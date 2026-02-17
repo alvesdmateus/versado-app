@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "ai_generations_used" integer DEFAULT 0 NOT NULL;

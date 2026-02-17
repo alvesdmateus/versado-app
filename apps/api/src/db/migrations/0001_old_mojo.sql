@@ -1,0 +1,3 @@
+ALTER TABLE "users" ALTER COLUMN "preferences" SET DEFAULT '{"darkMode":false,"themeColor":"sky","dailyGoal":50,"reminderTimes":[],"cardSortingLogic":"due_first","pushAlerts":true,"favoriteDeckIds":[]}'::jsonb;--> statement-breakpoint
+ALTER TABLE "card_progress" ADD COLUMN "created_at" timestamp with time zone DEFAULT now() NOT NULL;--> statement-breakpoint
+ALTER TABLE "card_progress" ADD COLUMN "updated_at" timestamp with time zone DEFAULT now() NOT NULL;

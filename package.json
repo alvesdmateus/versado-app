@@ -1,0 +1,17 @@
+{
+  "name": "flashcard-app",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun run --filter @flashcard/web dev",
+    "dev:web": "bun run --filter @flashcard/web dev",
+    "dev:api": "bun run --filter @flashcard/api dev",
+    "build": "bun run --filter '*' build",
+    "test": "bun run --filter '*' test",
+    "lint": "bun run --filter '*' lint",
+    "typecheck": "bun run --filter '*' typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

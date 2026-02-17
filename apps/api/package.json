@@ -1,0 +1,37 @@
+{
+  "name": "@flashcard/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@flashcard/algorithms": "workspace:*",
+    "@flashcard/auth": "workspace:*",
+    "@flashcard/core": "workspace:*",
+    "@flashcard/validation": "workspace:*",
+    "bcrypt": "^5.1.1",
+    "drizzle-orm": "^0.36.0",
+    "hono": "^4.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "openai": "^6.22.0",
+    "postgres": "^3.4.0",
+    "stripe": "^17.0.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.7",
+    "drizzle-kit": "^0.30.0",
+    "typescript": "^5.3.3"
+  }
+}

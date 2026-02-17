@@ -1,0 +1,44 @@
+import { forwardRef, useId, type TextareaHTMLAttributes } from "react";
+import { cn } from "@flashcard/ui";
+
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+}
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ label, error, className, id: externalId, ...props }, ref) => {
+    const generatedId = useId();
+    const id = externalId ?? generatedId;
+
+    return (
+      <div className="w-full">
+        {label && (
+          <label
+            htmlFor={id}
+            className="mb-1.5 block text-sm font-medium text-neutral-700"
+          >
+            {label}
+          </label>
+        )}
+        <textarea
+          ref={ref}
+          id={id}
+          className={cn(
+            "w-full rounded-lg border bg-neutral-0 px-3.5 py-2.5 text-sm text-neutral-900 outline-none transition-colors resize-none",
+            "placeholder:text-neutral-400",
+            "focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20",
+            error
+              ? "border-error-500 focus:border-error-500 focus:ring-error-500/20"
+              : "border-neutral-300 hover:border-neutral-400",
+            className
+          )}
+          {...props}
+        />
+        {error && <p className="mt-1.5 text-sm text-error-500">{error}</p>}
+      </div>
+    );
+  }
+);
+
+Textarea.displayName = "Textarea";
