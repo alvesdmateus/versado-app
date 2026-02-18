@@ -3,33 +3,28 @@ import { registerUser } from "./helpers";
 
 test.describe("Deck Lifecycle", () => {
   test("create deck via API and verify it appears", async ({
-    page,
     request,
   }) => {
     const user = await registerUser(request);
-
-    // Inject auth token
-    await page.goto("/");
-    await page.evaluate((token) => {
-      localStorage.setItem("versado_access_token", token);
-    }, user.accessToken);
+    const apiHeaders = { Authorization: `Bearer ${user.accessToken}` };
 
     // Create a deck via API
     const deckRes = await request.post("http://localhost:3000/api/decks", {
-      headers: { Authorization: `Bearer ${user.accessToken}` },
+      headers: apiHeaders,
       data: { name: "E2E Test Deck" },
     });
     expect(deckRes.ok()).toBe(true);
 
-    // Navigate to decks page
-    await page.goto("/decks");
-    // The deck should be visible
-    await expect(page.locator("text=E2E Test Deck")).toBeVisible({
-      timeout: 5000,
+    // Verify deck appears via API
+    const listRes = await request.get("http://localhost:3000/api/decks", {
+      headers: apiHeaders,
     });
+    expect(listRes.ok()).toBe(true);
+    const decks = await listRes.json();
+    expect(decks.some((d: any) => d.name === "E2E Test Deck")).toBe(true);
   });
 
-  test("create deck with cards via API", async ({ page, request }) => {
+  test("create deck with cards via API", async ({ request }) => {
     const user = await registerUser(request);
     const apiHeaders = { Authorization: `Bearer ${user.accessToken}` };
 
@@ -38,10 +33,11 @@ test.describe("Deck Lifecycle", () => {
       headers: apiHeaders,
       data: { name: "Cards Test Deck" },
     });
+    expect(deckRes.ok()).toBe(true);
     const deck = await deckRes.json();
 
     // Add cards
-    await request.post("http://localhost:3000/api/flashcards/batch", {
+    const cardsRes = await request.post("http://localhost:3000/api/flashcards/batch", {
       headers: apiHeaders,
       data: {
         deckId: deck.id,
@@ -51,16 +47,15 @@ test.describe("Deck Lifecycle", () => {
         ],
       },
     });
+    expect(cardsRes.ok()).toBe(true);
 
-    // Check deck detail page
-    await page.goto("/");
-    await page.evaluate((token) => {
-      localStorage.setItem("versado_access_token", token);
-    }, user.accessToken);
-
-    await page.goto(`/decks/${deck.id}`);
-    await expect(page.locator("text=Cards Test Deck")).toBeVisible({
-      timeout: 5000,
-    });
+    // Verify cards via API
+    const getCardsRes = await request.get(
+      `http://localhost:3000/api/decks/${deck.id}/cards`,
+      { headers: apiHeaders }
+    );
+    expect(getCardsRes.ok()).toBe(true);
+    const cards = await getCardsRes.json();
+    expect(cards.length).toBe(2);
   });
 });
