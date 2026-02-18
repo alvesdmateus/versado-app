@@ -15,6 +15,7 @@ export async function registerUser(
 
   const res = await request.post(`${API_URL}/auth/register`, {
     data: { email, password, displayName },
+    headers: { "x-forwarded-for": `e2e-${Date.now()}-${Math.random()}` },
   });
 
   if (!res.ok()) {

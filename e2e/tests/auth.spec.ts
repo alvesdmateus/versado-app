@@ -40,9 +40,9 @@ test.describe("Authentication", () => {
     const submitButton = page.locator('button[type="submit"], button:has-text("Sign In"), button:has-text("Log In"), button:has-text("Login")');
     if (await submitButton.count() > 0) {
       await submitButton.first().click();
-      // Should show an error message
+      // Should show an error message (could be validation, auth, or rate limit error)
       await expect(
-        page.locator("text=/invalid|error|incorrect|wrong/i")
+        page.locator("text=/invalid|error|incorrect|wrong|failed|too many/i")
       ).toBeVisible({ timeout: 5000 });
     }
   });
