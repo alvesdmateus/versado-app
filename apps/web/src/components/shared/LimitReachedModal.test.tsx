@@ -54,7 +54,7 @@ describe("LimitReachedModal", () => {
     );
     // The X close button is the first button
     const buttons = document.querySelectorAll("button");
-    fireEvent.click(buttons[0]); // X button
+    fireEvent.click(buttons[0]!); // X button
     expect(closed).toBe(true);
   });
 

@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach, spyOn, mock } from "bun:test";
+import { describe, test, expect, beforeEach, afterEach, spyOn } from "bun:test";
 import { apiClient, ApiError, setAccessToken, getAccessToken } from "./api-client";
 
 describe("api-client", () => {

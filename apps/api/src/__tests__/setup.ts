@@ -43,7 +43,7 @@ export function testRequest(
   path: string,
   init?: RequestInit
 ): Promise<Response> {
-  return app.request(path, init);
+  return Promise.resolve(app.request(path, init));
 }
 
 /**
@@ -59,7 +59,7 @@ export function authRequest(
   headers.set("Content-Type", "application/json");
   // Set IP for rate limiting
   headers.set("x-forwarded-for", `test-${Math.random()}`);
-  return app.request(path, { ...init, headers });
+  return Promise.resolve(app.request(path, { ...init, headers }));
 }
 
 /**

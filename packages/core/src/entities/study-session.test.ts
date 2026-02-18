@@ -69,8 +69,8 @@ describe("addReview", () => {
       responseTimeMs: 5000,
     });
     expect(updated.reviews).toHaveLength(1);
-    expect(updated.reviews[0].cardId).toBe("card-1");
-    expect(updated.reviews[0].rating).toBe(3);
+    expect(updated.reviews[0]!.cardId).toBe("card-1");
+    expect(updated.reviews[0]!.rating).toBe(3);
   });
 
   test("updates stats correctly", () => {
@@ -130,7 +130,7 @@ describe("addReview", () => {
       rating: 3,
       responseTimeMs: 0,
     });
-    expect(updated.reviews[0].id).toMatch(
+    expect(updated.reviews[0]!.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
     );
   });

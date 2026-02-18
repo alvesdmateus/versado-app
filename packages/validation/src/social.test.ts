@@ -47,7 +47,7 @@ describe("feedQuerySchema", () => {
   });
 
   test("accepts all filter values", () => {
-    for (const f of ["all", "users", "tags"]) {
+    for (const f of ["all", "users", "tags"] as const) {
       expect(feedQuerySchema.parse({ filter: f }).filter).toBe(f);
     }
   });
@@ -66,7 +66,7 @@ describe("popularDecksQuerySchema", () => {
   });
 
   test("accepts all period values", () => {
-    for (const p of ["week", "month", "all"]) {
+    for (const p of ["week", "month", "all"] as const) {
       expect(popularDecksQuerySchema.parse({ period: p }).period).toBe(p);
     }
   });

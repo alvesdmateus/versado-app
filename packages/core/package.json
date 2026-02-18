@@ -19,6 +19,7 @@
     "@versado/algorithms": "workspace:*"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "typescript": "^5.3.3"
   }
 }

@@ -1,10 +1,11 @@
+import React from "react";
 import { describe, test, expect, afterEach, beforeEach, spyOn } from "bun:test";
 import { render, screen, cleanup } from "@testing-library/react";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 afterEach(cleanup);
 
-function ThrowingComponent() {
+function ThrowingComponent(): React.ReactNode {
   throw new Error("Test error");
 }
 

@@ -1,6 +1,5 @@
 import { describe, test, expect } from "bun:test";
 import { createUser } from "./user";
-import type { User } from "./user";
 
 describe("createUser", () => {
   test("creates user with required fields", () => {

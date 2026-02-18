@@ -9,7 +9,7 @@ const UUID = "550e8400-e29b-41d4-a716-446655440000";
 
 describe("reviewRatingSchema", () => {
   test("accepts valid ratings 1-4", () => {
-    for (const r of [1, 2, 3, 4]) {
+    for (const r of [1, 2, 3, 4] as const) {
       expect(reviewRatingSchema.parse(r)).toBe(r);
     }
   });

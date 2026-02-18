@@ -152,7 +152,7 @@ describe("Study Routes", () => {
     test("does not create duplicate progress", async () => {
       const { user, token } = await createTestUser();
       const deck = await createTestDeck(user.id);
-      const card = await createTestFlashcard(deck.id);
+      await createTestFlashcard(deck.id);
 
       // Init first time
       await authRequest(

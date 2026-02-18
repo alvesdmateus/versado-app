@@ -141,7 +141,7 @@ describe("batchCreateFlashcardsSchema", () => {
       cards: [validCard, { front: "Q2", back: "A2", tags: ["tag1"] }],
     });
     expect(result.cards).toHaveLength(2);
-    expect(result.cards[0].difficulty).toBe("medium"); // default
+    expect(result.cards[0]!.difficulty).toBe("medium"); // default
   });
 
   test("rejects empty cards array", () => {

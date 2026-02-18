@@ -139,13 +139,18 @@ describe("Auth Routes", () => {
 
   describe("GET /auth/me", () => {
     test("returns 401 without token", async () => {
-      const res = await testRequest("/auth/me");
+      const res = await testRequest("/auth/me", {
+        headers: { "x-forwarded-for": `me-notoken-${Math.random()}` },
+      });
       expect(res.status).toBe(401);
     });
 
     test("returns 401 with malformed token", async () => {
       const res = await testRequest("/auth/me", {
-        headers: { Authorization: "Bearer invalid-token" },
+        headers: {
+          Authorization: "Bearer invalid-token",
+          "x-forwarded-for": `me-bad-${Math.random()}`,
+        },
       });
       expect(res.status).toBe(401);
     });
@@ -160,7 +165,10 @@ describe("Auth Routes", () => {
       const { accessToken } = await regRes.json();
 
       const res = await testRequest("/auth/me", {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "x-forwarded-for": `me2-${Math.random()}`,
+        },
       });
       expect(res.status).toBe(200);
       const body = await res.json();
