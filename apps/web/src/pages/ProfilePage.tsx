@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import {
   Moon,
   Palette,
+  CreditCard,
   Target,
   Clock,
   ArrowUpDown,
@@ -26,7 +27,9 @@ import { CardSortingModal } from "@/components/profile/CardSortingModal";
 import { ReminderTimesModal } from "@/components/profile/ReminderTimesModal";
 import { ChangePasswordModal } from "@/components/profile/ChangePasswordModal";
 import { ExportDataModal } from "@/components/profile/ExportDataModal";
+import { CardThemeModal } from "@/components/profile/CardThemeModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
+import { getCardTheme } from "@/lib/card-themes";
 
 const SORTING_LABELS: Record<string, string> = {
   due_first: "Due First",
@@ -43,6 +46,7 @@ export function ProfilePage() {
   // Modal states
   const [isDailyGoalOpen, setIsDailyGoalOpen] = useState(false);
   const [isThemeColorOpen, setIsThemeColorOpen] = useState(false);
+  const [isCardThemeOpen, setIsCardThemeOpen] = useState(false);
   const [isCardSortingOpen, setIsCardSortingOpen] = useState(false);
   const [isReminderTimesOpen, setIsReminderTimesOpen] = useState(false);
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
@@ -116,6 +120,12 @@ export function ProfilePage() {
           label="Theme Color"
           value={preferences?.themeColor ?? "Sky"}
           onClick={() => setIsThemeColorOpen(true)}
+        />
+        <SettingRow
+          icon={<CreditCard className="h-5 w-5" />}
+          label="Card Theme"
+          value={getCardTheme(preferences?.cardTheme).name}
+          onClick={() => setIsCardThemeOpen(true)}
         />
       </SettingsSection>
 
@@ -228,6 +238,16 @@ export function ProfilePage() {
         onSaved={(times) =>
           setPreferences((prev) =>
             prev ? { ...prev, reminderTimes: times } : prev
+          )
+        }
+      />
+      <CardThemeModal
+        isOpen={isCardThemeOpen}
+        onClose={() => setIsCardThemeOpen(false)}
+        currentTheme={preferences?.cardTheme ?? "classic"}
+        onSaved={(theme) =>
+          setPreferences((prev) =>
+            prev ? { ...prev, cardTheme: theme } : prev
           )
         }
       />

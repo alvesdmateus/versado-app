@@ -8,10 +8,16 @@
     "dev:api": "bun run --filter @versado/api dev",
     "build": "bun run --filter '*' build",
     "test": "bun run --filter '*' test",
+    "test:unit": "bun test packages/validation/src/ && bun test packages/core/src/entities/ && bun test packages/auth/src/",
+    "test:api": "cd apps/api && bun test src/__tests__/ --exclude '**/resilience/**'",
+    "test:web": "cd apps/web && bun test",
+    "test:e2e": "cd e2e && bunx playwright test --config=playwright.config.ts",
+    "test:resilience": "cd apps/api && bun test src/__tests__/resilience/",
     "lint": "bun run --filter '*' lint",
     "typecheck": "bun run --filter '*' typecheck"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "typescript": "^5.3.3"
   }
 }

@@ -56,6 +56,7 @@ export const updatePreferencesSchema = z.object({
   dailyGoal: z.number().int().min(1).max(500).optional(),
   reminderTimes: z.array(z.string()).max(5).optional(),
   cardSortingLogic: z.enum(["due_first", "random", "difficulty"]).optional(),
+  cardTheme: z.string().max(20).optional(),
   pushAlerts: z.boolean().optional(),
   favoriteDeckIds: z.array(z.string().uuid()).max(100).optional(),
 });

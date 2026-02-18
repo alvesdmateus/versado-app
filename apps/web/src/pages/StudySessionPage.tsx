@@ -3,7 +3,9 @@ import { useNavigate, useParams } from "react-router";
 import { X, ChevronUp, MoreVertical } from "lucide-react";
 import type { ReviewRating } from "@versado/algorithms";
 import { studyApi, type DueCard } from "@/lib/study-api";
+import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
+import { getCardTheme, type CardTheme } from "@/lib/card-themes";
 import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
 
 // ---------------------------------------------------------------------------
@@ -102,12 +104,19 @@ export function StudySessionPage() {
   const [ratingCounts, setRatingCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
   const [totalResponseTime, setTotalResponseTime] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
+  const [cardTheme, setCardTheme] = useState<CardTheme>(getCardTheme());
   const isResettingRef = useRef(false);
   const cardStartTimeRef = useRef(Date.now());
 
   const currentCard = dueCards[currentIndex] ?? null;
   const total = dueCards.length;
   const current = currentIndex + 1;
+
+  useEffect(() => {
+    profileApi.getPreferences().then((prefs) => {
+      setCardTheme(getCardTheme(prefs.cardTheme));
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!deckId) return;
@@ -387,22 +396,22 @@ export function StudySessionPage() {
             className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
           >
             {/* Front face — Question */}
-            <div className={`flip-card-face flex w-full flex-col items-center gap-5 rounded-2xl bg-neutral-0 p-8 shadow-card transition-shadow ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
-              <span className="text-xs font-semibold uppercase tracking-wider text-primary-500">
+            <div className={`flip-card-face flex w-full flex-col items-center gap-5 p-8 transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
+              <span className={`text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
                 Question
               </span>
-              <p className="text-xl font-bold text-neutral-900 text-center">
+              <p className={`text-xl font-bold text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.front}
               </p>
               <GraduationCapIcon />
             </div>
 
             {/* Back face — Answer */}
-            <div className="flip-card-face flip-card-back flex w-full flex-col items-center gap-5 rounded-2xl bg-neutral-0 p-8 shadow-card">
-              <span className="rounded-full bg-success-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-success-600">
+            <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-5 p-8 ${cardTheme.cardClassName}`}>
+              <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${cardTheme.answerLabelClassName}`}>
                 Answer Revealed
               </span>
-              <p className="text-base leading-relaxed text-neutral-700 text-center">
+              <p className={`text-base leading-relaxed text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.back}
               </p>
               <ShieldIcon />

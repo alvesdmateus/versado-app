@@ -1,0 +1,21 @@
+services:
+  postgres-test:
+    image: postgres:17-alpine
+    container_name: versado-test-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: versado_test
+    tmpfs:
+      - /var/lib/postgresql/data # Use tmpfs for speed in tests
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:latest
+    container_name: versado-toxiproxy
+    ports:
+      - "5434:5434" # Proxied PostgreSQL
+      - "8474:8474" # Toxiproxy HTTP API
+    depends_on:
+      - postgres-test

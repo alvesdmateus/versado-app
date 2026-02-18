@@ -7,6 +7,7 @@ export interface UserPreferences {
   dailyGoal: number;
   reminderTimes: string[];
   cardSortingLogic: "due_first" | "random" | "difficulty";
+  cardTheme: string;
   pushAlerts: boolean;
   favoriteDeckIds: string[];
 }

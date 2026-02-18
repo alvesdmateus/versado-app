@@ -18,7 +18,7 @@ export const TIER_LIMITS: Record<UserTier, TierLimits> = {
   free: {
     maxDecks: 5,
     maxCardsPerDeck: 100,
-    dailyReviewLimit: 1, // TODO: change back to 50
+    dailyReviewLimit: 50,
     canUseAI: true,
     aiGenerationLimit: 10,
     canListPaidDecks: false,

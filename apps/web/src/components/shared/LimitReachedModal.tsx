@@ -80,7 +80,7 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
               <div className="h-6 w-6 rounded-full bg-primary-400 ring-2 ring-neutral-0" />
             </div>
             <span className="text-xs text-neutral-500">
-              Join 10,000+ fluent learners
+              Join other fluent learners
             </span>
           </div>
         </div>
