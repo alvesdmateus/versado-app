@@ -57,8 +57,14 @@ export const updatePreferencesSchema = z.object({
   reminderTimes: z.array(z.string()).max(5).optional(),
   cardSortingLogic: z.enum(["due_first", "random", "difficulty"]).optional(),
   cardTheme: z.string().max(20).optional(),
+  nativeLanguage: z.string().max(10).optional(),
+  hasCompletedOnboarding: z.boolean().optional(),
   pushAlerts: z.boolean().optional(),
   favoriteDeckIds: z.array(z.string().uuid()).max(100).optional(),
+});
+
+export const googleOAuthSchema = z.object({
+  accessToken: z.string().min(1, "Access token is required"),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
@@ -66,3 +72,4 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 export type UpdatePreferencesInput = z.infer<typeof updatePreferencesSchema>;
+export type GoogleOAuthInput = z.infer<typeof googleOAuthSchema>;

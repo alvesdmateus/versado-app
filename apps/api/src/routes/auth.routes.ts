@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { setCookie, getCookie, deleteCookie } from "hono/cookie";
-import { registerSchema, loginSchema } from "@versado/validation";
+import { registerSchema, loginSchema, googleOAuthSchema } from "@versado/validation";
 import { REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_EXPIRY } from "@versado/auth";
 import { rateLimitMiddleware } from "../middleware/rate-limit";
 import { authMiddleware } from "../middleware/auth";
@@ -68,6 +68,17 @@ authRoutes.post("/logout", async (c) => {
 
   deleteCookie(c, REFRESH_TOKEN_COOKIE, { path: "/auth" });
   return c.json({ success: true });
+});
+
+authRoutes.post("/google", async (c) => {
+  const body = await c.req.json();
+  const { accessToken } = validate(googleOAuthSchema, body);
+
+  const { auth, refreshToken, isNewUser } =
+    await authService.loginWithGoogle(accessToken);
+
+  setRefreshCookie(c, refreshToken);
+  return c.json({ ...auth, isNewUser });
 });
 
 // Get current user profile (protected)

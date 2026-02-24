@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download } from "lucide-react";
 import { deckApi, type DeckResponse, type FlashcardResponse } from "@/lib/deck-api";
 import { ApiError } from "@/lib/api-client";
@@ -20,6 +21,7 @@ import { EmptyState, ConfirmDialog, CardListSkeleton } from "@/components/shared
 import { Button } from "@versado/ui";
 
 export function DeckDetailPage() {
+  const { t } = useTranslation();
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -108,7 +110,7 @@ export function DeckDetailPage() {
     setIsDeletingDeck(true);
     try {
       await deckApi.delete(deckId);
-      showToast("Deck deleted");
+      showToast(t("deck.deleteError"));
       navigate("/decks", { replace: true });
     } catch (err) {
       showErrorNotification(err, { onRetry: handleDeleteDeck });
@@ -123,7 +125,7 @@ export function DeckDetailPage() {
     try {
       await flashcardApi.delete(deleteCardId);
       setCards((prev) => prev.filter((c) => c.id !== deleteCardId));
-      showToast("Card deleted");
+      showToast(t("deck.cardDeleted"));
     } catch (err) {
       showErrorNotification(err);
     } finally {
@@ -136,7 +138,7 @@ export function DeckDetailPage() {
     try {
       await marketplaceApi.unlistDeck(deckId);
       setDeck((prev) => (prev ? { ...prev, visibility: "private" } : prev));
-      showToast("Removed from marketplace");
+      showToast(t("deck.deleteUnlist"));
     } catch (err) {
       showErrorNotification(err, { onRetry: handleUnlist });
     }
@@ -168,28 +170,28 @@ export function DeckDetailPage() {
         onBack={() => navigate("/decks")}
         menuItems={[
           {
-            label: "Edit",
+            label: t("deckDetail.edit"),
             icon: <Pencil className="h-4 w-4" />,
             onClick: () => setIsEditDeckOpen(true),
           },
           isListed
             ? {
-                label: "Unlist from Marketplace",
+                label: t("deckDetail.unlist"),
                 icon: <Store className="h-4 w-4" />,
                 onClick: handleUnlist,
               }
             : {
-                label: "List on Marketplace",
+                label: t("deckDetail.list"),
                 icon: <Store className="h-4 w-4" />,
                 onClick: () => setIsListModalOpen(true),
               },
           {
-            label: "Export Deck",
+            label: t("deckDetail.export"),
             icon: <Download className="h-4 w-4" />,
             onClick: () => setIsExportOpen(true),
           },
           {
-            label: "Delete",
+            label: t("common.delete"),
             icon: <Trash2 className="h-4 w-4" />,
             onClick: () => setIsDeleteDeckOpen(true),
             variant: "danger",
@@ -205,12 +207,12 @@ export function DeckDetailPage() {
         <div className="flex items-center justify-between text-xs text-neutral-500">
           <div className="flex items-center gap-1.5">
             <Layers className="h-4 w-4" />
-            <span>{total} cards</span>
+            <span>{t("decks.cardCount", { count: total })}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span>{mastered} mastered</span>
+            <span>{t("decks.mastered", { count: mastered })}</span>
             <span className="text-neutral-300">|</span>
-            <span>{progress}% complete</span>
+            <span>{t("decks.progress", { percent: progress })}</span>
           </div>
         </div>
 
@@ -231,7 +233,7 @@ export function DeckDetailPage() {
           disabled={total === 0}
         >
           <BookOpen className="h-4 w-4" />
-          Study Now
+          {t("deckDetail.studyNow")}
         </Button>
         <Button
           variant="secondary"
@@ -239,7 +241,7 @@ export function DeckDetailPage() {
           onClick={() => setIsAddCardOpen(true)}
         >
           <Plus className="h-4 w-4" />
-          Add Cards
+          {t("deckDetail.addCards")}
         </Button>
         <Button
           variant="secondary"
@@ -247,26 +249,26 @@ export function DeckDetailPage() {
           onClick={() => setIsAIGenerateOpen(true)}
         >
           <Sparkles className="h-4 w-4" />
-          AI Generate
+          {t("deckDetail.aiGenerate")}
         </Button>
       </div>
 
       {/* Card list */}
       <div className="mt-6 px-5">
         <h2 className="mb-3 text-sm font-semibold text-neutral-700">
-          Cards{" "}
+          {t("deckDetail.cards")}{" "}
           {filteredCards.length !== cards.length
-            ? `(${filteredCards.length} of ${cards.length})`
+            ? t("deckDetail.cardsCount", { count: filteredCards.length, total: cards.length })
             : `(${cards.length})`}
         </h2>
 
         {cards.length === 0 ? (
           <EmptyState
             icon={<Layers className="h-10 w-10" />}
-            title="No cards yet"
-            description="Add your first card to start studying"
+            title={t("deckDetail.noCards")}
+            description={t("deckDetail.noCardsDesc")}
             action={{
-              label: "Add Cards",
+              label: t("deckDetail.noCardAction"),
               onClick: () => setIsAddCardOpen(true),
             }}
           />
@@ -286,7 +288,7 @@ export function DeckDetailPage() {
             <div className="mt-3 flex flex-col gap-2">
               {filteredCards.length === 0 ? (
                 <p className="py-6 text-center text-sm text-neutral-400">
-                  No cards match your filters
+                  {t("deckDetail.noMatch")}
                 </p>
               ) : (
                 filteredCards.map((card) => (
@@ -382,9 +384,9 @@ export function DeckDetailPage() {
         isOpen={isDeleteDeckOpen}
         onClose={() => setIsDeleteDeckOpen(false)}
         onConfirm={handleDeleteDeck}
-        title="Delete Deck"
-        message="This will permanently delete this deck and all its cards. This action cannot be undone."
-        confirmLabel="Delete"
+        title={t("deckDetail.deleteTitle")}
+        message={t("deckDetail.deleteMessage")}
+        confirmLabel={t("deckDetail.deleteConfirm")}
         variant="danger"
         isLoading={isDeletingDeck}
       />
@@ -394,9 +396,9 @@ export function DeckDetailPage() {
         isOpen={deleteCardId !== null}
         onClose={() => setDeleteCardId(null)}
         onConfirm={handleDeleteCard}
-        title="Delete Card"
-        message="Are you sure you want to delete this card?"
-        confirmLabel="Delete"
+        title={t("deckDetail.deleteCard")}
+        message={t("deckDetail.deleteCardMessage")}
+        confirmLabel={t("common.delete")}
         variant="danger"
       />
 

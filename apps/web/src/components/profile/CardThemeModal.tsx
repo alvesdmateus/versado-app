@@ -38,23 +38,38 @@ export function CardThemeModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Card Theme" size="sm">
-      <div className="grid grid-cols-4 gap-3">
-        {CARD_THEMES.map((theme) => (
-          <button
-            key={theme.key}
-            onClick={() => handleSelect(theme.key)}
-            className="flex flex-col items-center gap-1.5"
-          >
-            <div
-              className={`relative flex h-14 w-10 items-center justify-center rounded-lg ${theme.previewColor} transition-transform hover:scale-110`}
+      <div className="grid grid-cols-2 gap-3">
+        {CARD_THEMES.map((theme) => {
+          const isSelected = selected === theme.key;
+          return (
+            <button
+              key={theme.key}
+              onClick={() => handleSelect(theme.key)}
+              className={`relative overflow-hidden rounded-2xl ${
+                isSelected ? "ring-2 ring-primary-500 ring-offset-2" : ""
+              }`}
             >
-              {selected === theme.key && (
-                <Check className="h-4 w-4 text-primary-500" />
-              )}
-            </div>
-            <span className="text-xs text-neutral-600">{theme.name}</span>
-          </button>
-        ))}
+              <div
+                className={`flex aspect-square flex-col justify-between p-3 ${theme.previewColor}`}
+                style={theme.backgroundStyle}
+              >
+                <div>
+                  {isSelected && (
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white shadow">
+                      <Check className="h-3.5 w-3.5 text-primary-500" />
+                    </div>
+                  )}
+                  {!isSelected && (
+                    <div className="h-6 w-6 rounded-full border-2 border-white/40" />
+                  )}
+                </div>
+                <p className="text-xs font-semibold text-white">
+                  {theme.name}
+                </p>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </Modal>
   );

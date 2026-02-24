@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Check,
   X,
@@ -43,34 +44,8 @@ function formatPrice(unitAmount: number, currency: string): string {
   }).format(unitAmount / 100);
 }
 
-const FREE_FEATURES = [
-  { label: "Up to 5 decks", included: true },
-  { label: "100 cards per deck", included: true },
-  { label: "50 reviews per day", included: true },
-  { label: "SM-2 spaced repetition", included: true },
-  { label: "Basic study stats", included: true },
-  { label: "Browse & buy on marketplace", included: true },
-  { label: "10 AI generations", included: true },
-  { label: "Unlimited decks & cards", included: false },
-  { label: "Unlimited reviews", included: false },
-  { label: "Sell on marketplace", included: false },
-  { label: "Offline mode", included: false },
-];
-
-const FLUENT_FEATURES = [
-  { label: "Unlimited decks & cards", included: true },
-  { label: "Unlimited daily reviews", included: true },
-  { label: "Unlimited AI generation", included: true },
-  { label: "SM-2 spaced repetition", included: true },
-  { label: "Advanced study analytics", included: true },
-  { label: "Browse & buy on marketplace", included: true },
-  { label: "Sell on marketplace", included: true },
-  { label: "Seller priority placement", included: true },
-  { label: "Offline mode & sync", included: true },
-  { label: "Priority support", included: true },
-];
-
 export function BillingPage() {
+  const { t } = useTranslation();
   const { user, refreshUser } = useAuth();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
@@ -82,6 +57,33 @@ export function BillingPage() {
   const [isCanceling, setIsCanceling] = useState(false);
   const [prices, setPrices] = useState<Price[]>([]);
   const [billingInterval, setBillingInterval] = useState<"month" | "year">("month");
+
+  const FREE_FEATURES = [
+    { label: t("billing.features_free_1"), included: true },
+    { label: t("billing.features_free_2"), included: true },
+    { label: t("billing.features_free_3"), included: true },
+    { label: t("billing.features_free_4"), included: true },
+    { label: t("billing.features_free_5"), included: true },
+    { label: t("billing.features_free_6"), included: true },
+    { label: t("billing.features_free_7"), included: true },
+    { label: t("billing.features_fluent_1"), included: false },
+    { label: t("billing.features_fluent_2"), included: false },
+    { label: t("billing.features_fluent_7"), included: false },
+    { label: t("billing.features_fluent_9"), included: false },
+  ];
+
+  const FLUENT_FEATURES = [
+    { label: t("billing.features_fluent_1"), included: true },
+    { label: t("billing.features_fluent_2"), included: true },
+    { label: t("billing.features_fluent_3"), included: true },
+    { label: t("billing.features_fluent_4"), included: true },
+    { label: t("billing.features_fluent_5"), included: true },
+    { label: t("billing.features_fluent_6"), included: true },
+    { label: t("billing.features_fluent_7"), included: true },
+    { label: t("billing.features_fluent_8"), included: true },
+    { label: t("billing.features_fluent_9"), included: true },
+    { label: t("billing.features_fluent_10"), included: true },
+  ];
 
   const userCurrency = useMemo(() => getCurrencyFromLocale(), []);
 
@@ -102,13 +104,13 @@ export function BillingPage() {
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       refreshUser();
-      showToast("Welcome to Fluent! Your learning just became unforgettable.");
+      showToast(t("billing.success"));
       setSearchParams({}, { replace: true });
     } else if (searchParams.get("canceled") === "true") {
-      showToast("Checkout canceled", "info");
+      showToast(t("billing.canceled"), "info");
       setSearchParams({}, { replace: true });
     }
-  }, [searchParams, setSearchParams, refreshUser, showToast]);
+  }, [searchParams, setSearchParams, refreshUser, showToast, t]);
 
   // Fetch subscription or prices
   useEffect(() => {
@@ -147,7 +149,7 @@ export function BillingPage() {
         prev ? { ...prev, cancelAtPeriodEnd: true } : prev
       );
       showToast(
-        "Subscription will be canceled at end of billing period",
+        t("profile.cancelMessage"),
         "info"
       );
     } catch (err) {
@@ -164,7 +166,7 @@ export function BillingPage() {
       setSubscription((prev) =>
         prev ? { ...prev, cancelAtPeriodEnd: false } : prev
       );
-      showToast("Subscription resumed!");
+      showToast(t("profile.resumeSubscription"));
     } catch (err) {
       showErrorNotification(err, { onRetry: handleResume });
     }
@@ -186,12 +188,12 @@ export function BillingPage() {
       {/* Header */}
       <div className="px-5 pt-6 pb-4">
         <h1 className="text-2xl font-bold text-neutral-900">
-          {isFluent ? "Your Plan" : "From curious to fluent."}
+          {isFluent ? t("billing.yourPlan") : t("billing.fromCuriousToFluent")}
         </h1>
         <p className="mt-1 text-sm text-neutral-500">
           {isFluent
-            ? "Manage your subscription and billing"
-            : "Unlock the full potential of your study experience"}
+            ? t("billing.manageSubscription")
+            : t("billing.unlockPotential")}
         </p>
       </div>
 
@@ -202,7 +204,7 @@ export function BillingPage() {
           <div className="rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 p-5">
             <div className="flex items-center gap-2">
               <Crown className="h-5 w-5 text-white" />
-              <h3 className="text-lg font-bold text-white">Versado Fluent</h3>
+              <h3 className="text-lg font-bold text-white">{t("billing.fluent")}</h3>
               <span
                 className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium ${
                   subscription.cancelAtPeriodEnd
@@ -210,13 +212,15 @@ export function BillingPage() {
                     : "bg-white/20 text-white"
                 }`}
               >
-                {subscription.cancelAtPeriodEnd ? "Canceling" : "Active"}
+                {subscription.cancelAtPeriodEnd
+                  ? t("profile.subscriptionCanceling")
+                  : t("profile.subscriptionActive")}
               </span>
             </div>
             <p className="mt-1 text-sm text-primary-100">
               {subscription.cancelAtPeriodEnd
-                ? `Access until ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`
-                : `Next billing: ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`}
+                ? `${t("profile.accessUntil")} ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`
+                : `${t("profile.nextBilling")} ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`}
             </p>
           </div>
 
@@ -228,7 +232,7 @@ export function BillingPage() {
             >
               <CreditCard className="h-5 w-5 text-neutral-500" />
               <span className="flex-1 text-sm font-medium text-neutral-700">
-                Manage Billing
+                {t("billing.managePageBilling")}
               </span>
               <ExternalLink className="h-4 w-4 text-neutral-400" />
             </button>
@@ -238,7 +242,7 @@ export function BillingPage() {
             >
               <Calendar className="h-5 w-5 text-neutral-500" />
               <span className="flex-1 text-sm text-neutral-700">
-                Billing period ends
+                {t("billing.billingPeriodEnds")}
               </span>
               <span className="text-sm text-neutral-500">
                 {new Date(
@@ -253,7 +257,7 @@ export function BillingPage() {
               >
                 <Sparkles className="h-5 w-5 text-primary-500" />
                 <span className="flex-1 text-sm font-medium text-primary-600">
-                  Resume Subscription
+                  {t("profile.resumeSubscription")}
                 </span>
               </button>
             ) : (
@@ -263,7 +267,7 @@ export function BillingPage() {
               >
                 <X className="h-5 w-5 text-error-500" />
                 <span className="flex-1 text-sm font-medium text-error-600">
-                  Cancel Subscription
+                  {t("profile.cancelSubscription")}
                 </span>
               </button>
             )}
@@ -274,11 +278,11 @@ export function BillingPage() {
         <div className="px-5 space-y-4">
           {/* Free plan */}
           <div className="rounded-xl border-2 border-neutral-200 bg-neutral-0 p-5">
-            <h3 className="text-base font-semibold text-neutral-700">Free</h3>
+            <h3 className="text-base font-semibold text-neutral-700">{t("billing.free")}</h3>
             <p className="mt-1 text-2xl font-bold text-neutral-900">
               $0
               <span className="text-sm font-normal text-neutral-500">
-                /month
+                /{t("billing.monthly").toLowerCase()}
               </span>
             </p>
             <div className="mt-4 space-y-2.5">
@@ -299,7 +303,7 @@ export function BillingPage() {
             </div>
             <div className="mt-4">
               <Button variant="secondary" fullWidth disabled>
-                Current Plan
+                {t("billing.freeDesc")}
               </Button>
             </div>
           </div>
@@ -308,17 +312,17 @@ export function BillingPage() {
           <div className="rounded-xl border-2 border-primary-500 bg-neutral-0 p-5 shadow-card">
             <div className="flex items-center gap-2">
               <h3 className="text-base font-semibold text-neutral-700">
-                Versado Fluent
+                {t("billing.fluent")}
               </h3>
               <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700">
-                Recommended
+                {t("billing.fluentDesc")}
               </span>
             </div>
             {selectedPrice && (
               <p className="mt-1 text-2xl font-bold text-neutral-900">
                 {formatPrice(selectedPrice.unitAmount, selectedPrice.currency)}
                 <span className="text-sm font-normal text-neutral-500">
-                  /{selectedPrice.recurring?.interval === "year" ? "year" : "month"}
+                  /{selectedPrice.recurring?.interval === "year" ? t("billing.yearly").toLowerCase() : t("billing.monthly").toLowerCase()}
                 </span>
               </p>
             )}
@@ -333,7 +337,7 @@ export function BillingPage() {
                       : "text-neutral-500"
                   }`}
                 >
-                  Monthly
+                  {t("billing.monthly")}
                 </button>
                 <button
                   type="button"
@@ -344,7 +348,7 @@ export function BillingPage() {
                       : "text-neutral-500"
                   }`}
                 >
-                  Yearly
+                  {t("billing.yearly")}
                 </button>
               </div>
             )}
@@ -358,7 +362,7 @@ export function BillingPage() {
             </div>
             <div className="mt-4">
               <Button fullWidth onClick={handleUpgrade} disabled={isLoading || !selectedPrice}>
-                {isLoading ? "Redirecting..." : "Go Fluent"}
+                {isLoading ? t("billing.redirecting") : t("billing.goFluent")}
               </Button>
             </div>
           </div>
@@ -370,9 +374,9 @@ export function BillingPage() {
         isOpen={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}
         onConfirm={handleCancel}
-        title="Cancel Subscription"
-        message="Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then."
-        confirmLabel="Cancel Subscription"
+        title={t("profile.cancelTitle")}
+        message={t("profile.cancelMessage")}
+        confirmLabel={t("profile.cancelConfirm")}
         variant="danger"
         isLoading={isCanceling}
       />

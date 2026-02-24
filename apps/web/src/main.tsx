@@ -7,8 +7,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { SyncProvider } from "./contexts/SyncContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import { ErrorNotificationProvider } from "./contexts/ErrorNotificationContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorBoundary } from "./components/shared/ErrorBoundary";
 import { router } from "./router";
+import "./i18n";
 import "./index.css";
 
 const root = document.getElementById("root");
@@ -17,6 +19,7 @@ if (!root) throw new Error("Root element not found");
 createRoot(root).render(
   <StrictMode>
     <ErrorBoundary>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <ThemeProvider>
         <AuthProvider>
         <SyncProvider>
@@ -28,6 +31,7 @@ createRoot(root).render(
         </SyncProvider>
       </AuthProvider>
       </ThemeProvider>
+      </GoogleOAuthProvider>
     </ErrorBoundary>
   </StrictMode>
 );

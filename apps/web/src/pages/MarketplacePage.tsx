@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { marketplaceApi, type MarketplaceListing } from "@/lib/marketplace-api";
 import { MarketplaceHeader } from "@/components/marketplace/MarketplaceHeader";
 import { MarketplaceSearchBar } from "@/components/marketplace/MarketplaceSearchBar";
@@ -36,6 +37,7 @@ const PAGE_SIZE = 20;
 
 export function MarketplacePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState("popular");
@@ -93,18 +95,18 @@ export function MarketplacePage() {
           value={sortBy}
           onChange={setSortBy}
           options={[
-            { value: "popular", label: "Popular" },
-            { value: "newest", label: "Newest" },
-            { value: "rating", label: "Highest Rated" },
-            { value: "price_asc", label: "Price: Low → High" },
-            { value: "price_desc", label: "Price: High → Low" },
+            { value: "popular", label: t("marketplace.popular") },
+            { value: "newest", label: t("marketplace.newest") },
+            { value: "rating", label: t("marketplace.highestRated") },
+            { value: "price_asc", label: t("marketplace.priceLow") },
+            { value: "price_desc", label: t("marketplace.priceHigh") },
           ]}
         />
       </div>
 
       {isLoading ? (
         <div className="mt-12 flex justify-center">
-          <p className="text-sm text-neutral-400">Loading...</p>
+          <p className="text-sm text-neutral-400">{t("marketplace.loading")}</p>
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3 px-5">
@@ -120,8 +122,8 @@ export function MarketplacePage() {
               reviewCount={formatCount(listing.reviewCount)}
               downloads={
                 listing.price > 0
-                  ? `${formatCount(listing.purchaseCount)} sales`
-                  : `${formatCount(listing.purchaseCount)} downloads`
+                  ? t("marketplace.sales", { value: formatCount(listing.purchaseCount) })
+                  : t("marketplace.downloads", { value: formatCount(listing.purchaseCount) })
               }
               onClick={() => navigate(`/market/${listing.id}`)}
             />
@@ -132,7 +134,7 @@ export function MarketplacePage() {
               disabled={isLoadingMore}
               className="mt-2 w-full rounded-xl bg-neutral-100 py-3 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200 disabled:opacity-50"
             >
-              {isLoadingMore ? "Loading..." : "Load More"}
+              {isLoadingMore ? t("marketplace.loading") : t("marketplace.load")}
             </button>
           )}
         </div>
@@ -140,9 +142,9 @@ export function MarketplacePage() {
 
       {!isLoading && listings.length === 0 && (
         <div className="mt-12 flex flex-col items-center text-center px-5">
-          <p className="text-sm text-neutral-500">No decks found</p>
+          <p className="text-sm text-neutral-500">{t("marketplace.noDecks")}</p>
           <p className="mt-1 text-xs text-neutral-400">
-            Try a different search or category
+            {t("marketplace.noDecksDesc")}
           </p>
         </div>
       )}

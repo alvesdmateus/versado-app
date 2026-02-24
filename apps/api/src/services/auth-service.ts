@@ -1,8 +1,9 @@
-import { eq, and, isNull } from "drizzle-orm";
+import { eq, and, or, isNull } from "drizzle-orm";
 import { db } from "../db";
 import { users, refreshTokens } from "../db/schema";
 import { hashPassword, verifyPassword } from "../lib/hash";
 import { sign } from "../lib/jwt";
+import { verifyGoogleAccessToken } from "../lib/google-auth";
 import { REFRESH_TOKEN_EXPIRY } from "@versado/auth";
 import type { AuthResponse, PublicProfile } from "@versado/auth";
 import { AppError } from "../middleware/error-handler";
@@ -84,6 +85,14 @@ export async function login(
 
   if (!user) {
     throw new AppError(401, "Invalid email or password", "INVALID_CREDENTIALS");
+  }
+
+  if (!user.passwordHash) {
+    throw new AppError(
+      401,
+      "This account uses Google sign-in. Please log in with Google.",
+      "GOOGLE_ACCOUNT"
+    );
   }
 
   const valid = await verifyPassword(password, user.passwordHash);
@@ -183,4 +192,70 @@ export async function getUserProfile(
     .limit(1);
 
   return user ? toPublicProfile(user) : null;
+}
+
+export async function loginWithGoogle(
+  accessToken: string
+): Promise<{ auth: AuthResponse; refreshToken: string; isNewUser: boolean }> {
+  const googleUser = await verifyGoogleAccessToken(accessToken);
+
+  // Find user by googleId or email
+  const [existing] = await db
+    .select()
+    .from(users)
+    .where(
+      or(eq(users.googleId, googleUser.sub), eq(users.email, googleUser.email))
+    )
+    .limit(1);
+
+  let user: typeof users.$inferSelect;
+  let isNewUser = false;
+
+  if (existing) {
+    // Link Google account if found by email but missing googleId
+    if (!existing.googleId) {
+      const rows = await db
+        .update(users)
+        .set({ googleId: googleUser.sub, updatedAt: new Date() })
+        .where(eq(users.id, existing.id))
+        .returning();
+      user = rows[0]!;
+    } else {
+      user = existing;
+    }
+  } else {
+    // Create new user (no password)
+    const rows = await db
+      .insert(users)
+      .values({
+        email: googleUser.email,
+        googleId: googleUser.sub,
+        displayName: googleUser.name || googleUser.email.split("@")[0]!,
+        avatarUrl: googleUser.picture ?? null,
+      })
+      .returning();
+    user = rows[0]!;
+    isNewUser = true;
+  }
+
+  const jwtToken = sign({
+    sub: user.id,
+    email: user.email,
+    tier: user.tier,
+  });
+
+  const refreshToken = crypto.randomUUID();
+  const tokenHash = await hashToken(refreshToken);
+
+  await db.insert(refreshTokens).values({
+    userId: user.id,
+    tokenHash,
+    expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY * 1000),
+  });
+
+  return {
+    auth: { accessToken: jwtToken, user: toPublicProfile(user) },
+    refreshToken,
+    isNewUser,
+  };
 }

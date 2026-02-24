@@ -1,6 +1,7 @@
 import { Component, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@versado/ui";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   children: ReactNode;
@@ -8,6 +9,24 @@ interface Props {
 
 interface State {
   hasError: boolean;
+}
+
+function ErrorFallback({ onReset }: { onReset: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
+      <AlertTriangle className="h-12 w-12 text-error-500" />
+      <h1 className="text-lg font-semibold text-neutral-900">
+        {t("errors.something_wrong")}
+      </h1>
+      <p className="text-sm text-neutral-500">
+        {t("common.tryAgain")}
+      </p>
+      <Button onClick={onReset}>
+        {t("common.reloadApp")}
+      </Button>
+    </div>
+  );
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -23,23 +42,12 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
-          <AlertTriangle className="h-12 w-12 text-error-500" />
-          <h1 className="text-lg font-semibold text-neutral-900">
-            Something went wrong
-          </h1>
-          <p className="text-sm text-neutral-500">
-            An unexpected error occurred. Please try again.
-          </p>
-          <Button
-            onClick={() => {
-              this.setState({ hasError: false });
-              window.location.reload();
-            }}
-          >
-            Reload App
-          </Button>
-        </div>
+        <ErrorFallback
+          onReset={() => {
+            this.setState({ hasError: false });
+            window.location.reload();
+          }}
+        />
       );
     }
 

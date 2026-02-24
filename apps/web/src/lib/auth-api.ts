@@ -31,4 +31,11 @@ export const authApi = {
   getMe() {
     return apiClient<PublicProfile>("/auth/me");
   },
+
+  loginWithGoogle(accessToken: string) {
+    return apiClient<AuthResponse & { isNewUser: boolean }>("/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ accessToken }),
+    });
+  },
 };

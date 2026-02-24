@@ -1,27 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { profileApi } from "@/lib/profile-api";
 import { Button } from "@versado/ui";
-
-const SORTING_OPTIONS = [
-  {
-    value: "due_first" as const,
-    label: "Due First",
-    description: "Cards due for review are shown first",
-  },
-  {
-    value: "random" as const,
-    label: "Random",
-    description: "Cards are shown in random order",
-  },
-  {
-    value: "difficulty" as const,
-    label: "By Difficulty",
-    description: "Harder cards are shown first",
-  },
-];
 
 interface CardSortingModalProps {
   isOpen: boolean;
@@ -36,10 +19,29 @@ export function CardSortingModal({
   currentSorting,
   onSaved,
 }: CardSortingModalProps) {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [selected, setSelected] = useState(currentSorting);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const SORTING_OPTIONS = [
+    {
+      value: "due_first" as const,
+      label: t("profile.sortingDueFirst"),
+      description: t("profile.sortingDueFirstDesc"),
+    },
+    {
+      value: "random" as const,
+      label: t("profile.sortingRandom"),
+      description: t("profile.sortingRandomDesc"),
+    },
+    {
+      value: "difficulty" as const,
+      label: t("profile.sortingDifficulty"),
+      description: t("profile.sortingDifficultyDesc"),
+    },
+  ];
 
   async function handleSave() {
     setIsSubmitting(true);
@@ -47,7 +49,7 @@ export function CardSortingModal({
       await profileApi.updatePreferences({
         cardSortingLogic: selected as "due_first" | "random" | "difficulty",
       });
-      showToast("Sorting preference updated!");
+      showToast(t("profile.sortingUpdated"));
       onSaved(selected);
       onClose();
     } catch (err) {
@@ -58,7 +60,7 @@ export function CardSortingModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Card Sorting" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("profile.sortingTitle")} size="sm">
       <div className="flex flex-col gap-2">
         {SORTING_OPTIONS.map((opt) => (
           <button
@@ -83,7 +85,7 @@ export function CardSortingModal({
         onClick={handleSave}
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Saving..." : "Save"}
+        {isSubmitting ? t("common.saving") : t("common.save")}
       </Button>
     </Modal>
   );

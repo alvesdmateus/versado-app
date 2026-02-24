@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import { X, ChevronUp, MoreVertical } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { ReviewRating } from "@versado/algorithms";
 import { studyApi, type DueCard } from "@/lib/study-api";
 import { profileApi } from "@/lib/profile-api";
@@ -14,8 +15,7 @@ import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
 
 interface RatingOption {
   rating: ReviewRating;
-  label: string;
-  interval: string;
+  ratingKey: "again" | "hard" | "good" | "easy";
   bgClass: string;
   icon: React.ReactNode;
 }
@@ -79,10 +79,10 @@ function ShieldIcon() {
 }
 
 const RATING_OPTIONS: RatingOption[] = [
-  { rating: 1 as ReviewRating, label: "Again", interval: "< 1m", bgClass: "bg-error-500", icon: <UndoIcon /> },
-  { rating: 2 as ReviewRating, label: "Hard", interval: "< 20m", bgClass: "bg-warning-500", icon: <FrownIcon /> },
-  { rating: 3 as ReviewRating, label: "Good", interval: "< 40m", bgClass: "bg-primary-500", icon: <ThumbsUpIcon /> },
-  { rating: 4 as ReviewRating, label: "Easy", interval: "< 78m", bgClass: "bg-success-500", icon: <SmileIcon /> },
+  { rating: 1 as ReviewRating, ratingKey: "again", bgClass: "bg-error-500", icon: <UndoIcon /> },
+  { rating: 2 as ReviewRating, ratingKey: "hard", bgClass: "bg-warning-500", icon: <FrownIcon /> },
+  { rating: 3 as ReviewRating, ratingKey: "good", bgClass: "bg-primary-500", icon: <ThumbsUpIcon /> },
+  { rating: 4 as ReviewRating, ratingKey: "easy", bgClass: "bg-success-500", icon: <SmileIcon /> },
 ];
 
 // ---------------------------------------------------------------------------
@@ -92,6 +92,7 @@ const RATING_OPTIONS: RatingOption[] = [
 type SessionState = "loading" | "studying" | "reviewing" | "complete" | "empty";
 
 export function StudySessionPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { deckId } = useParams<{ deckId: string }>();
 
@@ -230,7 +231,7 @@ export function StudySessionPage() {
   if (sessionState === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <p className="text-sm text-neutral-400">Loading cards...</p>
+        <p className="text-sm text-neutral-400">{t("study.loading")}</p>
       </div>
     );
   }
@@ -239,15 +240,15 @@ export function StudySessionPage() {
   if (sessionState === "empty") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-5">
-        <h1 className="text-2xl font-bold text-neutral-900">No Cards Due</h1>
+        <h1 className="text-2xl font-bold text-neutral-900">{t("study.noCardsDue")}</h1>
         <p className="mt-2 text-neutral-500">
-          All caught up! Come back later for more reviews.
+          {t("study.allCaughtUp")}
         </p>
         <button
           onClick={() => navigate("/")}
           className="mt-6 rounded-full bg-primary-500 px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-600 active:scale-95"
         >
-          Back to Home
+          {t("study.backToHome")}
         </button>
       </div>
     );
@@ -263,10 +264,10 @@ export function StudySessionPage() {
       : 0;
 
     const ratingBars = [
-      { label: "Again", count: ratingCounts[1], color: "bg-error-500" },
-      { label: "Hard", count: ratingCounts[2], color: "bg-warning-500" },
-      { label: "Good", count: ratingCounts[3], color: "bg-primary-500" },
-      { label: "Easy", count: ratingCounts[4], color: "bg-success-500" },
+      { ratingKey: "again" as const, count: ratingCounts[1], color: "bg-error-500" },
+      { ratingKey: "hard" as const, count: ratingCounts[2], color: "bg-warning-500" },
+      { ratingKey: "good" as const, count: ratingCounts[3], color: "bg-primary-500" },
+      { ratingKey: "easy" as const, count: ratingCounts[4], color: "bg-success-500" },
     ];
 
     return (
@@ -277,10 +278,10 @@ export function StudySessionPage() {
               <SmileIcon />
             </div>
             <h1 className="text-2xl font-bold text-neutral-900">
-              Session Complete!
+              {t("study.session.complete")}
             </h1>
             <p className="mt-1 text-sm text-neutral-500">
-              You reviewed {reviewedCount} card{reviewedCount !== 1 ? "s" : ""}
+              {t("study.session.reviewed", { count: reviewedCount })}
             </p>
           </div>
 
@@ -288,24 +289,24 @@ export function StudySessionPage() {
           <div className="mt-6 flex justify-center gap-6">
             <div className="text-center">
               <p className="text-2xl font-bold text-primary-500">{accuracy}%</p>
-              <p className="text-xs text-neutral-500">Accuracy</p>
+              <p className="text-xs text-neutral-500">{t("study.session.accuracy")}</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-neutral-700">{avgTime}s</p>
-              <p className="text-xs text-neutral-500">Avg. Time</p>
+              <p className="text-xs text-neutral-500">{t("study.session.avgTime")}</p>
             </div>
           </div>
 
           {/* Rating breakdown */}
           <div className="mt-6 rounded-xl bg-neutral-0 p-4 shadow-card">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-              Rating Breakdown
+              {t("study.session.ratingBreakdown")}
             </p>
             <div className="flex flex-col gap-2">
               {ratingBars.map((bar) => (
-                <div key={bar.label} className="flex items-center gap-2">
+                <div key={bar.ratingKey} className="flex items-center gap-2">
                   <span className="w-12 text-xs text-neutral-600">
-                    {bar.label}
+                    {t(`study.rating.${bar.ratingKey}`)}
                   </span>
                   <div className="flex-1 overflow-hidden rounded-full bg-neutral-100 h-2">
                     <div
@@ -331,19 +332,19 @@ export function StudySessionPage() {
               onClick={() => window.location.reload()}
               className="w-full rounded-full bg-primary-500 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-600 active:scale-95"
             >
-              Study Again
+              {t("study.session.study_again")}
             </button>
             <button
               onClick={() => navigate(`/decks/${deckId}`)}
               className="w-full rounded-full bg-neutral-100 py-3 text-sm font-semibold text-neutral-700 transition-all hover:bg-neutral-200 active:scale-95"
             >
-              Back to Deck
+              {t("study.session.back_to_deck")}
             </button>
             <button
               onClick={() => navigate("/")}
               className="w-full py-2 text-sm text-neutral-500 transition-colors hover:text-neutral-700"
             >
-              Back to Home
+              {t("study.session.back_to_home")}
             </button>
           </div>
         </div>
@@ -365,7 +366,7 @@ export function StudySessionPage() {
             <X className="h-5 w-5" />
           </button>
           <span className="text-sm font-semibold text-neutral-700">
-            {current} / {total}
+            {t("study.cardProgress", { current, total })}
           </span>
           {isReviewing ? (
             <button className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90">
@@ -396,9 +397,9 @@ export function StudySessionPage() {
             className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
           >
             {/* Front face — Question */}
-            <div className={`flip-card-face flex w-full flex-col items-center gap-5 p-8 transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
+            <div className={`flip-card-face flex w-full flex-col items-center gap-5 p-8 transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`} style={cardTheme.backgroundStyle}>
               <span className={`text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
-                Question
+                {t("study.question")}
               </span>
               <p className={`text-xl font-bold text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.front}
@@ -407,9 +408,9 @@ export function StudySessionPage() {
             </div>
 
             {/* Back face — Answer */}
-            <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-5 p-8 ${cardTheme.cardClassName}`}>
+            <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-5 p-8 ${cardTheme.cardClassName}`} style={cardTheme.backgroundStyle}>
               <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${cardTheme.answerLabelClassName}`}>
-                Answer Revealed
+                {t("study.answerRevealed")}
               </span>
               <p className={`text-base leading-relaxed text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.back}
@@ -425,7 +426,7 @@ export function StudySessionPage() {
         {isReviewing ? (
           <div className="flex flex-col items-center gap-4 animate-in fade-in duration-300">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
-              How well did you know this?
+              {t("study.ratingPrompt")}
             </p>
             <div className="flex gap-4">
               {RATING_OPTIONS.map((opt) => (
@@ -440,10 +441,10 @@ export function StudySessionPage() {
                     {opt.icon}
                   </div>
                   <span className="text-[10px] font-bold uppercase text-neutral-600">
-                    {opt.label}
+                    {t(`study.rating.${opt.ratingKey}`)}
                   </span>
                   <span className="text-[10px] text-neutral-400">
-                    {opt.interval}
+                    {t(`study.rating.${opt.ratingKey}_time`)}
                   </span>
                 </button>
               ))}
@@ -455,7 +456,7 @@ export function StudySessionPage() {
             className="flex w-full flex-col items-center gap-1 py-2 text-neutral-400 transition-colors hover:text-neutral-600"
           >
             <ChevronUp className="h-5 w-5 animate-bounce-subtle" />
-            <span className="text-sm">Tap to reveal answer</span>
+            <span className="text-sm">{t("study.revealAnswer")}</span>
           </button>
         )}
       </footer>

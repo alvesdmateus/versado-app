@@ -1,8 +1,12 @@
+import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { BottomNav, type BottomNavItem } from "@versado/ui";
 import { SyncStatusIndicator } from "@/components/shared/SyncStatusIndicator";
 import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
 import { OfflineBanner } from "@/components/shared/OfflineBanner";
+import { profileApi } from "@/lib/profile-api";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 function HomeIcon() {
   return (
@@ -38,13 +42,6 @@ function ProfileIcon() {
   );
 }
 
-const NAV_ITEMS: BottomNavItem[] = [
-  { key: "home", label: "Home", icon: <HomeIcon />, href: "/" },
-  { key: "decks", label: "Decks", icon: <DecksIcon />, href: "/decks" },
-  { key: "market", label: "Market", icon: <MarketIcon />, href: "/market" },
-  { key: "profile", label: "Profile", icon: <ProfileIcon />, href: "/profile" },
-];
-
 function getActiveKey(pathname: string): string {
   if (pathname.startsWith("/decks")) return "decks";
   if (pathname.startsWith("/market")) return "market";
@@ -55,6 +52,42 @@ function getActiveKey(pathname: string): string {
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+
+  const NAV_ITEMS: BottomNavItem[] = [
+    { key: "home", label: t("nav.home"), icon: <HomeIcon />, href: "/" },
+    { key: "decks", label: t("nav.decks"), icon: <DecksIcon />, href: "/decks" },
+    { key: "market", label: t("nav.market"), icon: <MarketIcon />, href: "/market" },
+    { key: "profile", label: t("nav.profile"), icon: <ProfileIcon />, href: "/profile" },
+  ];
+
+  useEffect(() => {
+    profileApi
+      .getPreferences()
+      .then((prefs) => {
+        if (prefs.nativeLanguage) {
+          i18n.changeLanguage(prefs.nativeLanguage);
+          document.documentElement.dir = prefs.nativeLanguage === "ar" ? "rtl" : "ltr";
+        }
+        if (!prefs.hasCompletedOnboarding) {
+          navigate("/onboard", { replace: true });
+        } else {
+          setOnboardingChecked(true);
+        }
+      })
+      .catch(() => {
+        setOnboardingChecked(true);
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!onboardingChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+        <p className="text-sm text-neutral-400">{t("common.loading")}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">

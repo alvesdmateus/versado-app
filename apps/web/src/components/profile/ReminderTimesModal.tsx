@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, X } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
@@ -19,6 +20,7 @@ export function ReminderTimesModal({
   currentTimes,
   onSaved,
 }: ReminderTimesModalProps) {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [times, setTimes] = useState<string[]>(currentTimes);
@@ -41,7 +43,7 @@ export function ReminderTimesModal({
     setIsSubmitting(true);
     try {
       await profileApi.updatePreferences({ reminderTimes: times });
-      showToast("Reminders updated!");
+      showToast(t("profile.reminderUpdated"));
       onSaved(times);
       onClose();
     } catch (err) {
@@ -52,11 +54,11 @@ export function ReminderTimesModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Reminder Times" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("profile.reminderTimesTitle")} size="sm">
       <div className="flex flex-col gap-3">
         {times.length === 0 && (
           <p className="text-sm text-neutral-500 text-center py-2">
-            No reminders set
+            {t("profile.noReminders")}
           </p>
         )}
         {times.map((time, i) => (
@@ -81,7 +83,7 @@ export function ReminderTimesModal({
             className="flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-neutral-300 py-2 text-sm text-neutral-500 transition-colors hover:border-primary-400 hover:text-primary-500"
           >
             <Plus className="h-4 w-4" />
-            Add Reminder
+            {t("profile.addReminder")}
           </button>
         )}
       </div>
@@ -91,7 +93,7 @@ export function ReminderTimesModal({
         onClick={handleSave}
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Saving..." : "Save"}
+        {isSubmitting ? t("common.saving") : t("common.save")}
       </Button>
     </Modal>
   );

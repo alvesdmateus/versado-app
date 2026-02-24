@@ -8,6 +8,8 @@ export interface UserPreferences {
   reminderTimes: string[];
   cardSortingLogic: "due_first" | "random" | "difficulty";
   cardTheme: string;
+  nativeLanguage: string;
+  hasCompletedOnboarding: boolean;
   pushAlerts: boolean;
   favoriteDeckIds: string[];
 }

@@ -1,10 +1,35 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff } from "lucide-react";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useTranslation } from "react-i18next";
 import { registerSchema } from "@versado/validation";
-import { Button, Input, Logo } from "@versado/ui";
+import { Button, Input, Logo, Divider, SocialButton } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api-client";
+
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <path
+        d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"
+        fill="#4285F4"
+      />
+      <path
+        d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"
+        fill="#34A853"
+      />
+      <path
+        d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+}
 
 interface FormErrors {
   displayName?: string;
@@ -16,7 +41,8 @@ interface FormErrors {
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
+  const { t } = useTranslation();
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,6 +51,29 @@ export function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (response) => {
+      setIsGoogleLoading(true);
+      setErrors({});
+      try {
+        const { isNewUser } = await loginWithGoogle(response.access_token);
+        navigate(isNewUser ? "/onboard" : "/");
+      } catch (err) {
+        if (err instanceof ApiError) {
+          setErrors({ general: err.message });
+        } else {
+          setErrors({ general: t("auth.register.googleError") });
+        }
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors({ general: t("auth.register.googleCancelled") });
+    },
+  });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -45,7 +94,7 @@ export function RegisterPage() {
 
     // Check confirm password
     if (password !== confirmPassword) {
-      setErrors({ confirmPassword: "Passwords do not match" });
+      setErrors({ confirmPassword: t("auth.register.noMatch") });
       return;
     }
 
@@ -54,12 +103,12 @@ export function RegisterPage() {
 
     try {
       await register(result.data.email, result.data.password, result.data.displayName);
-      navigate("/");
+      navigate("/onboard");
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors({ general: err.message });
       } else {
-        setErrors({ general: "Something went wrong. Please try again." });
+        setErrors({ general: t("auth.register.unknownError") });
       }
     } finally {
       setIsSubmitting(false);
@@ -72,9 +121,9 @@ export function RegisterPage() {
       <Logo size="lg" className="mb-4" />
 
       {/* Heading */}
-      <h1 className="text-2xl font-bold text-neutral-900">Create Account</h1>
+      <h1 className="text-2xl font-bold text-neutral-900">{t("auth.register.heading")}</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Start your learning journey today
+        {t("auth.register.subheading")}
       </p>
 
       {/* General error */}
@@ -87,9 +136,9 @@ export function RegisterPage() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="mt-8 w-full space-y-5">
         <Input
-          label="Display Name"
+          label={t("auth.register.displayNameLabel")}
           type="text"
-          placeholder="Your name"
+          placeholder={t("auth.register.displayNamePlaceholder")}
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           error={errors.displayName}
@@ -97,9 +146,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Email Address"
+          label={t("auth.register.emailLabel")}
           type="email"
-          placeholder="name@example.com"
+          placeholder={t("auth.register.emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
@@ -107,9 +156,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Password"
+          label={t("auth.register.passwordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Create a password"
+          placeholder={t("auth.register.passwordPlaceholder")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
@@ -120,7 +169,7 @@ export function RegisterPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="text-neutral-400 hover:text-neutral-600 transition-colors"
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? t("auth.register.hidePassword") : t("auth.register.showPassword")}
             >
               {showPassword ? (
                 <EyeOff className="h-4.5 w-4.5" />
@@ -132,9 +181,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Confirm Password"
+          label={t("auth.register.confirmPasswordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Repeat your password"
+          placeholder={t("auth.register.confirmPasswordPlaceholder")}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={errors.confirmPassword}
@@ -142,19 +191,32 @@ export function RegisterPage() {
         />
 
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Creating Account..." : "Create Account"}
+          {isSubmitting ? t("auth.register.creatingButton") : t("auth.register.createButton")}
         </Button>
       </form>
+
+      {/* Divider */}
+      <Divider label={t("auth.register.divider")} className="my-6 w-full" />
+
+      {/* Google Button */}
+      <SocialButton
+        icon={<GoogleIcon />}
+        onClick={() => googleLogin()}
+        disabled={isGoogleLoading}
+        className="w-full"
+      >
+        {isGoogleLoading ? t("auth.register.googleSigningUp") : t("auth.register.googleButton")}
+      </SocialButton>
 
       {/* Login footer */}
       <div className="self-stretch -mx-8 -mb-8 mt-8 rounded-b-2xl border-t border-neutral-200 bg-neutral-50 px-8 py-5 text-center">
         <p className="text-sm text-neutral-500">
-          Already have an account?{" "}
+          {t("auth.register.alreadyHave")}{" "}
           <Link
             to="/auth/login"
             className="font-medium text-primary-500 hover:text-primary-600"
           >
-            Sign In
+            {t("auth.register.signIn")}
           </Link>
         </p>
       </div>

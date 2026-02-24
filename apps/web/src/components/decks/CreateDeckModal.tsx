@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
@@ -16,6 +17,7 @@ export function CreateDeckModal({
   onClose,
   onCreated,
 }: CreateDeckModalProps) {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -32,7 +34,7 @@ export function CreateDeckModal({
     e.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Deck name is required");
+      setError(t("deck.createName"));
       return;
     }
 
@@ -43,11 +45,11 @@ export function CreateDeckModal({
         name: trimmedName,
         description: description.trim() || undefined,
       });
-      showToast("Deck created!");
+      showToast(t("deck.createSuccess"));
       resetForm();
       onCreated(deck);
     } catch {
-      setError("Failed to create deck. Please try again.");
+      setError(t("deck.createError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -59,25 +61,25 @@ export function CreateDeckModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Create Deck">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("deck.createTitle")}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input
-          label="Name"
-          placeholder="e.g. Spanish Vocabulary"
+          label={t("deck.createName")}
+          placeholder={t("deck.createNamePlaceholder")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={error}
           autoFocus
         />
         <Textarea
-          label="Description"
-          placeholder="What is this deck about? (optional)"
+          label={t("deck.createDescription")}
+          placeholder={t("deck.createDescriptionPlaceholder")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
         />
         <Button type="submit" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Create Deck"}
+          {isSubmitting ? t("common.creating") : t("common.create")}
         </Button>
       </form>
     </Modal>

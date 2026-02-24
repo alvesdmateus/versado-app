@@ -10,6 +10,7 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
   STRIPE_PRODUCT_ID_FLUENT: z.string().startsWith("prod_"),
   OPENAI_API_KEY: z.string().startsWith("sk-"),
+  GOOGLE_CLIENT_ID: z.string().min(1),
 });
 
 function validateEnv() {

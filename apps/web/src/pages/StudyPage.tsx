@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import type { ReviewRating } from "@versado/algorithms";
 import { IndexedDBAdapter } from "@versado/storage";
 import { StudyQueueService } from "@versado/core/services";
@@ -21,6 +22,7 @@ export interface StudyPageProps {
 const ANONYMOUS_USER_ID = "local-user";
 
 export function StudyPage({ deckId, userId, onBack }: StudyPageProps) {
+  const { t } = useTranslation();
   const effectiveUserId = userId ?? ANONYMOUS_USER_ID;
 
   // Create storage and services
@@ -79,7 +81,7 @@ export function StudyPage({ deckId, userId, onBack }: StudyPageProps) {
   if (state === "loading") {
     return (
       <div className="study-page study-page--loading">
-        <div className="study-page__loader">Loading cards...</div>
+        <div className="study-page__loader">{t("study.loading")}</div>
       </div>
     );
   }
@@ -89,11 +91,11 @@ export function StudyPage({ deckId, userId, onBack }: StudyPageProps) {
     return (
       <div className="study-page study-page--empty">
         <div className="study-page__empty-message">
-          <h2>No cards to study!</h2>
-          <p>Add some cards to this deck or check back later when cards are due for review.</p>
+          <h2>{t("study.noCardsDue")}</h2>
+          <p>{t("study.allCaughtUp")}</p>
           {onBack && (
             <button className="study-page__back-button" onClick={onBack}>
-              Go Back
+              {t("common.back")}
             </button>
           )}
         </div>
@@ -135,7 +137,7 @@ export function StudyPage({ deckId, userId, onBack }: StudyPageProps) {
         <header className="study-page__header">
           {onBack && (
             <button className="study-page__back-button" onClick={onBack}>
-              &larr; Back
+              &larr; {t("common.back")}
             </button>
           )}
           <StudyProgress
@@ -161,7 +163,7 @@ export function StudyPage({ deckId, userId, onBack }: StudyPageProps) {
           )}
           {state === "studying" && (
             <div className="study-page__hint">
-              Press <kbd>Space</kbd> or tap the card to reveal the answer
+              {t("study.revealAnswer")}
             </div>
           )}
         </footer>

@@ -56,6 +56,14 @@ profileRoutes.post("/change-password", async (c) => {
     throw new AppError(404, "User not found", "NOT_FOUND");
   }
 
+  if (!user.passwordHash) {
+    throw new AppError(
+      400,
+      "This account uses Google sign-in and has no password",
+      "GOOGLE_ACCOUNT"
+    );
+  }
+
   const valid = await verifyPassword(data.currentPassword, user.passwordHash);
   if (!valid) {
     throw new AppError(400, "Current password is incorrect", "INVALID_PASSWORD");

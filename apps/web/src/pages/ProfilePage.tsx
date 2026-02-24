@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Moon,
   Palette,
@@ -31,17 +32,18 @@ import { CardThemeModal } from "@/components/profile/CardThemeModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
 import { getCardTheme } from "@/lib/card-themes";
 
-const SORTING_LABELS: Record<string, string> = {
-  due_first: "Due First",
-  random: "Random",
-  difficulty: "By Difficulty",
-};
-
 export function ProfilePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { isDark, setDarkMode } = useTheme();
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
+
+  const SORTING_LABELS: Record<string, string> = {
+    due_first: t("profile.sortingDueFirst"),
+    random: t("profile.sortingRandom"),
+    difficulty: t("profile.sortingDifficulty"),
+  };
 
   // Modal states
   const [isDailyGoalOpen, setIsDailyGoalOpen] = useState(false);
@@ -104,10 +106,10 @@ export function ProfilePage() {
       {user?.tier === "fluent" && <SubscriptionSection />}
 
       {/* Appearance */}
-      <SettingsSection label="Appearance">
+      <SettingsSection label={t("profile.appearance")}>
         <SettingRow
           icon={<Moon className="h-5 w-5" />}
-          label="Dark Mode"
+          label={t("profile.darkMode")}
           rightElement={
             <ToggleSwitch
               checked={isDark}
@@ -117,29 +119,29 @@ export function ProfilePage() {
         />
         <SettingRow
           icon={<Palette className="h-5 w-5" />}
-          label="Theme Color"
+          label={t("profile.themeColor")}
           value={preferences?.themeColor ?? "Sky"}
           onClick={() => setIsThemeColorOpen(true)}
         />
         <SettingRow
           icon={<CreditCard className="h-5 w-5" />}
-          label="Card Theme"
+          label={t("profile.cardTheme")}
           value={getCardTheme(preferences?.cardTheme).name}
           onClick={() => setIsCardThemeOpen(true)}
         />
       </SettingsSection>
 
       {/* Study Preferences */}
-      <SettingsSection label="Study Preferences">
+      <SettingsSection label={t("profile.studyPreferences")}>
         <SettingRow
           icon={<Target className="h-5 w-5" />}
-          label="Daily Goal"
+          label={t("profile.dailyGoal")}
           value={`${preferences?.dailyGoal ?? 50} Cards`}
           onClick={() => setIsDailyGoalOpen(true)}
         />
         <SettingRow
           icon={<Clock className="h-5 w-5" />}
-          label="Reminder Times"
+          label={t("profile.reminderTimes")}
           value={
             preferences?.reminderTimes?.length
               ? `${preferences.reminderTimes.length} set`
@@ -149,20 +151,20 @@ export function ProfilePage() {
         />
         <SettingRow
           icon={<ArrowUpDown className="h-5 w-5" />}
-          label="Card Sorting Logic"
+          label={t("profile.cardSorting")}
           value={
             SORTING_LABELS[preferences?.cardSortingLogic ?? "due_first"] ??
-            "Due First"
+            t("profile.sortingDueFirst")
           }
           onClick={() => setIsCardSortingOpen(true)}
         />
       </SettingsSection>
 
       {/* Notifications */}
-      <SettingsSection label="Notifications">
+      <SettingsSection label={t("profile.notifications")}>
         <SettingRow
           icon={<Bell className="h-5 w-5" />}
-          label="Push Alerts"
+          label={t("profile.pushAlerts")}
           rightElement={
             <ToggleSwitch
               checked={preferences?.pushAlerts ?? true}
@@ -173,20 +175,20 @@ export function ProfilePage() {
       </SettingsSection>
 
       {/* Account */}
-      <SettingsSection label="Account">
+      <SettingsSection label={t("profile.account")}>
         <SettingRow
           icon={<Lock className="h-5 w-5" />}
-          label="Change Password"
+          label={t("profile.changePassword")}
           onClick={() => setIsPasswordOpen(true)}
         />
         <SettingRow
           icon={<Download className="h-5 w-5" />}
-          label="Export Data"
+          label={t("profile.exportData")}
           onClick={() => setIsExportOpen(true)}
         />
         <SettingRow
           icon={<LogOut className="h-5 w-5" />}
-          label="Log Out"
+          label={t("profile.logout")}
           danger
           onClick={handleLogout}
         />
@@ -194,11 +196,11 @@ export function ProfilePage() {
 
       {/* Footer */}
       <div className="mt-8 mb-2 flex flex-col items-center gap-1 px-5">
-        <p className="text-xs text-neutral-400">Versado v2.0.0</p>
+        <p className="text-xs text-neutral-400">{t("profile.version")}</p>
         <div className="flex gap-3">
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Terms</button>
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</button>
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Support</button>
+          <button className="text-xs text-neutral-400 hover:text-neutral-600">{t("profile.terms")}</button>
+          <button className="text-xs text-neutral-400 hover:text-neutral-600">{t("profile.privacy")}</button>
+          <button className="text-xs text-neutral-400 hover:text-neutral-600">{t("profile.support")}</button>
         </div>
       </div>
 

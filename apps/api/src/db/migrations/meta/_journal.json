@@ -43,6 +43,13 @@
       "when": 1771341977034,
       "tag": "0005_swift_doctor_faustus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1771519727461,
+      "tag": "0006_steep_proudstar",
+      "breakpoints": true
     }
   ]
 }

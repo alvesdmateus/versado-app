@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
@@ -18,6 +19,7 @@ export function EditDeckModal({
   deck,
   onUpdated,
 }: EditDeckModalProps) {
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const [name, setName] = useState(deck.name);
   const [description, setDescription] = useState(deck.description);
@@ -36,7 +38,7 @@ export function EditDeckModal({
     e.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Deck name is required");
+      setError(t("deck.createName"));
       return;
     }
 
@@ -47,34 +49,34 @@ export function EditDeckModal({
         name: trimmedName,
         description: description.trim(),
       });
-      showToast("Deck updated!");
+      showToast(t("deck.editSuccess"));
       onUpdated(updated);
     } catch {
-      setError("Failed to update deck. Please try again.");
+      setError(t("deck.editError"));
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Deck">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("deck.editTitle")}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input
-          label="Name"
+          label={t("deck.createName")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={error}
           autoFocus
         />
         <Textarea
-          label="Description"
-          placeholder="What is this deck about? (optional)"
+          label={t("deck.createDescription")}
+          placeholder={t("deck.createDescriptionPlaceholder")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
         />
         <Button type="submit" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Changes"}
+          {isSubmitting ? t("common.saving") : t("common.save")}
         </Button>
       </form>
     </Modal>

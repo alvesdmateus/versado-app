@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Layers, Download, Users } from "lucide-react";
 import { Button } from "@versado/ui";
+import { useTranslation } from "react-i18next";
 import {
   marketplaceApi,
   type MarketplaceDetail,
@@ -43,6 +44,7 @@ function formatCount(n: number): string {
 export function MarketplaceDetailPage() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
 
@@ -70,11 +72,11 @@ export function MarketplaceDetailPage() {
     setIsAdding(true);
     try {
       const { clonedDeckId } = await marketplaceApi.addToLibrary(deckId);
-      showToast("Added to your library!");
+      showToast(t("marketplace.addedSuccess"));
       navigate(`/decks/${clonedDeckId}`);
     } catch (err) {
       if (err instanceof ApiError && err.code === "ALREADY_PURCHASED") {
-        showToast("Already in your library", "info");
+        showToast(t("marketplace.alreadyPurchased"), "info");
       } else {
         showErrorNotification(err, { onRetry: handleAddToLibrary });
       }
@@ -96,6 +98,7 @@ export function MarketplaceDetailPage() {
   if (!detail) return null;
 
   const isFree = detail.price === 0;
+  const creator = detail.creator.displayName;
 
   return (
     <div className="pb-4">
@@ -129,7 +132,7 @@ export function MarketplaceDetailPage() {
               {detail.name}
             </h2>
             <p className="mt-0.5 text-sm text-neutral-500">
-              by {detail.creator.displayName}
+              {t("marketplace.by", { creator })}
             </p>
           </div>
           <span
@@ -139,7 +142,7 @@ export function MarketplaceDetailPage() {
                 : "bg-primary-500 text-white"
             }`}
           >
-            {isFree ? "Free" : `$${(detail.price / 100).toFixed(2)}`}
+            {isFree ? t("marketplace.free") : `$${(detail.price / 100).toFixed(2)}`}
           </span>
         </div>
 
@@ -161,7 +164,7 @@ export function MarketplaceDetailPage() {
           </div>
           <div className="flex items-center gap-1 text-xs text-neutral-500">
             <Users className="h-3.5 w-3.5" />
-            <span>{detail.cardCount} cards</span>
+            <span>{t("decks.cardCount", { count: detail.cardCount })}</span>
           </div>
         </div>
 
@@ -184,19 +187,19 @@ export function MarketplaceDetailPage() {
       <div className="mx-5 mt-4">
         {detail.isOwner ? (
           <Button variant="secondary" fullWidth disabled>
-            Your Deck
+            {t("marketplace.yourDeck")}
           </Button>
         ) : detail.isPurchased ? (
           <Button variant="secondary" fullWidth disabled>
-            Already in Library
+            {t("marketplace.alreadyInLibrary")}
           </Button>
         ) : isFree ? (
           <Button fullWidth onClick={handleAddToLibrary} disabled={isAdding}>
-            {isAdding ? "Adding..." : "Add to Library"}
+            {isAdding ? t("marketplace.adding") : t("marketplace.addToLibrary")}
           </Button>
         ) : (
           <Button fullWidth disabled>
-            ${(detail.price / 100).toFixed(2)} — Coming Soon
+            ${(detail.price / 100).toFixed(2)} — {t("marketplace.coming")}
           </Button>
         )}
       </div>
@@ -205,7 +208,7 @@ export function MarketplaceDetailPage() {
       {detail.sampleCards.length > 0 && (
         <div className="mx-5 mt-6">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
-            Sample Cards
+            {t("marketplace.sampleCards")}
           </h3>
           <SampleCardList cards={detail.sampleCards} />
         </div>
@@ -214,7 +217,7 @@ export function MarketplaceDetailPage() {
       {/* Reviews */}
       <div className="mx-5 mt-6">
         <h3 className="mb-3 text-sm font-semibold text-neutral-700">
-          Reviews ({detail.reviewCount})
+          {t("marketplace.reviews")} ({detail.reviewCount})
         </h3>
 
         {detail.isPurchased && !detail.isOwner && (

@@ -11,11 +11,13 @@ export {
   changePasswordSchema,
   updateProfileSchema,
   updatePreferencesSchema,
+  googleOAuthSchema,
   type RegisterInput,
   type LoginInput,
   type ChangePasswordInput,
   type UpdateProfileInput,
   type UpdatePreferencesInput,
+  type GoogleOAuthInput,
 } from "./auth";
 
 export {

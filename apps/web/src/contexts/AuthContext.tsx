@@ -21,6 +21,7 @@ export interface AuthContextValue {
     password: string,
     displayName: string
   ) => Promise<void>;
+  loginWithGoogle: (accessToken: string) => Promise<{ isNewUser: boolean }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -119,6 +120,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [scheduleRefresh]
   );
 
+  const loginWithGoogle = useCallback(
+    async (accessToken: string): Promise<{ isNewUser: boolean }> => {
+      const {
+        accessToken: token,
+        user: profile,
+        isNewUser,
+      } = await authApi.loginWithGoogle(accessToken);
+      setAccessToken(token);
+      setUser(profile);
+      scheduleRefresh();
+      return { isNewUser };
+    },
+    [scheduleRefresh]
+  );
+
   const refreshUser = useCallback(async () => {
     try {
       const { accessToken } = await authApi.refresh();
@@ -150,6 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         login,
         register,
+        loginWithGoogle,
         logout,
         refreshUser,
       }}

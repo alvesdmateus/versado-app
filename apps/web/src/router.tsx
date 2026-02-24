@@ -13,6 +13,7 @@ import { DeckDetailPage } from "./pages/DeckDetailPage";
 import { MarketplaceDetailPage } from "./pages/MarketplaceDetailPage";
 import { BillingPage } from "./pages/BillingPage";
 import { FluentPage } from "./pages/FluentPage";
+import { OnboardingPage } from "./pages/OnboardingPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 export const router = createBrowserRouter([
@@ -43,6 +44,14 @@ export const router = createBrowserRouter([
       { path: "not-found", element: <NotFoundPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
+  },
+  {
+    path: "/onboard",
+    element: (
+      <ProtectedRoute>
+        <OnboardingPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/study/:deckId",
