@@ -19,6 +19,11 @@ export function CircularProgress({
 
   return (
     <div
+      role="progressbar"
+      aria-valuenow={Math.round(value)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={`${Math.round(value)}% progress`}
       className={cn("relative inline-flex items-center justify-center", className)}
     >
       <svg width={size} height={size} className="-rotate-90">

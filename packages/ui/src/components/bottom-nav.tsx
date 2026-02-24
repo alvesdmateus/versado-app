@@ -23,6 +23,7 @@ export function BottomNav({
 }: BottomNavProps) {
   return (
     <nav
+      aria-label="Main navigation"
       className={cn(
         "fixed bottom-0 left-0 right-0 z-50 border-t border-neutral-200 bg-neutral-0",
         className
@@ -35,6 +36,7 @@ export function BottomNav({
             <button
               key={item.key}
               onClick={() => onNavigate(item.href)}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
                 "flex h-full flex-1 flex-col items-center justify-center gap-0.5 transition-colors",
                 isActive ? "text-primary-500" : "text-neutral-400"

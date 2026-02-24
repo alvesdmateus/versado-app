@@ -22,6 +22,9 @@ const BORDER_MAP = {
 export function Toast({ message, type, onDismiss }: ToastProps) {
   return (
     <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
       className={cn(
         "pointer-events-auto flex w-full max-w-sm items-center gap-3 rounded-lg border border-l-4 bg-neutral-0 px-4 py-3 shadow-lg animate-in slide-in-from-bottom-2 duration-200",
         BORDER_MAP[type]

@@ -154,3 +154,45 @@ NODE_ENV=development
 ```
 
 Docker Compose runs PostgreSQL on host port **5433** (5432 may be used by other projects).
+
+## Version Control
+
+### Branch Strategy (GitHub Flow)
+- `main` is always deployable — all work merges here via PR
+- Feature branches: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`, `ci/`
+- Naming: lowercase kebab-case, e.g. `feat/deck-sharing`, `fix/token-refresh`
+
+### Merge Strategy
+- **Squash merge only** — PR title becomes the commit message on `main`
+- Merge commits and rebase merges are disabled
+- Head branches auto-delete after merge
+
+### PR Title Format (Conventional Commits)
+```
+<type>(<scope>): <description>
+```
+- **Types:** `feat`, `fix`, `perf`, `docs`, `chore`, `refactor`, `test`, `style`, `ci`
+- **Scopes (optional):** `api`, `web`, `core`, `ui`, `algorithms`, `auth`, `storage`, `sync`, `validation`, `e2e`, `deps`, `ci`, `main` (release-please)
+- Subject must start lowercase
+- Examples: `feat(web): add deck sharing`, `fix(api): prevent duplicate progress entries`
+- Enforced by CI (`pr-lint.yml`) — individual feature branch commits can use any format
+
+### Semver Bumps
+| Type | Bump | Example |
+|------|------|---------|
+| `feat` | MINOR (0.x.0) | New feature |
+| `fix`, `perf` | PATCH (0.0.x) | Bug fix, perf improvement |
+| `docs`, `chore`, `refactor`, `test`, `ci`, `style` | none | No version bump |
+| `feat!` / `BREAKING CHANGE:` | MAJOR | Breaking change |
+
+### Releases
+- **release-please** automates versioning, changelog, and GitHub Releases
+- After merging a PR with releasable commits, release-please opens a Release PR
+- Merging the Release PR creates a git tag (`versado-vX.Y.Z`) and GitHub Release
+- All workspace `package.json` versions stay in sync (unified version)
+
+### Branch Protection (`main`)
+- PRs required (no direct pushes)
+- Required checks: Type Check, Unit Tests, API Integration Tests, Component Tests, E2E Tests, Validate PR Title
+- Branches must be up to date before merge
+- Conversation resolution required

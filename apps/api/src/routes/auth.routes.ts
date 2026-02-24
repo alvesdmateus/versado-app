@@ -1,6 +1,13 @@
 import { Hono } from "hono";
 import { setCookie, getCookie, deleteCookie } from "hono/cookie";
-import { registerSchema, loginSchema } from "@versado/validation";
+import {
+  registerSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyEmailSchema,
+  resendVerificationSchema,
+} from "@versado/validation";
 import { REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_EXPIRY } from "@versado/auth";
 import { rateLimitMiddleware } from "../middleware/rate-limit";
 import { authMiddleware } from "../middleware/auth";
@@ -69,6 +76,42 @@ authRoutes.post("/logout", async (c) => {
   deleteCookie(c, REFRESH_TOKEN_COOKIE, { path: "/auth" });
   return c.json({ success: true });
 });
+
+authRoutes.post(
+  "/forgot-password",
+  rateLimitMiddleware(3, 60_000),
+  async (c) => {
+    const body = await c.req.json();
+    const { email } = validate(forgotPasswordSchema, body);
+    await authService.forgotPassword(email);
+    return c.json({ success: true });
+  }
+);
+
+authRoutes.post("/reset-password", async (c) => {
+  const body = await c.req.json();
+  const { token, newPassword } = validate(resetPasswordSchema, body);
+  await authService.resetPassword(token, newPassword);
+  return c.json({ success: true });
+});
+
+authRoutes.post("/verify-email", async (c) => {
+  const body = await c.req.json();
+  const { token } = validate(verifyEmailSchema, body);
+  await authService.verifyEmail(token);
+  return c.json({ success: true });
+});
+
+authRoutes.post(
+  "/resend-verification",
+  rateLimitMiddleware(3, 60_000),
+  async (c) => {
+    const body = await c.req.json();
+    const { email } = validate(resendVerificationSchema, body);
+    await authService.resendVerificationEmail(email);
+    return c.json({ success: true });
+  }
+);
 
 // Get current user profile (protected)
 authRoutes.get("/me", authMiddleware(), async (c) => {

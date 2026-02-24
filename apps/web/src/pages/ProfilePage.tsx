@@ -10,6 +10,7 @@ import {
   Bell,
   Lock,
   Download,
+  Trash2,
   LogOut,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -28,6 +29,7 @@ import { ReminderTimesModal } from "@/components/profile/ReminderTimesModal";
 import { ChangePasswordModal } from "@/components/profile/ChangePasswordModal";
 import { ExportDataModal } from "@/components/profile/ExportDataModal";
 import { CardThemeModal } from "@/components/profile/CardThemeModal";
+import { DeleteAccountModal } from "@/components/profile/DeleteAccountModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
 import { getCardTheme } from "@/lib/card-themes";
 
@@ -51,6 +53,7 @@ export function ProfilePage() {
   const [isReminderTimesOpen, setIsReminderTimesOpen] = useState(false);
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
@@ -185,6 +188,12 @@ export function ProfilePage() {
           onClick={() => setIsExportOpen(true)}
         />
         <SettingRow
+          icon={<Trash2 className="h-5 w-5" />}
+          label="Delete Account"
+          danger
+          onClick={() => setIsDeleteOpen(true)}
+        />
+        <SettingRow
           icon={<LogOut className="h-5 w-5" />}
           label="Log Out"
           danger
@@ -258,6 +267,10 @@ export function ProfilePage() {
       <ExportDataModal
         isOpen={isExportOpen}
         onClose={() => setIsExportOpen(false)}
+      />
+      <DeleteAccountModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
       />
     </div>
   );

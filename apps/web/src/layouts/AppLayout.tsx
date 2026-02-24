@@ -3,6 +3,7 @@ import { BottomNav, type BottomNavItem } from "@versado/ui";
 import { SyncStatusIndicator } from "@/components/shared/SyncStatusIndicator";
 import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
 import { OfflineBanner } from "@/components/shared/OfflineBanner";
+import { EmailVerificationBanner } from "@/components/shared/EmailVerificationBanner";
 
 function HomeIcon() {
   return (
@@ -58,12 +59,19 @@ export function AppLayout() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-600 focus:shadow-md"
+      >
+        Skip to main content
+      </a>
       <UpdatePrompt />
       <OfflineBanner />
+      <EmailVerificationBanner />
       <div className="flex justify-end px-4 pt-2">
         <SyncStatusIndicator />
       </div>
-      <main className="pb-20">
+      <main id="main-content" className="pb-20">
         <Outlet />
       </main>
       <BottomNav

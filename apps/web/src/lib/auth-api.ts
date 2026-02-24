@@ -31,4 +31,32 @@ export const authApi = {
   getMe() {
     return apiClient<PublicProfile>("/auth/me");
   },
+
+  forgotPassword(email: string) {
+    return apiClient<{ success: boolean }>("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  resetPassword(token: string, newPassword: string, confirmPassword: string) {
+    return apiClient<{ success: boolean }>("/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, newPassword, confirmPassword }),
+    });
+  },
+
+  verifyEmail(token: string) {
+    return apiClient<{ success: boolean }>("/auth/verify-email", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+  },
+
+  resendVerification(email: string) {
+    return apiClient<{ success: boolean }>("/auth/resend-verification", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
 };

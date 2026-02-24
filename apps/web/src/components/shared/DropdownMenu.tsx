@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type ReactNode } from "react";
+import { useState, useEffect, useRef, useCallback, type ReactNode } from "react";
 import { cn } from "@versado/ui";
 
 interface DropdownMenuItem {
@@ -20,7 +20,14 @@ export function DropdownMenu({
   align = "right",
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setActiveIndex(-1);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -30,37 +37,97 @@ export function DropdownMenu({
         containerRef.current &&
         !containerRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        close();
       }
     }
 
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") setIsOpen(false);
-    }
-
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
     };
-  }, [isOpen]);
+  }, [isOpen, close]);
+
+  function handleTriggerKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setIsOpen(true);
+      setActiveIndex(0);
+    }
+  }
+
+  function handleMenuKeyDown(e: React.KeyboardEvent) {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setActiveIndex((prev) => (prev + 1) % items.length);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setActiveIndex((prev) => (prev - 1 + items.length) % items.length);
+        break;
+      case "Home":
+        e.preventDefault();
+        setActiveIndex(0);
+        break;
+      case "End":
+        e.preventDefault();
+        setActiveIndex(items.length - 1);
+        break;
+      case "Escape":
+        e.preventDefault();
+        close();
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (activeIndex >= 0 && items[activeIndex]) {
+          close();
+          items[activeIndex].onClick();
+        }
+        break;
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen && activeIndex >= 0) {
+      itemRefs.current[activeIndex]?.focus();
+    }
+  }, [isOpen, activeIndex]);
 
   return (
     <div ref={containerRef} className="relative">
-      <button onClick={() => setIsOpen((prev) => !prev)}>{trigger}</button>
+      <button
+        onClick={() => {
+          if (isOpen) {
+            close();
+          } else {
+            setIsOpen(true);
+            setActiveIndex(0);
+          }
+        }}
+        onKeyDown={handleTriggerKeyDown}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        {trigger}
+      </button>
       {isOpen && (
         <div
+          role="menu"
+          onKeyDown={handleMenuKeyDown}
           className={cn(
             "absolute top-full z-50 mt-1 min-w-[160px] rounded-lg border border-neutral-200 bg-neutral-0 py-1 shadow-lg animate-in fade-in zoom-in-95 duration-100",
             align === "right" ? "right-0" : "left-0"
           )}
         >
-          {items.map((item) => (
+          {items.map((item, index) => (
             <button
               key={item.label}
+              ref={(el) => { itemRefs.current[index] = el; }}
+              role="menuitem"
+              tabIndex={activeIndex === index ? 0 : -1}
               onClick={() => {
-                setIsOpen(false);
+                close();
                 item.onClick();
               }}
               className={cn(

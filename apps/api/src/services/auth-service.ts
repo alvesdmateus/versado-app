@@ -1,11 +1,20 @@
-import { eq, and, isNull } from "drizzle-orm";
+import { eq, and, isNull, gt } from "drizzle-orm";
 import { db } from "../db";
-import { users, refreshTokens } from "../db/schema";
+import {
+  users,
+  refreshTokens,
+  passwordResetTokens,
+  emailVerificationTokens,
+} from "../db/schema";
 import { hashPassword, verifyPassword } from "../lib/hash";
 import { sign } from "../lib/jwt";
 import { REFRESH_TOKEN_EXPIRY } from "@versado/auth";
 import type { AuthResponse, PublicProfile } from "@versado/auth";
 import { AppError } from "../middleware/error-handler";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "../lib/email";
 
 async function hashToken(token: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -22,6 +31,7 @@ function toPublicProfile(
     email: user.email,
     displayName: user.displayName,
     avatarUrl: user.avatarUrl,
+    emailVerified: user.emailVerified,
     tier: user.tier,
     createdAt: user.createdAt,
   };
@@ -65,6 +75,16 @@ export async function register(
     tokenHash,
     expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY * 1000),
   });
+
+  // Send verification email (fire-and-forget)
+  const verificationToken = crypto.randomUUID();
+  const verificationHash = await hashToken(verificationToken);
+  await db.insert(emailVerificationTokens).values({
+    userId: user.id,
+    tokenHash: verificationHash,
+    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+  });
+  sendVerificationEmail(user.email, verificationToken).catch(console.error);
 
   return {
     auth: { accessToken, user: toPublicProfile(user) },
@@ -183,4 +203,149 @@ export async function getUserProfile(
     .limit(1);
 
   return user ? toPublicProfile(user) : null;
+}
+
+export async function forgotPassword(email: string): Promise<void> {
+  const [user] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  // Silent return to prevent email enumeration
+  if (!user) return;
+
+  const token = crypto.randomUUID();
+  const tokenHash = await hashToken(token);
+
+  await db.insert(passwordResetTokens).values({
+    userId: user.id,
+    tokenHash,
+    expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+  });
+
+  await sendPasswordResetEmail(email, token);
+}
+
+export async function resetPassword(
+  token: string,
+  newPassword: string
+): Promise<void> {
+  const tokenHash = await hashToken(token);
+
+  const [stored] = await db
+    .select()
+    .from(passwordResetTokens)
+    .where(
+      and(
+        eq(passwordResetTokens.tokenHash, tokenHash),
+        isNull(passwordResetTokens.usedAt),
+        gt(passwordResetTokens.expiresAt, new Date())
+      )
+    )
+    .limit(1);
+
+  if (!stored) {
+    throw new AppError(
+      400,
+      "Invalid or expired reset token",
+      "INVALID_RESET_TOKEN"
+    );
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(users)
+      .set({ passwordHash, updatedAt: new Date() })
+      .where(eq(users.id, stored.userId));
+
+    await tx
+      .update(passwordResetTokens)
+      .set({ usedAt: new Date() })
+      .where(eq(passwordResetTokens.id, stored.id));
+
+    // Revoke all refresh tokens for security
+    await tx
+      .update(refreshTokens)
+      .set({ revokedAt: new Date() })
+      .where(
+        and(
+          eq(refreshTokens.userId, stored.userId),
+          isNull(refreshTokens.revokedAt)
+        )
+      );
+  });
+}
+
+export async function verifyEmail(token: string): Promise<void> {
+  const tokenHash = await hashToken(token);
+
+  const [stored] = await db
+    .select()
+    .from(emailVerificationTokens)
+    .where(
+      and(
+        eq(emailVerificationTokens.tokenHash, tokenHash),
+        isNull(emailVerificationTokens.usedAt),
+        gt(emailVerificationTokens.expiresAt, new Date())
+      )
+    )
+    .limit(1);
+
+  if (!stored) {
+    throw new AppError(
+      400,
+      "Invalid or expired verification token",
+      "INVALID_VERIFICATION_TOKEN"
+    );
+  }
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(users)
+      .set({ emailVerified: true, updatedAt: new Date() })
+      .where(eq(users.id, stored.userId));
+
+    await tx
+      .update(emailVerificationTokens)
+      .set({ usedAt: new Date() })
+      .where(eq(emailVerificationTokens.id, stored.id));
+  });
+}
+
+export async function resendVerificationEmail(
+  email: string
+): Promise<void> {
+  const [user] = await db
+    .select({ id: users.id, emailVerified: users.emailVerified })
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  // Silent return to prevent enumeration
+  if (!user || user.emailVerified) return;
+
+  // Invalidate existing tokens
+  await db
+    .update(emailVerificationTokens)
+    .set({ usedAt: new Date() })
+    .where(
+      and(
+        eq(emailVerificationTokens.userId, user.id),
+        isNull(emailVerificationTokens.usedAt)
+      )
+    );
+
+  const token = crypto.randomUUID();
+  const tokenHash = await hashToken(token);
+
+  await db.insert(emailVerificationTokens).values({
+    userId: user.id,
+    tokenHash,
+    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+  });
+
+  await sendVerificationEmail(email, token);
 }

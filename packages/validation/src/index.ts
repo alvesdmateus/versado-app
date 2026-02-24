@@ -11,11 +11,19 @@ export {
   changePasswordSchema,
   updateProfileSchema,
   updatePreferencesSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyEmailSchema,
+  resendVerificationSchema,
   type RegisterInput,
   type LoginInput,
   type ChangePasswordInput,
   type UpdateProfileInput,
   type UpdatePreferencesInput,
+  type ForgotPasswordInput,
+  type ResetPasswordInput,
+  type VerifyEmailInput,
+  type ResendVerificationInput,
 } from "./auth";
 
 export {
