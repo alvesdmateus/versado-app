@@ -1,0 +1,44 @@
+name: PR Lint
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  conventional-pr-title:
+    name: Validate PR Title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            perf
+            docs
+            chore
+            refactor
+            test
+            style
+            ci
+          scopes: |
+            api
+            web
+            core
+            ui
+            algorithms
+            auth
+            storage
+            sync
+            validation
+            e2e
+            deps
+            ci
+          requireScope: false
+          subjectPattern: ^[a-z].+$
+          subjectPatternError: |
+            The subject "{subject}" must start with a lowercase letter.
+            Example: "feat(web): add deck sharing"
