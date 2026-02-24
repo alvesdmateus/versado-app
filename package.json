@@ -1,7 +1,10 @@
 {
   "name": "versado",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "bun run --filter @versado/web dev",
     "dev:web": "bun run --filter @versado/web dev",
@@ -19,5 +22,6 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "typescript": "^5.3.3"
-  }
+  },
+  "version": "0.1.1"
 }
