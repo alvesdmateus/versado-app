@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
-import { deckApi, type DeckResponse } from "@/lib/deck-api";
+import type { DeckResponse } from "@/lib/deck-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { Input, Button } from "@versado/ui";
 
 interface EditDeckModalProps {
@@ -43,7 +44,7 @@ export function EditDeckModal({
     setIsSubmitting(true);
     setError("");
     try {
-      const updated = await deckApi.update(deck.id, {
+      const updated = await syncAwareApi.updateDeck(deck.id, {
         name: trimmedName,
         description: description.trim(),
       });

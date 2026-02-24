@@ -3,8 +3,8 @@ import { Plus, X } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
-import { flashcardApi } from "@/lib/flashcard-api";
 import type { FlashcardResponse } from "@/lib/deck-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { Button } from "@versado/ui";
 
 interface CardRow {
@@ -68,7 +68,7 @@ export function AddCardModal({
     setIsSubmitting(true);
     setError("");
     try {
-      const cards = await flashcardApi.batchCreate({
+      const cards = await syncAwareApi.createCards({
         deckId,
         cards: validCards.map((r) => ({
           front: r.front.trim(),

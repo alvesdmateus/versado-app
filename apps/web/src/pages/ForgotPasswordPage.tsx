@@ -1,16 +1,20 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router";
 import { Mail, ArrowLeft } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { forgotPasswordSchema } from "@versado/validation";
 import { Button, Input, Logo } from "@versado/ui";
 import { authApi } from "@/lib/auth-api";
 import { ApiError } from "@/lib/api-client";
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -25,7 +29,7 @@ export function ForgotPasswordPage() {
     setIsSubmitting(true);
 
     try {
-      await authApi.forgotPassword(result.data.email);
+      await authApi.forgotPassword(result.data.email, turnstileToken ?? undefined);
       setIsSubmitted(true);
     } catch (err) {
       if (err instanceof ApiError) {
@@ -79,6 +83,14 @@ export function ForgotPasswordPage() {
           error={error}
           autoComplete="email"
         />
+
+        {TURNSTILE_SITE_KEY && (
+          <Turnstile
+            siteKey={TURNSTILE_SITE_KEY}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+          />
+        )}
 
         <Button
           type="submit"

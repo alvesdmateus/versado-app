@@ -2,7 +2,9 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import { X, ChevronUp, MoreVertical } from "lucide-react";
 import type { ReviewRating } from "@versado/algorithms";
-import { studyApi, type DueCard } from "@/lib/study-api";
+import { studyApi } from "@/lib/study-api";
+import type { DueCard } from "@/lib/study-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
@@ -125,7 +127,7 @@ export function StudySessionPage() {
       try {
         // Initialize progress for new cards, then fetch due cards
         await studyApi.initProgress(deckId!);
-        const cards = await studyApi.getDueCards(deckId!);
+        const cards = await syncAwareApi.getDueCards(deckId!);
 
         if (cards.length === 0) {
           setSessionState("empty");
@@ -135,8 +137,8 @@ export function StudySessionPage() {
         setDueCards(cards);
 
         // Start a session
-        const session = await studyApi.startSession(deckId!);
-        setSessionId(session.id);
+        const session = await syncAwareApi.startSession(deckId!);
+        if (session) setSessionId(session.id);
         cardStartTimeRef.current = Date.now();
         setSessionState("studying");
       } catch {
@@ -162,7 +164,7 @@ export function StudySessionPage() {
 
       // Submit review to API
       try {
-        await studyApi.submitReview(
+        await syncAwareApi.submitReview(
           currentCard.progress.id,
           rating,
           responseTimeMs
@@ -183,7 +185,7 @@ export function StudySessionPage() {
       if (nextIndex >= dueCards.length) {
         // End session
         if (sessionId) {
-          studyApi.endSession(sessionId).catch(() => {});
+          syncAwareApi.endSession(sessionId).catch(() => {});
         }
         setSessionState("complete");
       } else {
@@ -207,7 +209,7 @@ export function StudySessionPage() {
 
   const handleClose = useCallback(() => {
     if (sessionId) {
-      studyApi.endSession(sessionId).catch(() => {});
+      syncAwareApi.endSession(sessionId).catch(() => {});
     }
     navigate("/");
   }, [navigate, sessionId]);
@@ -465,7 +467,7 @@ export function StudySessionPage() {
         onClose={() => {
           setIsLimitReached(false);
           if (sessionId) {
-            studyApi.endSession(sessionId).catch(() => {});
+            syncAwareApi.endSession(sessionId).catch(() => {});
           }
           navigate("/");
         }}

@@ -8,6 +8,8 @@ import { EmailVerificationBanner } from "@/components/shared/EmailVerificationBa
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { profileApi } from "@/lib/profile-api";
+import { TIER_LIMITS } from "@/lib/feature-limits";
+import type { UserTier } from "@versado/core/entities";
 
 function HomeIcon() {
   return (
@@ -75,6 +77,9 @@ export function AppLayout() {
       .catch(() => {});
   }, [user?.id]);
 
+  const showSync =
+    user?.tier && TIER_LIMITS[user.tier as UserTier]?.canUseOffline;
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <a
@@ -86,9 +91,11 @@ export function AppLayout() {
       <UpdatePrompt />
       <OfflineBanner />
       <EmailVerificationBanner />
-      <div className="flex justify-end px-4 pt-2">
-        <SyncStatusIndicator />
-      </div>
+      {showSync && (
+        <div className="flex justify-end px-4 pt-2">
+          <SyncStatusIndicator />
+        </div>
+      )}
       <main id="main-content" className="pb-20">
         <Outlet />
       </main>

@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Plus, Layers, Upload } from "lucide-react";
-import { deckApi, type DeckResponse } from "@/lib/deck-api";
+import type { DeckResponse } from "@/lib/deck-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { profileApi } from "@/lib/profile-api";
 import { DecksHeader } from "@/components/decks/DecksHeader";
 import { DeckSearchBar } from "@/components/decks/DeckSearchBar";
@@ -46,7 +47,7 @@ export function DecksPage() {
 
   useEffect(() => {
     Promise.all([
-      deckApi.list(),
+      syncAwareApi.listDecks(),
       profileApi.getPreferences(),
     ])
       .then(([deckList, prefs]) => {
