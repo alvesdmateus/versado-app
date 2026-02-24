@@ -23,6 +23,21 @@ const CODE_MAP: Record<string, { title: string; description: string }> = {
     description:
       "You've reached your daily review limit. Go Fluent for unlimited reviews.",
   },
+  DECK_LIMIT_REACHED: {
+    title: "Deck Limit Reached",
+    description:
+      "You've reached the maximum number of decks on your plan. Go Fluent for unlimited decks.",
+  },
+  CARD_LIMIT_REACHED: {
+    title: "Card Limit Reached",
+    description:
+      "You've reached the maximum number of cards per deck. Go Fluent for unlimited cards.",
+  },
+  ACCOUNT_LOCKED: {
+    title: "Account Locked",
+    description:
+      "Too many failed login attempts. Please try again later.",
+  },
   // 503 specific codes
   AI_SERVICE_UNAVAILABLE: {
     title: "AI Unavailable",
