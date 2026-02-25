@@ -10,6 +10,7 @@ export interface UserPreferences {
   cardTheme: string;
   pushAlerts: boolean;
   favoriteDeckIds: string[];
+  onboardingCompleted?: boolean;
 }
 
 export const profileApi = {

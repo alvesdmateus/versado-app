@@ -18,6 +18,7 @@ import { BillingPage } from "./pages/BillingPage";
 import { FluentPage } from "./pages/FluentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { AuthCallbackPage } from "./pages/AuthCallbackPage";
+import { OnboardingPage } from "./pages/OnboardingPage";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ export const router = createBrowserRouter([
   {
     path: "/auth/callback",
     element: <AuthCallbackPage />,
+  },
+  {
+    path: "/onboarding",
+    element: (
+      <ProtectedRoute>
+        <OnboardingPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/study/:deckId",

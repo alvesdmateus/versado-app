@@ -59,6 +59,7 @@ export const updatePreferencesSchema = z.object({
   cardTheme: z.string().max(20).optional(),
   pushAlerts: z.boolean().optional(),
   favoriteDeckIds: z.array(z.string().uuid()).max(100).optional(),
+  onboardingCompleted: z.boolean().optional(),
 });
 
 export const forgotPasswordSchema = z.object({
