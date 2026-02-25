@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import {
   Moon,
   Palette,
@@ -202,8 +202,8 @@ export function ProfilePage() {
       <div className="mt-8 mb-2 flex flex-col items-center gap-1 px-5">
         <p className="text-xs text-neutral-400">Versado v2.0.0</p>
         <div className="flex gap-3">
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Terms</button>
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</button>
+          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">Terms</Link>
+          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</Link>
           <button className="text-xs text-neutral-400 hover:text-neutral-600">Support</button>
         </div>
       </div>

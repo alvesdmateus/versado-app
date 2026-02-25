@@ -189,6 +189,18 @@ export function RegisterPage() {
           />
         )}
 
+        <p className="text-xs text-center text-neutral-400">
+          By creating an account, you agree to our{" "}
+          <Link to="/terms" className="text-primary-500 hover:text-primary-600 underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link to="/privacy" className="text-primary-500 hover:text-primary-600 underline">
+            Privacy Policy
+          </Link>
+          .
+        </p>
+
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
           {isSubmitting ? "Creating Account..." : "Create Account"}
         </Button>
