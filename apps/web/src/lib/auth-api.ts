@@ -31,4 +31,8 @@ export const authApi = {
   getMe() {
     return apiClient<PublicProfile>("/auth/me");
   },
+
+  getGoogleAuthUrl() {
+    return apiClient<{ url: string }>("/auth/google");
+  },
 };

@@ -43,6 +43,13 @@
       "when": 1771341977034,
       "tag": "0005_swift_doctor_faustus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772006400000,
+      "tag": "0006_add_google_oauth",
+      "breakpoints": true
     }
   ]
 }
