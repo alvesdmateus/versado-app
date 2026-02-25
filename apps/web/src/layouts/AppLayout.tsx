@@ -66,6 +66,9 @@ export function AppLayout() {
   const { setDarkMode } = useTheme();
   const hasSyncedPrefs = useRef(false);
 
+  const showSync =
+    user?.tier && TIER_LIMITS[user.tier as UserTier]?.canUseOffline;
+
   useEffect(() => {
     if (!user || hasSyncedPrefs.current) return;
     hasSyncedPrefs.current = true;
@@ -73,12 +76,12 @@ export function AppLayout() {
       .getPreferences()
       .then((prefs) => {
         setDarkMode(prefs.darkMode);
+        if (!prefs.onboardingCompleted) {
+          navigate("/onboarding", { replace: true });
+        }
       })
       .catch(() => {});
   }, [user?.id]);
-
-  const showSync =
-    user?.tier && TIER_LIMITS[user.tier as UserTier]?.canUseOffline;
 
   return (
     <div className="min-h-screen bg-neutral-50">

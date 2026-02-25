@@ -94,7 +94,7 @@ export function RegisterPage() {
 
     try {
       await register(result.data.email, result.data.password, result.data.displayName, turnstileToken ?? undefined);
-      navigate("/");
+      navigate("/onboarding");
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors({ general: err.message });

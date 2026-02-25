@@ -43,6 +43,7 @@ export const users = pgTable("users", {
       cardSortingLogic: "due_first" | "random" | "difficulty";
       pushAlerts: boolean;
       favoriteDeckIds: string[];
+      onboardingCompleted?: boolean;
     }>()
     .notNull()
     .default({
