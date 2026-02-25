@@ -54,6 +54,31 @@ export interface SessionResponse {
   };
 }
 
+export interface SessionHistoryItem {
+  id: string;
+  deckId: string;
+  deckName: string | null;
+  startedAt: string;
+  endedAt: string | null;
+  reviews: Array<{ rating: number }> | null;
+  stats: {
+    cardsStudied: number;
+    correctCount: number;
+    incorrectCount: number;
+    averageTimeMs: number;
+  } | null;
+}
+
+export interface DetailedStats {
+  cardDistribution: Record<string, number>;
+  dailyReviews: Array<{
+    date: string;
+    reviews: number;
+    accuracy: number | null;
+  }>;
+  totalSessions: number;
+}
+
 export const studyApi = {
   getDueCards(deckId: string, limit?: number) {
     const query = limit ? `?limit=${limit}` : "";
@@ -95,5 +120,19 @@ export const studyApi = {
       `/api/study/decks/${deckId}/init-progress${query}`,
       { method: "POST" }
     );
+  },
+
+  getSessions(limit?: number, offset?: number) {
+    const params = new URLSearchParams();
+    if (limit) params.set("limit", String(limit));
+    if (offset) params.set("offset", String(offset));
+    const qs = params.toString();
+    return apiClient<{ sessions: SessionHistoryItem[]; total: number }>(
+      `/api/study/sessions${qs ? `?${qs}` : ""}`
+    );
+  },
+
+  getDetailedStats() {
+    return apiClient<DetailedStats>("/api/study/stats/detailed");
   },
 };

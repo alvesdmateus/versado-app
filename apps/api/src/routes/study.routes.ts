@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { eq, and, lte, gte, sql } from "drizzle-orm";
+import { eq, and, lte, gte, sql, desc } from "drizzle-orm";
 import { submitReviewSchema, startSessionSchema, idSchema } from "@versado/validation";
 import { calculateSM2 } from "@versado/algorithms";
 import type { ReviewRating } from "@versado/algorithms";
@@ -253,4 +253,114 @@ studyRoutes.post("/decks/:deckId/init-progress", async (c) => {
     .returning();
 
   return c.json(progressRecords, 201);
+});
+
+// List study sessions (history)
+studyRoutes.get("/sessions", async (c) => {
+  const user = c.get("user");
+  const limit = Math.min(Number(c.req.query("limit") ?? 20), 50);
+  const offset = Number(c.req.query("offset") ?? 0);
+
+  const sessions = await db
+    .select({
+      id: studySessions.id,
+      deckId: studySessions.deckId,
+      deckName: decks.name,
+      startedAt: studySessions.startedAt,
+      endedAt: studySessions.endedAt,
+      reviews: studySessions.reviews,
+      stats: studySessions.stats,
+    })
+    .from(studySessions)
+    .leftJoin(decks, eq(studySessions.deckId, decks.id))
+    .where(eq(studySessions.userId, user.id))
+    .orderBy(desc(studySessions.startedAt))
+    .limit(limit)
+    .offset(offset);
+
+  const [countResult] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(studySessions)
+    .where(eq(studySessions.userId, user.id));
+
+  return c.json({
+    sessions,
+    total: countResult?.count ?? 0,
+  });
+});
+
+// Detailed study stats
+studyRoutes.get("/stats/detailed", async (c) => {
+  const user = c.get("user");
+
+  // Card status distribution across all decks
+  const statusCounts = await db
+    .select({
+      status: cardProgress.status,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(cardProgress)
+    .where(and(eq(cardProgress.userId, user.id), eq(cardProgress.tombstone, false)))
+    .groupBy(cardProgress.status);
+
+  const cardDistribution: Record<string, number> = {};
+  for (const row of statusCounts) {
+    cardDistribution[row.status] = row.count;
+  }
+
+  // Daily review counts and accuracy for last 14 days
+  const fourteenDaysAgo = new Date();
+  fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+  fourteenDaysAgo.setHours(0, 0, 0, 0);
+
+  const recentSessions = await db
+    .select({
+      startedAt: studySessions.startedAt,
+      stats: studySessions.stats,
+    })
+    .from(studySessions)
+    .where(
+      and(
+        eq(studySessions.userId, user.id),
+        gte(studySessions.startedAt, fourteenDaysAgo)
+      )
+    )
+    .orderBy(studySessions.startedAt);
+
+  // Aggregate by day
+  const dailyData: Record<string, { reviews: number; correct: number; total: number }> = {};
+  for (let i = 0; i < 14; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - (13 - i));
+    const key = d.toISOString().slice(0, 10);
+    dailyData[key] = { reviews: 0, correct: 0, total: 0 };
+  }
+
+  for (const session of recentSessions) {
+    const key = new Date(session.startedAt).toISOString().slice(0, 10);
+    if (dailyData[key]) {
+      const stats = session.stats as { cardsStudied?: number; correctCount?: number } | null;
+      dailyData[key].reviews += stats?.cardsStudied ?? 0;
+      dailyData[key].correct += stats?.correctCount ?? 0;
+      dailyData[key].total += stats?.cardsStudied ?? 0;
+    }
+  }
+
+  const dailyReviews = Object.entries(dailyData).map(([date, data]) => ({
+    date,
+    reviews: data.reviews,
+    accuracy: data.total > 0 ? Math.round((data.correct / data.total) * 100) : null,
+  }));
+
+  // Total sessions count
+  const [sessionCount] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(studySessions)
+    .where(eq(studySessions.userId, user.id));
+
+  return c.json({
+    cardDistribution,
+    dailyReviews,
+    totalSessions: sessionCount?.count ?? 0,
+  });
 });

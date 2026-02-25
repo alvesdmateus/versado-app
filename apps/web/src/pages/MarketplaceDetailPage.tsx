@@ -8,6 +8,7 @@ import {
   type MarketplaceReview,
 } from "@/lib/marketplace-api";
 import { ApiError } from "@/lib/api-client";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { MarketplaceDetailHeader } from "@/components/marketplace/MarketplaceDetailHeader";
@@ -43,6 +44,7 @@ function formatCount(n: number): string {
 export function MarketplaceDetailPage() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
 
@@ -85,17 +87,35 @@ export function MarketplaceDetailPage() {
 
   function handleReviewSubmitted(review: MarketplaceReview) {
     if (!detail) return;
+    const filtered = detail.reviews.filter((r) => r.userId !== review.userId);
+    const isUpdate = detail.reviews.length !== filtered.length;
     setDetail({
       ...detail,
-      reviews: [review, ...detail.reviews],
-      reviewCount: detail.reviewCount + 1,
+      reviews: [review, ...filtered],
+      reviewCount: isUpdate ? detail.reviewCount : detail.reviewCount + 1,
     });
+  }
+
+  async function handleReviewDeleted(reviewId: string) {
+    if (!detail || !deckId) return;
+    try {
+      await marketplaceApi.deleteReview(deckId);
+      setDetail({
+        ...detail,
+        reviews: detail.reviews.filter((r) => r.id !== reviewId),
+        reviewCount: Math.max(0, detail.reviewCount - 1),
+      });
+      showToast("Review deleted");
+    } catch (err) {
+      showErrorNotification(err);
+    }
   }
 
   if (isLoading) return <MarketplaceDetailSkeleton />;
   if (!detail) return null;
 
   const isFree = detail.price === 0;
+  const existingReview = user ? detail.reviews.find((r) => r.userId === user.id) : null;
 
   return (
     <div className="pb-4">
@@ -221,12 +241,17 @@ export function MarketplaceDetailPage() {
           <div className="mb-4">
             <ReviewForm
               deckId={deckId!}
+              existingReview={existingReview}
               onSubmitted={handleReviewSubmitted}
             />
           </div>
         )}
 
-        <ReviewList reviews={detail.reviews} />
+        <ReviewList
+          reviews={detail.reviews}
+          currentUserId={user?.id}
+          onDelete={handleReviewDeleted}
+        />
       </div>
     </div>
   );

@@ -19,6 +19,8 @@ import { FluentPage } from "./pages/FluentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
+import { StudyHistoryPage } from "./pages/StudyHistoryPage";
+import { StudyStatsPage } from "./pages/StudyStatsPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 
@@ -50,6 +52,8 @@ export const router = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "billing", element: <BillingPage /> },
       { path: "fluent", element: <FluentPage /> },
+      { path: "history", element: <StudyHistoryPage /> },
+      { path: "stats", element: <StudyStatsPage /> },
       { path: "not-found", element: <NotFoundPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],

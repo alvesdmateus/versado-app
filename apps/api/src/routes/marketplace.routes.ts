@@ -492,3 +492,52 @@ marketplaceRoutes.post("/:deckId/reviews", async (c) => {
 
   return c.json(review, 201);
 });
+
+// Delete review
+marketplaceRoutes.delete("/:deckId/reviews", async (c) => {
+  const user = c.get("user" as never) as { id: string };
+  const deckId = validate(idSchema, c.req.param("deckId"));
+
+  const [existing] = await db
+    .select({ id: marketplaceReviews.id })
+    .from(marketplaceReviews)
+    .where(
+      and(eq(marketplaceReviews.userId, user.id), eq(marketplaceReviews.deckId, deckId))
+    )
+    .limit(1);
+
+  if (!existing) {
+    throw new AppError(404, "Review not found", "NOT_FOUND");
+  }
+
+  await db.delete(marketplaceReviews).where(eq(marketplaceReviews.id, existing.id));
+
+  // Recalculate deck rating
+  const [deck] = await db
+    .select({ marketplace: decks.marketplace })
+    .from(decks)
+    .where(eq(decks.id, deckId))
+    .limit(1);
+
+  const [ratingResult] = await db
+    .select({
+      avgRating: sql<number>`round(avg(${marketplaceReviews.rating})::numeric, 1)::real`,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(marketplaceReviews)
+    .where(eq(marketplaceReviews.deckId, deckId));
+
+  await db
+    .update(decks)
+    .set({
+      marketplace: {
+        ...deck!.marketplace!,
+        rating: ratingResult?.avgRating ?? 0,
+        reviewCount: ratingResult?.count ?? 0,
+      },
+      updatedAt: new Date(),
+    })
+    .where(eq(decks.id, deckId));
+
+  return c.json({ success: true });
+});

@@ -342,6 +342,12 @@ export function StudySessionPage() {
               Back to Deck
             </button>
             <button
+              onClick={() => navigate("/history")}
+              className="w-full rounded-full bg-neutral-100 py-3 text-sm font-semibold text-neutral-700 transition-all hover:bg-neutral-200 active:scale-95"
+            >
+              View History
+            </button>
+            <button
               onClick={() => navigate("/")}
               className="w-full py-2 text-sm text-neutral-500 transition-colors hover:text-neutral-700"
             >
