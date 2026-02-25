@@ -37,6 +37,7 @@ jobs:
             e2e
             deps
             ci
+            main
           requireScope: false
           subjectPattern: ^[a-z].+$
           subjectPatternError: |

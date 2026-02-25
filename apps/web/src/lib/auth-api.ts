@@ -59,4 +59,8 @@ export const authApi = {
       body: JSON.stringify({ email }),
     });
   },
+
+  getGoogleAuthUrl() {
+    return apiClient<{ url: string }>("/auth/google");
+  },
 };

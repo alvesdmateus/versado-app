@@ -17,6 +17,7 @@ import { MarketplaceDetailPage } from "./pages/MarketplaceDetailPage";
 import { BillingPage } from "./pages/BillingPage";
 import { FluentPage } from "./pages/FluentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       { path: "not-found", element: <NotFoundPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthCallbackPage />,
   },
   {
     path: "/study/:deckId",

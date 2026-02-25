@@ -106,6 +106,14 @@ export async function login(
     throw new AppError(401, "Invalid email or password", "INVALID_CREDENTIALS");
   }
 
+  if (!user.passwordHash) {
+    throw new AppError(
+      401,
+      "This account uses Google Sign-In. Please sign in with Google.",
+      "OAUTH_ONLY_ACCOUNT"
+    );
+  }
+
   const valid = await verifyPassword(password, user.passwordHash);
   if (!valid) {
     throw new AppError(401, "Invalid email or password", "INVALID_CREDENTIALS");
@@ -348,4 +356,76 @@ export async function resendVerificationEmail(
   });
 
   await sendVerificationEmail(email, token);
+}
+
+export async function findOrCreateGoogleUser(
+  googleId: string,
+  email: string,
+  displayName: string,
+  avatarUrl: string | null
+): Promise<{ auth: AuthResponse; refreshToken: string }> {
+  // 1. Look up by googleId (returning user)
+  let [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.googleId, googleId))
+    .limit(1);
+
+  if (!user) {
+    // 2. Look up by email to link an existing email/password account
+    const [existing] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+
+    if (existing) {
+      const updated = await db
+        .update(users)
+        .set({
+          googleId,
+          avatarUrl: existing.avatarUrl ?? avatarUrl,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, existing.id))
+        .returning();
+      user = updated[0]!;
+    }
+  }
+
+  if (!user) {
+    // 3. Create new Google-only user
+    const created = await db
+      .insert(users)
+      .values({
+        email,
+        passwordHash: null,
+        googleId,
+        displayName,
+        avatarUrl,
+        emailVerified: true,
+      })
+      .returning();
+    user = created[0]!;
+  }
+
+  const accessToken = sign({
+    sub: user.id,
+    email: user.email,
+    tier: user.tier,
+  });
+
+  const refreshToken = crypto.randomUUID();
+  const tokenHash = await hashToken(refreshToken);
+
+  await db.insert(refreshTokens).values({
+    userId: user.id,
+    tokenHash,
+    expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY * 1000),
+  });
+
+  return {
+    auth: { accessToken, user: toPublicProfile(user) },
+    refreshToken,
+  };
 }

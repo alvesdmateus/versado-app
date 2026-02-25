@@ -58,9 +58,6 @@ export function ProfilePage() {
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
       setPreferences(prefs);
-      if (!localStorage.getItem("theme") && prefs.darkMode) {
-        setDarkMode(true);
-      }
     }).catch(() => {});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

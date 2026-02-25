@@ -23,7 +23,7 @@ export function useTheme(): ThemeContextValue {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(() => {
-    return document.documentElement.classList.contains("dark");
+    return localStorage.getItem("theme") === "dark";
   });
 
   const applyTheme = useCallback((dark: boolean) => {

@@ -10,7 +10,11 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
   STRIPE_PRODUCT_ID_FLUENT: z.string().startsWith("prod_"),
   OPENAI_API_KEY: z.string().startsWith("sk-"),
-  RESEND_API_KEY: z.string().startsWith("re_"),
+  RESEND_API_KEY: z.string().startsWith("re_").optional().default(""),
+  TURNSTILE_SECRET_KEY: z.string().optional().default(""),
+  GOOGLE_CLIENT_ID: z.string().optional().default(""),
+  GOOGLE_CLIENT_SECRET: z.string().optional().default(""),
+  API_URL: z.string().url().optional().default("http://localhost:3000"),
 });
 
 function validateEnv() {
