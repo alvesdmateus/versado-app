@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download } from "lucide-react";
-import { deckApi, type DeckResponse, type FlashcardResponse } from "@/lib/deck-api";
+import type { DeckResponse, FlashcardResponse } from "@/lib/deck-api";
 import { ApiError } from "@/lib/api-client";
-import { flashcardApi } from "@/lib/flashcard-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { marketplaceApi } from "@/lib/marketplace-api";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
@@ -88,7 +88,7 @@ export function DeckDetailPage() {
 
   useEffect(() => {
     if (!deckId) return;
-    Promise.all([deckApi.get(deckId), deckApi.getCards(deckId)])
+    Promise.all([syncAwareApi.getDeck(deckId), syncAwareApi.getCards(deckId)])
       .then(([d, c]) => {
         setDeck(d);
         setCards(c);
@@ -107,7 +107,7 @@ export function DeckDetailPage() {
     if (!deckId) return;
     setIsDeletingDeck(true);
     try {
-      await deckApi.delete(deckId);
+      await syncAwareApi.deleteDeck(deckId);
       showToast("Deck deleted");
       navigate("/decks", { replace: true });
     } catch (err) {
@@ -121,7 +121,7 @@ export function DeckDetailPage() {
   async function handleDeleteCard() {
     if (!deleteCardId) return;
     try {
-      await flashcardApi.delete(deleteCardId);
+      await syncAwareApi.deleteCard(deleteCardId);
       setCards((prev) => prev.filter((c) => c.id !== deleteCardId));
       showToast("Card deleted");
     } catch (err) {

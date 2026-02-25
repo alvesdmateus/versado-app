@@ -1,7 +1,8 @@
 import type { SyncEngine, SyncStorage } from "@versado/sync";
 import { deckApi, type DeckResponse, type FlashcardResponse } from "./deck-api";
-import { studyApi, type DueCard, type ReviewResult } from "./study-api";
+import { studyApi, type DueCard, type ReviewResult, type SessionResponse } from "./study-api";
 import { flashcardApi } from "./flashcard-api";
+import { dashboardApi, type DashboardStats } from "./dashboard-api";
 
 // Module-level references, set by SyncContext on init
 let syncEngine: SyncEngine | null = null;
@@ -105,6 +106,36 @@ export const syncAwareApi = {
     }
   },
 
+  async updateDeck(
+    id: string,
+    data: Partial<{
+      name: string;
+      description: string;
+      tags: string[];
+      visibility: string;
+      coverImageUrl: string;
+    }>
+  ): Promise<DeckResponse> {
+    try {
+      const deck = await deckApi.update(id, data);
+      if (syncStorage) {
+        await syncStorage.cacheDecks([deck as unknown as Record<string, unknown>]);
+      }
+      return deck;
+    } catch (error) {
+      if (!navigator.onLine && syncEngine) {
+        await syncEngine.queueChange("decks", id, "update", data);
+        // Return a synthetic response from cache
+        const allDecks = await syncStorage?.getCachedDecks();
+        const existing = allDecks?.find((d) => d.id === id);
+        if (existing) {
+          return { ...existing, ...data, updatedAt: new Date().toISOString() } as unknown as DeckResponse;
+        }
+      }
+      throw error;
+    }
+  },
+
   async deleteDeck(id: string): Promise<void> {
     try {
       await deckApi.delete(id);
@@ -152,6 +183,29 @@ export const syncAwareApi = {
     }
   },
 
+  async updateCard(
+    id: string,
+    data: Partial<{
+      front: string;
+      back: string;
+      tags: string[];
+      difficulty: string;
+    }>
+  ): Promise<FlashcardResponse> {
+    try {
+      const card = await flashcardApi.update(id, data);
+      if (syncStorage) {
+        await syncStorage.cacheCards([card as unknown as Record<string, unknown>]);
+      }
+      return card;
+    } catch (error) {
+      if (!navigator.onLine && syncEngine) {
+        await syncEngine.queueChange("flashcards", id, "update", data);
+      }
+      throw error;
+    }
+  },
+
   async deleteCard(id: string): Promise<void> {
     try {
       await flashcardApi.delete(id);
@@ -165,6 +219,44 @@ export const syncAwareApi = {
   },
 
   // --- Study ---
+
+  async startSession(deckId: string): Promise<SessionResponse | null> {
+    try {
+      return await studyApi.startSession(deckId);
+    } catch {
+      // Non-critical — return null if offline or fails
+      return null;
+    }
+  },
+
+  async endSession(sessionId: string): Promise<void> {
+    try {
+      await studyApi.endSession(sessionId);
+    } catch {
+      // Fire-and-forget — best effort
+    }
+  },
+
+  // --- Dashboard ---
+
+  async getStats(): Promise<DashboardStats> {
+    const CACHE_KEY = "versado:dashboard-stats";
+    try {
+      const stats = await dashboardApi.getStats();
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(stats));
+      } catch {
+        // localStorage full — ignore
+      }
+      return stats;
+    } catch (error) {
+      if (!navigator.onLine) {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) return JSON.parse(cached) as DashboardStats;
+      }
+      throw error;
+    }
+  },
 
   async getDueCards(deckId: string, limit?: number): Promise<DueCard[]> {
     try {

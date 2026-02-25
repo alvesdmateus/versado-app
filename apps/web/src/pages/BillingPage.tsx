@@ -13,35 +13,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { billingApi, type Subscription, type Price } from "@/lib/billing-api";
+import { getCurrencyFromLocale, formatPrice } from "@/lib/currency";
 import { ConfirmDialog } from "@/components/shared";
 import { Button } from "@versado/ui";
-
-const LOCALE_CURRENCY_MAP: Record<string, string> = {
-  "pt-BR": "brl",
-  "en-US": "usd",
-  "en-GB": "gbp",
-  "es-MX": "mxn",
-  "es-AR": "ars",
-  "ja-JP": "jpy",
-  "en-AU": "aud",
-  "en-CA": "cad",
-  "de-DE": "eur",
-  "fr-FR": "eur",
-  "es-ES": "eur",
-  "it-IT": "eur",
-};
-
-function getCurrencyFromLocale(): string {
-  const locale = navigator.language;
-  return LOCALE_CURRENCY_MAP[locale] ?? "usd";
-}
-
-function formatPrice(unitAmount: number, currency: string): string {
-  return new Intl.NumberFormat(navigator.language, {
-    style: "currency",
-    currency: currency.toUpperCase(),
-  }).format(unitAmount / 100);
-}
 
 const FREE_FEATURES = [
   { label: "Up to 5 decks", included: true },

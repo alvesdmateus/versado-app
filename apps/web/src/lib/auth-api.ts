@@ -9,10 +9,10 @@ export const authApi = {
     });
   },
 
-  register(email: string, password: string, displayName: string) {
+  register(email: string, password: string, displayName: string, turnstileToken?: string) {
     return apiClient<AuthResponse>("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, displayName }),
+      body: JSON.stringify({ email, password, displayName, turnstileToken }),
     });
   },
 
@@ -32,10 +32,10 @@ export const authApi = {
     return apiClient<PublicProfile>("/auth/me");
   },
 
-  forgotPassword(email: string) {
+  forgotPassword(email: string, turnstileToken?: string) {
     return apiClient<{ success: boolean }>("/auth/forgot-password", {
       method: "POST",
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, turnstileToken }),
     });
   },
 

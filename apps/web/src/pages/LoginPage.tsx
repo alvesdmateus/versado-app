@@ -90,7 +90,11 @@ export function LoginPage() {
       navigate("/");
     } catch (err) {
       if (err instanceof ApiError) {
-        setErrors({ email: err.message });
+        if (err.code === "ACCOUNT_LOCKED") {
+          setErrors({ general: err.message });
+        } else {
+          setErrors({ email: err.message });
+        }
       } else {
         setErrors({ email: "Something went wrong. Please try again." });
       }
@@ -110,7 +114,7 @@ export function LoginPage() {
         Log in to your learning dashboard
       </p>
 
-      {/* General error */}
+      {/* Account lockout / general error */}
       {errors.general && (
         <div className="mt-4 w-full rounded-lg bg-error-50 px-4 py-3 text-sm text-error-600">
           {errors.general}

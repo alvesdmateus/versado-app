@@ -48,6 +48,16 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
+          {
+            urlPattern: /^https?:\/\/.*\/api\/(decks|flashcards|study|dashboard)/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-cache",
+              expiration: { maxEntries: 100, maxAgeSeconds: 86400 },
+              cacheableResponse: { statuses: [0, 200] },
+              networkTimeoutSeconds: 3,
+            },
+          },
         ],
       },
     }),

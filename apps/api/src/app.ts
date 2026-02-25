@@ -48,6 +48,14 @@ export function createApp() {
   const api = new Hono();
   api.use("*", rateLimitMiddleware(100, 60_000));
   api.use("*", authMiddleware());
+  api.use(
+    "*",
+    rateLimitMiddleware({
+      maxRequests: 200,
+      windowMs: 60_000,
+      keyExtractor: (c) => `user:${c.get("user").id}`,
+    })
+  );
   api.route("/decks", deckRoutes);
   api.route("/flashcards", flashcardRoutes);
   api.route("/study", studyRoutes);

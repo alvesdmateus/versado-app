@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { dashboardApi, type DashboardStats } from "@/lib/dashboard-api";
+import type { DashboardStats } from "@/lib/dashboard-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import {
   socialApi,
   type FeedItem,
@@ -43,7 +44,7 @@ export function useSocialHome() {
   useEffect(() => {
     async function load() {
       const results = await Promise.allSettled([
-        dashboardApi.getStats(),
+        syncAwareApi.getStats(),
         socialApi.getPopularDecks({ limit: 10 }),
         socialApi.getFeed({ limit: 5 }),
         socialApi.getRecommendations({ limit: 4 }),

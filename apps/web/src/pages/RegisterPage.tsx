@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff } from "lucide-react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { registerSchema } from "@versado/validation";
 import { Button, Input, Logo, Divider, SocialButton } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,6 +31,8 @@ function GoogleIcon() {
   );
 }
 
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+
 interface FormErrors {
   displayName?: string;
   email?: string;
@@ -50,6 +53,7 @@ export function RegisterPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   async function handleGoogleSignIn() {
     setIsGoogleLoading(true);
@@ -89,7 +93,7 @@ export function RegisterPage() {
     setIsSubmitting(true);
 
     try {
-      await register(result.data.email, result.data.password, result.data.displayName);
+      await register(result.data.email, result.data.password, result.data.displayName, turnstileToken ?? undefined);
       navigate("/");
     } catch (err) {
       if (err instanceof ApiError) {
@@ -176,6 +180,14 @@ export function RegisterPage() {
           error={errors.confirmPassword}
           autoComplete="new-password"
         />
+
+        {TURNSTILE_SITE_KEY && (
+          <Turnstile
+            siteKey={TURNSTILE_SITE_KEY}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+          />
+        )}
 
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
           {isSubmitting ? "Creating Account..." : "Create Account"}

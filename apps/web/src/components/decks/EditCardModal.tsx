@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
-import { flashcardApi } from "@/lib/flashcard-api";
 import type { FlashcardResponse } from "@/lib/deck-api";
+import { syncAwareApi } from "@/lib/sync-aware-api";
 import { Button } from "@versado/ui";
 
 interface EditCardModalProps {
@@ -43,7 +43,7 @@ export function EditCardModal({
     setIsSubmitting(true);
     setError("");
     try {
-      const updated = await flashcardApi.update(card.id, {
+      const updated = await syncAwareApi.updateCard(card.id, {
         front: front.trim(),
         back: back.trim(),
       });
