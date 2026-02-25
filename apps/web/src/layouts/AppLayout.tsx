@@ -1,8 +1,12 @@
+import { useEffect, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { BottomNav, type BottomNavItem } from "@versado/ui";
 import { SyncStatusIndicator } from "@/components/shared/SyncStatusIndicator";
 import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
 import { OfflineBanner } from "@/components/shared/OfflineBanner";
+import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
+import { profileApi } from "@/lib/profile-api";
 
 function HomeIcon() {
   return (
@@ -55,6 +59,20 @@ function getActiveKey(pathname: string): string {
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { setDarkMode } = useTheme();
+  const hasSyncedPrefs = useRef(false);
+
+  useEffect(() => {
+    if (!user || hasSyncedPrefs.current) return;
+    hasSyncedPrefs.current = true;
+    profileApi
+      .getPreferences()
+      .then((prefs) => {
+        setDarkMode(prefs.darkMode);
+      })
+      .catch(() => {});
+  }, [user?.id]);
 
   return (
     <div className="min-h-screen bg-neutral-50">
