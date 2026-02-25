@@ -1,15 +1,18 @@
 import { Hono } from "hono";
+import { deleteCookie } from "hono/cookie";
 import { eq } from "drizzle-orm";
 import {
   updateProfileSchema,
   changePasswordSchema,
   updatePreferencesSchema,
 } from "@versado/validation";
+import { REFRESH_TOKEN_COOKIE } from "@versado/auth";
 import { db } from "../db";
 import { users } from "../db/schema";
 import { AppError } from "../middleware/error-handler";
 import { hashPassword, verifyPassword } from "../lib/hash";
 import { validate } from "../lib/validate";
+import { deleteAccount } from "../services/profile-service";
 
 export const profileRoutes = new Hono();
 
@@ -35,6 +38,7 @@ profileRoutes.patch("/", async (c) => {
     email: user.email,
     displayName: user.displayName,
     avatarUrl: user.avatarUrl,
+    emailVerified: user.emailVerified,
     tier: user.tier,
     createdAt: user.createdAt,
   });
@@ -116,4 +120,14 @@ profileRoutes.patch("/preferences", async (c) => {
     .returning({ preferences: users.preferences });
 
   return c.json(rows[0]!.preferences);
+});
+
+// Delete account (hard delete)
+profileRoutes.delete("/", async (c) => {
+  const authUser = c.get("user");
+
+  await deleteAccount(authUser.id);
+
+  deleteCookie(c, REFRESH_TOKEN_COOKIE, { path: "/auth" });
+  return c.json({ success: true });
 });

@@ -22,6 +22,7 @@ export interface PublicProfile {
   email: string;
   displayName: string;
   avatarUrl: string | null;
+  emailVerified: boolean;
   tier: UserTier;
   createdAt: Date;
 }

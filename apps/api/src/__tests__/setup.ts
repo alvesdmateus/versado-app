@@ -26,6 +26,8 @@ import {
   cardProgress,
   studySessions,
   refreshTokens,
+  passwordResetTokens,
+  emailVerificationTokens,
   purchases,
   subscriptions,
   marketplaceReviews,
@@ -138,6 +140,8 @@ export async function cleanDatabase() {
   await db.delete(cardProgress);
   await db.delete(flashcards);
   await db.delete(decks);
+  await db.delete(passwordResetTokens);
+  await db.delete(emailVerificationTokens);
   await db.delete(refreshTokens);
   await db.delete(users);
 }

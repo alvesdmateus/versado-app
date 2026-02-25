@@ -41,4 +41,10 @@ export const profileApi = {
       body: JSON.stringify(data),
     });
   },
+
+  deleteAccount() {
+    return apiClient<{ success: boolean }>("/api/profile", {
+      method: "DELETE",
+    });
+  },
 };

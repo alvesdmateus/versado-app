@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useId, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { cn } from "@versado/ui";
@@ -28,6 +28,7 @@ export function Modal({
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -37,6 +38,24 @@ export function Modal({
 
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
+
+      if (e.key === "Tab" && contentRef.current) {
+        const focusable = contentRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0]!;
+        const last = focusable[focusable.length - 1]!;
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
 
     document.addEventListener("keydown", handleKeyDown);
@@ -65,6 +84,9 @@ export function Modal({
       <div
         ref={contentRef}
         tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
         className={cn(
           "w-full rounded-2xl bg-neutral-0 shadow-xl outline-none animate-in zoom-in-95 duration-150",
           SIZE_MAP[size]
@@ -73,13 +95,14 @@ export function Modal({
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
             {title && (
-              <h2 className="text-lg font-semibold text-neutral-900">
+              <h2 id={titleId} className="text-lg font-semibold text-neutral-900">
                 {title}
               </h2>
             )}
             {showCloseButton && (
               <button
                 onClick={onClose}
+                aria-label="Close"
                 className="ml-auto -mr-1 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600"
               >
                 <X className="h-5 w-5" />
