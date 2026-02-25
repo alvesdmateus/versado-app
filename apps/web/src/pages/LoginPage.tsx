@@ -205,6 +205,10 @@ export function LoginPage() {
             Create Account
           </Link>
         </p>
+        <div className="mt-2 flex justify-center gap-3">
+          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">Terms</Link>
+          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</Link>
+        </div>
       </div>
     </div>
   );
