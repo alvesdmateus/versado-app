@@ -5,6 +5,7 @@ import { loginSchema } from "@versado/validation";
 import { Button, Input, Logo, Divider, SocialButton } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api-client";
+import { authApi } from "@/lib/auth-api";
 
 function GoogleIcon() {
   return (
@@ -40,6 +41,7 @@ function AppleIcon() {
 interface FormErrors {
   email?: string;
   password?: string;
+  general?: string;
 }
 
 export function LoginPage() {
@@ -51,6 +53,18 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  async function handleGoogleSignIn() {
+    setIsGoogleLoading(true);
+    try {
+      const { url } = await authApi.getGoogleAuthUrl();
+      window.location.href = url;
+    } catch {
+      setErrors({ general: "Google sign-in is unavailable. Please try again." });
+      setIsGoogleLoading(false);
+    }
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -95,6 +109,13 @@ export function LoginPage() {
       <p className="mt-1 text-sm text-neutral-500">
         Log in to your learning dashboard
       </p>
+
+      {/* General error */}
+      {errors.general && (
+        <div className="mt-4 w-full rounded-lg bg-error-50 px-4 py-3 text-sm text-error-600">
+          {errors.general}
+        </div>
+      )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="mt-8 w-full space-y-5">
@@ -159,7 +180,13 @@ export function LoginPage() {
 
       {/* Social Buttons */}
       <div className="grid w-full grid-cols-2 gap-3">
-        <SocialButton icon={<GoogleIcon />}>Google</SocialButton>
+        <SocialButton
+          icon={<GoogleIcon />}
+          onClick={handleGoogleSignIn}
+          disabled={isGoogleLoading || isSubmitting}
+        >
+          {isGoogleLoading ? "Redirecting..." : "Google"}
+        </SocialButton>
         <SocialButton icon={<AppleIcon />}>Apple</SocialButton>
       </div>
 
