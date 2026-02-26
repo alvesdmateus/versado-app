@@ -7,8 +7,12 @@ import {
   type ReactNode,
 } from "react";
 
+export type ThemePreference = "light" | "dark" | "system";
+
 interface ThemeContextValue {
   isDark: boolean;
+  themePreference: ThemePreference;
+  setThemePreference: (pref: ThemePreference) => void;
   toggleDarkMode: () => void;
   setDarkMode: (dark: boolean) => void;
 }
@@ -21,10 +25,25 @@ export function useTheme(): ThemeContextValue {
   return ctx;
 }
 
+function getSystemDark(): boolean {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+function getStoredPreference(): ThemePreference {
+  const stored = localStorage.getItem("theme");
+  if (stored === "dark" || stored === "light" || stored === "system") return stored;
+  return "system";
+}
+
+function resolveIsDark(pref: ThemePreference): boolean {
+  if (pref === "dark") return true;
+  if (pref === "light") return false;
+  return getSystemDark();
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
-  });
+  const [themePreference, setThemePref] = useState<ThemePreference>(getStoredPreference);
+  const [isDark, setIsDark] = useState(() => resolveIsDark(getStoredPreference()));
 
   const applyTheme = useCallback((dark: boolean) => {
     if (dark) {
@@ -32,36 +51,60 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       document.documentElement.classList.remove("dark");
     }
-    localStorage.setItem("theme", dark ? "dark" : "light");
-
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
       meta.setAttribute("content", dark ? "#0f172a" : "#3b82f6");
     }
   }, []);
 
-  const toggleDarkMode = useCallback(() => {
-    setIsDark((prev) => {
-      const next = !prev;
-      applyTheme(next);
-      return next;
-    });
-  }, [applyTheme]);
-
-  const setDarkMode = useCallback(
-    (dark: boolean) => {
+  const setThemePreference = useCallback(
+    (pref: ThemePreference) => {
+      setThemePref(pref);
+      if (pref === "system") {
+        localStorage.removeItem("theme");
+      } else {
+        localStorage.setItem("theme", pref);
+      }
+      const dark = resolveIsDark(pref);
       setIsDark(dark);
       applyTheme(dark);
     },
     [applyTheme]
   );
 
+  const toggleDarkMode = useCallback(() => {
+    setThemePreference(isDark ? "light" : "dark");
+  }, [isDark, setThemePreference]);
+
+  const setDarkMode = useCallback(
+    (dark: boolean) => {
+      setThemePreference(dark ? "dark" : "light");
+    },
+    [setThemePreference]
+  );
+
+  // Apply on mount
   useEffect(() => {
     applyTheme(isDark);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Follow system changes when preference is "system"
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (themePreference === "system") {
+        setIsDark(e.matches);
+        applyTheme(e.matches);
+      }
+    };
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, [themePreference, applyTheme]);
+
   return (
-    <ThemeContext.Provider value={{ isDark, toggleDarkMode, setDarkMode }}>
+    <ThemeContext.Provider
+      value={{ isDark, themePreference, setThemePreference, toggleDarkMode, setDarkMode }}
+    >
       {children}
     </ThemeContext.Provider>
   );

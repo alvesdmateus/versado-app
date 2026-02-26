@@ -14,7 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { profileApi, type UserPreferences } from "@/lib/profile-api";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { UserInfoCard } from "@/components/profile/UserInfoCard";
@@ -45,7 +45,7 @@ const SORTING_LABELS: Record<string, string> = {
 export function ProfilePage() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { isDark, setDarkMode } = useTheme();
+  const { themePreference, setThemePreference } = useTheme();
   const { showErrorNotification } = useErrorNotification();
   const { showToast } = useToast();
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
@@ -66,14 +66,15 @@ export function ProfilePage() {
     }).catch((err) => showErrorNotification(err));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function handleDarkModeToggle(value: boolean) {
-    setDarkMode(value);
-    setPreferences((prev) => (prev ? { ...prev, darkMode: value } : prev));
+  async function handleThemePreferenceChange(pref: ThemePreference) {
+    const prev = themePreference;
+    setThemePreference(pref);
+    setPreferences((p) => (p ? { ...p, themePreference: pref } : p));
     try {
-      await profileApi.updatePreferences({ darkMode: value });
+      await profileApi.updatePreferences({ themePreference: pref });
     } catch {
-      setDarkMode(!value);
-      setPreferences((prev) => (prev ? { ...prev, darkMode: !value } : prev));
+      setThemePreference(prev);
+      setPreferences((p) => (p ? { ...p, themePreference: prev } : p));
     }
   }
 
@@ -126,12 +127,24 @@ export function ProfilePage() {
       <SettingsSection label="Appearance">
         <SettingRow
           icon={<Moon className="h-5 w-5" />}
-          label="Dark Mode"
+          label="Theme"
           rightElement={
-            <ToggleSwitch
-              checked={isDark}
-              onChange={handleDarkModeToggle}
-            />
+            <div className="flex rounded-lg bg-neutral-100 dark:bg-neutral-800 p-0.5 gap-0.5">
+              {(["system", "light", "dark"] as ThemePreference[]).map((pref) => (
+                <button
+                  key={pref}
+                  type="button"
+                  onClick={() => handleThemePreferenceChange(pref)}
+                  className={`rounded-md px-3 py-1 text-xs font-medium capitalize transition-all ${
+                    (preferences?.themePreference ?? themePreference) === pref
+                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm"
+                      : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  }`}
+                >
+                  {pref}
+                </button>
+              ))}
+            </div>
           }
         />
         <SettingRow

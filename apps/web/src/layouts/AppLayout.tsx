@@ -6,7 +6,7 @@ import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
 import { OfflineBanner } from "@/components/shared/OfflineBanner";
 import { EmailVerificationBanner } from "@/components/shared/EmailVerificationBanner";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { profileApi } from "@/lib/profile-api";
 import { TIER_LIMITS } from "@/lib/feature-limits";
 import type { UserTier } from "@versado/core/entities";
@@ -77,7 +77,7 @@ export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { setDarkMode } = useTheme();
+  const { setDarkMode, setThemePreference } = useTheme();
   const hasSyncedPrefs = useRef(false);
 
   const showSync =
@@ -89,7 +89,11 @@ export function AppLayout() {
     profileApi
       .getPreferences()
       .then((prefs) => {
-        setDarkMode(prefs.darkMode);
+        if (prefs.themePreference) {
+          setThemePreference(prefs.themePreference as ThemePreference);
+        } else {
+          setDarkMode(prefs.darkMode);
+        }
         if (!prefs.onboardingCompleted) {
           navigate("/onboarding", { replace: true });
         }
