@@ -50,6 +50,7 @@ export function DeckGridCard({
               e.stopPropagation();
               onToggleFavorite();
             }}
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
             className="absolute top-2 left-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm transition-colors hover:bg-black/30"
           >
             <Heart

@@ -185,7 +185,7 @@ export function StudySessionPage() {
       if (nextIndex >= dueCards.length) {
         // End session
         if (sessionId) {
-          syncAwareApi.endSession(sessionId).catch(() => {});
+          syncAwareApi.endSession(sessionId).catch(console.error);
         }
         setSessionState("complete");
       } else {
@@ -209,7 +209,7 @@ export function StudySessionPage() {
 
   const handleClose = useCallback(() => {
     if (sessionId) {
-      syncAwareApi.endSession(sessionId).catch(() => {});
+      syncAwareApi.endSession(sessionId).catch(console.error);
     }
     navigate("/");
   }, [navigate, sessionId]);
@@ -368,6 +368,7 @@ export function StudySessionPage() {
         <div className="flex items-center justify-between">
           <button
             onClick={handleClose}
+            aria-label="Close study session"
             className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90"
           >
             <X className="h-5 w-5" />
@@ -376,7 +377,7 @@ export function StudySessionPage() {
             {current} / {total}
           </span>
           {isReviewing ? (
-            <button className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90">
+            <button aria-label="More options" className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90">
               <MoreVertical className="h-5 w-5" />
             </button>
           ) : (
@@ -473,7 +474,7 @@ export function StudySessionPage() {
         onClose={() => {
           setIsLimitReached(false);
           if (sessionId) {
-            syncAwareApi.endSession(sessionId).catch(() => {});
+            syncAwareApi.endSession(sessionId).catch(console.error);
           }
           navigate("/");
         }}

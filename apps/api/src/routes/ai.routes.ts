@@ -4,6 +4,7 @@ import { generateFlashcardsSchema } from "@versado/validation";
 import { db } from "../db";
 import { decks } from "../db/schema";
 import { AppError } from "../middleware/error-handler";
+import { rateLimitMiddleware } from "../middleware/rate-limit";
 import { validate } from "../lib/validate";
 import {
   generateFlashcards,
@@ -13,6 +14,16 @@ import {
 } from "../services/ai-service";
 
 export const aiRoutes = new Hono();
+
+// Stricter rate limit for AI generation: 10 requests per minute per user
+aiRoutes.use(
+  "/generate",
+  rateLimitMiddleware({
+    maxRequests: 10,
+    windowMs: 60_000,
+    keyExtractor: (c) => `ai:${c.get("user").id}`,
+  })
+);
 
 // Generate flashcards from prompt (preview only, not saved)
 aiRoutes.post("/generate", async (c) => {

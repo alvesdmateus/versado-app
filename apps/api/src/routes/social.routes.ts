@@ -11,8 +11,19 @@ import { db } from "../db";
 import { decks, users, follows } from "../db/schema";
 import { validate } from "../lib/validate";
 import { AppError } from "../middleware/error-handler";
+import { rateLimitMiddleware } from "../middleware/rate-limit";
 
 export const socialRoutes = new Hono();
+
+// Stricter rate limit for follow/unfollow: 30 requests per minute per user
+socialRoutes.use(
+  "/follow/*",
+  rateLimitMiddleware({
+    maxRequests: 30,
+    windowMs: 60_000,
+    keyExtractor: (c) => `social-follow:${c.get("user").id}`,
+  })
+);
 
 // ─── Follow / Unfollow ──────────────────────────────────────────────
 
