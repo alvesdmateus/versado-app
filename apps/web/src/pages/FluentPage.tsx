@@ -154,6 +154,7 @@ export function FluentPage() {
             src="/images/fluent-banner-study.svg"
             alt="Limitless learning at your fingertips"
             className="block w-full"
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
           <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/50 via-transparent to-transparent p-5">
             <p className="text-lg font-semibold leading-snug text-white drop-shadow-md">

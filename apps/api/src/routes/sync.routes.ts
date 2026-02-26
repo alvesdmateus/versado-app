@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { eq, and, gt } from "drizzle-orm";
+import { z } from "zod";
 import { db } from "../db";
 import { decks, flashcards, cardProgress } from "../db/schema";
 
@@ -46,17 +47,27 @@ syncRoutes.get("/pull", async (c) => {
   });
 });
 
+const syncChangeSchema = z.object({
+  id: z.string().uuid(),
+  collection: z.enum(["decks", "flashcards", "card-progress"]),
+  entityId: z.string().uuid(),
+  operation: z.enum(["create", "update", "delete"]),
+  data: z.record(z.unknown()),
+});
+
+const syncPushSchema = z.object({
+  changes: z.array(syncChangeSchema).max(100),
+});
+
 // Push — receive batch of client changes
 syncRoutes.post("/push", async (c) => {
   const user = c.get("user");
   const body = await c.req.json();
-  const changes = body.changes as Array<{
-    id: string;
-    collection: string;
-    entityId: string;
-    operation: string;
-    data: Record<string, unknown>;
-  }>;
+  const parsed = syncPushSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json({ error: "Invalid request body", details: parsed.error.issues }, 400);
+  }
+  const { changes } = parsed.data;
 
   const results: Array<{
     outboxId: string;
@@ -296,6 +307,14 @@ async function processCardProgressChange(
       updateData.lastReviewedAt = new Date(data.lastReviewedAt as string);
 
     await db.update(cardProgress).set(updateData).where(eq(cardProgress.id, entityId));
+    return { success: true };
+  }
+
+  if (operation === "delete") {
+    await db
+      .update(cardProgress)
+      .set({ tombstone: true, version: existing.version + 1, updatedAt: new Date() })
+      .where(eq(cardProgress.id, entityId));
     return { success: true };
   }
 
