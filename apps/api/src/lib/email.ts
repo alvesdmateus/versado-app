@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { env } from "../env";
 
-const resend = new Resend(env.RESEND_API_KEY);
+const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
 const FROM_EMAIL = "Versado <onboarding@resend.dev>";
 
@@ -10,6 +10,11 @@ export async function sendPasswordResetEmail(
   token: string
 ): Promise<void> {
   const resetUrl = `${env.WEB_URL}/auth/reset-password?token=${token}`;
+
+  if (!resend) {
+    console.warn("RESEND_API_KEY not configured, skipping password reset email");
+    return;
+  }
 
   await resend.emails.send({
     from: FROM_EMAIL,
@@ -33,6 +38,11 @@ export async function sendVerificationEmail(
   token: string
 ): Promise<void> {
   const verifyUrl = `${env.WEB_URL}/auth/verify-email?token=${token}`;
+
+  if (!resend) {
+    console.warn("RESEND_API_KEY not configured, skipping verification email");
+    return;
+  }
 
   await resend.emails.send({
     from: FROM_EMAIL,
