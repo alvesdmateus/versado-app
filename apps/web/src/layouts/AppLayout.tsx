@@ -29,6 +29,18 @@ function DecksIcon() {
   );
 }
 
+function DiscoverIcon() {
+  return (
+    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+      <path
+        fillRule="evenodd"
+        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM15.61 8.39a.75.75 0 0 1 .194.63l-1.5 6a.75.75 0 0 1-.554.554l-6 1.5a.75.75 0 0 1-.824-.824l1.5-6a.75.75 0 0 1 .554-.554l6-1.5a.75.75 0 0 1 .63.194ZM12 12.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 function MarketIcon() {
   return (
     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -48,12 +60,14 @@ function ProfileIcon() {
 const NAV_ITEMS: BottomNavItem[] = [
   { key: "home", label: "Home", icon: <HomeIcon />, href: "/" },
   { key: "decks", label: "Decks", icon: <DecksIcon />, href: "/decks" },
+  { key: "discover", label: "Discover", icon: <DiscoverIcon />, href: "/discover" },
   { key: "market", label: "Market", icon: <MarketIcon />, href: "/market" },
   { key: "profile", label: "Profile", icon: <ProfileIcon />, href: "/profile" },
 ];
 
 function getActiveKey(pathname: string): string {
   if (pathname.startsWith("/decks")) return "decks";
+  if (pathname.startsWith("/discover")) return "discover";
   if (pathname.startsWith("/market")) return "market";
   if (pathname.startsWith("/profile")) return "profile";
   return "home";
