@@ -21,6 +21,7 @@ import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
 import { StudyHistoryPage } from "./pages/StudyHistoryPage";
 import { StudyStatsPage } from "./pages/StudyStatsPage";
+import { DiscoverPage } from "./pages/DiscoverPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "decks", element: <DecksPage /> },
       { path: "decks/:deckId", element: <DeckDetailPage /> },
+      { path: "discover", element: <DiscoverPage /> },
       { path: "market", element: <MarketplacePage /> },
       { path: "market/:deckId", element: <MarketplaceDetailPage /> },
       { path: "profile", element: <ProfilePage /> },
