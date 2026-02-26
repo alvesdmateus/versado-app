@@ -15,8 +15,22 @@ export interface DashboardStats {
   }>;
 }
 
+export interface DailyActivity {
+  date: string;
+  sessions: number;
+  cardsStudied: number;
+  correctCount: number;
+}
+
+export interface DashboardHistory {
+  days: DailyActivity[];
+}
+
 export const dashboardApi = {
   getStats() {
     return apiClient<DashboardStats>("/api/dashboard");
+  },
+  getHistory() {
+    return apiClient<DashboardHistory>("/api/dashboard/history");
   },
 };
