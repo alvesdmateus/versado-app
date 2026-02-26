@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.4...versado-v0.1.5) (2026-02-26)
+
+
+### Features
+
+* **web:** add activity heatmap and sparklines to homepage ([#27](https://github.com/alvesdmateus/versado-app/issues/27)) ([b9e6ed0](https://github.com/alvesdmateus/versado-app/commit/b9e6ed08251597956e702990bd999d4cbbc1bd80))
+
 ## [0.1.4](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.3...versado-v0.1.4) (2026-02-26)
 
 
