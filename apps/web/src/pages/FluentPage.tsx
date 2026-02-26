@@ -106,6 +106,7 @@ export function FluentPage() {
           <div className="flex">
             <button
               onClick={() => navigate(-1)}
+              aria-label="Go back"
               className="z-10 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-neutral-100/50"
             >
               <ArrowLeft className="h-5 w-5 text-neutral-700" />

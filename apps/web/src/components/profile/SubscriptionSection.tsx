@@ -25,7 +25,7 @@ export function SubscriptionSection() {
     billingApi
       .getSubscription()
       .then(({ subscription }) => setSubscription(subscription))
-      .catch(() => {})
+      .catch((err) => showErrorNotification(err))
       .finally(() => setLoading(false));
   }, []);
 

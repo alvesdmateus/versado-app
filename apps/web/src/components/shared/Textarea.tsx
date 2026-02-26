@@ -10,6 +10,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, className, id: externalId, ...props }, ref) => {
     const generatedId = useId();
     const id = externalId ?? generatedId;
+    const errorId = `${id}-error`;
 
     return (
       <div className="w-full">
@@ -24,6 +25,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           ref={ref}
           id={id}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
           className={cn(
             "w-full rounded-lg border bg-neutral-0 px-3.5 py-2.5 text-sm text-neutral-900 outline-none transition-colors resize-none",
             "placeholder:text-neutral-400",
@@ -35,7 +38,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
           {...props}
         />
-        {error && <p className="mt-1.5 text-sm text-error-500">{error}</p>}
+        {error && <p id={errorId} className="mt-1.5 text-sm text-error-500" role="alert">{error}</p>}
       </div>
     );
   }
