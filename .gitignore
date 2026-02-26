@@ -36,6 +36,3 @@ coverage/
 
 # Windows artifacts
 nul
-
-# Android TWA project (standalone repo)
-versado-android/
