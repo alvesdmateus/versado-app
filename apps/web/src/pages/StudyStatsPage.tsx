@@ -3,13 +3,14 @@ import { useNavigate } from "react-router";
 import { ChevronLeft, BarChart3, Target, Layers, Calendar } from "lucide-react";
 import { studyApi, type DetailedStats } from "@/lib/study-api";
 import { dashboardApi, type DashboardStats } from "@/lib/dashboard-api";
+import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const STATUS_COLORS: Record<string, string> = {
-  new: "#94a3b8",
-  learning: "#3b82f6",
-  relearning: "#f59e0b",
+  new: "var(--color-neutral-400)",
+  learning: "var(--color-primary-400)",
+  relearning: "var(--color-warning-500)",
   review: "#8b5cf6",
-  mastered: "#22c55e",
+  mastered: "var(--color-success-400)",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -211,6 +212,7 @@ function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
 
 export function StudyStatsPage() {
   const navigate = useNavigate();
+  const { showErrorNotification } = useErrorNotification();
   const [stats, setStats] = useState<DetailedStats | null>(null);
   const [dashboard, setDashboard] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -221,7 +223,7 @@ export function StudyStatsPage() {
         setStats(detailed);
         setDashboard(dash);
       })
-      .catch(() => {})
+      .catch((err) => showErrorNotification(err))
       .finally(() => setIsLoading(false));
   }, []);
 

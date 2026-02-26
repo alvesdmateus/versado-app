@@ -6,6 +6,7 @@ import { MarketplaceSearchBar } from "@/components/marketplace/MarketplaceSearch
 import { MarketplaceListingCard } from "@/components/marketplace/MarketplaceListingCard";
 import { DeckFilterTabs } from "@/components/decks/DeckFilterTabs";
 import { SortSelect } from "@/components/shared/SortSelect";
+import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const CATEGORY_TABS = ["All", "Languages", "Science", "History"];
 
@@ -36,6 +37,7 @@ const PAGE_SIZE = 20;
 
 export function MarketplacePage() {
   const navigate = useNavigate();
+  const { showErrorNotification } = useErrorNotification();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState("popular");
@@ -69,8 +71,8 @@ export function MarketplacePage() {
       }
       setHasMore(result.listings.length >= PAGE_SIZE);
       offsetRef.current += result.listings.length;
-    } catch {
-      // Silently fail — show empty state
+    } catch (err) {
+      showErrorNotification(err);
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);
@@ -128,8 +130,10 @@ export function MarketplacePage() {
       </div>
 
       {isLoading ? (
-        <div className="mt-12 flex justify-center">
-          <p className="text-sm text-neutral-400">Loading...</p>
+        <div className="mt-4 flex flex-col gap-3 px-5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-24 animate-pulse rounded-xl bg-neutral-200" />
+          ))}
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3 px-5">

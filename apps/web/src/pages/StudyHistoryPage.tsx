@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { ChevronLeft, BookOpen, Clock, Target } from "lucide-react";
 import { Button } from "@versado/ui";
 import { studyApi, type SessionHistoryItem } from "@/lib/study-api";
+import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const PAGE_SIZE = 20;
 
@@ -110,6 +111,7 @@ function SessionCard({ session }: { session: SessionHistoryItem }) {
 
 export function StudyHistoryPage() {
   const navigate = useNavigate();
+  const { showErrorNotification } = useErrorNotification();
   const [sessions, setSessions] = useState<SessionHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -132,8 +134,8 @@ export function StudyHistoryPage() {
       }
       setHasMore(result.sessions.length >= PAGE_SIZE);
       offsetRef.current += result.sessions.length;
-    } catch {
-      // Silent fail
+    } catch (err) {
+      showErrorNotification(err);
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);

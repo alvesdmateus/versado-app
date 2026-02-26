@@ -90,13 +90,13 @@ export function BillingPage() {
       billingApi
         .getSubscription()
         .then(({ subscription }) => setSubscription(subscription))
-        .catch(() => {})
+        .catch((err) => showErrorNotification(err))
         .finally(() => setSubLoading(false));
     } else {
       billingApi
         .getPrices()
         .then(({ prices }) => setPrices(prices))
-        .catch(() => {})
+        .catch((err) => showErrorNotification(err))
         .finally(() => setSubLoading(false));
     }
   }, [user?.tier]);
