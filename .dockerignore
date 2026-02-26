@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.*
+*.test.ts
+**/__tests__/
+.git
+.gitignore
+README.md
+e2e/
+apps/web/
