@@ -52,6 +52,7 @@ export const updateProfileSchema = z.object({
 
 export const updatePreferencesSchema = z.object({
   darkMode: z.boolean().optional(),
+  themePreference: z.enum(["light", "dark", "system"]).optional(),
   themeColor: z.string().max(20).optional(),
   dailyGoal: z.number().int().min(1).max(500).optional(),
   reminderTimes: z.array(z.string()).max(5).optional(),

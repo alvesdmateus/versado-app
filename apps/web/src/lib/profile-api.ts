@@ -3,6 +3,7 @@ import { apiClient } from "./api-client";
 
 export interface UserPreferences {
   darkMode: boolean;
+  themePreference?: "light" | "dark" | "system";
   themeColor: string;
   dailyGoal: number;
   reminderTimes: string[];
