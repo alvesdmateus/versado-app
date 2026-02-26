@@ -8,4 +8,6 @@ dist
 .gitignore
 README.md
 e2e/
-apps/web/
+apps/web/src/
+apps/web/dist/
+apps/web/public/
