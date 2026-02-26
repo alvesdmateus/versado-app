@@ -206,10 +206,7 @@ export function BillingPage() {
               </span>
               <ExternalLink className="h-4 w-4 text-neutral-400" />
             </button>
-            <button
-              onClick={() => {}}
-              className="flex w-full items-center gap-3 p-4 text-left"
-            >
+            <div className="flex w-full items-center gap-3 p-4">
               <Calendar className="h-5 w-5 text-neutral-500" />
               <span className="flex-1 text-sm text-neutral-700">
                 Billing period ends
@@ -219,7 +216,7 @@ export function BillingPage() {
                   subscription.currentPeriodEnd
                 ).toLocaleDateString()}
               </span>
-            </button>
+            </div>
             {subscription.cancelAtPeriodEnd ? (
               <button
                 onClick={handleResume}
