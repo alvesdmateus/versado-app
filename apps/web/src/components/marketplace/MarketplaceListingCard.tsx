@@ -35,7 +35,7 @@ export function MarketplaceListingCard({
         {thumbnailUrl ? (
           <img src={thumbnailUrl} alt={title} className="h-full w-full object-cover" />
         ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}>
+          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br dark:brightness-75 ${gradient}`}>
             <Layers className="h-6 w-6 text-white/40" />
           </div>
         )}

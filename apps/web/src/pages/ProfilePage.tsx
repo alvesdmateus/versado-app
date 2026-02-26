@@ -32,6 +32,7 @@ import { CardThemeModal } from "@/components/profile/CardThemeModal";
 import { DeleteAccountModal } from "@/components/profile/DeleteAccountModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
 import { getCardTheme } from "@/lib/card-themes";
+import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const SORTING_LABELS: Record<string, string> = {
   due_first: "Due First",
@@ -43,6 +44,7 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { isDark, setDarkMode } = useTheme();
+  const { showErrorNotification } = useErrorNotification();
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
 
   // Modal states
@@ -58,7 +60,7 @@ export function ProfilePage() {
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
       setPreferences(prefs);
-    }).catch(() => {});
+    }).catch((err) => showErrorNotification(err));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleDarkModeToggle(value: boolean) {

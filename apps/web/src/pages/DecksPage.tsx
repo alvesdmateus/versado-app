@@ -12,6 +12,7 @@ import { CreateDeckModal } from "@/components/decks/CreateDeckModal";
 import { ImportDeckModal } from "@/components/decks/ImportDeckModal";
 import { SortSelect } from "@/components/shared/SortSelect";
 import { EmptyState, DeckGridSkeleton } from "@/components/shared";
+import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const FILTER_TABS = ["All", "Recently Studied", "Favorites"];
 
@@ -36,6 +37,7 @@ function getGradient(name: string): string {
 
 export function DecksPage() {
   const navigate = useNavigate();
+  const { showErrorNotification } = useErrorNotification();
   const [decks, setDecks] = useState<DeckResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,7 +56,7 @@ export function DecksPage() {
         setDecks(deckList);
         setFavoriteIds(new Set(prefs.favoriteDeckIds ?? []));
       })
-      .catch(() => {})
+      .catch((err) => showErrorNotification(err))
       .finally(() => setIsLoading(false));
   }, []);
 

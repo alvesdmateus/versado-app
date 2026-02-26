@@ -316,7 +316,7 @@ studyRoutes.get("/stats/detailed", async (c) => {
   const recentSessions = await db
     .select({
       startedAt: studySessions.startedAt,
-      stats: studySessions.stats,
+      reviews: studySessions.reviews,
     })
     .from(studySessions)
     .where(
@@ -327,7 +327,7 @@ studyRoutes.get("/stats/detailed", async (c) => {
     )
     .orderBy(studySessions.startedAt);
 
-  // Aggregate by day
+  // Aggregate by day using individual review ratings
   const dailyData: Record<string, { reviews: number; correct: number; total: number }> = {};
   for (let i = 0; i < 14; i++) {
     const d = new Date();
@@ -339,10 +339,12 @@ studyRoutes.get("/stats/detailed", async (c) => {
   for (const session of recentSessions) {
     const key = new Date(session.startedAt).toISOString().slice(0, 10);
     if (dailyData[key]) {
-      const stats = session.stats as { cardsStudied?: number; correctCount?: number } | null;
-      dailyData[key].reviews += stats?.cardsStudied ?? 0;
-      dailyData[key].correct += stats?.correctCount ?? 0;
-      dailyData[key].total += stats?.cardsStudied ?? 0;
+      const reviewsArr = session.reviews as Array<{ rating: number }> | null;
+      if (reviewsArr && reviewsArr.length > 0) {
+        dailyData[key].reviews += reviewsArr.length;
+        dailyData[key].total += reviewsArr.length;
+        dailyData[key].correct += reviewsArr.filter((r) => r.rating >= 3).length;
+      }
     }
   }
 
