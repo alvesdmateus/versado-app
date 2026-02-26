@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "flashcard-app",
+      "name": "versado-app",
       "devDependencies": {
         "@playwright/test": "^1.58.2",
         "typescript": "^5.3.3",

@@ -37,9 +37,9 @@
 * **api:** add missing RESEND_API_KEY to .env.test ([0262a72](https://github.com/alvesdmateus/versado-app/commit/0262a729edfd6b15b7fb015af52f2e566b140f11))
 * **ci:** add main scope for release-please PR titles ([#3](https://github.com/alvesdmateus/versado-app/issues/3)) ([6eb6a63](https://github.com/alvesdmateus/versado-app/commit/6eb6a63d4e13f0269d7346cb9cf2aac79933ab8c))
 
-## [0.1.1](https://github.com/alvesdmateus/flashcard-app/compare/versado-v0.1.0...versado-v0.1.1) (2026-02-24)
+## [0.1.1](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.0...versado-v0.1.1) (2026-02-24)
 
 
 ### Miscellaneous
 
-* **ci:** add release management with GitHub Flow and semantic versioning ([#1](https://github.com/alvesdmateus/flashcard-app/issues/1)) ([edcabdd](https://github.com/alvesdmateus/flashcard-app/commit/edcabddc72d4ffd5d4dd4db62e3348ef48130063))
+* **ci:** add release management with GitHub Flow and semantic versioning ([#1](https://github.com/alvesdmateus/versado-app/issues/1)) ([edcabdd](https://github.com/alvesdmateus/versado-app/commit/edcabddc72d4ffd5d4dd4db62e3348ef48130063))
