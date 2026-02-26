@@ -325,6 +325,20 @@ export const marketplaceReviews = pgTable(
   (table) => [uniqueIndex("marketplace_reviews_user_deck_idx").on(table.userId, table.deckId)]
 );
 
+// Push notification subscriptions (per-device)
+export const pushSubscriptions = pgTable("push_subscriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 // Social follows (user-follows-user and user-follows-tag)
 export const follows = pgTable(
   "follows",

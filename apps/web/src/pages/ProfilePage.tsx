@@ -33,6 +33,8 @@ import { DeleteAccountModal } from "@/components/profile/DeleteAccountModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
 import { getCardTheme } from "@/lib/card-themes";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
+import { useToast } from "@/contexts/ToastContext";
+import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-manager";
 
 const SORTING_LABELS: Record<string, string> = {
   due_first: "Due First",
@@ -45,6 +47,7 @@ export function ProfilePage() {
   const { user, logout } = useAuth();
   const { isDark, setDarkMode } = useTheme();
   const { showErrorNotification } = useErrorNotification();
+  const { showToast } = useToast();
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
 
   // Modal states
@@ -74,15 +77,29 @@ export function ProfilePage() {
     }
   }
 
-  async function handleToggle(
-    key: keyof Pick<UserPreferences, "pushAlerts">,
-    value: boolean
-  ) {
-    setPreferences((prev) => (prev ? { ...prev, [key]: value } : prev));
+  async function handlePushToggle(value: boolean) {
+    setPreferences((prev) => (prev ? { ...prev, pushAlerts: value } : prev));
     try {
-      await profileApi.updatePreferences({ [key]: value });
+      if (value) {
+        const success = await subscribeToPush();
+        if (!success) {
+          setPreferences((prev) =>
+            prev ? { ...prev, pushAlerts: false } : prev
+          );
+          showToast(
+            "Push notifications not available or permission denied",
+            "error"
+          );
+          return;
+        }
+      } else {
+        await unsubscribeFromPush();
+      }
+      await profileApi.updatePreferences({ pushAlerts: value });
     } catch {
-      setPreferences((prev) => (prev ? { ...prev, [key]: !value } : prev));
+      setPreferences((prev) =>
+        prev ? { ...prev, pushAlerts: !value } : prev
+      );
     }
   }
 
@@ -168,7 +185,7 @@ export function ProfilePage() {
           rightElement={
             <ToggleSwitch
               checked={preferences?.pushAlerts ?? true}
-              onChange={(v) => handleToggle("pushAlerts", v)}
+              onChange={(v) => handlePushToggle(v)}
             />
           }
         />
