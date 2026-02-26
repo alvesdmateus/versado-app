@@ -94,3 +94,47 @@ dashboardRoutes.get("/", async (c) => {
     decks: deckSummaries,
   });
 });
+
+// Get per-day activity history for the last 90 days
+dashboardRoutes.get("/history", async (c) => {
+  const user = c.get("user");
+
+  const ninetyDaysAgo = new Date();
+  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 89);
+  ninetyDaysAgo.setHours(0, 0, 0, 0);
+
+  const sessions = await db
+    .select()
+    .from(studySessions)
+    .where(
+      and(
+        eq(studySessions.userId, user.id),
+        gte(studySessions.startedAt, ninetyDaysAgo)
+      )
+    );
+
+  // Aggregate by date
+  const buckets = new Map<string, { sessions: number; cardsStudied: number; correctCount: number }>();
+  for (const session of sessions) {
+    const date = session.startedAt.toISOString().slice(0, 10);
+    const existing = buckets.get(date) ?? { sessions: 0, cardsStudied: 0, correctCount: 0 };
+    existing.sessions += 1;
+    existing.cardsStudied += session.stats.cardsStudied;
+    existing.correctCount += session.stats.correctCount;
+    buckets.set(date, existing);
+  }
+
+  // Build complete 90-day array (fill missing days with zeros)
+  const days: Array<{ date: string; sessions: number; cardsStudied: number; correctCount: number }> = [];
+  const cursor = new Date(ninetyDaysAgo);
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  while (cursor <= today) {
+    const dateStr = cursor.toISOString().slice(0, 10);
+    const bucket = buckets.get(dateStr) ?? { sessions: 0, cardsStudied: 0, correctCount: 0 };
+    days.push({ date: dateStr, ...bucket });
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return c.json({ days });
+});
