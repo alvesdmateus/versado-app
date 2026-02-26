@@ -217,12 +217,14 @@ export function DecksPage() {
       {/* FABs */}
       <button
         onClick={() => setIsImportOpen(true)}
+        aria-label="Import deck"
         className="fixed bottom-24 right-22 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-0 text-primary-500 shadow-card-lg border border-neutral-200 transition-all hover:bg-neutral-50 active:scale-90"
       >
         <Upload className="h-6 w-6" />
       </button>
       <button
         onClick={() => setIsCreateOpen(true)}
+        aria-label="Create new deck"
         className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-card-lg transition-all hover:bg-primary-600 active:scale-90"
       >
         <Plus className="h-6 w-6" />

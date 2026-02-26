@@ -53,6 +53,7 @@ export function CardListItem({ card, onEdit, onDelete }: CardListItemProps) {
           e.stopPropagation();
           onDelete(card.id);
         }}
+        aria-label="Delete card"
         className="shrink-0 rounded-lg p-1.5 text-neutral-300 opacity-0 transition-all hover:text-error-500 group-hover:opacity-100"
       >
         <Trash2 className="h-4 w-4" />
