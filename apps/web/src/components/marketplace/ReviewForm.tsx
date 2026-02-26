@@ -8,14 +8,15 @@ import { StarRatingInput } from "./StarRatingInput";
 
 interface ReviewFormProps {
   deckId: string;
+  existingReview?: MarketplaceReview | null;
   onSubmitted: (review: MarketplaceReview) => void;
 }
 
-export function ReviewForm({ deckId, onSubmitted }: ReviewFormProps) {
+export function ReviewForm({ deckId, existingReview, onSubmitted }: ReviewFormProps) {
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(existingReview?.rating ?? 0);
+  const [comment, setComment] = useState(existingReview?.comment ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit() {
@@ -30,7 +31,7 @@ export function ReviewForm({ deckId, onSubmitted }: ReviewFormProps) {
         rating,
         comment: comment.trim() || undefined,
       });
-      showToast("Review submitted!");
+      showToast(existingReview ? "Review updated!" : "Review submitted!");
       onSubmitted(review);
       setRating(0);
       setComment("");
@@ -43,7 +44,9 @@ export function ReviewForm({ deckId, onSubmitted }: ReviewFormProps) {
 
   return (
     <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-      <h3 className="text-sm font-semibold text-neutral-700">Write a Review</h3>
+      <h3 className="text-sm font-semibold text-neutral-700">
+        {existingReview ? "Edit Your Review" : "Write a Review"}
+      </h3>
 
       <div className="mt-3">
         <StarRatingInput value={rating} onChange={setRating} />
@@ -65,7 +68,7 @@ export function ReviewForm({ deckId, onSubmitted }: ReviewFormProps) {
           onClick={handleSubmit}
           disabled={isSubmitting || rating === 0}
         >
-          {isSubmitting ? "Submitting..." : "Submit Review"}
+          {isSubmitting ? "Submitting..." : existingReview ? "Update Review" : "Submit Review"}
         </Button>
       </div>
     </div>

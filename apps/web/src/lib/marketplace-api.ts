@@ -101,4 +101,11 @@ export const marketplaceApi = {
       { method: "POST", body: JSON.stringify(data) }
     );
   },
+
+  deleteReview(deckId: string) {
+    return apiClient<{ success: boolean }>(
+      `/api/marketplace/${deckId}/reviews`,
+      { method: "DELETE" }
+    );
+  },
 };

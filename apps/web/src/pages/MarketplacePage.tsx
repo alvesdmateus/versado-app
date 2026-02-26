@@ -39,6 +39,7 @@ export function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState("popular");
+  const [minRating, setMinRating] = useState(0);
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -59,6 +60,7 @@ export function MarketplacePage() {
         sortBy,
         limit: PAGE_SIZE,
         offset: offsetRef.current,
+        minRating: minRating || undefined,
       });
       if (append) {
         setListings((prev) => [...prev, ...result.listings]);
@@ -73,7 +75,7 @@ export function MarketplacePage() {
       setIsLoading(false);
       setIsLoadingMore(false);
     }
-  }, [searchQuery, activeCategory, sortBy]);
+  }, [searchQuery, activeCategory, sortBy, minRating]);
 
   useEffect(() => {
     fetchListings();
@@ -88,6 +90,29 @@ export function MarketplacePage() {
         activeTab={activeCategory}
         onTabChange={setActiveCategory}
       />
+      {/* Rating filter */}
+      <div className="mt-2 flex items-center gap-2 px-5">
+        <span className="text-xs text-neutral-500">Rating:</span>
+        {[
+          { label: "Any", value: 0 },
+          { label: "2+", value: 2 },
+          { label: "3+", value: 3 },
+          { label: "4+", value: 4 },
+        ].map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => setMinRating(opt.value)}
+            className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+              minRating === opt.value
+                ? "bg-primary-500 text-white"
+                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
       <div className="mt-2 flex justify-end px-5">
         <SortSelect
           value={sortBy}
