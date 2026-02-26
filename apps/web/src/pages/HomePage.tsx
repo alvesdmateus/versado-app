@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
 import { BarChart3, Clock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -5,6 +6,7 @@ import { useSocialHome } from "@/hooks/useSocialHome";
 import { HomeHeader } from "@/components/home/HomeHeader";
 import { TodayReviewCard } from "@/components/home/TodayReviewCard";
 import { StatsRow } from "@/components/home/StatsRow";
+import { ActivitySection } from "@/components/home/ActivitySection";
 import { DeckCarousel } from "@/components/home/DeckCarousel";
 import { TrendingTagsSection } from "@/components/home/TrendingTagsSection";
 import { PopularDeckCarousel } from "@/components/home/PopularDeckCarousel";
@@ -12,6 +14,7 @@ import { ActivityFeed } from "@/components/home/ActivityFeed";
 import { RecommendedDecksSection } from "@/components/home/RecommendedDecksSection";
 import { SuggestedCreatorsSection } from "@/components/home/SuggestedCreatorsSection";
 import { HomeSkeleton } from "@/components/shared";
+import { dashboardApi, type DashboardHistory } from "@/lib/dashboard-api";
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -34,6 +37,12 @@ export function HomePage() {
     toggleFollowUser,
     toggleFollowTag,
   } = useSocialHome();
+
+  const [history, setHistory] = useState<DashboardHistory | null>(null);
+
+  useEffect(() => {
+    dashboardApi.getHistory().then(setHistory).catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return <HomeSkeleton />;
@@ -68,8 +77,11 @@ export function HomePage() {
         streakActive={stats?.streakActive ?? false}
       />
 
+      {/* Activity charts */}
+      <ActivitySection history={history} />
+
       {/* Quick links */}
-      <div className="mt-2 flex gap-3 px-5">
+      <div className="mt-4 flex gap-3 px-5">
         <Link
           to="/history"
           className="flex flex-1 items-center gap-2 rounded-xl bg-neutral-0 p-3 shadow-card transition-shadow hover:shadow-card-lg"
