@@ -8,11 +8,15 @@ FROM base AS deps
 # Copy root workspace config
 COPY package.json bun.lock ./
 
-# Copy workspace package.json files (needed for bun install resolution)
+# Copy ALL workspace package.json files (bun.lock references entire workspace)
 COPY apps/api/package.json apps/api/package.json
+COPY apps/web/package.json apps/web/package.json
 COPY packages/algorithms/package.json packages/algorithms/package.json
 COPY packages/auth/package.json packages/auth/package.json
 COPY packages/core/package.json packages/core/package.json
+COPY packages/storage/package.json packages/storage/package.json
+COPY packages/sync/package.json packages/sync/package.json
+COPY packages/ui/package.json packages/ui/package.json
 COPY packages/validation/package.json packages/validation/package.json
 
 # Install production dependencies
@@ -23,9 +27,13 @@ FROM base AS build
 
 COPY package.json bun.lock ./
 COPY apps/api/package.json apps/api/package.json
+COPY apps/web/package.json apps/web/package.json
 COPY packages/algorithms/package.json packages/algorithms/package.json
 COPY packages/auth/package.json packages/auth/package.json
 COPY packages/core/package.json packages/core/package.json
+COPY packages/storage/package.json packages/storage/package.json
+COPY packages/sync/package.json packages/sync/package.json
+COPY packages/ui/package.json packages/ui/package.json
 COPY packages/validation/package.json packages/validation/package.json
 
 RUN bun install --frozen-lockfile
