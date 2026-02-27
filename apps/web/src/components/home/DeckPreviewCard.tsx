@@ -1,4 +1,5 @@
 import { Layers } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { CircularProgress } from "@versado/ui";
 
 export interface DeckPreviewCardProps {
@@ -16,6 +17,8 @@ export function DeckPreviewCard({
   progress,
   onClick,
 }: DeckPreviewCardProps) {
+  const { t } = useTranslation("home");
+
   return (
     <button
       onClick={onClick}
@@ -41,7 +44,7 @@ export function DeckPreviewCard({
             {name}
           </h3>
           <p className="mt-0.5 text-xs text-neutral-500">
-            {cardCount.toLocaleString()} Cards
+            {t("history.cards", { count: cardCount })}
           </p>
         </div>
         <CircularProgress value={progress} size={32} strokeWidth={2.5} />

@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "decks": "Paquets",
+    "discover": "Découvrir",
+    "market": "Marché",
+    "profile": "Profil"
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "back": "Retour",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "confirm": "Confirmer",
+    "retry": "Réessayer",
+    "skip": "Passer",
+    "done": "Terminé"
+  },
+  "loading": "Chargement...",
+  "skipToContent": "Aller au contenu principal"
+}

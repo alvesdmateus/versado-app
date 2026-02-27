@@ -1,0 +1,43 @@
+{
+  "loading": "Chargement des cartes...",
+  "empty": {
+    "heading": "Aucune carte à réviser",
+    "message": "C'est tout pour maintenant ! Revenez plus tard pour plus de révisions.",
+    "backHome": "Retour à l'accueil"
+  },
+  "session": {
+    "closeSession": "Fermer la session d'étude",
+    "moreOptions": "Plus d'options"
+  },
+  "card": {
+    "question": "Question",
+    "answerRevealed": "Réponse révélée",
+    "tapToReveal": "Appuyez pour révéler la réponse",
+    "howWell": "Avec quelle facilité connaissiez-vous cette carte ?"
+  },
+  "ratings": {
+    "again": "Encore",
+    "hard": "Difficile",
+    "good": "Bon",
+    "easy": "Facile"
+  },
+  "complete": {
+    "heading": "Session terminée !",
+    "reviewed": "Vous avez révisé {{count}} carte(s)",
+    "accuracy": "Précision",
+    "avgTime": "Temps moyen",
+    "ratingBreakdown": "Répartition des évaluations",
+    "studyAgain": "Étudier à nouveau",
+    "backToDeck": "Retour au deck",
+    "viewHistory": "Voir l'historique",
+    "backHome": "Retour à l'accueil"
+  },
+  "limitReached": {
+    "imageAlt": "Limite quotidienne atteinte",
+    "heading": "Vous avez atteint votre limite quotidienne",
+    "message": "Mais ne vous découragez pas ! Continuez à travailler sur vos objectifs et",
+    "goFluent": "Go Fluent",
+    "maybeLater": "Plus tard",
+    "socialProof": "Rejoignez d'autres apprenants fluides"
+  }
+}

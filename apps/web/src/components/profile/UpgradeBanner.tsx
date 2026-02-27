@@ -1,23 +1,25 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
 
 export function UpgradeBanner() {
   const navigate = useNavigate();
+  const { t } = useTranslation("profile");
 
   return (
     <div className="mx-5 mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 p-5">
       <div className="flex items-center gap-2">
         <Sparkles className="h-5 w-5 text-white" />
-        <h3 className="text-lg font-bold text-white">Go Fluent</h3>
+        <h3 className="text-lg font-bold text-white">{t("upgrade.goFluent")}</h3>
       </div>
       <p className="mt-1 text-sm text-primary-100">
-        AI-powered mastery, unlimited decks, and offline access — for less than a coffee a week.
+        {t("upgrade.description")}
       </p>
       <button
         onClick={() => navigate("/fluent")}
         className="mt-3 rounded-full bg-neutral-0 px-6 py-2 text-sm font-semibold text-primary-600 transition-all hover:bg-primary-50 active:scale-95"
       >
-        Go Fluent
+        {t("upgrade.goFluent")}
       </button>
     </div>
   );

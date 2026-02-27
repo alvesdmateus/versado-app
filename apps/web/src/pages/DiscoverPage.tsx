@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Compass } from "lucide-react";
 import { useDiscover } from "@/hooks/useDiscover";
 import { TrendingTagsSection } from "@/components/home/TrendingTagsSection";
@@ -39,6 +40,7 @@ function DiscoverSkeleton() {
 }
 
 export function DiscoverPage() {
+  const { t } = useTranslation("home");
   const navigate = useNavigate();
   const {
     popularDecks,
@@ -64,10 +66,10 @@ export function DiscoverPage() {
         <div className="px-5 pt-6 pb-2">
           <div className="flex items-center gap-2">
             <Compass className="h-6 w-6 text-primary-500" />
-            <h1 className="text-2xl font-bold text-neutral-900">Discover</h1>
+            <h1 className="text-2xl font-bold text-neutral-900">{t("discover.heading")}</h1>
           </div>
           <p className="mt-1 text-sm text-neutral-500">
-            Find new decks, creators, and topics
+            {t("discover.subtitle")}
           </p>
         </div>
         <DiscoverSkeleton />

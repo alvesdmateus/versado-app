@@ -1,0 +1,87 @@
+{
+  "greeting": "¡Hola, {{name}}!",
+  "subtitle": "¿Listo para una sesión rápida?",
+  "todayReview": "Repaso de hoy",
+  "cardsDue": "tarjetas pendientes",
+  "studyNow": "Estudiar ahora",
+  "studyHistory": "Historial de estudio",
+  "stats": "Estadísticas",
+  "yourDecks": "Tus mazos",
+  "viewAll": "Ver todo",
+  "trendingTopics": "Temas en tendencia",
+  "popularDecks": "Mazos populares",
+  "recommendedForYou": "Recomendado para ti",
+  "followTopicsTitle": "Sigue temas para obtener recomendaciones",
+  "followTopicsDesc": "Toca los temas en tendencia arriba para personalizar tu feed",
+  "noRecommendations": "No hay nuevas recomendaciones por ahora",
+  "suggestedCreators": "Creadores sugeridos",
+  "statsRow": {
+    "mastered": "Dominadas",
+    "accuracy": "Precisión",
+    "streak": "Racha",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "activity": {
+    "heading": "Actividad",
+    "emptyState": "Empieza a estudiar para ver tu actividad",
+    "accuracyLabel": "Precisión",
+    "cardsPerDay": "Tarjetas / día"
+  },
+  "feed": {
+    "all": "Todo",
+    "creators": "Creadores",
+    "tags": "Etiquetas",
+    "emptyTitle": "Sin actividad aún",
+    "emptyDescription": "Sigue creadores o etiquetas para ver actividad aquí",
+    "browseMarketplace": "Explorar Marketplace",
+    "showMore": "Ver más",
+    "published": " publicó ",
+    "via": " vía "
+  },
+  "time": {
+    "justNow": "justo ahora",
+    "minutesAgo": "hace {{minutes}}m",
+    "hoursAgo": "hace {{hours}}h",
+    "daysAgo": "hace {{days}}d",
+    "weeksAgo": "hace {{weeks}}sem"
+  },
+  "discover": {
+    "heading": "Descubrir",
+    "subtitle": "Encuentra nuevos mazos, creadores y temas"
+  },
+  "history": {
+    "heading": "Historial de estudio",
+    "noSessions": "Aún no hay sesiones de estudio",
+    "emptyState": "Empieza a estudiar para ver tu historial aquí",
+    "inProgress": "En progreso",
+    "deletedDeck": "Mazo eliminado",
+    "cards": "{{count}} tarjetas",
+    "loadMore": "Cargar más"
+  },
+  "studyStats": {
+    "heading": "Estadísticas de estudio",
+    "totalSessions": "Sesiones totales",
+    "cardsMastered": "Tarjetas dominadas",
+    "accuracy": "Precisión",
+    "dayStreak": "Días de racha",
+    "dailyReviews": "Repasos diarios",
+    "accuracyTrend": "Tendencia de precisión",
+    "notEnoughData": "Aún no hay suficientes datos",
+    "cardDistribution": "Distribución de tarjetas",
+    "noCards": "Aún no hay tarjetas",
+    "cards": "tarjetas",
+    "statusNew": "Nueva",
+    "statusLearning": "Aprendiendo",
+    "statusRelearning": "Reaprendiendo",
+    "statusReview": "Repaso",
+    "statusMastered": "Dominada"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "heading": "¡Ups! Esta página se ha perdido.",
+    "description": "La página que buscas pudo haber sido movida, eliminada, o nunca existió.",
+    "backHome": "Volver al inicio",
+    "helpCenter": "Centro de ayuda"
+  }
+}

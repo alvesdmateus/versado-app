@@ -1,4 +1,5 @@
 import { Layers } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { FeedItem } from "@/lib/social-api";
 
 interface FeedItemCardProps {
@@ -6,23 +7,24 @@ interface FeedItemCardProps {
   onDeckClick: (deckId: string) => void;
 }
 
-function timeAgo(date: string): string {
-  const seconds = Math.floor(
-    (Date.now() - new Date(date).getTime()) / 1000
-  );
-  if (seconds < 60) return "just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
-  const weeks = Math.floor(days / 7);
-  return `${weeks}w ago`;
-}
-
 export function FeedItemCard({ item, onDeckClick }: FeedItemCardProps) {
+  const { t } = useTranslation("home");
   const initial = item.creator.displayName.charAt(0).toUpperCase();
+
+  function timeAgo(date: string): string {
+    const seconds = Math.floor(
+      (Date.now() - new Date(date).getTime()) / 1000
+    );
+    if (seconds < 60) return t("time.justNow");
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return t("time.minutesAgo", { minutes });
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return t("time.hoursAgo", { hours });
+    const days = Math.floor(hours / 24);
+    if (days < 7) return t("time.daysAgo", { days });
+    const weeks = Math.floor(days / 7);
+    return t("time.weeksAgo", { weeks });
+  }
 
   return (
     <button
@@ -46,7 +48,7 @@ export function FeedItemCard({ item, onDeckClick }: FeedItemCardProps) {
       <div className="min-w-0 flex-1">
         <p className="text-sm text-neutral-900">
           <span className="font-semibold">{item.creator.displayName}</span>
-          {" published "}
+          {t("feed.published")}
           <span className="font-semibold">{item.deck.name}</span>
         </p>
         <p className="mt-0.5 text-xs text-neutral-400">
@@ -54,7 +56,7 @@ export function FeedItemCard({ item, onDeckClick }: FeedItemCardProps) {
           {item.matchReason === "followed_tag" && item.matchedTag && (
             <span>
               {" "}
-              &middot; via{" "}
+              &middot;{t("feed.via")}
               <span className="text-primary-500">#{item.matchedTag}</span>
             </span>
           )}

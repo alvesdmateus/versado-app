@@ -1,0 +1,68 @@
+{
+  "welcome": {
+    "heading": "Bem-vindo ao Versado{{name}}!",
+    "subheading": "Sua ferramenta pessoal de repetição espaçada. Vamos configurar tudo para você começar a memorizar de forma eficaz.",
+    "getStarted": "Começar"
+  },
+  "language": {
+    "heading": "Qual é o seu idioma nativo?",
+    "subheading": "Isso nos ajuda a personalizar sua experiência."
+  },
+  "topics": {
+    "heading": "O que você quer estudar?",
+    "subheading": "Selecione tópicos que te interessam. Isso nos ajuda a sugerir conteúdo relevante.",
+    "continue": "Continuar ({{count}} selecionados)",
+    "continueDefault": "Continuar",
+    "skip": "Pular por agora",
+    "languages": "Idiomas",
+    "science": "Ciência",
+    "math": "Matemática",
+    "history": "História",
+    "geography": "Geografia",
+    "programming": "Programação",
+    "medicine": "Medicina",
+    "law": "Direito",
+    "music": "Música",
+    "art": "Arte",
+    "literature": "Literatura",
+    "philosophy": "Filosofia",
+    "psychology": "Psicologia",
+    "economics": "Economia",
+    "business": "Negócios",
+    "cooking": "Culinária"
+  },
+  "goal": {
+    "heading": "Defina Sua Meta Diária",
+    "subheading": "Quantos cartões você quer revisar por dia? Você pode alterar isso depois.",
+    "casual": "Casual",
+    "casualDesc": "10 cartões/dia",
+    "regular": "Regular",
+    "regularDesc": "25 cartões/dia",
+    "serious": "Sério",
+    "seriousDesc": "50 cartões/dia",
+    "intense": "Intenso",
+    "intenseDesc": "100 cartões/dia"
+  },
+  "appearance": {
+    "heading": "Personalizar Aparência",
+    "subheading": "Deixe o Versado com a sua cara. Você pode alterar depois.",
+    "themeSystem": "Padrão do Dispositivo",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "cardTheme": "Tema do Cartão",
+    "preview": "Prévia",
+    "previewQuestion": "O que é repetição espaçada?"
+  },
+  "tutorial": {
+    "heading": "Como Funciona",
+    "subheading": "Uma visão geral rápida de como aproveitar ao máximo o Versado.",
+    "createDecks": "Criar Baralhos",
+    "createDecksDesc": "Organize seus flashcards em baralhos por assunto, tema, ou como preferir.",
+    "studySmart": "Estude com Inteligência",
+    "studySmartDesc": "Nosso algoritmo de repetição espaçada mostra os cartões no momento perfeito para retenção a longo prazo.",
+    "reviewImprove": "Revise e Melhore",
+    "reviewImproveDesc": "Avalie cada cartão e veja sua precisão melhorar com o tempo. Consistência é a chave!",
+    "startLearning": "Começar a Estudar",
+    "settingUp": "Configurando..."
+  }
+}

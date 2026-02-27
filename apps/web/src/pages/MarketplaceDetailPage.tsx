@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Layers, Download, Users } from "lucide-react";
 import { Button } from "@versado/ui";
 import {
@@ -44,6 +45,7 @@ function formatCount(n: number): string {
 export function MarketplaceDetailPage() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation("marketplace");
   const { user } = useAuth();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
@@ -72,11 +74,11 @@ export function MarketplaceDetailPage() {
     setIsAdding(true);
     try {
       const { clonedDeckId } = await marketplaceApi.addToLibrary(deckId);
-      showToast("Added to your library!");
+      showToast(t("addedToLibrary"));
       navigate(`/decks/${clonedDeckId}`);
     } catch (err) {
       if (err instanceof ApiError && err.code === "ALREADY_PURCHASED") {
-        showToast("Already in your library", "info");
+        showToast(t("alreadyInLibraryToast"), "info");
       } else {
         showErrorNotification(err, { onRetry: handleAddToLibrary });
       }
@@ -105,7 +107,7 @@ export function MarketplaceDetailPage() {
         reviews: detail.reviews.filter((r) => r.id !== reviewId),
         reviewCount: Math.max(0, detail.reviewCount - 1),
       });
-      showToast("Review deleted");
+      showToast(t("reviewDeleted"));
     } catch (err) {
       showErrorNotification(err);
     }
@@ -134,7 +136,7 @@ export function MarketplaceDetailPage() {
           />
         ) : (
           <div
-            className={`flex h-full w-full items-center justify-center bg-gradient-to-br dark:brightness-75 ${getGradient(detail.name)}`}
+            className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${getGradient(detail.name)}`}
           >
             <Layers className="h-12 w-12 text-white/40" />
           </div>
@@ -149,7 +151,7 @@ export function MarketplaceDetailPage() {
               {detail.name}
             </h2>
             <p className="mt-0.5 text-sm text-neutral-500">
-              by {detail.creator.displayName}
+              {t("byCreator", { name: detail.creator.displayName })}
             </p>
           </div>
           <span
@@ -159,7 +161,7 @@ export function MarketplaceDetailPage() {
                 : "bg-primary-500 text-white"
             }`}
           >
-            {isFree ? "Free" : `$${(detail.price / 100).toFixed(2)}`}
+            {isFree ? t("free") : `$${(detail.price / 100).toFixed(2)}`}
           </span>
         </div>
 
@@ -181,7 +183,7 @@ export function MarketplaceDetailPage() {
           </div>
           <div className="flex items-center gap-1 text-xs text-neutral-500">
             <Users className="h-3.5 w-3.5" />
-            <span>{detail.cardCount} cards</span>
+            <span>{t("cards", { count: detail.cardCount })}</span>
           </div>
         </div>
 
@@ -204,19 +206,19 @@ export function MarketplaceDetailPage() {
       <div className="mx-5 mt-4">
         {detail.isOwner ? (
           <Button variant="secondary" fullWidth disabled>
-            Your Deck
+            {t("yourDeck")}
           </Button>
         ) : detail.isPurchased ? (
           <Button variant="secondary" fullWidth disabled>
-            Already in Library
+            {t("alreadyInLibrary")}
           </Button>
         ) : isFree ? (
           <Button fullWidth onClick={handleAddToLibrary} disabled={isAdding}>
-            {isAdding ? "Adding..." : "Add to Library"}
+            {isAdding ? t("adding") : t("addToLibrary")}
           </Button>
         ) : (
           <Button fullWidth disabled>
-            ${(detail.price / 100).toFixed(2)} — Coming Soon
+            ${(detail.price / 100).toFixed(2)} — {t("comingSoon")}
           </Button>
         )}
       </div>
@@ -225,7 +227,7 @@ export function MarketplaceDetailPage() {
       {detail.sampleCards.length > 0 && (
         <div className="mx-5 mt-6">
           <h3 className="mb-3 text-sm font-semibold text-neutral-700">
-            Sample Cards
+            {t("sampleCards")}
           </h3>
           <SampleCardList cards={detail.sampleCards} />
         </div>
@@ -234,7 +236,7 @@ export function MarketplaceDetailPage() {
       {/* Reviews */}
       <div className="mx-5 mt-6">
         <h3 className="mb-3 text-sm font-semibold text-neutral-700">
-          Reviews ({detail.reviewCount})
+          {t("reviews", { count: detail.reviewCount })}
         </h3>
 
         {detail.isPurchased && !detail.isOwner && (

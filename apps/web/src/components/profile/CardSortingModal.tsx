@@ -1,27 +1,17 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { profileApi } from "@/lib/profile-api";
 import { Button } from "@versado/ui";
 
-const SORTING_OPTIONS = [
-  {
-    value: "due_first" as const,
-    label: "Due First",
-    description: "Cards due for review are shown first",
-  },
-  {
-    value: "random" as const,
-    label: "Random",
-    description: "Cards are shown in random order",
-  },
-  {
-    value: "difficulty" as const,
-    label: "By Difficulty",
-    description: "Harder cards are shown first",
-  },
-];
+const SORTING_KEYS = ["dueFirst", "random", "byDifficulty"] as const;
+const SORTING_VALUES = {
+  dueFirst: "due_first",
+  random: "random",
+  byDifficulty: "difficulty",
+} as const;
 
 interface CardSortingModalProps {
   isOpen: boolean;
@@ -36,6 +26,7 @@ export function CardSortingModal({
   currentSorting,
   onSaved,
 }: CardSortingModalProps) {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [selected, setSelected] = useState(currentSorting);
@@ -47,7 +38,7 @@ export function CardSortingModal({
       await profileApi.updatePreferences({
         cardSortingLogic: selected as "due_first" | "random" | "difficulty",
       });
-      showToast("Sorting preference updated!");
+      showToast(t("cardSortingModal.updated"));
       onSaved(selected);
       onClose();
     } catch (err) {
@@ -58,24 +49,29 @@ export function CardSortingModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Card Sorting" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("cardSortingModal.title")} size="sm">
       <div className="flex flex-col gap-2">
-        {SORTING_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => setSelected(opt.value)}
-            className={`rounded-lg border p-3 text-left transition-colors ${
-              selected === opt.value
-                ? "border-primary-500 bg-primary-50"
-                : "border-neutral-200 hover:border-neutral-300"
-            }`}
-          >
-            <p className="text-sm font-medium text-neutral-900">{opt.label}</p>
-            <p className="mt-0.5 text-xs text-neutral-500">
-              {opt.description}
-            </p>
-          </button>
-        ))}
+        {SORTING_KEYS.map((key) => {
+          const apiValue = SORTING_VALUES[key];
+          return (
+            <button
+              key={key}
+              onClick={() => setSelected(apiValue)}
+              className={`rounded-lg border p-3 text-left transition-colors ${
+                selected === apiValue
+                  ? "border-primary-500 bg-primary-50"
+                  : "border-neutral-200 hover:border-neutral-300"
+              }`}
+            >
+              <p className="text-sm font-medium text-neutral-900">
+                {t(`sorting.${key}`)}
+              </p>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                {t(`sorting.${key}Desc`)}
+              </p>
+            </button>
+          );
+        })}
       </div>
       <Button
         className="mt-4"
@@ -83,7 +79,7 @@ export function CardSortingModal({
         onClick={handleSave}
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Saving..." : "Save"}
+        {isSubmitting ? t("cardSortingModal.saving") : t("cardSortingModal.save")}
       </Button>
     </Modal>
   );

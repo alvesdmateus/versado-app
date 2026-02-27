@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import { BarChart3, Clock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSocialHome } from "@/hooks/useSocialHome";
@@ -17,6 +18,7 @@ import { HomeSkeleton } from "@/components/shared";
 import { dashboardApi, type DashboardHistory } from "@/lib/dashboard-api";
 
 export function HomePage() {
+  const { t } = useTranslation("home");
   const navigate = useNavigate();
   const { user } = useAuth();
   const {
@@ -87,14 +89,14 @@ export function HomePage() {
           className="flex flex-1 items-center gap-2 rounded-xl bg-neutral-0 p-3 shadow-card transition-shadow hover:shadow-card-lg"
         >
           <Clock className="h-5 w-5 text-primary-500" />
-          <span className="text-sm font-medium text-neutral-700">Study History</span>
+          <span className="text-sm font-medium text-neutral-700">{t("studyHistory")}</span>
         </Link>
         <Link
           to="/stats"
           className="flex flex-1 items-center gap-2 rounded-xl bg-neutral-0 p-3 shadow-card transition-shadow hover:shadow-card-lg"
         >
           <BarChart3 className="h-5 w-5 text-primary-500" />
-          <span className="text-sm font-medium text-neutral-700">Stats</span>
+          <span className="text-sm font-medium text-neutral-700">{t("stats")}</span>
         </Link>
       </div>
 

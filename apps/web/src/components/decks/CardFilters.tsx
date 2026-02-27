@@ -1,20 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Search, X } from "lucide-react";
 import { SortSelect } from "@/components/shared/SortSelect";
 
 const DIFFICULTY_OPTIONS = ["all", "easy", "medium", "hard"] as const;
-
-const DIFFICULTY_LABELS: Record<string, string> = {
-  all: "All",
-  easy: "Easy",
-  medium: "Medium",
-  hard: "Hard",
-};
-
-const SORT_OPTIONS = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
-  { value: "a-z", label: "A-Z" },
-];
 
 interface CardFiltersProps {
   search: string;
@@ -39,6 +27,21 @@ export function CardFilters({
   selectedTags,
   onTagToggle,
 }: CardFiltersProps) {
+  const { t } = useTranslation("decks");
+
+  const difficultyLabels: Record<string, string> = {
+    all: t("cardFilters.all"),
+    easy: t("cardFilters.easy"),
+    medium: t("cardFilters.medium"),
+    hard: t("cardFilters.hard"),
+  };
+
+  const sortOptions = [
+    { value: "newest", label: t("cardFilters.newest") },
+    { value: "oldest", label: t("cardFilters.oldest") },
+    { value: "a-z", label: t("cardFilters.az") },
+  ];
+
   return (
     <div className="flex flex-col gap-3">
       {/* Search */}
@@ -46,7 +49,7 @@ export function CardFilters({
         <Search className="h-4 w-4 text-neutral-400" />
         <input
           type="text"
-          placeholder="Search cards..."
+          placeholder={t("cardFilters.searchPlaceholder")}
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           className="flex-1 bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
@@ -71,11 +74,11 @@ export function CardFilters({
                   : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
               }`}
             >
-              {DIFFICULTY_LABELS[d]}
+              {difficultyLabels[d]}
             </button>
           ))}
         </div>
-        <SortSelect value={sort} onChange={onSortChange} options={SORT_OPTIONS} />
+        <SortSelect value={sort} onChange={onSortChange} options={sortOptions} />
       </div>
 
       {/* Tag filter chips */}

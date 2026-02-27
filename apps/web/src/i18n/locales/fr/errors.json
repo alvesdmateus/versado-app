@@ -1,0 +1,86 @@
+{
+  "codes": {
+    "aiLimitReached": {
+      "title": "Limite d'IA atteinte",
+      "description": "Vous avez atteint votre limite de génération d'IA. Passez à Fluent pour des générations illimitées."
+    },
+    "tierLimit": {
+      "title": "Limite du plan atteinte",
+      "description": "Vous avez atteint une limite de votre forfait actuel. Passez à Fluent pour plus."
+    },
+    "reviewLimitReached": {
+      "title": "Limite d'examen quotidienne",
+      "description": "Vous avez atteint votre limite d'examen quotidienne. Passez à Fluent pour des examens illimitées."
+    },
+    "deckLimitReached": {
+      "title": "Limite de paquets atteinte",
+      "description": "Vous avez atteint le nombre maximal de paquets de votre forfait. Passez à Fluent pour des paquets illimitées."
+    },
+    "cardLimitReached": {
+      "title": "Limite de cartes atteinte",
+      "description": "Vous avez atteint le nombre maximal de cartes par paquet. Passez à Fluent pour des cartes illimitées."
+    },
+    "accountLocked": {
+      "title": "Compte verrouillé",
+      "description": "Trop de tentatives de connexion échouées. Veuillez réessayer plus tard."
+    },
+    "aiServiceUnavailable": {
+      "title": "IA indisponible",
+      "description": "Le service d'IA est temporairement indisponible. Veuillez réessayer dans quelques minutes."
+    },
+    "aiRateLimited": {
+      "title": "Service d'IA occupé",
+      "description": "Le service d'IA est actuellement surchargé. Veuillez patienter et réessayer."
+    }
+  },
+  "statuses": {
+    "network": {
+      "title": "Connexion échouée",
+      "description": "Impossible d'atteindre le serveur. Vérifiez votre connexion Internet et réessayez."
+    },
+    "unauthorized": {
+      "title": "Session expirée",
+      "description": "Votre session a expiré. Veuillez vous reconnecter."
+    },
+    "forbidden": {
+      "title": "Accès refusé",
+      "description": "Vous n'avez pas la permission d'effectuer cette action."
+    },
+    "tooManyRequests": {
+      "title": "Trop de demandes",
+      "description": "Vous faites trop de demandes rapidement. Veuillez patienter et réessayer."
+    },
+    "serverError": {
+      "title": "Erreur serveur",
+      "description": "Une erreur s'est produite de notre côté. Veuillez réessayer plus tard."
+    },
+    "serviceUnavailable": {
+      "title": "Service indisponible",
+      "description": "Le service est temporairement indisponible. Veuillez réessayer dans quelques minutes."
+    }
+  },
+  "default": {
+    "title": "Une erreur s'est produite",
+    "description": "Une erreur inattendue s'est produite. Veuillez réessayer."
+  },
+  "boundary": {
+    "title": "Une erreur s'est produite",
+    "description": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "reload": "Recharger l'application"
+  },
+  "offline": {
+    "message": "Vous êtes hors ligne — les modifications seront synchronisées lorsque vous vous reconnecterez"
+  },
+  "update": {
+    "available": "Une nouvelle version est disponible",
+    "refresh": "Actualiser"
+  },
+  "emailVerification": {
+    "message": "Veuillez vérifier votre adresse e-mail.",
+    "sending": "Envoi en cours...",
+    "resend": "Renvoyer",
+    "sent": "Email de vérification envoyé !",
+    "failed": "Échec de l'envoi de l'email",
+    "dismissLabel": "Ignorer la bannière de vérification"
+  }
+}

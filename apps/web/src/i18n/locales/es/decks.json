@@ -1,0 +1,183 @@
+{
+  "header": {
+    "title": "Mis Mazos",
+    "moreOptions": "Más opciones"
+  },
+  "search": {
+    "placeholder": "Busca tus mazos..."
+  },
+  "filters": {
+    "all": "Todos",
+    "recentlyStudied": "Estudiados Recientemente",
+    "favorites": "Favoritos"
+  },
+  "sort": {
+    "newest": "Más Nuevo",
+    "nameAZ": "Nombre A-Z",
+    "mostCards": "Más Tarjetas",
+    "bestProgress": "Mejor Progreso"
+  },
+  "empty": {
+    "noDecks": "Sin mazos aún",
+    "noDecksDesc": "Crea tu primer mazo para empezar",
+    "createDeck": "Crear Mazo",
+    "noFavorites": "Sin favoritos aún",
+    "noFavoritesDesc": "Toca el icono del corazón en un mazo para agregarlo a favoritos",
+    "noHistory": "Sin historial de estudio",
+    "noHistoryDesc": "Comienza a estudiar un mazo para verlo aquí",
+    "noResults": "No se encontraron mazos",
+    "noResultsDesc": "Intenta con un término de búsqueda diferente"
+  },
+  "fab": {
+    "importDeck": "Importar mazo",
+    "createDeck": "Crear nuevo mazo"
+  },
+  "grid": {
+    "cards": "Tarjetas",
+    "removeFavorite": "Eliminar de favoritos",
+    "addFavorite": "Agregar a favoritos"
+  },
+  "detail": {
+    "back": "Atrás",
+    "cards": "tarjetas",
+    "mastered": "dominadas",
+    "complete": "completado",
+    "studyNow": "Estudiar Ahora",
+    "addCards": "Agregar Tarjetas",
+    "aiGenerate": "Generar con AI",
+    "cardsHeading": "Tarjetas",
+    "noCards": "Sin tarjetas aún",
+    "noCardsDesc": "Agrega tu primera tarjeta para empezar a estudiar",
+    "noCardsMatch": "Ninguna tarjeta coincide con tus filtros",
+    "edit": "Editar",
+    "unlistMarketplace": "Deslistar del Marketplace",
+    "listMarketplace": "Listar en Marketplace",
+    "exportDeck": "Exportar Mazo",
+    "delete": "Eliminar",
+    "deckDeleted": "Mazo eliminado",
+    "cardDeleted": "Tarjeta eliminada",
+    "removedFromMarketplace": "Eliminado del marketplace"
+  },
+  "deleteDeck": {
+    "title": "Eliminar Mazo",
+    "message": "Esto eliminará permanentemente este mazo y todas sus tarjetas. Esta acción no se puede deshacer.",
+    "confirm": "Eliminar"
+  },
+  "deleteCard": {
+    "title": "Eliminar Tarjeta",
+    "message": "¿Estás seguro de que deseas eliminar esta tarjeta?",
+    "confirm": "Eliminar",
+    "ariaLabel": "Eliminar tarjeta"
+  },
+  "createModal": {
+    "title": "Crear Mazo",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "p.ej. Vocabulario en Español",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "¿De qué se trata este mazo? (opcional)",
+    "nameRequired": "Se requiere el nombre del mazo",
+    "creating": "Creando...",
+    "create": "Crear Mazo",
+    "created": "¡Mazo creado!",
+    "failed": "Error al crear el mazo. Por favor intenta de nuevo."
+  },
+  "editModal": {
+    "title": "Editar Mazo",
+    "nameLabel": "Nombre",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "¿De qué se trata este mazo? (opcional)",
+    "nameRequired": "Se requiere el nombre del mazo",
+    "saving": "Guardando...",
+    "save": "Guardar Cambios",
+    "updated": "¡Mazo actualizado!",
+    "failed": "Error al actualizar el mazo. Por favor intenta de nuevo."
+  },
+  "importModal": {
+    "title": "Importar Mazo",
+    "dropPrompt": "Suelta un archivo aquí o haz clic para buscar",
+    "supportedFormats": "Soporta archivos .json y .csv",
+    "json": "JSON",
+    "csv": "CSV",
+    "invalidFile": "Por favor selecciona un archivo .json o .csv",
+    "readFailed": "Error al leer el archivo",
+    "deckName": "Nombre del Mazo",
+    "deckNamePlaceholder": "Ingresa el nombre del mazo",
+    "descriptionLabel": "Descripción (opcional)",
+    "descriptionPlaceholder": "Descripción del mazo",
+    "cardsFound": "Se encontraron {{count}} tarjetas",
+    "andMore": "...y {{count}} más",
+    "nameRequired": "Por favor proporciona un nombre de mazo",
+    "back": "Atrás",
+    "importCards": "Importar {{count}} Tarjeta(s)",
+    "importing": "Importando...",
+    "imported": "¡\"{{name}}\" importado con {{count}} tarjeta(s)!",
+    "importFailed": "Error al importar el mazo"
+  },
+  "addCardModal": {
+    "title": "Agregar Tarjetas",
+    "frontPlaceholder": "Frente (pregunta)",
+    "backPlaceholder": "Reverso (respuesta)",
+    "cardNumber": "Tarjeta {{number}}",
+    "addAnother": "Agregar Otra Tarjeta",
+    "validation": "Agrega al menos una tarjeta con frente y reverso",
+    "adding": "Agregando...",
+    "addCards": "Agregar {{count}} Tarjeta(s)",
+    "added": "¡{{count}} tarjeta(s) agregada(s)!",
+    "failed": "Error al agregar tarjetas. Por favor intenta de nuevo."
+  },
+  "editCardModal": {
+    "title": "Editar Tarjeta",
+    "frontLabel": "Frente",
+    "backLabel": "Reverso",
+    "validation": "Frente y reverso son requeridos",
+    "saving": "Guardando...",
+    "save": "Guardar Cambios",
+    "updated": "¡Tarjeta actualizada!",
+    "failed": "Error al actualizar la tarjeta. Por favor intenta de nuevo."
+  },
+  "cardFilters": {
+    "searchPlaceholder": "Buscar tarjetas...",
+    "all": "Todas",
+    "easy": "Fácil",
+    "medium": "Medio",
+    "hard": "Difícil",
+    "newest": "Más Nueva",
+    "oldest": "Más Antigua",
+    "az": "A-Z"
+  },
+  "aiGenerate": {
+    "title": "Generar Tarjetas con AI",
+    "usageLabel": "Generaciones de AI",
+    "used": "usadas",
+    "limitTitle": "Límite de Generación Alcanzado",
+    "limitMessage": "Go Fluent para generaciones ilimitadas de AI.",
+    "goFluent": "Go Fluent",
+    "topicLabel": "Tema o Indicación",
+    "topicPlaceholder": "p.ej., vocabulario de comida española, eventos clave de la Segunda Guerra Mundial, métodos de arrays en JavaScript...",
+    "numberOfCards": "Número de Tarjetas",
+    "cards": "tarjetas",
+    "topicRequired": "Por favor ingresa un tema o indicación",
+    "generateFailed": "Error al generar tarjetas",
+    "generating": "Generando...",
+    "generate": "Generar Tarjetas",
+    "selected": "{{selected}} de {{total}} tarjetas seleccionadas",
+    "deselectAll": "Deseleccionar Todo",
+    "selectAll": "Seleccionar Todo",
+    "selectValidation": "Selecciona al menos una tarjeta para guardar",
+    "saveFailed": "Error al guardar tarjetas. Por favor intenta de nuevo.",
+    "saving": "Guardando...",
+    "saveCards": "Guardar {{count}} Tarjeta(s)",
+    "regenerate": "Regenerar",
+    "added": "¡{{count}} tarjeta(s) agregada(s)!"
+  },
+  "exportModal": {
+    "title": "Exportar Mazo",
+    "description": "Exportar \"{{name}}\" ({{count}} tarjetas)",
+    "jsonLabel": "JSON (Recomendado)",
+    "jsonDesc": "Datos completos del mazo incluyendo etiquetas, dificultad y metadatos",
+    "csvLabel": "CSV",
+    "csvDesc": "Formato simple de hoja de cálculo para Excel, Google Sheets",
+    "exportAs": "Exportar como {{format}}",
+    "exported": "¡Mazo exportado como {{format}}!"
+  }
+}

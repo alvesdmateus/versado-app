@@ -1,0 +1,129 @@
+{
+  "header": {
+    "title": "Perfil",
+    "goBack": "Volver",
+    "moreOptions": "Más opciones"
+  },
+  "userInfo": {
+    "freeMember": "Miembro gratuito",
+    "fluentMember": "Miembro Fluent"
+  },
+  "upgrade": {
+    "goFluent": "Hazte Fluent",
+    "description": "Dominio con IA, mazos ilimitados y acceso sin conexión — por menos de lo que cuesta un café a la semana."
+  },
+  "sections": {
+    "appearance": "Apariencia",
+    "studyPreferences": "Preferencias de estudio",
+    "notifications": "Notificaciones",
+    "account": "Cuenta"
+  },
+  "settings": {
+    "theme": "Tema",
+    "system": "sistema",
+    "light": "claro",
+    "dark": "oscuro",
+    "themeColor": "Color del tema",
+    "cardTheme": "Tema de tarjetas",
+    "dailyGoal": "Meta diaria",
+    "cards": "{{count}} tarjetas",
+    "reminderTimes": "Horarios de recordatorio",
+    "remindersSet": "{{count}} configurados",
+    "remindersNone": "Ninguno",
+    "cardSorting": "Orden de tarjetas",
+    "pushAlerts": "Notificaciones push",
+    "pushDenied": "Las notificaciones push no están disponibles o el permiso fue denegado",
+    "changePassword": "Cambiar contraseña",
+    "exportData": "Exportar datos",
+    "deleteAccount": "Eliminar cuenta",
+    "logOut": "Cerrar sesión",
+    "language": "Idioma"
+  },
+  "sorting": {
+    "dueFirst": "Pendientes primero",
+    "dueFirstDesc": "Las tarjetas pendientes de repaso se muestran primero",
+    "random": "Aleatorio",
+    "randomDesc": "Las tarjetas se muestran en orden aleatorio",
+    "byDifficulty": "Por dificultad",
+    "byDifficultyDesc": "Las tarjetas más difíciles se muestran primero"
+  },
+  "dailyGoalModal": {
+    "title": "Meta diaria",
+    "description": "¿Cuántas tarjetas quieres estudiar por día?",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "updated": "¡Meta diaria actualizada!"
+  },
+  "themeColorModal": {
+    "title": "Color del tema",
+    "updated": "¡Tema actualizado!"
+  },
+  "cardThemeModal": {
+    "title": "Tema de tarjetas",
+    "updated": "¡Tema de tarjetas actualizado!"
+  },
+  "cardSortingModal": {
+    "title": "Orden de tarjetas",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "updated": "¡Preferencia de orden actualizada!"
+  },
+  "reminderTimesModal": {
+    "title": "Horarios de recordatorio",
+    "noReminders": "No hay recordatorios configurados",
+    "addReminder": "Agregar recordatorio",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "updated": "¡Recordatorios actualizados!"
+  },
+  "changePasswordModal": {
+    "title": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "minLength": "La nueva contraseña debe tener al menos 8 caracteres",
+    "mismatch": "Las contraseñas no coinciden",
+    "changing": "Cambiando...",
+    "change": "Cambiar contraseña",
+    "success": "¡Contraseña cambiada!",
+    "failed": "No se pudo cambiar la contraseña"
+  },
+  "exportDataModal": {
+    "title": "Exportar datos",
+    "description": "Exporta todos tus mazos y tarjetas como un archivo JSON. Esto incluye nombres de mazos, descripciones y todo el contenido de las tarjetas.",
+    "exporting": "Exportando...",
+    "exportJson": "Exportar como JSON",
+    "success": "¡Datos exportados!"
+  },
+  "deleteAccountModal": {
+    "title": "Eliminar cuenta",
+    "warning": "Esta acción es permanente y no se puede deshacer.",
+    "details": "Todos tus mazos, tarjetas, progreso de estudio y datos de cuenta se eliminarán permanentemente.",
+    "confirmLabel": "Escribe \"DELETE\" para confirmar",
+    "placeholder": "DELETE",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "delete": "Eliminar cuenta",
+    "failed": "No se pudo eliminar la cuenta"
+  },
+  "subscription": {
+    "title": "Suscripción",
+    "currentPlan": "Plan actual",
+    "fluent": "Fluent",
+    "accessUntil": "Acceso hasta",
+    "nextBilling": "Próximo cobro",
+    "manageBilling": "Administrar facturación",
+    "resume": "Reanudar suscripción",
+    "cancel": "Cancelar suscripción",
+    "cancelTitle": "Cancelar suscripción",
+    "cancelDescription": "Tus funciones Fluent seguirán activas hasta el final de tu período de facturación actual. Puedes reanudar en cualquier momento antes de eso.",
+    "cancelConfirm": "Cancelar suscripción",
+    "resumed": "¡Suscripción reanudada!",
+    "canceled": "La suscripción se cancelará al final del período de facturación"
+  },
+  "footer": {
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "support": "Soporte"
+  }
+}

@@ -1,6 +1,7 @@
 import { Component, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@versado/ui";
+import i18n from "@/i18n";
 
 interface Props {
   children: ReactNode;
@@ -22,14 +23,15 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      const t = i18n.getFixedT(null, "errors");
       return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
           <AlertTriangle className="h-12 w-12 text-error-500" />
           <h1 className="text-lg font-semibold text-neutral-900">
-            Something went wrong
+            {t("boundary.title")}
           </h1>
           <p className="text-sm text-neutral-500">
-            An unexpected error occurred. Please try again.
+            {t("boundary.description")}
           </p>
           <Button
             onClick={() => {
@@ -37,7 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
               window.location.reload();
             }}
           >
-            Reload App
+            {t("boundary.reload")}
           </Button>
         </div>
       );

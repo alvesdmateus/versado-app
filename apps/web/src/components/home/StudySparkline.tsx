@@ -40,7 +40,7 @@ export function StudySparkline({
     <div className="flex flex-col gap-1">
       <div className="flex items-baseline justify-between">
         <span className="text-xs font-medium text-neutral-500">{label}</span>
-        <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+        <span className="text-sm font-semibold text-neutral-900">
           {currentValue}
         </span>
       </div>

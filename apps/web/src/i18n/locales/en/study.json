@@ -1,0 +1,43 @@
+{
+  "loading": "Loading cards...",
+  "empty": {
+    "heading": "No Cards Due",
+    "message": "All caught up! Come back later for more reviews.",
+    "backHome": "Back to Home"
+  },
+  "session": {
+    "closeSession": "Close study session",
+    "moreOptions": "More options"
+  },
+  "card": {
+    "question": "Question",
+    "answerRevealed": "Answer Revealed",
+    "tapToReveal": "Tap to reveal answer",
+    "howWell": "How well did you know this?"
+  },
+  "ratings": {
+    "again": "Again",
+    "hard": "Hard",
+    "good": "Good",
+    "easy": "Easy"
+  },
+  "complete": {
+    "heading": "Session Complete!",
+    "reviewed": "You reviewed {{count}} card(s)",
+    "accuracy": "Accuracy",
+    "avgTime": "Avg. Time",
+    "ratingBreakdown": "Rating Breakdown",
+    "studyAgain": "Study Again",
+    "backToDeck": "Back to Deck",
+    "viewHistory": "View History",
+    "backHome": "Back to Home"
+  },
+  "limitReached": {
+    "imageAlt": "Daily limit reached",
+    "heading": "You've reached your daily limit",
+    "message": "But hey, don't be upset! Continue working on your goals and",
+    "goFluent": "Go Fluent",
+    "maybeLater": "Maybe Later",
+    "socialProof": "Join other fluent learners"
+  }
+}

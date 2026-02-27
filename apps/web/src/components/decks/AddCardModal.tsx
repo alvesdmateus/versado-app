@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, X } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
@@ -29,6 +30,7 @@ export function AddCardModal({
   deckId,
   onAdded,
 }: AddCardModalProps) {
+  const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const [rows, setRows] = useState<CardRow[]>([emptyRow()]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,7 +63,7 @@ export function AddCardModal({
     );
 
     if (validCards.length === 0) {
-      setError("Add at least one card with both front and back");
+      setError(t("addCardModal.validation"));
       return;
     }
 
@@ -75,11 +77,11 @@ export function AddCardModal({
           back: r.back.trim(),
         })),
       });
-      showToast(`${cards.length} card${cards.length > 1 ? "s" : ""} added!`);
+      showToast(t("addCardModal.added", { count: cards.length }));
       resetForm();
       onAdded(cards);
     } catch {
-      setError("Failed to add cards. Please try again.");
+      setError(t("addCardModal.failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -90,8 +92,10 @@ export function AddCardModal({
     onClose();
   }
 
+  const validCount = rows.filter((r) => r.front.trim() && r.back.trim()).length;
+
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Add Cards" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("addCardModal.title")} size="lg">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex max-h-[50vh] flex-col gap-4 overflow-y-auto">
           {rows.map((row, i) => (
@@ -107,20 +111,20 @@ export function AddCardModal({
               )}
               <div className="flex flex-col gap-2">
                 <Textarea
-                  placeholder="Front (question)"
+                  placeholder={t("addCardModal.frontPlaceholder")}
                   value={row.front}
                   onChange={(e) => updateRow(i, "front", e.target.value)}
                   rows={2}
                 />
                 <Textarea
-                  placeholder="Back (answer)"
+                  placeholder={t("addCardModal.backPlaceholder")}
                   value={row.back}
                   onChange={(e) => updateRow(i, "back", e.target.value)}
                   rows={2}
                 />
               </div>
               <p className="mt-1 text-right text-xs text-neutral-400">
-                Card {i + 1}
+                {t("addCardModal.cardNumber", { number: i + 1 })}
               </p>
             </div>
           ))}
@@ -132,15 +136,15 @@ export function AddCardModal({
           className="flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-neutral-300 py-2.5 text-sm text-neutral-500 transition-colors hover:border-primary-400 hover:text-primary-500"
         >
           <Plus className="h-4 w-4" />
-          Add Another Card
+          {t("addCardModal.addAnother")}
         </button>
 
         {error && <p className="text-sm text-error-500">{error}</p>}
 
         <Button type="submit" fullWidth disabled={isSubmitting}>
           {isSubmitting
-            ? "Adding..."
-            : `Add ${rows.filter((r) => r.front.trim() && r.back.trim()).length} Card${rows.filter((r) => r.front.trim() && r.back.trim()).length !== 1 ? "s" : ""}`}
+            ? t("addCardModal.adding")
+            : t("addCardModal.addCards", { count: validCount })}
         </Button>
       </form>
     </Modal>

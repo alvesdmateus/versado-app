@@ -1,0 +1,86 @@
+{
+  "codes": {
+    "aiLimitReached": {
+      "title": "AI-Limit erreicht",
+      "description": "Sie haben Ihr AI-Generierungslimit erreicht. Werden Sie Fluent, um unbegrenzte Generierungen zu erhalten."
+    },
+    "tierLimit": {
+      "title": "Planlimit erreicht",
+      "description": "Sie haben ein Limit in Ihrem aktuellen Plan erreicht. Werden Sie Fluent für mehr."
+    },
+    "reviewLimitReached": {
+      "title": "Tägliches Überprüfungslimit",
+      "description": "Sie haben Ihr tägliches Überprüfungslimit erreicht. Werden Sie Fluent für unbegrenzte Überprüfungen."
+    },
+    "deckLimitReached": {
+      "title": "Deck-Limit erreicht",
+      "description": "Sie haben die maximale Anzahl von Decks in Ihrem Plan erreicht. Werden Sie Fluent für unbegrenzte Decks."
+    },
+    "cardLimitReached": {
+      "title": "Kartenlimit erreicht",
+      "description": "Sie haben die maximale Anzahl von Karten pro Deck erreicht. Werden Sie Fluent für unbegrenzte Karten."
+    },
+    "accountLocked": {
+      "title": "Konto gesperrt",
+      "description": "Zu viele fehlgeschlagene Anmeldeversuche. Bitte versuchen Sie es später erneut."
+    },
+    "aiServiceUnavailable": {
+      "title": "AI nicht verfügbar",
+      "description": "Der AI-Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in wenigen Minuten erneut."
+    },
+    "aiRateLimited": {
+      "title": "AI-Dienst überlastet",
+      "description": "Der AI-Dienst ist derzeit überlastet. Bitte warten Sie einen Moment und versuchen Sie es erneut."
+    }
+  },
+  "statuses": {
+    "network": {
+      "title": "Verbindung fehlgeschlagen",
+      "description": "Der Server konnte nicht erreicht werden. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+    },
+    "unauthorized": {
+      "title": "Sitzung abgelaufen",
+      "description": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+    },
+    "forbidden": {
+      "title": "Zugriff verweigert",
+      "description": "Sie haben keine Berechtigung, diese Aktion auszuführen."
+    },
+    "tooManyRequests": {
+      "title": "Zu viele Anfragen",
+      "description": "Sie stellen Anfragen zu schnell. Bitte warten Sie einen Moment und versuchen Sie es erneut."
+    },
+    "serverError": {
+      "title": "Serverfehler",
+      "description": "Etwas ist auf unserer Seite schief gelaufen. Bitte versuchen Sie es später erneut."
+    },
+    "serviceUnavailable": {
+      "title": "Dienst nicht verfügbar",
+      "description": "Der Dienst ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in wenigen Minuten erneut."
+    }
+  },
+  "default": {
+    "title": "Etwas ist schief gelaufen",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+  },
+  "boundary": {
+    "title": "Etwas ist schief gelaufen",
+    "description": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "reload": "App neu laden"
+  },
+  "offline": {
+    "message": "Sie sind offline – Änderungen werden synchronisiert, wenn Sie sich wieder verbinden"
+  },
+  "update": {
+    "available": "Eine neue Version ist verfügbar",
+    "refresh": "Aktualisieren"
+  },
+  "emailVerification": {
+    "message": "Bitte überprüfen Sie Ihre E-Mail-Adresse.",
+    "sending": "Wird gesendet...",
+    "resend": "Erneut senden",
+    "sent": "Bestätigungsemail gesendet!",
+    "failed": "Fehler beim Senden der E-Mail",
+    "dismissLabel": "Überprüfungsbanner schließen"
+  }
+}

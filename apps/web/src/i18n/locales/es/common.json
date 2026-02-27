@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "decks": "Mazos",
+    "discover": "Descubrir",
+    "market": "Tienda",
+    "profile": "Perfil"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "continue": "Continuar",
+    "back": "Volver",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "confirm": "Confirmar",
+    "retry": "Reintentar",
+    "skip": "Omitir",
+    "done": "Listo"
+  },
+  "loading": "Cargando...",
+  "skipToContent": "Ir al contenido principal"
+}

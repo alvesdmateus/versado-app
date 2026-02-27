@@ -1,4 +1,5 @@
 import { Store } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { FeedItem } from "@/lib/social-api";
 import { SectionHeader } from "./SectionHeader";
 import { FeedItemCard } from "./FeedItemCard";
@@ -15,12 +16,6 @@ interface ActivityFeedProps {
   onBrowseMarketplace: () => void;
 }
 
-const FILTER_OPTIONS = [
-  { value: "all", label: "All" },
-  { value: "users", label: "Creators" },
-  { value: "tags", label: "Tags" },
-];
-
 export function ActivityFeed({
   items,
   hasMore,
@@ -31,9 +26,17 @@ export function ActivityFeed({
   onDeckClick,
   onBrowseMarketplace,
 }: ActivityFeedProps) {
+  const { t } = useTranslation(["home", "common"]);
+
+  const FILTER_OPTIONS = [
+    { value: "all", label: t("feed.all") },
+    { value: "users", label: t("feed.creators") },
+    { value: "tags", label: t("feed.tags") },
+  ];
+
   return (
     <section className="mt-6">
-      <SectionHeader title="Activity" />
+      <SectionHeader title={t("activity.heading")} />
 
       {/* Filter chips */}
       <div className="mt-2 flex gap-2 px-5">
@@ -57,10 +60,10 @@ export function ActivityFeed({
         {items.length === 0 ? (
           <EmptyState
             icon={<Store className="h-10 w-10" />}
-            title="No activity yet"
-            description="Follow creators or tags to see activity here"
+            title={t("feed.emptyTitle")}
+            description={t("feed.emptyDescription")}
             action={{
-              label: "Browse Marketplace",
+              label: t("feed.browseMarketplace"),
               onClick: onBrowseMarketplace,
             }}
           />
@@ -79,7 +82,7 @@ export function ActivityFeed({
                 disabled={isLoadingMore}
                 className="mt-1 w-full rounded-xl bg-neutral-100 py-2.5 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200 disabled:opacity-50"
               >
-                {isLoadingMore ? "Loading..." : "Show More"}
+                {isLoadingMore ? t("common:loading") : t("feed.showMore")}
               </button>
             )}
           </>

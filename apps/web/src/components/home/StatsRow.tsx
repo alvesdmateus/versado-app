@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { StatCard } from "@versado/ui";
 
 export interface StatsRowProps {
@@ -17,22 +18,24 @@ export function StatsRow({
   streakDays,
   streakActive,
 }: StatsRowProps) {
+  const { t } = useTranslation("home");
+
   return (
     <div className="mt-5 flex gap-3 px-5">
       <StatCard
-        label="Mastered"
+        label={t("statsRow.mastered")}
         value={mastered.toLocaleString()}
         trend={`↗ ${masteredTrend}`}
       />
       <StatCard
-        label="Accuracy"
+        label={t("statsRow.accuracy")}
         value={accuracy}
         trend={`↗ ${accuracyTrend}`}
       />
       <StatCard
-        label="Streak"
+        label={t("statsRow.streak")}
         value={`${streakDays}d`}
-        trend={streakActive ? "⚡ Active" : "Inactive"}
+        trend={streakActive ? `⚡ ${t("statsRow.active")}` : t("statsRow.inactive")}
       />
     </div>
   );

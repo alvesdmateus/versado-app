@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 import type { FlashcardResponse } from "@/lib/deck-api";
 
@@ -14,6 +15,7 @@ interface CardListItemProps {
 }
 
 export function CardListItem({ card, onEdit, onDelete }: CardListItemProps) {
+  const { t } = useTranslation("decks");
   return (
     <div className="group flex items-start gap-3 rounded-xl bg-neutral-0 p-4 shadow-card transition-shadow hover:shadow-card-hover">
       <button
@@ -53,7 +55,7 @@ export function CardListItem({ card, onEdit, onDelete }: CardListItemProps) {
           e.stopPropagation();
           onDelete(card.id);
         }}
-        aria-label="Delete card"
+        aria-label={t("deleteCard.ariaLabel")}
         className="shrink-0 rounded-lg p-1.5 text-neutral-300 opacity-0 transition-all hover:text-error-500 group-hover:opacity-100"
       >
         <Trash2 className="h-4 w-4" />

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Upload, FileJson, FileSpreadsheet, Loader2 } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
@@ -27,6 +28,7 @@ export function ImportDeckModal({
   onClose,
   onImported,
 }: ImportDeckModalProps) {
+  const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -61,7 +63,7 @@ export function ImportDeckModal({
 
     const extension = file.name.split(".").pop()?.toLowerCase();
     if (extension !== "json" && extension !== "csv") {
-      setError("Please select a .json or .csv file");
+      setError(t("importModal.invalidFile"));
       return;
     }
 
@@ -97,7 +99,7 @@ export function ImportDeckModal({
         setError(err instanceof Error ? err.message : "Failed to parse file");
       }
     };
-    reader.onerror = () => setError("Failed to read file");
+    reader.onerror = () => setError(t("importModal.readFailed"));
     reader.readAsText(file);
   }
 
@@ -124,7 +126,7 @@ export function ImportDeckModal({
 
   async function handleImport() {
     if (!parsed || !deckName.trim()) {
-      setError("Please provide a deck name");
+      setError(t("importModal.nameRequired"));
       return;
     }
 
@@ -160,13 +162,13 @@ export function ImportDeckModal({
       }
 
       showToast(
-        `Imported "${deckName}" with ${parsed.cards.length} card${parsed.cards.length !== 1 ? "s" : ""}!`
+        t("importModal.imported", { name: deckName, count: parsed.cards.length })
       );
       resetForm();
       onImported(deck);
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Failed to import deck";
+        err instanceof Error ? err.message : t("importModal.importFailed");
       setError(message);
     } finally {
       setIsImporting(false);
@@ -174,7 +176,7 @@ export function ImportDeckModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Import Deck" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("importModal.title")} size="lg">
       <div className="flex flex-col gap-4">
         {!parsed ? (
           /* Step 1: File Selection */
@@ -195,18 +197,18 @@ export function ImportDeckModal({
               />
               <div className="text-center">
                 <p className="text-sm font-medium text-neutral-700">
-                  Drop a file here or click to browse
+                  {t("importModal.dropPrompt")}
                 </p>
                 <p className="mt-1 text-xs text-neutral-500">
-                  Supports .json and .csv files
+                  {t("importModal.supportedFormats")}
                 </p>
               </div>
               <div className="flex gap-2">
                 <span className="flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-600">
-                  <FileJson className="h-3 w-3" /> JSON
+                  <FileJson className="h-3 w-3" /> {t("importModal.json")}
                 </span>
                 <span className="flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-600">
-                  <FileSpreadsheet className="h-3 w-3" /> CSV
+                  <FileSpreadsheet className="h-3 w-3" /> {t("importModal.csv")}
                 </span>
               </div>
             </div>
@@ -225,24 +227,23 @@ export function ImportDeckModal({
           /* Step 2: Preview & Import */
           <>
             <Input
-              label="Deck Name"
+              label={t("importModal.deckName")}
               value={deckName}
               onChange={(e) => setDeckName(e.target.value)}
-              placeholder="Enter deck name"
+              placeholder={t("importModal.deckNamePlaceholder")}
             />
 
             <Textarea
-              label="Description (optional)"
+              label={t("importModal.descriptionLabel")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Deck description"
+              placeholder={t("importModal.descriptionPlaceholder")}
               rows={2}
             />
 
             <div className="rounded-lg bg-neutral-50 px-3 py-2">
               <p className="text-sm font-medium text-neutral-700">
-                {parsed.cards.length} card{parsed.cards.length !== 1 ? "s" : ""}{" "}
-                found
+                {t("importModal.cardsFound", { count: parsed.cards.length })}
                 <span className="ml-1 text-xs text-neutral-400">
                   ({parsed.sourceFormat.toUpperCase()})
                 </span>
@@ -266,7 +267,7 @@ export function ImportDeckModal({
               ))}
               {parsed.cards.length > 10 && (
                 <p className="text-center text-xs text-neutral-400">
-                  ...and {parsed.cards.length - 10} more
+                  {t("importModal.andMore", { count: parsed.cards.length - 10 })}
                 </p>
               )}
             </div>
@@ -300,7 +301,7 @@ export function ImportDeckModal({
                 }}
                 disabled={isImporting}
               >
-                Back
+                {t("importModal.back")}
               </Button>
               <Button
                 fullWidth
@@ -310,10 +311,10 @@ export function ImportDeckModal({
                 {isImporting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Importing...
+                    {t("importModal.importing")}
                   </>
                 ) : (
-                  `Import ${parsed.cards.length} Card${parsed.cards.length !== 1 ? "s" : ""}`
+                  t("importModal.importCards", { count: parsed.cards.length })
                 )}
               </Button>
             </div>

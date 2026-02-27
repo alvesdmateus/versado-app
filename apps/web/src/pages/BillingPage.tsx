@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Check,
   X,
@@ -17,34 +18,35 @@ import { getCurrencyFromLocale, formatPrice } from "@/lib/currency";
 import { ConfirmDialog } from "@/components/shared";
 import { Button } from "@versado/ui";
 
-const FREE_FEATURES = [
-  { label: "Up to 5 decks", included: true },
-  { label: "100 cards per deck", included: true },
-  { label: "50 reviews per day", included: true },
-  { label: "SM-2 spaced repetition", included: true },
-  { label: "Basic study stats", included: true },
-  { label: "Browse & buy on marketplace", included: true },
-  { label: "10 AI generations", included: true },
-  { label: "Unlimited decks & cards", included: false },
-  { label: "Unlimited reviews", included: false },
-  { label: "Sell on marketplace", included: false },
-  { label: "Offline mode", included: false },
+const FREE_FEATURE_KEYS: { key: string; included: boolean }[] = [
+  { key: "5decks", included: true },
+  { key: "100cards", included: true },
+  { key: "50reviews", included: true },
+  { key: "sm2", included: true },
+  { key: "basicStats", included: true },
+  { key: "browseBuy", included: true },
+  { key: "10ai", included: true },
+  { key: "unlimitedDecks", included: false },
+  { key: "unlimitedReviews", included: false },
+  { key: "sellMarketplace", included: false },
+  { key: "offlineMode", included: false },
 ];
 
-const FLUENT_FEATURES = [
-  { label: "Unlimited decks & cards", included: true },
-  { label: "Unlimited daily reviews", included: true },
-  { label: "Unlimited AI generation", included: true },
-  { label: "SM-2 spaced repetition", included: true },
-  { label: "Advanced study analytics", included: true },
-  { label: "Browse & buy on marketplace", included: true },
-  { label: "Sell on marketplace", included: true },
-  { label: "Seller priority placement", included: true },
-  { label: "Offline mode & sync", included: true },
-  { label: "Priority support", included: true },
+const FLUENT_FEATURE_KEYS = [
+  "unlimitedDecks",
+  "unlimitedReviews",
+  "unlimitedAI",
+  "sm2",
+  "advancedAnalytics",
+  "browseBuy",
+  "sellMarketplace",
+  "sellerPlacement",
+  "offlineSync",
+  "prioritySupport",
 ];
 
 export function BillingPage() {
+  const { t } = useTranslation("billing");
   const { user, refreshUser } = useAuth();
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
@@ -76,10 +78,10 @@ export function BillingPage() {
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       refreshUser();
-      showToast("Welcome to Fluent! Your learning just became unforgettable.");
+      showToast(t("successWelcome"));
       setSearchParams({}, { replace: true });
     } else if (searchParams.get("canceled") === "true") {
-      showToast("Checkout canceled", "info");
+      showToast(t("checkoutCanceled"), "info");
       setSearchParams({}, { replace: true });
     }
   }, [searchParams, setSearchParams, refreshUser, showToast]);
@@ -120,10 +122,7 @@ export function BillingPage() {
       setSubscription((prev) =>
         prev ? { ...prev, cancelAtPeriodEnd: true } : prev
       );
-      showToast(
-        "Subscription will be canceled at end of billing period",
-        "info"
-      );
+      showToast(t("canceledAtEnd"), "info");
     } catch (err) {
       showErrorNotification(err, { onRetry: handleCancel });
     } finally {
@@ -138,7 +137,7 @@ export function BillingPage() {
       setSubscription((prev) =>
         prev ? { ...prev, cancelAtPeriodEnd: false } : prev
       );
-      showToast("Subscription resumed!");
+      showToast(t("subscriptionResumed"));
     } catch (err) {
       showErrorNotification(err, { onRetry: handleResume });
     }
@@ -160,12 +159,12 @@ export function BillingPage() {
       {/* Header */}
       <div className="px-5 pt-6 pb-4">
         <h1 className="text-2xl font-bold text-neutral-900">
-          {isFluent ? "Your Plan" : "From curious to fluent."}
+          {isFluent ? t("yourPlan") : t("heroTitle")}
         </h1>
         <p className="mt-1 text-sm text-neutral-500">
           {isFluent
-            ? "Manage your subscription and billing"
-            : "Unlock the full potential of your study experience"}
+            ? t("manageSubtitle")
+            : t("heroSubtitle")}
         </p>
       </div>
 
@@ -176,7 +175,7 @@ export function BillingPage() {
           <div className="rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 p-5">
             <div className="flex items-center gap-2">
               <Crown className="h-5 w-5 text-white" />
-              <h3 className="text-lg font-bold text-white">Versado Fluent</h3>
+              <h3 className="text-lg font-bold text-white">{t("fluentPlanName")}</h3>
               <span
                 className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium ${
                   subscription.cancelAtPeriodEnd
@@ -184,13 +183,13 @@ export function BillingPage() {
                     : "bg-white/20 text-white"
                 }`}
               >
-                {subscription.cancelAtPeriodEnd ? "Canceling" : "Active"}
+                {subscription.cancelAtPeriodEnd ? t("canceling") : t("active")}
               </span>
             </div>
             <p className="mt-1 text-sm text-primary-100">
               {subscription.cancelAtPeriodEnd
-                ? `Access until ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`
-                : `Next billing: ${new Date(subscription.currentPeriodEnd).toLocaleDateString()}`}
+                ? t("accessUntil", { date: new Date(subscription.currentPeriodEnd).toLocaleDateString() })
+                : t("nextBilling", { date: new Date(subscription.currentPeriodEnd).toLocaleDateString() })}
             </p>
           </div>
 
@@ -202,14 +201,14 @@ export function BillingPage() {
             >
               <CreditCard className="h-5 w-5 text-neutral-500" />
               <span className="flex-1 text-sm font-medium text-neutral-700">
-                Manage Billing
+                {t("manageBilling")}
               </span>
               <ExternalLink className="h-4 w-4 text-neutral-400" />
             </button>
             <div className="flex w-full items-center gap-3 p-4">
               <Calendar className="h-5 w-5 text-neutral-500" />
               <span className="flex-1 text-sm text-neutral-700">
-                Billing period ends
+                {t("billingPeriodEnds")}
               </span>
               <span className="text-sm text-neutral-500">
                 {new Date(
@@ -224,7 +223,7 @@ export function BillingPage() {
               >
                 <Sparkles className="h-5 w-5 text-primary-500" />
                 <span className="flex-1 text-sm font-medium text-primary-600">
-                  Resume Subscription
+                  {t("resumeSubscription")}
                 </span>
               </button>
             ) : (
@@ -234,7 +233,7 @@ export function BillingPage() {
               >
                 <X className="h-5 w-5 text-error-500" />
                 <span className="flex-1 text-sm font-medium text-error-600">
-                  Cancel Subscription
+                  {t("cancelSubscription")}
                 </span>
               </button>
             )}
@@ -245,16 +244,16 @@ export function BillingPage() {
         <div className="px-5 space-y-4">
           {/* Free plan */}
           <div className="rounded-xl border-2 border-neutral-200 bg-neutral-0 p-5">
-            <h3 className="text-base font-semibold text-neutral-700">Free</h3>
+            <h3 className="text-base font-semibold text-neutral-700">{t("freePlanName")}</h3>
             <p className="mt-1 text-2xl font-bold text-neutral-900">
-              $0
+              {t("freePrice")}
               <span className="text-sm font-normal text-neutral-500">
-                /month
+                {t("perMonth")}
               </span>
             </p>
             <div className="mt-4 space-y-2.5">
-              {FREE_FEATURES.map((f) => (
-                <div key={f.label} className="flex items-center gap-2">
+              {FREE_FEATURE_KEYS.map((f) => (
+                <div key={f.key} className="flex items-center gap-2">
                   {f.included ? (
                     <Check className="h-4 w-4 text-success-500" />
                   ) : (
@@ -263,14 +262,14 @@ export function BillingPage() {
                   <span
                     className={`text-sm ${f.included ? "text-neutral-700" : "text-neutral-400"}`}
                   >
-                    {f.label}
+                    {t(`freeFeatures.${f.key}`)}
                   </span>
                 </div>
               ))}
             </div>
             <div className="mt-4">
               <Button variant="secondary" fullWidth disabled>
-                Current Plan
+                {t("currentPlan")}
               </Button>
             </div>
           </div>
@@ -279,17 +278,17 @@ export function BillingPage() {
           <div className="rounded-xl border-2 border-primary-500 bg-neutral-0 p-5 shadow-card">
             <div className="flex items-center gap-2">
               <h3 className="text-base font-semibold text-neutral-700">
-                Versado Fluent
+                {t("fluentPlanName")}
               </h3>
               <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-700">
-                Recommended
+                {t("recommended")}
               </span>
             </div>
             {selectedPrice && (
               <p className="mt-1 text-2xl font-bold text-neutral-900">
                 {formatPrice(selectedPrice.unitAmount, selectedPrice.currency)}
                 <span className="text-sm font-normal text-neutral-500">
-                  /{selectedPrice.recurring?.interval === "year" ? "year" : "month"}
+                  {selectedPrice.recurring?.interval === "year" ? t("perYear") : t("perMonth")}
                 </span>
               </p>
             )}
@@ -304,7 +303,7 @@ export function BillingPage() {
                       : "text-neutral-500"
                   }`}
                 >
-                  Monthly
+                  {t("monthly")}
                 </button>
                 <button
                   type="button"
@@ -315,21 +314,21 @@ export function BillingPage() {
                       : "text-neutral-500"
                   }`}
                 >
-                  Yearly
+                  {t("yearly")}
                 </button>
               </div>
             )}
             <div className="mt-4 space-y-2.5">
-              {FLUENT_FEATURES.map((f) => (
-                <div key={f.label} className="flex items-center gap-2">
+              {FLUENT_FEATURE_KEYS.map((key) => (
+                <div key={key} className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-success-500" />
-                  <span className="text-sm text-neutral-700">{f.label}</span>
+                  <span className="text-sm text-neutral-700">{t(`fluentFeatures.${key}`)}</span>
                 </div>
               ))}
             </div>
             <div className="mt-4">
               <Button fullWidth onClick={handleUpgrade} disabled={isLoading || !selectedPrice}>
-                {isLoading ? "Redirecting..." : "Go Fluent"}
+                {isLoading ? t("redirecting") : t("goFluent")}
               </Button>
             </div>
           </div>
@@ -341,9 +340,9 @@ export function BillingPage() {
         isOpen={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}
         onConfirm={handleCancel}
-        title="Cancel Subscription"
-        message="Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then."
-        confirmLabel="Cancel Subscription"
+        title={t("cancelDialogTitle")}
+        message={t("cancelDialogMessage")}
+        confirmLabel={t("cancelSubscription")}
         variant="danger"
         isLoading={isCanceling}
       />

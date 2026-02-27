@@ -1,0 +1,129 @@
+{
+  "header": {
+    "title": "Profile",
+    "goBack": "Go back",
+    "moreOptions": "More options"
+  },
+  "userInfo": {
+    "freeMember": "Free Member",
+    "fluentMember": "Fluent Member"
+  },
+  "upgrade": {
+    "goFluent": "Go Fluent",
+    "description": "AI-powered mastery, unlimited decks, and offline access — for less than a coffee a week."
+  },
+  "sections": {
+    "appearance": "Appearance",
+    "studyPreferences": "Study Preferences",
+    "notifications": "Notifications",
+    "account": "Account"
+  },
+  "settings": {
+    "theme": "Theme",
+    "system": "system",
+    "light": "light",
+    "dark": "dark",
+    "themeColor": "Theme Color",
+    "cardTheme": "Card Theme",
+    "dailyGoal": "Daily Goal",
+    "cards": "{{count}} Cards",
+    "reminderTimes": "Reminder Times",
+    "remindersSet": "{{count}} set",
+    "remindersNone": "None",
+    "cardSorting": "Card Sorting Logic",
+    "pushAlerts": "Push Alerts",
+    "pushDenied": "Push notifications not available or permission denied",
+    "changePassword": "Change Password",
+    "exportData": "Export Data",
+    "deleteAccount": "Delete Account",
+    "logOut": "Log Out",
+    "language": "Language"
+  },
+  "sorting": {
+    "dueFirst": "Due First",
+    "dueFirstDesc": "Cards due for review are shown first",
+    "random": "Random",
+    "randomDesc": "Cards are shown in random order",
+    "byDifficulty": "By Difficulty",
+    "byDifficultyDesc": "Harder cards are shown first"
+  },
+  "dailyGoalModal": {
+    "title": "Daily Goal",
+    "description": "How many cards do you want to study per day?",
+    "saving": "Saving...",
+    "save": "Save",
+    "updated": "Daily goal updated!"
+  },
+  "themeColorModal": {
+    "title": "Theme Color",
+    "updated": "Theme updated!"
+  },
+  "cardThemeModal": {
+    "title": "Card Theme",
+    "updated": "Card theme updated!"
+  },
+  "cardSortingModal": {
+    "title": "Card Sorting",
+    "saving": "Saving...",
+    "save": "Save",
+    "updated": "Sorting preference updated!"
+  },
+  "reminderTimesModal": {
+    "title": "Reminder Times",
+    "noReminders": "No reminders set",
+    "addReminder": "Add Reminder",
+    "saving": "Saving...",
+    "save": "Save",
+    "updated": "Reminders updated!"
+  },
+  "changePasswordModal": {
+    "title": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "minLength": "New password must be at least 8 characters",
+    "mismatch": "Passwords do not match",
+    "changing": "Changing...",
+    "change": "Change Password",
+    "success": "Password changed!",
+    "failed": "Failed to change password"
+  },
+  "exportDataModal": {
+    "title": "Export Data",
+    "description": "Export all your decks and flashcards as a JSON file. This includes deck names, descriptions, and all card content.",
+    "exporting": "Exporting...",
+    "exportJson": "Export as JSON",
+    "success": "Data exported!"
+  },
+  "deleteAccountModal": {
+    "title": "Delete Account",
+    "warning": "This action is permanent and cannot be undone.",
+    "details": "All your decks, flashcards, study progress, and account data will be permanently deleted.",
+    "confirmLabel": "Type \"DELETE\" to confirm",
+    "placeholder": "DELETE",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "delete": "Delete Account",
+    "failed": "Failed to delete account"
+  },
+  "subscription": {
+    "title": "Subscription",
+    "currentPlan": "Current Plan",
+    "fluent": "Fluent",
+    "accessUntil": "Access Until",
+    "nextBilling": "Next Billing",
+    "manageBilling": "Manage Billing",
+    "resume": "Resume Subscription",
+    "cancel": "Cancel Subscription",
+    "cancelTitle": "Cancel Subscription",
+    "cancelDescription": "Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then.",
+    "cancelConfirm": "Cancel Subscription",
+    "resumed": "Subscription resumed!",
+    "canceled": "Subscription will be canceled at end of billing period"
+  },
+  "footer": {
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "support": "Support"
+  }
+}

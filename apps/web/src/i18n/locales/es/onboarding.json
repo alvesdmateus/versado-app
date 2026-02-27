@@ -1,0 +1,68 @@
+{
+  "welcome": {
+    "heading": "¡Bienvenido a Versado{{name}}!",
+    "subheading": "Tu herramienta personal de aprendizaje con repetición espaciada. Vamos a configurar todo para que empieces a memorizar de forma efectiva.",
+    "getStarted": "Comenzar"
+  },
+  "language": {
+    "heading": "¿Cuál es tu idioma nativo?",
+    "subheading": "Esto nos ayuda a personalizar tu experiencia."
+  },
+  "topics": {
+    "heading": "¿Qué quieres estudiar?",
+    "subheading": "Selecciona los temas que te interesan. Esto nos ayuda a sugerirte contenido relevante.",
+    "continue": "Continuar ({{count}} seleccionados)",
+    "continueDefault": "Continuar",
+    "skip": "Omitir por ahora",
+    "languages": "Idiomas",
+    "science": "Ciencias",
+    "math": "Matemáticas",
+    "history": "Historia",
+    "geography": "Geografía",
+    "programming": "Programación",
+    "medicine": "Medicina",
+    "law": "Derecho",
+    "music": "Música",
+    "art": "Arte",
+    "literature": "Literatura",
+    "philosophy": "Filosofía",
+    "psychology": "Psicología",
+    "economics": "Economía",
+    "business": "Negocios",
+    "cooking": "Cocina"
+  },
+  "goal": {
+    "heading": "Define tu meta diaria",
+    "subheading": "¿Cuántas tarjetas quieres repasar cada día? Puedes cambiarlo después.",
+    "casual": "Casual",
+    "casualDesc": "10 tarjetas/día",
+    "regular": "Regular",
+    "regularDesc": "25 tarjetas/día",
+    "serious": "Serio",
+    "seriousDesc": "50 tarjetas/día",
+    "intense": "Intenso",
+    "intenseDesc": "100 tarjetas/día"
+  },
+  "appearance": {
+    "heading": "Personaliza la apariencia",
+    "subheading": "Haz que Versado se sienta tuyo. Puedes cambiar esto después.",
+    "themeSystem": "Por defecto",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "cardTheme": "Tema de tarjetas",
+    "preview": "Vista previa",
+    "previewQuestion": "¿Qué es la repetición espaciada?"
+  },
+  "tutorial": {
+    "heading": "Cómo funciona",
+    "subheading": "Un resumen rápido de cómo sacarle el máximo provecho a Versado.",
+    "createDecks": "Crea mazos",
+    "createDecksDesc": "Organiza tus tarjetas en mazos por materia, tema o como prefieras.",
+    "studySmart": "Estudia de forma inteligente",
+    "studySmartDesc": "Nuestro algoritmo de repetición espaciada te muestra las tarjetas en el momento ideal para retención a largo plazo.",
+    "reviewImprove": "Repasa y mejora",
+    "reviewImproveDesc": "Califica cada tarjeta y observa cómo mejora tu precisión con el tiempo. ¡La constancia es clave!",
+    "startLearning": "Empezar a aprender",
+    "settingUp": "Configurando..."
+  }
+}

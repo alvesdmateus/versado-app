@@ -1,0 +1,87 @@
+{
+  "greeting": "Hello, {{name}}!",
+  "subtitle": "Ready for a quick session?",
+  "todayReview": "Today's Review",
+  "cardsDue": "cards due",
+  "studyNow": "Study Now",
+  "studyHistory": "Study History",
+  "stats": "Stats",
+  "yourDecks": "Your Decks",
+  "viewAll": "View All",
+  "trendingTopics": "Trending Topics",
+  "popularDecks": "Popular Decks",
+  "recommendedForYou": "Recommended For You",
+  "followTopicsTitle": "Follow topics to get recommendations",
+  "followTopicsDesc": "Tap trending topics above to personalize your feed",
+  "noRecommendations": "No new recommendations right now",
+  "suggestedCreators": "Suggested Creators",
+  "statsRow": {
+    "mastered": "Mastered",
+    "accuracy": "Accuracy",
+    "streak": "Streak",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "activity": {
+    "heading": "Activity",
+    "emptyState": "Start studying to see your activity",
+    "accuracyLabel": "Accuracy",
+    "cardsPerDay": "Cards / day"
+  },
+  "feed": {
+    "all": "All",
+    "creators": "Creators",
+    "tags": "Tags",
+    "emptyTitle": "No activity yet",
+    "emptyDescription": "Follow creators or tags to see activity here",
+    "browseMarketplace": "Browse Marketplace",
+    "showMore": "Show More",
+    "published": " published ",
+    "via": " via "
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{{minutes}}m ago",
+    "hoursAgo": "{{hours}}h ago",
+    "daysAgo": "{{days}}d ago",
+    "weeksAgo": "{{weeks}}w ago"
+  },
+  "discover": {
+    "heading": "Discover",
+    "subtitle": "Find new decks, creators, and topics"
+  },
+  "history": {
+    "heading": "Study History",
+    "noSessions": "No study sessions yet",
+    "emptyState": "Start studying to see your history here",
+    "inProgress": "In progress",
+    "deletedDeck": "Deleted Deck",
+    "cards": "{{count}} cards",
+    "loadMore": "Load More"
+  },
+  "studyStats": {
+    "heading": "Study Stats",
+    "totalSessions": "Total Sessions",
+    "cardsMastered": "Cards Mastered",
+    "accuracy": "Accuracy",
+    "dayStreak": "Day Streak",
+    "dailyReviews": "Daily Reviews",
+    "accuracyTrend": "Accuracy Trend",
+    "notEnoughData": "Not enough data yet",
+    "cardDistribution": "Card Distribution",
+    "noCards": "No cards yet",
+    "cards": "cards",
+    "statusNew": "New",
+    "statusLearning": "Learning",
+    "statusRelearning": "Relearning",
+    "statusReview": "Review",
+    "statusMastered": "Mastered"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "heading": "Oops! This page has wandered off.",
+    "description": "The page you're looking for might have been moved, deleted, or never existed in the first place.",
+    "backHome": "Back to Home",
+    "helpCenter": "Help Center"
+  }
+}

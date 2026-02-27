@@ -1,0 +1,86 @@
+{
+  "codes": {
+    "aiLimitReached": {
+      "title": "AI Limit Reached",
+      "description": "You've reached your AI generation limit. Go Fluent for unlimited generations."
+    },
+    "tierLimit": {
+      "title": "Plan Limit Reached",
+      "description": "You've reached a limit on your current plan. Go Fluent for more."
+    },
+    "reviewLimitReached": {
+      "title": "Daily Review Limit",
+      "description": "You've reached your daily review limit. Go Fluent for unlimited reviews."
+    },
+    "deckLimitReached": {
+      "title": "Deck Limit Reached",
+      "description": "You've reached the maximum number of decks on your plan. Go Fluent for unlimited decks."
+    },
+    "cardLimitReached": {
+      "title": "Card Limit Reached",
+      "description": "You've reached the maximum number of cards per deck. Go Fluent for unlimited cards."
+    },
+    "accountLocked": {
+      "title": "Account Locked",
+      "description": "Too many failed login attempts. Please try again later."
+    },
+    "aiServiceUnavailable": {
+      "title": "AI Unavailable",
+      "description": "The AI service is temporarily unavailable. Please try again in a few minutes."
+    },
+    "aiRateLimited": {
+      "title": "AI Service Busy",
+      "description": "The AI service is currently overloaded. Please wait a moment and try again."
+    }
+  },
+  "statuses": {
+    "network": {
+      "title": "Connection Failed",
+      "description": "Unable to reach the server. Check your internet connection and try again."
+    },
+    "unauthorized": {
+      "title": "Session Expired",
+      "description": "Your session has expired. Please sign in again."
+    },
+    "forbidden": {
+      "title": "Access Denied",
+      "description": "You don't have permission to perform this action."
+    },
+    "tooManyRequests": {
+      "title": "Too Many Requests",
+      "description": "You're making requests too quickly. Please wait a moment and try again."
+    },
+    "serverError": {
+      "title": "Server Error",
+      "description": "Something went wrong on our end. Please try again later."
+    },
+    "serviceUnavailable": {
+      "title": "Service Unavailable",
+      "description": "The service is temporarily unavailable. Please try again in a few minutes."
+    }
+  },
+  "default": {
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Please try again."
+  },
+  "boundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "reload": "Reload App"
+  },
+  "offline": {
+    "message": "You're offline — changes will sync when you reconnect"
+  },
+  "update": {
+    "available": "A new version is available",
+    "refresh": "Refresh"
+  },
+  "emailVerification": {
+    "message": "Please verify your email address.",
+    "sending": "Sending...",
+    "resend": "Resend",
+    "sent": "Verification email sent!",
+    "failed": "Failed to send email",
+    "dismissLabel": "Dismiss verification banner"
+  }
+}

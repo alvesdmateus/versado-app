@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, MoreVertical } from "lucide-react";
 import { DropdownMenu } from "@/components/shared/DropdownMenu";
 
@@ -18,6 +19,8 @@ export function DeckDetailHeader({
   onBack,
   menuItems,
 }: DeckDetailHeaderProps) {
+  const { t } = useTranslation("decks");
+
   return (
     <div className="flex items-center justify-between px-5 py-4">
       <button
@@ -25,7 +28,7 @@ export function DeckDetailHeader({
         className="flex items-center gap-1 text-neutral-600 transition-colors hover:text-neutral-900"
       >
         <ChevronLeft className="h-5 w-5" />
-        <span className="text-sm">Back</span>
+        <span className="text-sm">{t("detail.back")}</span>
       </button>
       <h1 className="flex-1 truncate text-center text-lg font-semibold text-neutral-900 px-2">
         {title}

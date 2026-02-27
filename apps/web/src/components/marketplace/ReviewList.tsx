@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 import type { MarketplaceReview } from "@/lib/marketplace-api";
 import { ConfirmDialog } from "@/components/shared";
@@ -23,11 +24,12 @@ function getInitial(name: string): string {
 }
 
 export function ReviewList({ reviews, currentUserId, onDelete }: ReviewListProps) {
+  const { t } = useTranslation(["marketplace", "common"]);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   if (reviews.length === 0) {
     return (
-      <p className="text-center text-sm text-neutral-400">No reviews yet</p>
+      <p className="text-center text-sm text-neutral-400">{t("marketplace:noReviews")}</p>
     );
   }
 
@@ -55,7 +57,7 @@ export function ReviewList({ reviews, currentUserId, onDelete }: ReviewListProps
                 <button
                   onClick={() => setDeleteTarget(review.id)}
                   className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-error-50 hover:text-error-500"
-                  aria-label="Delete review"
+                  aria-label={t("marketplace:deleteReviewLabel")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -77,9 +79,9 @@ export function ReviewList({ reviews, currentUserId, onDelete }: ReviewListProps
             setDeleteTarget(null);
           }
         }}
-        title="Delete Review"
-        message="Are you sure you want to delete your review? This action cannot be undone."
-        confirmLabel="Delete"
+        title={t("marketplace:deleteReviewTitle")}
+        message={t("marketplace:deleteReviewMessage")}
+        confirmLabel={t("common:actions.delete")}
         variant="danger"
       />
     </>

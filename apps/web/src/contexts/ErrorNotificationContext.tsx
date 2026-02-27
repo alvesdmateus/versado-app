@@ -5,6 +5,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { ApiError } from "@/lib/api-client";
 import { getErrorInfo } from "@/lib/error-messages";
 import { ErrorNotification } from "@/components/shared/ErrorNotification";
@@ -44,6 +45,7 @@ export function ErrorNotificationProvider({
 }: {
   children: ReactNode;
 }) {
+  const { t } = useTranslation("errors");
   const [errorState, setErrorState] = useState<ErrorState | null>(null);
 
   const showErrorNotification = useCallback(
@@ -60,13 +62,13 @@ export function ErrorNotificationProvider({
         message = error.message;
       }
 
-      const info = getErrorInfo(status, code, message);
+      const info = getErrorInfo(t, status, code, message);
       setErrorState({
         ...info,
         onRetry: options?.onRetry,
       });
     },
-    []
+    [t]
   );
 
   const handleDismiss = useCallback(() => {
