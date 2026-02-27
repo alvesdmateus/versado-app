@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.6...versado-v0.1.7) (2026-02-27)
+
+
+### Features
+
+* **web:** add i18n infrastructure (en + pt) ([#32](https://github.com/alvesdmateus/versado-app/issues/32)) ([9389562](https://github.com/alvesdmateus/versado-app/commit/9389562e23d7b24f26161ed4f7cb7c091d6a4cef))
+
 ## [0.1.6](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.5...versado-v0.1.6) (2026-02-27)
 
 
