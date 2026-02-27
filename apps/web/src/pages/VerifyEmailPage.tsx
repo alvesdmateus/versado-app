@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Logo } from "@versado/ui";
 import { authApi } from "@/lib/auth-api";
 import { useAuth } from "@/hooks/useAuth";
 
 export function VerifyEmailPage() {
+  const { t } = useTranslation("auth");
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { refreshUser } = useAuth();
@@ -14,7 +16,7 @@ export function VerifyEmailPage() {
     token ? "verifying" : "error"
   );
   const [errorMessage, setErrorMessage] = useState(
-    token ? "" : "No verification token provided."
+    token ? "" : t("verifyEmail.noToken")
   );
 
   useEffect(() => {
@@ -32,9 +34,7 @@ export function VerifyEmailPage() {
       } catch {
         if (!cancelled) {
           setStatus("error");
-          setErrorMessage(
-            "This verification link is invalid or has expired."
-          );
+          setErrorMessage(t("verifyEmail.invalidLink"));
         }
       }
     }
@@ -43,7 +43,7 @@ export function VerifyEmailPage() {
     return () => {
       cancelled = true;
     };
-  }, [token, refreshUser]);
+  }, [token, refreshUser, t]);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -53,10 +53,10 @@ export function VerifyEmailPage() {
         <>
           <Loader2 className="mb-4 h-10 w-10 animate-spin text-primary-500" />
           <h1 className="text-2xl font-bold text-neutral-900">
-            Verifying Email...
+            {t("verifyEmail.verifying")}
           </h1>
           <p className="mt-2 text-sm text-neutral-500">
-            Please wait while we verify your email address.
+            {t("verifyEmail.verifyingDescription")}
           </p>
         </>
       )}
@@ -67,16 +67,16 @@ export function VerifyEmailPage() {
             <CheckCircle className="h-8 w-8 text-success-500" />
           </div>
           <h1 className="text-2xl font-bold text-neutral-900">
-            Email Verified!
+            {t("verifyEmail.success")}
           </h1>
           <p className="mt-2 text-sm text-neutral-500">
-            Your email has been verified successfully.
+            {t("verifyEmail.successDescription")}
           </p>
           <Link
             to="/"
             className="mt-6 text-sm font-medium text-primary-500 hover:text-primary-600"
           >
-            Continue to App
+            {t("verifyEmail.continueToApp")}
           </Link>
         </>
       )}
@@ -87,14 +87,14 @@ export function VerifyEmailPage() {
             <XCircle className="h-8 w-8 text-error-500" />
           </div>
           <h1 className="text-2xl font-bold text-neutral-900">
-            Verification Failed
+            {t("verifyEmail.failed")}
           </h1>
           <p className="mt-2 text-sm text-neutral-500">{errorMessage}</p>
           <Link
             to="/auth/login"
             className="mt-6 text-sm font-medium text-primary-500 hover:text-primary-600"
           >
-            Go to Login
+            {t("verifyEmail.goToLogin")}
           </Link>
         </>
       )}

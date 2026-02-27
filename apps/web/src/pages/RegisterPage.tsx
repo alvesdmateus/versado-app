@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useTranslation, Trans } from "react-i18next";
 import { registerSchema } from "@versado/validation";
 import { Button, Input, Logo, Divider, SocialButton } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
@@ -44,6 +45,7 @@ interface FormErrors {
 export function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { t } = useTranslation("auth");
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,7 +63,7 @@ export function RegisterPage() {
       const { url } = await authApi.getGoogleAuthUrl();
       window.location.href = url;
     } catch {
-      setErrors({ general: "Google sign-in is unavailable. Please try again." });
+      setErrors({ general: t("register.googleUnavailable") });
       setIsGoogleLoading(false);
     }
   }
@@ -69,7 +71,6 @@ export function RegisterPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    // Validate with Zod
     const result = registerSchema.safeParse({ email, password, displayName });
     if (!result.success) {
       const fieldErrors: FormErrors = {};
@@ -83,9 +84,8 @@ export function RegisterPage() {
       return;
     }
 
-    // Check confirm password
     if (password !== confirmPassword) {
-      setErrors({ confirmPassword: "Passwords do not match" });
+      setErrors({ confirmPassword: t("register.passwordsMismatch") });
       return;
     }
 
@@ -99,7 +99,7 @@ export function RegisterPage() {
       if (err instanceof ApiError) {
         setErrors({ general: err.message });
       } else {
-        setErrors({ general: "Something went wrong. Please try again." });
+        setErrors({ general: t("register.genericError") });
       }
     } finally {
       setIsSubmitting(false);
@@ -108,28 +108,24 @@ export function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Logo */}
       <Logo size="lg" className="mb-4" />
 
-      {/* Heading */}
-      <h1 className="text-2xl font-bold text-neutral-900">Create Account</h1>
+      <h1 className="text-2xl font-bold text-neutral-900">{t("register.heading")}</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Start your learning journey today
+        {t("register.subheading")}
       </p>
 
-      {/* General error */}
       {errors.general && (
         <div className="mt-4 w-full rounded-lg bg-error-50 px-4 py-3 text-sm text-error-600">
           {errors.general}
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="mt-8 w-full space-y-5">
         <Input
-          label="Display Name"
+          label={t("register.displayNameLabel")}
           type="text"
-          placeholder="Your name"
+          placeholder={t("register.displayNamePlaceholder")}
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           error={errors.displayName}
@@ -137,9 +133,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Email Address"
+          label={t("register.emailLabel")}
           type="email"
-          placeholder="name@example.com"
+          placeholder={t("register.emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
@@ -147,9 +143,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Password"
+          label={t("register.passwordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Create a password"
+          placeholder={t("register.passwordPlaceholder")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
@@ -160,7 +156,7 @@ export function RegisterPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="text-neutral-400 hover:text-neutral-600 transition-colors"
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? t("login.hidePassword") : t("login.showPassword")}
             >
               {showPassword ? (
                 <EyeOff className="h-4.5 w-4.5" />
@@ -172,9 +168,9 @@ export function RegisterPage() {
         />
 
         <Input
-          label="Confirm Password"
+          label={t("register.confirmPasswordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Repeat your password"
+          placeholder={t("register.confirmPasswordPlaceholder")}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={errors.confirmPassword}
@@ -190,41 +186,38 @@ export function RegisterPage() {
         )}
 
         <p className="text-xs text-center text-neutral-400">
-          By creating an account, you agree to our{" "}
-          <Link to="/terms" className="text-primary-500 hover:text-primary-600 underline">
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link to="/privacy" className="text-primary-500 hover:text-primary-600 underline">
-            Privacy Policy
-          </Link>
-          .
+          <Trans
+            i18nKey="register.termsAgreement"
+            ns="auth"
+            components={{
+              terms: <Link to="/terms" className="text-primary-500 hover:text-primary-600 underline" />,
+              privacy: <Link to="/privacy" className="text-primary-500 hover:text-primary-600 underline" />,
+            }}
+          />
         </p>
 
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Creating Account..." : "Create Account"}
+          {isSubmitting ? t("register.creatingAccount") : t("register.createAccount")}
         </Button>
       </form>
 
-      {/* Divider + Social */}
-      <Divider label="Or continue with" className="my-6 w-full" />
+      <Divider label={t("register.orContinueWith")} className="my-6 w-full" />
       <SocialButton
         icon={<GoogleIcon />}
         onClick={handleGoogleSignIn}
         disabled={isGoogleLoading || isSubmitting}
       >
-        {isGoogleLoading ? "Redirecting..." : "Sign up with Google"}
+        {isGoogleLoading ? t("register.redirecting") : t("register.signUpGoogle")}
       </SocialButton>
 
-      {/* Login footer */}
       <div className="self-stretch -mx-8 -mb-8 mt-8 rounded-b-2xl border-t border-neutral-200 bg-neutral-50 px-8 py-5 text-center">
         <p className="text-sm text-neutral-500">
-          Already have an account?{" "}
+          {t("register.alreadyHaveAccount")}{" "}
           <Link
             to="/auth/login"
             className="font-medium text-primary-500 hover:text-primary-600"
           >
-            Sign In
+            {t("register.signIn")}
           </Link>
         </p>
       </div>

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { loginSchema } from "@versado/validation";
 import { Button, Input, Logo, Divider, SocialButton } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,6 +41,7 @@ interface FormErrors {
 export function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useTranslation("auth");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,7 +56,7 @@ export function LoginPage() {
       const { url } = await authApi.getGoogleAuthUrl();
       window.location.href = url;
     } catch {
-      setErrors({ general: "Google sign-in is unavailable. Please try again." });
+      setErrors({ general: t("login.googleUnavailable") });
       setIsGoogleLoading(false);
     }
   }
@@ -89,7 +91,7 @@ export function LoginPage() {
           setErrors({ email: err.message });
         }
       } else {
-        setErrors({ email: "Something went wrong. Please try again." });
+        setErrors({ email: t("login.genericError") });
       }
     } finally {
       setIsSubmitting(false);
@@ -98,28 +100,24 @@ export function LoginPage() {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Logo */}
       <Logo size="lg" className="mb-4" />
 
-      {/* Heading */}
-      <h1 className="text-2xl font-bold text-neutral-900">Welcome Back</h1>
+      <h1 className="text-2xl font-bold text-neutral-900">{t("login.heading")}</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Log in to your learning dashboard
+        {t("login.subheading")}
       </p>
 
-      {/* Account lockout / general error */}
       {errors.general && (
         <div className="mt-4 w-full rounded-lg bg-error-50 px-4 py-3 text-sm text-error-600">
           {errors.general}
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="mt-8 w-full space-y-5">
         <Input
-          label="Email Address"
+          label={t("login.emailLabel")}
           type="email"
-          placeholder="name@example.com"
+          placeholder={t("login.emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
@@ -132,19 +130,19 @@ export function LoginPage() {
               htmlFor="password"
               className="block text-sm font-medium text-neutral-700"
             >
-              Password
+              {t("login.passwordLabel")}
             </label>
             <Link
               to="/auth/forgot-password"
               className="text-sm font-medium text-primary-500 hover:text-primary-600"
             >
-              Forgot?
+              {t("login.forgot")}
             </Link>
           </div>
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Enter your password"
+            placeholder={t("login.passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={errors.password}
@@ -155,7 +153,7 @@ export function LoginPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="text-neutral-400 hover:text-neutral-600 transition-colors"
                 tabIndex={-1}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label={showPassword ? t("login.hidePassword") : t("login.showPassword")}
               >
                 {showPassword ? (
                   <EyeOff className="h-4.5 w-4.5" />
@@ -168,38 +166,35 @@ export function LoginPage() {
         </div>
 
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Signing In..." : "Sign In"}
+          {isSubmitting ? t("login.signingIn") : t("login.signIn")}
         </Button>
       </form>
 
-      {/* Divider */}
-      <Divider label="Or continue with" className="my-6 w-full" />
+      <Divider label={t("login.orContinueWith")} className="my-6 w-full" />
 
-      {/* Social Buttons */}
       <div className="grid w-full grid-cols-2 gap-3">
         <SocialButton
           icon={<GoogleIcon />}
           onClick={handleGoogleSignIn}
           disabled={isGoogleLoading || isSubmitting}
         >
-          {isGoogleLoading ? "Redirecting..." : "Google"}
+          {isGoogleLoading ? t("login.redirecting") : t("login.google")}
         </SocialButton>
       </div>
 
-      {/* Register footer */}
       <div className="self-stretch -mx-8 -mb-8 mt-8 rounded-b-2xl border-t border-neutral-200 bg-neutral-50 px-8 py-5 text-center">
         <p className="text-sm text-neutral-500">
-          Don't have an account?{" "}
+          {t("login.noAccount")}{" "}
           <Link
             to="/auth/register"
             className="font-medium text-primary-500 hover:text-primary-600"
           >
-            Create Account
+            {t("login.createAccount")}
           </Link>
         </p>
         <div className="mt-2 flex justify-center gap-3">
-          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">Terms</Link>
-          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</Link>
+          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">{t("login.terms")}</Link>
+          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">{t("login.privacy")}</Link>
         </div>
       </div>
     </div>

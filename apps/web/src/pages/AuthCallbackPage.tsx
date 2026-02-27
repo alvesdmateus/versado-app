@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { setAccessToken } from "@/lib/api-client";
 import { useAuth } from "@/hooks/useAuth";
 
 export function AuthCallbackPage() {
   const navigate = useNavigate();
   const { loginWithToken } = useAuth();
+  const { t } = useTranslation("auth");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const oauthError = searchParams.get("error");
     if (oauthError) {
-      setError("Google sign-in failed. Please try again.");
+      setError(t("callback.googleFailed"));
       setTimeout(() => navigate("/auth/login", { replace: true }), 3000);
       return;
     }
@@ -39,7 +41,7 @@ export function AuthCallbackPage() {
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <div className="space-y-1 text-center">
           <p className="text-sm text-error-600">{error}</p>
-          <p className="text-xs text-neutral-400">Redirecting to login...</p>
+          <p className="text-xs text-neutral-400">{t("callback.redirecting")}</p>
         </div>
       </div>
     );
@@ -47,7 +49,7 @@ export function AuthCallbackPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-      <p className="text-sm text-neutral-400">Signing you in...</p>
+      <p className="text-sm text-neutral-400">{t("callback.signingIn")}</p>
     </div>
   );
 }

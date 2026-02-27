@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import { Eye, EyeOff, CheckCircle, ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { resetPasswordSchema } from "@versado/validation";
 import { Button, Input, Logo } from "@versado/ui";
 import { authApi } from "@/lib/auth-api";
@@ -12,6 +13,7 @@ interface FormErrors {
 }
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation("auth");
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -27,15 +29,15 @@ export function ResetPasswordPage() {
     return (
       <div className="flex flex-col items-center text-center">
         <Logo size="lg" className="mb-4" />
-        <h1 className="text-2xl font-bold text-neutral-900">Invalid Link</h1>
+        <h1 className="text-2xl font-bold text-neutral-900">{t("resetPassword.invalidLink")}</h1>
         <p className="mt-2 text-sm text-neutral-500">
-          This password reset link is invalid or has expired.
+          {t("resetPassword.invalidLinkDescription")}
         </p>
         <Link
           to="/auth/forgot-password"
           className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600"
         >
-          Request a new reset link
+          {t("resetPassword.requestNewLink")}
         </Link>
       </div>
     );
@@ -47,17 +49,16 @@ export function ResetPasswordPage() {
         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-50">
           <CheckCircle className="h-8 w-8 text-success-500" />
         </div>
-        <h1 className="text-2xl font-bold text-neutral-900">Password Reset!</h1>
+        <h1 className="text-2xl font-bold text-neutral-900">{t("resetPassword.success")}</h1>
         <p className="mt-2 text-sm text-neutral-500">
-          Your password has been updated successfully. You can now log in with
-          your new password.
+          {t("resetPassword.successDescription")}
         </p>
         <Link
           to="/auth/login"
           className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600"
         >
           <ArrowLeft className="h-4 w-4" />
-          Go to Login
+          {t("resetPassword.goToLogin")}
         </Link>
       </div>
     );
@@ -93,14 +94,12 @@ export function ResetPasswordPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === "INVALID_RESET_TOKEN") {
-          setGeneralError(
-            "This reset link has expired. Please request a new one."
-          );
+          setGeneralError(t("resetPassword.expiredLink"));
         } else {
           setGeneralError(err.message);
         }
       } else {
-        setGeneralError("Something went wrong. Please try again.");
+        setGeneralError(t("resetPassword.genericError"));
       }
     } finally {
       setIsSubmitting(false);
@@ -111,9 +110,9 @@ export function ResetPasswordPage() {
     <div className="flex flex-col items-center">
       <Logo size="lg" className="mb-4" />
 
-      <h1 className="text-2xl font-bold text-neutral-900">Set New Password</h1>
+      <h1 className="text-2xl font-bold text-neutral-900">{t("resetPassword.heading")}</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Enter your new password below
+        {t("resetPassword.subheading")}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 w-full space-y-5">
@@ -124,9 +123,9 @@ export function ResetPasswordPage() {
         )}
 
         <Input
-          label="New Password"
+          label={t("resetPassword.newPasswordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Enter new password"
+          placeholder={t("resetPassword.newPasswordPlaceholder")}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           error={errors.newPassword}
@@ -137,7 +136,7 @@ export function ResetPasswordPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="text-neutral-400 hover:text-neutral-600 transition-colors"
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? t("resetPassword.hidePassword") : t("resetPassword.showPassword")}
             >
               {showPassword ? (
                 <EyeOff className="h-4.5 w-4.5" />
@@ -149,9 +148,9 @@ export function ResetPasswordPage() {
         />
 
         <Input
-          label="Confirm Password"
+          label={t("resetPassword.confirmPasswordLabel")}
           type={showPassword ? "text" : "password"}
-          placeholder="Confirm new password"
+          placeholder={t("resetPassword.confirmPasswordPlaceholder")}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           error={errors.confirmPassword}
@@ -165,7 +164,7 @@ export function ResetPasswordPage() {
           fullWidth
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Resetting..." : "Reset Password"}
+          {isSubmitting ? t("resetPassword.resetting") : t("resetPassword.resetPassword")}
         </Button>
       </form>
 
@@ -174,7 +173,7 @@ export function ResetPasswordPage() {
         className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary-500 hover:text-primary-600"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to Login
+        {t("resetPassword.backToLogin")}
       </Link>
     </div>
   );
