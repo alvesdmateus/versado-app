@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Plus, Layers, Upload } from "lucide-react";
 import type { DeckResponse } from "@/lib/deck-api";
 import { syncAwareApi } from "@/lib/sync-aware-api";
@@ -14,7 +15,7 @@ import { SortSelect } from "@/components/shared/SortSelect";
 import { EmptyState, DeckGridSkeleton } from "@/components/shared";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
-const FILTER_TABS = ["All", "Recently Studied", "Favorites"];
+const FILTER_KEYS = ["all", "recentlyStudied", "favorites"] as const;
 
 const GRADIENTS = [
   "from-violet-300 to-violet-400",
@@ -37,11 +38,12 @@ function getGradient(name: string): string {
 
 export function DecksPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation("decks");
   const { showErrorNotification } = useErrorNotification();
   const [decks, setDecks] = useState<DeckResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState<(typeof FILTER_KEYS)[number]>("all");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
@@ -95,14 +97,14 @@ export function DecksPage() {
     }
 
     // Tab filter
-    if (activeFilter === "Recently Studied") {
+    if (activeFilter === "recentlyStudied") {
       result = result.filter(
         (d) =>
           d.stats.masteredCards > 0 ||
           d.stats.reviewCards > 0 ||
           d.stats.learningCards > 0
       );
-    } else if (activeFilter === "Favorites") {
+    } else if (activeFilter === "favorites") {
       result = result.filter((d) => favoriteIds.has(d.id));
     }
 
@@ -122,34 +124,36 @@ export function DecksPage() {
     return result;
   }, [searchQuery, decks, activeFilter, favoriteIds, sortBy]);
 
+  const filterLabels = FILTER_KEYS.map((k) => t(`filters.${k}`));
+
   const emptyMessage = useMemo(() => {
     if (decks.length === 0) {
       return {
-        title: "No decks yet",
-        description: "Create your first deck to get started",
-        action: { label: "Create Deck", onClick: () => setIsCreateOpen(true) },
+        title: t("empty.noDecks"),
+        description: t("empty.noDecksDesc"),
+        action: { label: t("empty.createDeck"), onClick: () => setIsCreateOpen(true) },
       };
     }
-    if (activeFilter === "Favorites" && filteredDecks.length === 0) {
+    if (activeFilter === "favorites" && filteredDecks.length === 0) {
       return {
-        title: "No favorites yet",
-        description: "Tap the heart icon on a deck to add it to favorites",
+        title: t("empty.noFavorites"),
+        description: t("empty.noFavoritesDesc"),
       };
     }
-    if (activeFilter === "Recently Studied" && filteredDecks.length === 0) {
+    if (activeFilter === "recentlyStudied" && filteredDecks.length === 0) {
       return {
-        title: "No study history",
-        description: "Start studying a deck to see it here",
+        title: t("empty.noHistory"),
+        description: t("empty.noHistoryDesc"),
       };
     }
     if (searchQuery.trim() && filteredDecks.length === 0) {
       return {
-        title: "No decks found",
-        description: "Try a different search term",
+        title: t("empty.noResults"),
+        description: t("empty.noResultsDesc"),
       };
     }
     return null;
-  }, [decks.length, activeFilter, filteredDecks.length, searchQuery]);
+  }, [decks.length, activeFilter, filteredDecks.length, searchQuery, t]);
 
   if (isLoading) {
     return (
@@ -165,19 +169,22 @@ export function DecksPage() {
       <DecksHeader />
       <DeckSearchBar value={searchQuery} onChange={setSearchQuery} />
       <DeckFilterTabs
-        tabs={FILTER_TABS}
-        activeTab={activeFilter}
-        onTabChange={setActiveFilter}
+        tabs={filterLabels}
+        activeTab={t(`filters.${activeFilter}`)}
+        onTabChange={(label) => {
+          const idx = filterLabels.indexOf(label);
+          if (idx >= 0) setActiveFilter(FILTER_KEYS[idx]!);
+        }}
       />
       <div className="mt-2 flex justify-end px-5">
         <SortSelect
           value={sortBy}
           onChange={setSortBy}
           options={[
-            { value: "newest", label: "Newest" },
-            { value: "name", label: "Name A-Z" },
-            { value: "cards", label: "Most Cards" },
-            { value: "progress", label: "Best Progress" },
+            { value: "newest", label: t("sort.newest") },
+            { value: "name", label: t("sort.nameAZ") },
+            { value: "cards", label: t("sort.mostCards") },
+            { value: "progress", label: t("sort.bestProgress") },
           ]}
         />
       </div>
@@ -217,14 +224,14 @@ export function DecksPage() {
       {/* FABs */}
       <button
         onClick={() => setIsImportOpen(true)}
-        aria-label="Import deck"
+        aria-label={t("fab.importDeck")}
         className="fixed bottom-24 right-22 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-0 text-primary-500 shadow-card-lg border border-neutral-200 transition-all hover:bg-neutral-50 active:scale-90"
       >
         <Upload className="h-6 w-6" />
       </button>
       <button
         onClick={() => setIsCreateOpen(true)}
-        aria-label="Create new deck"
+        aria-label={t("fab.createDeck")}
         className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-card-lg transition-all hover:bg-primary-600 active:scale-90"
       >
         <Plus className="h-6 w-6" />

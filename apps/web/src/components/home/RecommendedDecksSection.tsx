@@ -1,4 +1,5 @@
 import { Hash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { PopularDeck } from "@/lib/social-api";
 import { MarketplaceListingCard } from "@/components/marketplace/MarketplaceListingCard";
 import { SectionHeader } from "./SectionHeader";
@@ -20,20 +21,22 @@ export function RecommendedDecksSection({
   hasFollowedTags,
   onDeckClick,
 }: RecommendedDecksSectionProps) {
+  const { t } = useTranslation("home");
+
   return (
     <section className="mt-6">
-      <SectionHeader title="Recommended For You" />
+      <SectionHeader title={t("recommendedForYou")} />
       <div className="mt-3 flex flex-col gap-2 px-5">
         {decks.length === 0 ? (
           !hasFollowedTags ? (
             <EmptyState
               icon={<Hash className="h-10 w-10" />}
-              title="Follow topics to get recommendations"
-              description="Tap trending topics above to personalize your feed"
+              title={t("followTopicsTitle")}
+              description={t("followTopicsDesc")}
             />
           ) : (
             <p className="py-6 text-center text-sm text-neutral-400">
-              No new recommendations right now
+              {t("noRecommendations")}
             </p>
           )
         ) : (

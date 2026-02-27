@@ -1,0 +1,129 @@
+{
+  "header": {
+    "title": "Profil",
+    "goBack": "Retour",
+    "moreOptions": "Plus d'options"
+  },
+  "userInfo": {
+    "freeMember": "Membre gratuit",
+    "fluentMember": "Membre Fluent"
+  },
+  "upgrade": {
+    "goFluent": "Passer à Fluent",
+    "description": "Maîtrise assistée par l'IA, paquets illimités et accès hors ligne — pour moins qu'un café par semaine."
+  },
+  "sections": {
+    "appearance": "Apparence",
+    "studyPreferences": "Préférences d'étude",
+    "notifications": "Notifications",
+    "account": "Compte"
+  },
+  "settings": {
+    "theme": "Thème",
+    "system": "système",
+    "light": "clair",
+    "dark": "sombre",
+    "themeColor": "Couleur du thème",
+    "cardTheme": "Thème des cartes",
+    "dailyGoal": "Objectif quotidien",
+    "cards": "{{count}} Cartes",
+    "reminderTimes": "Heures de rappel",
+    "remindersSet": "{{count}} définis",
+    "remindersNone": "Aucun",
+    "cardSorting": "Tri des cartes",
+    "pushAlerts": "Notifications push",
+    "pushDenied": "Les notifications push ne sont pas disponibles ou l'autorisation a été refusée",
+    "changePassword": "Changer le mot de passe",
+    "exportData": "Exporter les données",
+    "deleteAccount": "Supprimer le compte",
+    "logOut": "Se déconnecter",
+    "language": "Langue"
+  },
+  "sorting": {
+    "dueFirst": "À réviser d'abord",
+    "dueFirstDesc": "Les cartes à réviser sont affichées en premier",
+    "random": "Aléatoire",
+    "randomDesc": "Les cartes sont affichées dans un ordre aléatoire",
+    "byDifficulty": "Par difficulté",
+    "byDifficultyDesc": "Les cartes les plus difficiles sont affichées en premier"
+  },
+  "dailyGoalModal": {
+    "title": "Objectif quotidien",
+    "description": "Combien de cartes souhaitez-vous étudier par jour ?",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer",
+    "updated": "Objectif quotidien mis à jour !"
+  },
+  "themeColorModal": {
+    "title": "Couleur du thème",
+    "updated": "Thème mis à jour !"
+  },
+  "cardThemeModal": {
+    "title": "Thème des cartes",
+    "updated": "Thème des cartes mis à jour !"
+  },
+  "cardSortingModal": {
+    "title": "Tri des cartes",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer",
+    "updated": "Préférence de tri mise à jour !"
+  },
+  "reminderTimesModal": {
+    "title": "Heures de rappel",
+    "noReminders": "Aucun rappel défini",
+    "addReminder": "Ajouter un rappel",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer",
+    "updated": "Rappels mis à jour !"
+  },
+  "changePasswordModal": {
+    "title": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "minLength": "Le nouveau mot de passe doit contenir au moins 8 caractères",
+    "mismatch": "Les mots de passe ne correspondent pas",
+    "changing": "Modification...",
+    "change": "Changer le mot de passe",
+    "success": "Mot de passe modifié !",
+    "failed": "Échec du changement de mot de passe"
+  },
+  "exportDataModal": {
+    "title": "Exporter les données",
+    "description": "Exportez tous vos paquets et flashcards sous forme de fichier JSON. Cela inclut les noms des paquets, les descriptions et tout le contenu des cartes.",
+    "exporting": "Exportation...",
+    "exportJson": "Exporter en JSON",
+    "success": "Données exportées !"
+  },
+  "deleteAccountModal": {
+    "title": "Supprimer le compte",
+    "warning": "Cette action est définitive et ne peut pas être annulée.",
+    "details": "Tous vos paquets, flashcards, progrès d'étude et données de compte seront définitivement supprimés.",
+    "confirmLabel": "Tapez « DELETE » pour confirmer",
+    "placeholder": "DELETE",
+    "cancel": "Annuler",
+    "deleting": "Suppression...",
+    "delete": "Supprimer le compte",
+    "failed": "Échec de la suppression du compte"
+  },
+  "subscription": {
+    "title": "Abonnement",
+    "currentPlan": "Forfait actuel",
+    "fluent": "Fluent",
+    "accessUntil": "Accès jusqu'au",
+    "nextBilling": "Prochaine facturation",
+    "manageBilling": "Gérer la facturation",
+    "resume": "Reprendre l'abonnement",
+    "cancel": "Annuler l'abonnement",
+    "cancelTitle": "Annuler l'abonnement",
+    "cancelDescription": "Vos fonctionnalités Fluent resteront actives jusqu'à la fin de votre période de facturation en cours. Vous pouvez reprendre à tout moment avant cette date.",
+    "cancelConfirm": "Annuler l'abonnement",
+    "resumed": "Abonnement repris !",
+    "canceled": "L'abonnement sera annulé à la fin de la période de facturation"
+  },
+  "footer": {
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "support": "Assistance"
+  }
+}

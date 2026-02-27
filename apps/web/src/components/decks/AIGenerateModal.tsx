@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Sparkles, Check, RotateCcw, Loader2 } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
@@ -23,6 +24,7 @@ export function AIGenerateModal({
   deckId,
   onGenerated,
 }: AIGenerateModalProps) {
+  const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const { user } = useAuth();
 
@@ -64,7 +66,7 @@ export function AIGenerateModal({
 
   async function handleGenerate() {
     if (!prompt.trim()) {
-      setError("Please enter a topic or prompt");
+      setError(t("aiGenerate.topicRequired"));
       return;
     }
 
@@ -77,7 +79,7 @@ export function AIGenerateModal({
       // Refresh usage count
       aiApi.getUsage().then(setUsage).catch(() => {});
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to generate cards";
+      const message = err instanceof Error ? err.message : t("aiGenerate.generateFailed");
       setError(message);
     } finally {
       setIsGenerating(false);
@@ -87,7 +89,7 @@ export function AIGenerateModal({
   async function handleSave() {
     const cardsToSave = generatedCards.filter((_, i) => selected.has(i));
     if (cardsToSave.length === 0) {
-      setError("Select at least one card to save");
+      setError(t("aiGenerate.selectValidation"));
       return;
     }
 
@@ -102,11 +104,11 @@ export function AIGenerateModal({
           difficulty: c.difficulty,
         })),
       });
-      showToast(`${saved.length} card${saved.length !== 1 ? "s" : ""} added!`);
+      showToast(t("aiGenerate.added", { count: saved.length }));
       resetForm();
       onGenerated(saved);
     } catch {
-      setError("Failed to save cards. Please try again.");
+      setError(t("aiGenerate.saveFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -135,14 +137,14 @@ export function AIGenerateModal({
   const hasCards = generatedCards.length > 0;
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="AI Generate Cards" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("aiGenerate.title")} size="lg">
       <div className="flex flex-col gap-4">
         {/* Usage indicator for free tier */}
         {usage !== null && tierLimit !== Infinity && (
           <div className="flex items-center justify-between rounded-lg bg-neutral-50 px-3 py-2">
-            <span className="text-xs text-neutral-500">AI Generations</span>
+            <span className="text-xs text-neutral-500">{t("aiGenerate.usageLabel")}</span>
             <span className={`text-xs font-medium ${isLimitReached ? "text-error-500" : "text-neutral-700"}`}>
-              {usage.used} / {tierLimit} used
+              {usage.used} / {tierLimit} {t("aiGenerate.used")}
             </span>
           </div>
         )}
@@ -151,9 +153,9 @@ export function AIGenerateModal({
           /* Upgrade CTA when limit reached */
           <div className="rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-5 text-center">
             <Sparkles className="mx-auto h-8 w-8 text-primary-500" />
-            <h3 className="mt-2 font-semibold text-neutral-900">Generation Limit Reached</h3>
+            <h3 className="mt-2 font-semibold text-neutral-900">{t("aiGenerate.limitTitle")}</h3>
             <p className="mt-1 text-sm text-neutral-600">
-              Go Fluent for unlimited AI generations.
+              {t("aiGenerate.limitMessage")}
             </p>
             <Button
               className="mt-3"
@@ -163,15 +165,15 @@ export function AIGenerateModal({
                 window.location.href = "/fluent";
               }}
             >
-              Go Fluent
+              {t("aiGenerate.goFluent")}
             </Button>
           </div>
         ) : !hasCards ? (
           /* Step 1: Prompt Input */
           <>
             <Textarea
-              label="Topic or Prompt"
-              placeholder="e.g., Spanish food vocabulary, World War II key events, JavaScript array methods..."
+              label={t("aiGenerate.topicLabel")}
+              placeholder={t("aiGenerate.topicPlaceholder")}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               rows={3}
@@ -179,7 +181,7 @@ export function AIGenerateModal({
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-neutral-700">
-                Number of Cards
+                {t("aiGenerate.numberOfCards")}
               </label>
               <select
                 value={count}
@@ -188,7 +190,7 @@ export function AIGenerateModal({
               >
                 {[5, 10, 15, 20].map((n) => (
                   <option key={n} value={n}>
-                    {n} cards
+                    {n} {t("aiGenerate.cards")}
                   </option>
                 ))}
               </select>
@@ -204,12 +206,12 @@ export function AIGenerateModal({
               {isGenerating ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Generating...
+                  {t("aiGenerate.generating")}
                 </>
               ) : (
                 <>
                   <Sparkles className="h-4 w-4" />
-                  Generate Cards
+                  {t("aiGenerate.generate")}
                 </>
               )}
             </Button>
@@ -219,14 +221,14 @@ export function AIGenerateModal({
           <>
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-neutral-700">
-                {selected.size} of {generatedCards.length} cards selected
+                {t("aiGenerate.selected", { selected: selected.size, total: generatedCards.length })}
               </p>
               <button
                 type="button"
                 onClick={toggleAll}
                 className="text-xs font-medium text-primary-500 hover:text-primary-600"
               >
-                {selected.size === generatedCards.length ? "Deselect All" : "Select All"}
+                {selected.size === generatedCards.length ? t("aiGenerate.deselectAll") : t("aiGenerate.selectAll")}
               </button>
             </div>
 
@@ -286,7 +288,7 @@ export function AIGenerateModal({
                 }}
               >
                 <RotateCcw className="h-4 w-4" />
-                Regenerate
+                {t("aiGenerate.regenerate")}
               </Button>
               <Button
                 fullWidth
@@ -296,10 +298,10 @@ export function AIGenerateModal({
                 {isSaving ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Saving...
+                    {t("aiGenerate.saving")}
                   </>
                 ) : (
-                  `Save ${selected.size} Card${selected.size !== 1 ? "s" : ""}`
+                  t("aiGenerate.saveCards", { count: selected.size })
                 )}
               </Button>
             </div>

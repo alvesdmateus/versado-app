@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, BookOpen, Clock, Target } from "lucide-react";
 import { Button } from "@versado/ui";
 import { studyApi, type SessionHistoryItem } from "@/lib/study-api";
@@ -17,8 +18,8 @@ function formatDate(dateStr: string): string {
   });
 }
 
-function formatDuration(startedAt: string, endedAt: string | null): string {
-  if (!endedAt) return "In progress";
+function formatDuration(startedAt: string, endedAt: string | null): string | null {
+  if (!endedAt) return null;
   const ms = new Date(endedAt).getTime() - new Date(startedAt).getTime();
   const minutes = Math.floor(ms / 60000);
   const seconds = Math.floor((ms % 60000) / 1000);
@@ -36,9 +37,10 @@ function getRatingBreakdown(reviews: Array<{ rating: number }> | null) {
 }
 
 const RATING_COLORS = ["bg-error-400", "bg-warning-400", "bg-primary-400", "bg-success-400"];
-const RATING_LABELS = ["Again", "Hard", "Good", "Easy"];
 
 function SessionCard({ session }: { session: SessionHistoryItem }) {
+  const { t } = useTranslation(["home", "study"]);
+  const RATING_LABELS = [t("study:ratings.again"), t("study:ratings.hard"), t("study:ratings.good"), t("study:ratings.easy")];
   const navigate = useNavigate();
   const stats = session.stats;
   const cardsStudied = stats?.cardsStudied ?? 0;
@@ -55,7 +57,7 @@ function SessionCard({ session }: { session: SessionHistoryItem }) {
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-neutral-900">
-            {session.deckName ?? "Deleted Deck"}
+            {session.deckName ?? t("history.deletedDeck")}
           </p>
           <p className="mt-0.5 text-xs text-neutral-400">
             {formatDate(session.startedAt)}
@@ -67,7 +69,7 @@ function SessionCard({ session }: { session: SessionHistoryItem }) {
       <div className="mt-3 flex items-center gap-4">
         <div className="flex items-center gap-1.5 text-xs text-neutral-500">
           <BookOpen className="h-3.5 w-3.5" />
-          <span>{cardsStudied} cards</span>
+          <span>{t("history.cards", { count: cardsStudied })}</span>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-neutral-500">
           <Target className="h-3.5 w-3.5" />
@@ -75,7 +77,7 @@ function SessionCard({ session }: { session: SessionHistoryItem }) {
         </div>
         <div className="flex items-center gap-1.5 text-xs text-neutral-500">
           <Clock className="h-3.5 w-3.5" />
-          <span>{formatDuration(session.startedAt, session.endedAt)}</span>
+          <span>{formatDuration(session.startedAt, session.endedAt) ?? t("history.inProgress")}</span>
         </div>
       </div>
 
@@ -110,6 +112,7 @@ function SessionCard({ session }: { session: SessionHistoryItem }) {
 }
 
 export function StudyHistoryPage() {
+  const { t } = useTranslation(["home", "common"]);
   const navigate = useNavigate();
   const { showErrorNotification } = useErrorNotification();
   const [sessions, setSessions] = useState<SessionHistoryItem[]>([]);
@@ -155,10 +158,10 @@ export function StudyHistoryPage() {
           className="flex items-center gap-1 text-neutral-600 transition-colors hover:text-neutral-900"
         >
           <ChevronLeft className="h-5 w-5" />
-          <span className="text-sm">Back</span>
+          <span className="text-sm">{t("common:actions.back")}</span>
         </button>
         <h1 className="flex-1 truncate text-center text-lg font-semibold text-neutral-900 pr-14">
-          Study History
+          {t("history.heading")}
         </h1>
       </div>
 
@@ -171,8 +174,8 @@ export function StudyHistoryPage() {
         ) : sessions.length === 0 ? (
           <div className="flex flex-col items-center py-16">
             <BookOpen className="h-12 w-12 text-neutral-300" />
-            <p className="mt-3 text-sm font-medium text-neutral-500">No study sessions yet</p>
-            <p className="mt-1 text-xs text-neutral-400">Start studying to see your history here</p>
+            <p className="mt-3 text-sm font-medium text-neutral-500">{t("history.noSessions")}</p>
+            <p className="mt-1 text-xs text-neutral-400">{t("history.emptyState")}</p>
           </div>
         ) : (
           <>
@@ -186,7 +189,7 @@ export function StudyHistoryPage() {
                 onClick={() => fetchSessions(true)}
                 disabled={isLoadingMore}
               >
-                {isLoadingMore ? "Loading..." : "Load More"}
+                {isLoadingMore ? t("common:loading") : t("history.loadMore")}
               </Button>
             )}
           </>

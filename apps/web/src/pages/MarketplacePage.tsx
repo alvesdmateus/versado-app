@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { marketplaceApi, type MarketplaceListing } from "@/lib/marketplace-api";
 import { MarketplaceHeader } from "@/components/marketplace/MarketplaceHeader";
 import { MarketplaceSearchBar } from "@/components/marketplace/MarketplaceSearchBar";
@@ -8,7 +9,7 @@ import { DeckFilterTabs } from "@/components/decks/DeckFilterTabs";
 import { SortSelect } from "@/components/shared/SortSelect";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
-const CATEGORY_TABS = ["All", "Languages", "Science", "History"];
+const CATEGORY_KEYS = ["all", "languages", "science", "history"] as const;
 
 const GRADIENTS = [
   "from-violet-300 to-violet-400",
@@ -37,9 +38,10 @@ const PAGE_SIZE = 20;
 
 export function MarketplacePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation(["marketplace", "common"]);
   const { showErrorNotification } = useErrorNotification();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState<(typeof CATEGORY_KEYS)[number]>("all");
   const [sortBy, setSortBy] = useState("popular");
   const [minRating, setMinRating] = useState(0);
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
@@ -58,7 +60,7 @@ export function MarketplacePage() {
     try {
       const result = await marketplaceApi.browse({
         search: searchQuery.trim() || undefined,
-        tag: activeCategory !== "All" ? activeCategory : undefined,
+        tag: activeCategory !== "all" ? activeCategory : undefined,
         sortBy,
         limit: PAGE_SIZE,
         offset: offsetRef.current,
@@ -83,23 +85,28 @@ export function MarketplacePage() {
     fetchListings();
   }, [fetchListings]);
 
+  const filterLabels = CATEGORY_KEYS.map((k) => t(`marketplace:categories.${k}`));
+
   return (
     <div className="pb-4">
       <MarketplaceHeader />
       <MarketplaceSearchBar value={searchQuery} onChange={setSearchQuery} />
       <DeckFilterTabs
-        tabs={CATEGORY_TABS}
-        activeTab={activeCategory}
-        onTabChange={setActiveCategory}
+        tabs={filterLabels}
+        activeTab={t(`marketplace:categories.${activeCategory}`)}
+        onTabChange={(label) => {
+          const idx = filterLabels.indexOf(label);
+          if (idx >= 0) setActiveCategory(CATEGORY_KEYS[idx]!);
+        }}
       />
       {/* Rating filter */}
       <div className="mt-2 flex items-center gap-2 px-5">
-        <span className="text-xs text-neutral-500">Rating:</span>
+        <span className="text-xs text-neutral-500">{t("marketplace:rating.label")}</span>
         {[
-          { label: "Any", value: 0 },
-          { label: "2+", value: 2 },
-          { label: "3+", value: 3 },
-          { label: "4+", value: 4 },
+          { label: t("marketplace:rating.any"), value: 0 },
+          { label: t("marketplace:rating.2plus"), value: 2 },
+          { label: t("marketplace:rating.3plus"), value: 3 },
+          { label: t("marketplace:rating.4plus"), value: 4 },
         ].map((opt) => (
           <button
             key={opt.value}
@@ -120,11 +127,11 @@ export function MarketplacePage() {
           value={sortBy}
           onChange={setSortBy}
           options={[
-            { value: "popular", label: "Popular" },
-            { value: "newest", label: "Newest" },
-            { value: "rating", label: "Highest Rated" },
-            { value: "price_asc", label: "Price: Low → High" },
-            { value: "price_desc", label: "Price: High → Low" },
+            { value: "popular", label: t("marketplace:sort.popular") },
+            { value: "newest", label: t("marketplace:sort.newest") },
+            { value: "rating", label: t("marketplace:sort.highestRated") },
+            { value: "price_asc", label: t("marketplace:sort.priceLowHigh") },
+            { value: "price_desc", label: t("marketplace:sort.priceHighLow") },
           ]}
         />
       </div>
@@ -149,8 +156,8 @@ export function MarketplacePage() {
               reviewCount={formatCount(listing.reviewCount)}
               downloads={
                 listing.price > 0
-                  ? `${formatCount(listing.purchaseCount)} sales`
-                  : `${formatCount(listing.purchaseCount)} downloads`
+                  ? t("marketplace:sales", { count: listing.purchaseCount })
+                  : t("marketplace:downloads", { count: listing.purchaseCount })
               }
               onClick={() => navigate(`/market/${listing.id}`)}
             />
@@ -161,7 +168,7 @@ export function MarketplacePage() {
               disabled={isLoadingMore}
               className="mt-2 w-full rounded-xl bg-neutral-100 py-3 text-sm font-medium text-neutral-600 transition-colors hover:bg-neutral-200 disabled:opacity-50"
             >
-              {isLoadingMore ? "Loading..." : "Load More"}
+              {isLoadingMore ? t("common:loading") : t("marketplace:loadMore")}
             </button>
           )}
         </div>
@@ -169,9 +176,9 @@ export function MarketplacePage() {
 
       {!isLoading && listings.length === 0 && (
         <div className="mt-12 flex flex-col items-center text-center px-5">
-          <p className="text-sm text-neutral-500">No decks found</p>
+          <p className="text-sm text-neutral-500">{t("marketplace:noDecksFound")}</p>
           <p className="mt-1 text-xs text-neutral-400">
-            Try a different search or category
+            {t("marketplace:tryDifferentSearch")}
           </p>
         </div>
       )}

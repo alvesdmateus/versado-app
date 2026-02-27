@@ -1,0 +1,183 @@
+{
+  "header": {
+    "title": "Meine Kartensets",
+    "moreOptions": "Weitere Optionen"
+  },
+  "search": {
+    "placeholder": "Deine Kartensets durchsuchen..."
+  },
+  "filters": {
+    "all": "Alle",
+    "recentlyStudied": "Kürzlich gelernt",
+    "favorites": "Favoriten"
+  },
+  "sort": {
+    "newest": "Neueste",
+    "nameAZ": "Name A-Z",
+    "mostCards": "Die meisten Karten",
+    "bestProgress": "Bester Fortschritt"
+  },
+  "empty": {
+    "noDecks": "Noch keine Kartensets",
+    "noDecksDesc": "Erstelle dein erstes Kartenset, um zu starten",
+    "createDeck": "Kartenset erstellen",
+    "noFavorites": "Noch keine Favoriten",
+    "noFavoritesDesc": "Tippe auf das Herz-Symbol bei einem Kartenset, um es zu den Favoriten hinzuzufügen",
+    "noHistory": "Keine Lernhistorie",
+    "noHistoryDesc": "Starte eine Lerneinheit, um sie hier zu sehen",
+    "noResults": "Keine Kartensets gefunden",
+    "noResultsDesc": "Versuche einen anderen Suchbegriff"
+  },
+  "fab": {
+    "importDeck": "Kartenset importieren",
+    "createDeck": "Neues Kartenset erstellen"
+  },
+  "grid": {
+    "cards": "Karten",
+    "removeFavorite": "Aus Favoriten entfernen",
+    "addFavorite": "Zu Favoriten hinzufügen"
+  },
+  "detail": {
+    "back": "Zurück",
+    "cards": "Karten",
+    "mastered": "beherrscht",
+    "complete": "abgeschlossen",
+    "studyNow": "Jetzt lernen",
+    "addCards": "Karten hinzufügen",
+    "aiGenerate": "KI-generiert",
+    "cardsHeading": "Karten",
+    "noCards": "Noch keine Karten",
+    "noCardsDesc": "Füge deine erste Karte hinzu, um zu lernen",
+    "noCardsMatch": "Keine Karten entsprechen deinen Filtern",
+    "edit": "Bearbeiten",
+    "unlistMarketplace": "Aus dem Marktplatz entfernen",
+    "listMarketplace": "Im Marktplatz auflisten",
+    "exportDeck": "Kartenset exportieren",
+    "delete": "DELETE",
+    "deckDeleted": "Kartenset gelöscht",
+    "cardDeleted": "Karte gelöscht",
+    "removedFromMarketplace": "Aus dem Marktplatz entfernt"
+  },
+  "deleteDeck": {
+    "title": "Kartenset löschen",
+    "message": "Dies löscht dieses Kartenset und alle seine Karten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen"
+  },
+  "deleteCard": {
+    "title": "Karte löschen",
+    "message": "Möchtest du diese Karte wirklich löschen?",
+    "confirm": "Löschen",
+    "ariaLabel": "Karte löschen"
+  },
+  "createModal": {
+    "title": "Kartenset erstellen",
+    "nameLabel": "Name",
+    "namePlaceholder": "z.B. Spanische Vokabeln",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Worum geht es in diesem Kartenset? (optional)",
+    "nameRequired": "Der Name des Kartensets ist erforderlich",
+    "creating": "Wird erstellt...",
+    "create": "Kartenset erstellen",
+    "created": "Kartenset erstellt!",
+    "failed": "Kartenset konnte nicht erstellt werden. Bitte versuche es erneut."
+  },
+  "editModal": {
+    "title": "Kartenset bearbeiten",
+    "nameLabel": "Name",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Worum geht es in diesem Kartenset? (optional)",
+    "nameRequired": "Der Name des Kartensets ist erforderlich",
+    "saving": "Wird gespeichert...",
+    "save": "Änderungen speichern",
+    "updated": "Kartenset aktualisiert!",
+    "failed": "Kartenset konnte nicht aktualisiert werden. Bitte versuche es erneut."
+  },
+  "importModal": {
+    "title": "Kartenset importieren",
+    "dropPrompt": "Ziehe eine Datei hierher oder klicke zum Durchsuchen",
+    "supportedFormats": "Unterstützt .json und .csv Dateien",
+    "json": "JSON",
+    "csv": "CSV",
+    "invalidFile": "Bitte wähle eine .json oder .csv Datei",
+    "readFailed": "Datei konnte nicht gelesen werden",
+    "deckName": "Name des Kartensets",
+    "deckNamePlaceholder": "Gib den Namen des Kartensets ein",
+    "descriptionLabel": "Beschreibung (optional)",
+    "descriptionPlaceholder": "Beschreibung des Kartensets",
+    "cardsFound": "{{count}} Karten gefunden",
+    "andMore": "...und {{count}} weitere",
+    "nameRequired": "Bitte gib einen Namen für das Kartenset ein",
+    "back": "Zurück",
+    "importCards": "{{count}} Karte(n) importieren",
+    "importing": "Wird importiert...",
+    "imported": "\"{{name}}\" mit {{count}} Karte(n) importiert!",
+    "importFailed": "Kartenset konnte nicht importiert werden"
+  },
+  "addCardModal": {
+    "title": "Karten hinzufügen",
+    "frontPlaceholder": "Vorderseite (Frage)",
+    "backPlaceholder": "Rückseite (Antwort)",
+    "cardNumber": "Karte {{number}}",
+    "addAnother": "Weitere Karte hinzufügen",
+    "validation": "Füge mindestens eine Karte mit Vorderseite und Rückseite hinzu",
+    "adding": "Wird hinzugefügt...",
+    "addCards": "{{count}} Karte(n) hinzufügen",
+    "added": "{{count}} Karte(n) hinzugefügt!",
+    "failed": "Karten konnten nicht hinzugefügt werden. Bitte versuche es erneut."
+  },
+  "editCardModal": {
+    "title": "Karte bearbeiten",
+    "frontLabel": "Vorderseite",
+    "backLabel": "Rückseite",
+    "validation": "Vorderseite und Rückseite sind erforderlich",
+    "saving": "Wird gespeichert...",
+    "save": "Änderungen speichern",
+    "updated": "Karte aktualisiert!",
+    "failed": "Karte konnte nicht aktualisiert werden. Bitte versuche es erneut."
+  },
+  "cardFilters": {
+    "searchPlaceholder": "Karten durchsuchen...",
+    "all": "Alle",
+    "easy": "Einfach",
+    "medium": "Mittel",
+    "hard": "Schwierig",
+    "newest": "Neueste",
+    "oldest": "Älteste",
+    "az": "A-Z"
+  },
+  "aiGenerate": {
+    "title": "KI-generierte Karten",
+    "usageLabel": "KI-Generierungen",
+    "used": "verwendet",
+    "limitTitle": "Generierungslimit erreicht",
+    "limitMessage": "Go Fluent für unbegrenzte KI-Generierungen.",
+    "goFluent": "Go Fluent",
+    "topicLabel": "Thema oder Anfrage",
+    "topicPlaceholder": "z.B. Spanische Lebensmittel-Vokabeln, Wichtige Ereignisse des Zweiten Weltkriegs, JavaScript Array-Methoden...",
+    "numberOfCards": "Anzahl der Karten",
+    "cards": "Karten",
+    "topicRequired": "Bitte gib ein Thema oder eine Anfrage ein",
+    "generateFailed": "Karten konnten nicht generiert werden",
+    "generating": "Wird generiert...",
+    "generate": "Karten generieren",
+    "selected": "{{selected}} von {{total}} Karten ausgewählt",
+    "deselectAll": "Alle abwählen",
+    "selectAll": "Alle auswählen",
+    "selectValidation": "Wähle mindestens eine Karte zum Speichern",
+    "saveFailed": "Karten konnten nicht gespeichert werden. Bitte versuche es erneut.",
+    "saving": "Wird gespeichert...",
+    "saveCards": "{{count}} Karte(n) speichern",
+    "regenerate": "Neu generieren",
+    "added": "{{count}} Karte(n) hinzugefügt!"
+  },
+  "exportModal": {
+    "title": "Kartenset exportieren",
+    "description": "\"{{name}}\" ({{count}} Karten) exportieren",
+    "jsonLabel": "JSON (empfohlen)",
+    "jsonDesc": "Vollständige Kartensatzdaten einschließlich Tags, Schwierigkeit und Metadaten",
+    "csvLabel": "CSV",
+    "csvDesc": "Einfaches Tabellenkalkulationsformat für Excel, Google Sheets",
+    "exportAs": "Exportieren als {{format}}",
+    "exported": "Kartenset als {{format}} exportiert!"
+  }
+}

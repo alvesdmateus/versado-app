@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { DashboardHistory } from "@/lib/dashboard-api";
 import { ActivityHeatmap } from "./ActivityHeatmap";
 import { StudySparkline } from "./StudySparkline";
@@ -7,6 +8,7 @@ interface ActivitySectionProps {
 }
 
 export function ActivitySection({ history }: ActivitySectionProps) {
+  const { t } = useTranslation("home");
   if (!history) {
     // Skeleton
     return (
@@ -48,7 +50,7 @@ export function ActivitySection({ history }: ActivitySectionProps) {
   return (
     <div className="mt-5 px-5">
       <h2 className="mb-3 text-sm font-semibold text-neutral-500 uppercase tracking-wide">
-        Activity
+        {t("activity.heading")}
       </h2>
 
       <div className="rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
@@ -56,7 +58,7 @@ export function ActivitySection({ history }: ActivitySectionProps) {
           <ActivityHeatmap days={days} />
         ) : (
           <p className="py-2 text-center text-xs text-neutral-400">
-            Start studying to see your activity
+            {t("activity.emptyState")}
           </p>
         )}
       </div>
@@ -65,14 +67,14 @@ export function ActivitySection({ history }: ActivitySectionProps) {
         <div className="flex-1 rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
           <StudySparkline
             data={accuracyData}
-            label="Accuracy"
+            label={t("activity.accuracyLabel")}
             currentValue={`${avgAccuracy}%`}
           />
         </div>
         <div className="flex-1 rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
           <StudySparkline
             data={cardsData}
-            label="Cards / day"
+            label={t("activity.cardsPerDay")}
             currentValue={`${avgCards}`}
           />
         </div>

@@ -1,0 +1,86 @@
+{
+  "codes": {
+    "aiLimitReached": {
+      "title": "Limite de IA Atingido",
+      "description": "Você atingiu seu limite de geração de IA. Vá para Fluent para gerações ilimitadas."
+    },
+    "tierLimit": {
+      "title": "Limite do Plano Atingido",
+      "description": "Você atingiu um limite no seu plano atual. Vá para Fluent para mais."
+    },
+    "reviewLimitReached": {
+      "title": "Limite de Revisão Diária",
+      "description": "Você atingiu seu limite de revisão diária. Vá para Fluent para revisões ilimitadas."
+    },
+    "deckLimitReached": {
+      "title": "Limite de Baralhos Atingido",
+      "description": "Você atingiu o número máximo de baralhos no seu plano. Vá para Fluent para baralhos ilimitados."
+    },
+    "cardLimitReached": {
+      "title": "Limite de Cartões Atingido",
+      "description": "Você atingiu o número máximo de cartões por baralho. Vá para Fluent para cartões ilimitados."
+    },
+    "accountLocked": {
+      "title": "Conta Bloqueada",
+      "description": "Muitas tentativas de login falhadas. Tente novamente mais tarde."
+    },
+    "aiServiceUnavailable": {
+      "title": "IA Indisponível",
+      "description": "O serviço de IA está temporariamente indisponível. Tente novamente em alguns minutos."
+    },
+    "aiRateLimited": {
+      "title": "Serviço de IA Ocupado",
+      "description": "O serviço de IA está atualmente sobrecarregado. Aguarde um momento e tente novamente."
+    }
+  },
+  "statuses": {
+    "network": {
+      "title": "Falha na Conexão",
+      "description": "Não foi possível alcançar o servidor. Verifique sua conexão com a internet e tente novamente."
+    },
+    "unauthorized": {
+      "title": "Sessão Expirada",
+      "description": "Sua sessão expirou. Faça login novamente."
+    },
+    "forbidden": {
+      "title": "Acesso Negado",
+      "description": "Você não tem permissão para realizar esta ação."
+    },
+    "tooManyRequests": {
+      "title": "Muitas Requisições",
+      "description": "Você está fazendo requisições muito rapidamente. Aguarde um momento e tente novamente."
+    },
+    "serverError": {
+      "title": "Erro do Servidor",
+      "description": "Algo deu errado do nosso lado. Tente novamente mais tarde."
+    },
+    "serviceUnavailable": {
+      "title": "Serviço Indisponível",
+      "description": "O serviço está temporariamente indisponível. Tente novamente em alguns minutos."
+    }
+  },
+  "default": {
+    "title": "Algo Deu Errado",
+    "description": "Um erro inesperado ocorreu. Tente novamente."
+  },
+  "boundary": {
+    "title": "Algo deu errado",
+    "description": "Um erro inesperado ocorreu. Tente novamente.",
+    "reload": "Recarregar App"
+  },
+  "offline": {
+    "message": "Você está offline — as alterações serão sincronizadas quando você se reconectar"
+  },
+  "update": {
+    "available": "Uma nova versão está disponível",
+    "refresh": "Atualizar"
+  },
+  "emailVerification": {
+    "message": "Verifique seu endereço de email.",
+    "sending": "Enviando...",
+    "resend": "Reenviar",
+    "sent": "Email de verificação enviado!",
+    "failed": "Falha ao enviar email",
+    "dismissLabel": "Descartar banner de verificação"
+  }
+}

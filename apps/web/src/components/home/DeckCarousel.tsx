@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { DeckPreviewCard, type DeckPreviewCardProps } from "./DeckPreviewCard";
 
 export interface DeckCarouselProps {
@@ -6,16 +7,18 @@ export interface DeckCarouselProps {
 }
 
 export function DeckCarousel({ decks, onViewAll }: DeckCarouselProps) {
+  const { t } = useTranslation("home");
+
   return (
     <section className="mt-6">
       <div className="flex items-center justify-between px-5">
-        <h2 className="text-lg font-bold text-neutral-900">Your Decks</h2>
+        <h2 className="text-lg font-bold text-neutral-900">{t("yourDecks")}</h2>
         {onViewAll && (
           <button
             onClick={onViewAll}
             className="text-sm font-medium text-primary-500 transition-colors hover:text-primary-600"
           >
-            View All
+            {t("viewAll")}
           </button>
         )}
       </div>

@@ -1,0 +1,66 @@
+{
+  "welcome": {
+    "heading": "Willkommen bei Versado{{name}}!",
+    "subheading": "Dein persönliches Lernwerkzeug mit verteilter Wiederholung. Lass uns alles einrichten, damit du effektiv lernen kannst.",
+    "getStarted": "Los geht's"
+  },
+  "language": {
+    "heading": "Was ist deine Muttersprache?",
+    "subheading": "Das hilft uns, dein Erlebnis zu personalisieren."
+  },
+  "topics": {
+    "heading": "Was möchtest du lernen?",
+    "subheading": "Wähle Themen, die dich interessieren. Das hilft uns, passende Inhalte vorzuschlagen.",
+    "continue": "Weiter ({{count}} ausgewählt)",
+    "continueDefault": "Weiter",
+    "skip": "Vorerst überspringen",
+    "languages": "Sprachen",
+    "science": "Naturwissenschaften",
+    "math": "Mathematik",
+    "history": "Geschichte",
+    "geography": "Geografie",
+    "programming": "Programmierung",
+    "medicine": "Medizin",
+    "law": "Jura",
+    "music": "Musik",
+    "art": "Kunst",
+    "literature": "Literatur",
+    "philosophy": "Philosophie",
+    "psychology": "Psychologie",
+    "economics": "Volkswirtschaft",
+    "business": "Betriebswirtschaft",
+    "cooking": "Kochen"
+  },
+  "goal": {
+    "heading": "Setze dein Tagesziel",
+    "subheading": "Wie viele Karten möchtest du pro Tag wiederholen? Du kannst das jederzeit ändern.",
+    "casual": "Entspannt",
+    "casualDesc": "10 Karten/Tag",
+    "regular": "Regelmäßig",
+    "regularDesc": "25 Karten/Tag",
+    "serious": "Ehrgeizig",
+    "seriousDesc": "50 Karten/Tag",
+    "intense": "Intensiv",
+    "intenseDesc": "100 Karten/Tag"
+  },
+  "appearance": {
+    "heading": "Darstellung anpassen",
+    "subheading": "Mach Versado zu deinem eigenen. Du kannst das jederzeit ändern.",
+    "darkMode": "Dunkelmodus",
+    "cardTheme": "Kartendesign",
+    "preview": "Vorschau",
+    "previewQuestion": "Was ist verteilte Wiederholung?"
+  },
+  "tutorial": {
+    "heading": "So funktioniert's",
+    "subheading": "Hier ist ein kurzer Überblick, wie du das Beste aus Versado herausholst.",
+    "createDecks": "Stapel erstellen",
+    "createDecksDesc": "Organisiere deine Karteikarten in Stapeln nach Fach, Thema oder was immer du möchtest.",
+    "studySmart": "Clever lernen",
+    "studySmartDesc": "Unser Algorithmus für verteilte Wiederholung zeigt dir Karten zum optimalen Zeitpunkt für langfristiges Behalten.",
+    "reviewImprove": "Wiederholen & Verbessern",
+    "reviewImproveDesc": "Bewerte jede Karte und beobachte, wie sich deine Genauigkeit verbessert. Regelmäßigkeit ist der Schlüssel!",
+    "startLearning": "Loslegen",
+    "settingUp": "Wird eingerichtet..."
+  }
+}

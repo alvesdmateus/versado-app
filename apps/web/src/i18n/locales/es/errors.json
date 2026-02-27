@@ -1,0 +1,86 @@
+{
+  "codes": {
+    "aiLimitReached": {
+      "title": "Límite de IA alcanzado",
+      "description": "Has alcanzado tu límite de generación por IA. Obtén Fluent para generaciones ilimitadas."
+    },
+    "tierLimit": {
+      "title": "Límite del plan alcanzado",
+      "description": "Has alcanzado un límite en tu plan actual. Obtén Fluent para más."
+    },
+    "reviewLimitReached": {
+      "title": "Límite de revisión diaria",
+      "description": "Has alcanzado tu límite de revisión diaria. Obtén Fluent para revisiones ilimitadas."
+    },
+    "deckLimitReached": {
+      "title": "Límite de mazos alcanzado",
+      "description": "Has alcanzado el número máximo de mazos en tu plan. Obtén Fluent para mazos ilimitados."
+    },
+    "cardLimitReached": {
+      "title": "Límite de tarjetas alcanzado",
+      "description": "Has alcanzado el número máximo de tarjetas por mazo. Obtén Fluent para tarjetas ilimitadas."
+    },
+    "accountLocked": {
+      "title": "Cuenta bloqueada",
+      "description": "Demasiados intentos de inicio de sesión fallidos. Por favor, inténtalo más tarde."
+    },
+    "aiServiceUnavailable": {
+      "title": "IA no disponible",
+      "description": "El servicio de IA no está disponible temporalmente. Por favor, inténtalo en unos minutos."
+    },
+    "aiRateLimited": {
+      "title": "Servicio de IA ocupado",
+      "description": "El servicio de IA está actualmente sobrecargado. Por favor, espera un momento e inténtalo de nuevo."
+    }
+  },
+  "statuses": {
+    "network": {
+      "title": "Conexión fallida",
+      "description": "No se puede alcanzar el servidor. Verifica tu conexión a Internet e inténtalo de nuevo."
+    },
+    "unauthorized": {
+      "title": "Sesión expirada",
+      "description": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
+    },
+    "forbidden": {
+      "title": "Acceso denegado",
+      "description": "No tienes permiso para realizar esta acción."
+    },
+    "tooManyRequests": {
+      "title": "Demasiadas solicitudes",
+      "description": "Estás haciendo solicitudes demasiado rápidamente. Por favor, espera un momento e inténtalo de nuevo."
+    },
+    "serverError": {
+      "title": "Error del servidor",
+      "description": "Algo salió mal de nuestro lado. Por favor, inténtalo más tarde."
+    },
+    "serviceUnavailable": {
+      "title": "Servicio no disponible",
+      "description": "El servicio no está disponible temporalmente. Por favor, inténtalo en unos minutos."
+    }
+  },
+  "default": {
+    "title": "Algo salió mal",
+    "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo."
+  },
+  "boundary": {
+    "title": "Algo salió mal",
+    "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+    "reload": "Recargar aplicación"
+  },
+  "offline": {
+    "message": "Estás desconectado — los cambios se sincronizarán cuando te reconectes"
+  },
+  "update": {
+    "available": "Una nueva versión está disponible",
+    "refresh": "Actualizar"
+  },
+  "emailVerification": {
+    "message": "Por favor, verifica tu dirección de correo electrónico.",
+    "sending": "Enviando...",
+    "resend": "Reenviar",
+    "sent": "¡Correo de verificación enviado!",
+    "failed": "Error al enviar correo",
+    "dismissLabel": "Descartar banner de verificación"
+  }
+}

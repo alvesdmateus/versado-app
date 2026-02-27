@@ -38,9 +38,13 @@ import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { useToast } from "@/contexts/ToastContext";
 import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-manager";
 
+const SUPPORTED_LANGUAGES = ["en", "pt", "es", "fr", "de"] as const;
 const LANGUAGE_LABELS: Record<string, string> = {
   en: "English",
   pt: "Português",
+  es: "Español",
+  fr: "Français",
+  de: "Deutsch",
 };
 
 export function ProfilePage() {
@@ -81,13 +85,15 @@ export function ProfilePage() {
   }
 
   async function handleLanguageChange() {
-    const newLang = i18n.language === "en" ? "pt" : "en";
+    const currentIdx = SUPPORTED_LANGUAGES.indexOf(i18n.language as typeof SUPPORTED_LANGUAGES[number]);
+    const newLang = SUPPORTED_LANGUAGES[(currentIdx + 1) % SUPPORTED_LANGUAGES.length];
+    const prevLang = i18n.language;
     i18n.changeLanguage(newLang);
     try {
       await profileApi.updatePreferences({ nativeLanguage: newLang });
       setPreferences((p) => (p ? { ...p, nativeLanguage: newLang } : p));
     } catch {
-      i18n.changeLanguage(i18n.language === "en" ? "pt" : "en");
+      i18n.changeLanguage(prevLang);
     }
   }
 

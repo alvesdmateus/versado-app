@@ -1,4 +1,5 @@
 import { Flame } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { StreakBadge } from "@versado/ui";
 
 export interface HomeHeaderProps {
@@ -7,14 +8,16 @@ export interface HomeHeaderProps {
 }
 
 export function HomeHeader({ userName, streakCount }: HomeHeaderProps) {
+  const { t } = useTranslation("home");
+
   return (
     <header className="flex items-start justify-between px-5 pt-6 pb-2">
       <div>
         <h1 className="text-2xl font-bold text-neutral-900">
-          Hello, {userName}!
+          {t("greeting", { name: userName })}
         </h1>
         <p className="mt-0.5 text-sm text-neutral-500">
-          Ready for a quick session?
+          {t("subtitle")}
         </p>
       </div>
       <StreakBadge

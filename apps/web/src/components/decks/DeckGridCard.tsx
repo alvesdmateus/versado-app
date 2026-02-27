@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Clock, Heart, Layers } from "lucide-react";
 import { CircularProgress } from "@versado/ui";
 
@@ -24,6 +25,8 @@ export function DeckGridCard({
   onToggleFavorite,
   onClick,
 }: DeckGridCardProps) {
+  const { t } = useTranslation("decks");
+
   return (
     <button
       onClick={onClick}
@@ -50,7 +53,7 @@ export function DeckGridCard({
               e.stopPropagation();
               onToggleFavorite();
             }}
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            aria-label={isFavorite ? t("grid.removeFavorite") : t("grid.addFavorite")}
             className="absolute top-2 left-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm transition-colors hover:bg-black/30"
           >
             <Heart
@@ -69,7 +72,7 @@ export function DeckGridCard({
           {name}
         </h3>
         <p className="mt-0.5 text-xs text-neutral-500">
-          {cardCount.toLocaleString()} Cards
+          {cardCount.toLocaleString()} {t("grid.cards")}
         </p>
         <div className="mt-1 flex items-center gap-1">
           <Clock className="h-3 w-3 text-neutral-400" />

@@ -108,7 +108,7 @@ export function OnboardingPage() {
   function handleLanguageSelect(code: string) {
     setNativeLanguage(code);
     // Switch UI language immediately for supported languages
-    if (["en", "pt"].includes(code)) {
+    if (["en", "pt", "es", "fr", "de"].includes(code)) {
       i18n.changeLanguage(code);
     }
   }

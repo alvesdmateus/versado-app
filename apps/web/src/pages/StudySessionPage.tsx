@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { X, ChevronUp, MoreVertical } from "lucide-react";
 import type { ReviewRating } from "@versado/algorithms";
 import { studyApi } from "@/lib/study-api";
@@ -16,7 +17,7 @@ import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
 
 interface RatingOption {
   rating: ReviewRating;
-  label: string;
+  labelKey: string;
   interval: string;
   bgClass: string;
   icon: React.ReactNode;
@@ -81,10 +82,10 @@ function ShieldIcon() {
 }
 
 const RATING_OPTIONS: RatingOption[] = [
-  { rating: 1 as ReviewRating, label: "Again", interval: "< 1m", bgClass: "bg-error-500", icon: <UndoIcon /> },
-  { rating: 2 as ReviewRating, label: "Hard", interval: "< 20m", bgClass: "bg-warning-500", icon: <FrownIcon /> },
-  { rating: 3 as ReviewRating, label: "Good", interval: "< 40m", bgClass: "bg-primary-500", icon: <ThumbsUpIcon /> },
-  { rating: 4 as ReviewRating, label: "Easy", interval: "< 78m", bgClass: "bg-success-500", icon: <SmileIcon /> },
+  { rating: 1 as ReviewRating, labelKey: "again", interval: "< 1m", bgClass: "bg-error-500", icon: <UndoIcon /> },
+  { rating: 2 as ReviewRating, labelKey: "hard", interval: "< 20m", bgClass: "bg-warning-500", icon: <FrownIcon /> },
+  { rating: 3 as ReviewRating, labelKey: "good", interval: "< 40m", bgClass: "bg-primary-500", icon: <ThumbsUpIcon /> },
+  { rating: 4 as ReviewRating, labelKey: "easy", interval: "< 78m", bgClass: "bg-success-500", icon: <SmileIcon /> },
 ];
 
 // ---------------------------------------------------------------------------
@@ -96,6 +97,7 @@ type SessionState = "loading" | "studying" | "reviewing" | "complete" | "empty";
 export function StudySessionPage() {
   const navigate = useNavigate();
   const { deckId } = useParams<{ deckId: string }>();
+  const { t } = useTranslation("study");
 
   const [sessionState, setSessionState] = useState<SessionState>("loading");
   const [dueCards, setDueCards] = useState<DueCard[]>([]);
@@ -232,7 +234,7 @@ export function StudySessionPage() {
   if (sessionState === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <p className="text-sm text-neutral-400">Loading cards...</p>
+        <p className="text-sm text-neutral-400">{t("loading")}</p>
       </div>
     );
   }
@@ -241,15 +243,15 @@ export function StudySessionPage() {
   if (sessionState === "empty") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-50 px-5">
-        <h1 className="text-2xl font-bold text-neutral-900">No Cards Due</h1>
+        <h1 className="text-2xl font-bold text-neutral-900">{t("empty.heading")}</h1>
         <p className="mt-2 text-neutral-500">
-          All caught up! Come back later for more reviews.
+          {t("empty.message")}
         </p>
         <button
           onClick={() => navigate("/")}
           className="mt-6 rounded-full bg-primary-500 px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-600 active:scale-95"
         >
-          Back to Home
+          {t("empty.backHome")}
         </button>
       </div>
     );
@@ -265,10 +267,10 @@ export function StudySessionPage() {
       : 0;
 
     const ratingBars = [
-      { label: "Again", count: ratingCounts[1], color: "bg-error-500" },
-      { label: "Hard", count: ratingCounts[2], color: "bg-warning-500" },
-      { label: "Good", count: ratingCounts[3], color: "bg-primary-500" },
-      { label: "Easy", count: ratingCounts[4], color: "bg-success-500" },
+      { label: t("ratings.again"), count: ratingCounts[1], color: "bg-error-500" },
+      { label: t("ratings.hard"), count: ratingCounts[2], color: "bg-warning-500" },
+      { label: t("ratings.good"), count: ratingCounts[3], color: "bg-primary-500" },
+      { label: t("ratings.easy"), count: ratingCounts[4], color: "bg-success-500" },
     ];
 
     return (
@@ -279,10 +281,10 @@ export function StudySessionPage() {
               <SmileIcon />
             </div>
             <h1 className="text-2xl font-bold text-neutral-900">
-              Session Complete!
+              {t("complete.heading")}
             </h1>
             <p className="mt-1 text-sm text-neutral-500">
-              You reviewed {reviewedCount} card{reviewedCount !== 1 ? "s" : ""}
+              {t("complete.reviewed", { count: reviewedCount })}
             </p>
           </div>
 
@@ -290,18 +292,18 @@ export function StudySessionPage() {
           <div className="mt-6 flex justify-center gap-6">
             <div className="text-center">
               <p className="text-2xl font-bold text-primary-500">{accuracy}%</p>
-              <p className="text-xs text-neutral-500">Accuracy</p>
+              <p className="text-xs text-neutral-500">{t("complete.accuracy")}</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-neutral-700">{avgTime}s</p>
-              <p className="text-xs text-neutral-500">Avg. Time</p>
+              <p className="text-xs text-neutral-500">{t("complete.avgTime")}</p>
             </div>
           </div>
 
           {/* Rating breakdown */}
           <div className="mt-6 rounded-xl bg-neutral-0 p-4 shadow-card">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-              Rating Breakdown
+              {t("complete.ratingBreakdown")}
             </p>
             <div className="flex flex-col gap-2">
               {ratingBars.map((bar) => (
@@ -333,25 +335,25 @@ export function StudySessionPage() {
               onClick={() => window.location.reload()}
               className="w-full rounded-full bg-primary-500 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-600 active:scale-95"
             >
-              Study Again
+              {t("complete.studyAgain")}
             </button>
             <button
               onClick={() => navigate(`/decks/${deckId}`)}
               className="w-full rounded-full bg-neutral-100 py-3 text-sm font-semibold text-neutral-700 transition-all hover:bg-neutral-200 active:scale-95"
             >
-              Back to Deck
+              {t("complete.backToDeck")}
             </button>
             <button
               onClick={() => navigate("/history")}
               className="w-full rounded-full bg-neutral-100 py-3 text-sm font-semibold text-neutral-700 transition-all hover:bg-neutral-200 active:scale-95"
             >
-              View History
+              {t("complete.viewHistory")}
             </button>
             <button
               onClick={() => navigate("/")}
               className="w-full py-2 text-sm text-neutral-500 transition-colors hover:text-neutral-700"
             >
-              Back to Home
+              {t("complete.backHome")}
             </button>
           </div>
         </div>
@@ -368,7 +370,7 @@ export function StudySessionPage() {
         <div className="flex items-center justify-between">
           <button
             onClick={handleClose}
-            aria-label="Close study session"
+            aria-label={t("session.closeSession")}
             className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90"
           >
             <X className="h-5 w-5" />
@@ -377,7 +379,7 @@ export function StudySessionPage() {
             {current} / {total}
           </span>
           {isReviewing ? (
-            <button aria-label="More options" className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90">
+            <button aria-label={t("session.moreOptions")} className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-all hover:bg-neutral-200 active:scale-90">
               <MoreVertical className="h-5 w-5" />
             </button>
           ) : (
@@ -407,7 +409,7 @@ export function StudySessionPage() {
             {/* Front face — Question */}
             <div className={`flip-card-face flex w-full flex-col items-center gap-5 p-8 transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
               <span className={`text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
-                Question
+                {t("card.question")}
               </span>
               <p className={`text-xl font-bold text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.front}
@@ -418,7 +420,7 @@ export function StudySessionPage() {
             {/* Back face — Answer */}
             <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-5 p-8 ${cardTheme.cardClassName}`}>
               <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${cardTheme.answerLabelClassName}`}>
-                Answer Revealed
+                {t("card.answerRevealed")}
               </span>
               <p className={`text-base leading-relaxed text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.back}
@@ -434,7 +436,7 @@ export function StudySessionPage() {
         {isReviewing ? (
           <div className="flex flex-col items-center gap-4 animate-in fade-in duration-300">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
-              How well did you know this?
+              {t("card.howWell")}
             </p>
             <div className="flex gap-4">
               {RATING_OPTIONS.map((opt) => (
@@ -449,7 +451,7 @@ export function StudySessionPage() {
                     {opt.icon}
                   </div>
                   <span className="text-[10px] font-bold uppercase text-neutral-600">
-                    {opt.label}
+                    {t(`ratings.${opt.labelKey}`)}
                   </span>
                   <span className="text-[10px] text-neutral-400">
                     {opt.interval}
@@ -464,7 +466,7 @@ export function StudySessionPage() {
             className="flex w-full flex-col items-center gap-1 py-2 text-neutral-400 transition-colors hover:text-neutral-600"
           >
             <ChevronUp className="h-5 w-5 animate-bounce-subtle" />
-            <span className="text-sm">Tap to reveal answer</span>
+            <span className="text-sm">{t("card.tapToReveal")}</span>
           </button>
         )}
       </footer>

@@ -1,0 +1,183 @@
+{
+  "header": {
+    "title": "My Decks",
+    "moreOptions": "More options"
+  },
+  "search": {
+    "placeholder": "Search your decks..."
+  },
+  "filters": {
+    "all": "All",
+    "recentlyStudied": "Recently Studied",
+    "favorites": "Favorites"
+  },
+  "sort": {
+    "newest": "Newest",
+    "nameAZ": "Name A-Z",
+    "mostCards": "Most Cards",
+    "bestProgress": "Best Progress"
+  },
+  "empty": {
+    "noDecks": "No decks yet",
+    "noDecksDesc": "Create your first deck to get started",
+    "createDeck": "Create Deck",
+    "noFavorites": "No favorites yet",
+    "noFavoritesDesc": "Tap the heart icon on a deck to add it to favorites",
+    "noHistory": "No study history",
+    "noHistoryDesc": "Start studying a deck to see it here",
+    "noResults": "No decks found",
+    "noResultsDesc": "Try a different search term"
+  },
+  "fab": {
+    "importDeck": "Import deck",
+    "createDeck": "Create new deck"
+  },
+  "grid": {
+    "cards": "Cards",
+    "removeFavorite": "Remove from favorites",
+    "addFavorite": "Add to favorites"
+  },
+  "detail": {
+    "back": "Back",
+    "cards": "cards",
+    "mastered": "mastered",
+    "complete": "complete",
+    "studyNow": "Study Now",
+    "addCards": "Add Cards",
+    "aiGenerate": "AI Generate",
+    "cardsHeading": "Cards",
+    "noCards": "No cards yet",
+    "noCardsDesc": "Add your first card to start studying",
+    "noCardsMatch": "No cards match your filters",
+    "edit": "Edit",
+    "unlistMarketplace": "Unlist from Marketplace",
+    "listMarketplace": "List on Marketplace",
+    "exportDeck": "Export Deck",
+    "delete": "Delete",
+    "deckDeleted": "Deck deleted",
+    "cardDeleted": "Card deleted",
+    "removedFromMarketplace": "Removed from marketplace"
+  },
+  "deleteDeck": {
+    "title": "Delete Deck",
+    "message": "This will permanently delete this deck and all its cards. This action cannot be undone.",
+    "confirm": "Delete"
+  },
+  "deleteCard": {
+    "title": "Delete Card",
+    "message": "Are you sure you want to delete this card?",
+    "confirm": "Delete",
+    "ariaLabel": "Delete card"
+  },
+  "createModal": {
+    "title": "Create Deck",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Spanish Vocabulary",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What is this deck about? (optional)",
+    "nameRequired": "Deck name is required",
+    "creating": "Creating...",
+    "create": "Create Deck",
+    "created": "Deck created!",
+    "failed": "Failed to create deck. Please try again."
+  },
+  "editModal": {
+    "title": "Edit Deck",
+    "nameLabel": "Name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What is this deck about? (optional)",
+    "nameRequired": "Deck name is required",
+    "saving": "Saving...",
+    "save": "Save Changes",
+    "updated": "Deck updated!",
+    "failed": "Failed to update deck. Please try again."
+  },
+  "importModal": {
+    "title": "Import Deck",
+    "dropPrompt": "Drop a file here or click to browse",
+    "supportedFormats": "Supports .json and .csv files",
+    "json": "JSON",
+    "csv": "CSV",
+    "invalidFile": "Please select a .json or .csv file",
+    "readFailed": "Failed to read file",
+    "deckName": "Deck Name",
+    "deckNamePlaceholder": "Enter deck name",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Deck description",
+    "cardsFound": "{{count}} cards found",
+    "andMore": "...and {{count}} more",
+    "nameRequired": "Please provide a deck name",
+    "back": "Back",
+    "importCards": "Import {{count}} Card(s)",
+    "importing": "Importing...",
+    "imported": "Imported \"{{name}}\" with {{count}} card(s)!",
+    "importFailed": "Failed to import deck"
+  },
+  "addCardModal": {
+    "title": "Add Cards",
+    "frontPlaceholder": "Front (question)",
+    "backPlaceholder": "Back (answer)",
+    "cardNumber": "Card {{number}}",
+    "addAnother": "Add Another Card",
+    "validation": "Add at least one card with both front and back",
+    "adding": "Adding...",
+    "addCards": "Add {{count}} Card(s)",
+    "added": "{{count}} card(s) added!",
+    "failed": "Failed to add cards. Please try again."
+  },
+  "editCardModal": {
+    "title": "Edit Card",
+    "frontLabel": "Front",
+    "backLabel": "Back",
+    "validation": "Both front and back are required",
+    "saving": "Saving...",
+    "save": "Save Changes",
+    "updated": "Card updated!",
+    "failed": "Failed to update card. Please try again."
+  },
+  "cardFilters": {
+    "searchPlaceholder": "Search cards...",
+    "all": "All",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "az": "A-Z"
+  },
+  "aiGenerate": {
+    "title": "AI Generate Cards",
+    "usageLabel": "AI Generations",
+    "used": "used",
+    "limitTitle": "Generation Limit Reached",
+    "limitMessage": "Go Fluent for unlimited AI generations.",
+    "goFluent": "Go Fluent",
+    "topicLabel": "Topic or Prompt",
+    "topicPlaceholder": "e.g., Spanish food vocabulary, World War II key events, JavaScript array methods...",
+    "numberOfCards": "Number of Cards",
+    "cards": "cards",
+    "topicRequired": "Please enter a topic or prompt",
+    "generateFailed": "Failed to generate cards",
+    "generating": "Generating...",
+    "generate": "Generate Cards",
+    "selected": "{{selected}} of {{total}} cards selected",
+    "deselectAll": "Deselect All",
+    "selectAll": "Select All",
+    "selectValidation": "Select at least one card to save",
+    "saveFailed": "Failed to save cards. Please try again.",
+    "saving": "Saving...",
+    "saveCards": "Save {{count}} Card(s)",
+    "regenerate": "Regenerate",
+    "added": "{{count}} card(s) added!"
+  },
+  "exportModal": {
+    "title": "Export Deck",
+    "description": "Export \"{{name}}\" ({{count}} cards)",
+    "jsonLabel": "JSON (Recommended)",
+    "jsonDesc": "Full deck data including tags, difficulty, and metadata",
+    "csvLabel": "CSV",
+    "csvDesc": "Simple spreadsheet format for Excel, Google Sheets",
+    "exportAs": "Export as {{format}}",
+    "exported": "Deck exported as {{format}}!"
+  }
+}

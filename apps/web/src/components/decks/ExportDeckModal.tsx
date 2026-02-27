@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FileJson, FileSpreadsheet } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
@@ -22,6 +23,7 @@ export function ExportDeckModal({
   deck,
   cards,
 }: ExportDeckModalProps) {
+  const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [format, setFormat] = useState<ExportFormat>("json");
@@ -33,7 +35,7 @@ export function ExportDeckModal({
       } else {
         exportDeckAsCSV(deck, cards);
       }
-      showToast(`Deck exported as ${format.toUpperCase()}!`);
+      showToast(t("exportModal.exported", { format: format.toUpperCase() }));
       onClose();
     } catch (err) {
       showErrorNotification(err);
@@ -41,10 +43,10 @@ export function ExportDeckModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Export Deck" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("exportModal.title")} size="sm">
       <div className="flex flex-col gap-4">
         <p className="text-sm text-neutral-600">
-          Export "{deck.name}" ({cards.length} cards)
+          {t("exportModal.description", { name: deck.name, count: cards.length })}
         </p>
 
         <div className="flex flex-col gap-2">
@@ -66,10 +68,10 @@ export function ExportDeckModal({
             <FileJson className={`h-5 w-5 ${format === "json" ? "text-primary-500" : "text-neutral-400"}`} />
             <div>
               <p className="text-sm font-medium text-neutral-900">
-                JSON (Recommended)
+                {t("exportModal.jsonLabel")}
               </p>
               <p className="text-xs text-neutral-500">
-                Full deck data including tags, difficulty, and metadata
+                {t("exportModal.jsonDesc")}
               </p>
             </div>
           </label>
@@ -91,16 +93,16 @@ export function ExportDeckModal({
             />
             <FileSpreadsheet className={`h-5 w-5 ${format === "csv" ? "text-primary-500" : "text-neutral-400"}`} />
             <div>
-              <p className="text-sm font-medium text-neutral-900">CSV</p>
+              <p className="text-sm font-medium text-neutral-900">{t("exportModal.csvLabel")}</p>
               <p className="text-xs text-neutral-500">
-                Simple spreadsheet format for Excel, Google Sheets
+                {t("exportModal.csvDesc")}
               </p>
             </div>
           </label>
         </div>
 
         <Button fullWidth onClick={handleExport}>
-          Export as {format.toUpperCase()}
+          {t("exportModal.exportAs", { format: format.toUpperCase() })}
         </Button>
       </div>
     </Modal>

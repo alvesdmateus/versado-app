@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
@@ -19,6 +20,7 @@ export function EditCardModal({
   card,
   onUpdated,
 }: EditCardModalProps) {
+  const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const [front, setFront] = useState(card.front);
   const [back, setBack] = useState(card.back);
@@ -36,7 +38,7 @@ export function EditCardModal({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!front.trim() || !back.trim()) {
-      setError("Both front and back are required");
+      setError(t("editCardModal.validation"));
       return;
     }
 
@@ -47,34 +49,34 @@ export function EditCardModal({
         front: front.trim(),
         back: back.trim(),
       });
-      showToast("Card updated!");
+      showToast(t("editCardModal.updated"));
       onUpdated(updated);
     } catch {
-      setError("Failed to update card. Please try again.");
+      setError(t("editCardModal.failed"));
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Card">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("editCardModal.title")}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Textarea
-          label="Front"
+          label={t("editCardModal.frontLabel")}
           value={front}
           onChange={(e) => setFront(e.target.value)}
           rows={3}
           autoFocus
         />
         <Textarea
-          label="Back"
+          label={t("editCardModal.backLabel")}
           value={back}
           onChange={(e) => setBack(e.target.value)}
           rows={3}
         />
         {error && <p className="text-sm text-error-500">{error}</p>}
         <Button type="submit" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Changes"}
+          {isSubmitting ? t("editCardModal.saving") : t("editCardModal.save")}
         </Button>
       </form>
     </Modal>

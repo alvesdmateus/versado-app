@@ -1,0 +1,87 @@
+{
+  "greeting": "Bonjour, {{name}} !",
+  "subtitle": "Prêt pour une session rapide ?",
+  "todayReview": "Révision du jour",
+  "cardsDue": "cartes à réviser",
+  "studyNow": "Étudier maintenant",
+  "studyHistory": "Historique d'étude",
+  "stats": "Statistiques",
+  "yourDecks": "Vos paquets",
+  "viewAll": "Tout voir",
+  "trendingTopics": "Sujets tendance",
+  "popularDecks": "Paquets populaires",
+  "recommendedForYou": "Recommandés pour vous",
+  "followTopicsTitle": "Suivez des sujets pour recevoir des recommandations",
+  "followTopicsDesc": "Appuyez sur les sujets tendance ci-dessus pour personnaliser votre fil",
+  "noRecommendations": "Aucune nouvelle recommandation pour le moment",
+  "suggestedCreators": "Créateurs suggérés",
+  "statsRow": {
+    "mastered": "Maîtrisées",
+    "accuracy": "Précision",
+    "streak": "Série",
+    "active": "Actif",
+    "inactive": "Inactif"
+  },
+  "activity": {
+    "heading": "Activité",
+    "emptyState": "Commencez à étudier pour voir votre activité",
+    "accuracyLabel": "Précision",
+    "cardsPerDay": "Cartes / jour"
+  },
+  "feed": {
+    "all": "Tout",
+    "creators": "Créateurs",
+    "tags": "Tags",
+    "emptyTitle": "Aucune activité pour le moment",
+    "emptyDescription": "Suivez des créateurs ou des tags pour voir l'activité ici",
+    "browseMarketplace": "Parcourir la boutique",
+    "showMore": "Voir plus",
+    "published": " a publié ",
+    "via": " via "
+  },
+  "time": {
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {{minutes}}min",
+    "hoursAgo": "il y a {{hours}}h",
+    "daysAgo": "il y a {{days}}j",
+    "weeksAgo": "il y a {{weeks}}sem"
+  },
+  "discover": {
+    "heading": "Découvrir",
+    "subtitle": "Trouvez de nouveaux paquets, créateurs et sujets"
+  },
+  "history": {
+    "heading": "Historique d'étude",
+    "noSessions": "Aucune session d'étude pour le moment",
+    "emptyState": "Commencez à étudier pour voir votre historique ici",
+    "inProgress": "En cours",
+    "deletedDeck": "Paquet supprimé",
+    "cards": "{{count}} cartes",
+    "loadMore": "Charger plus"
+  },
+  "studyStats": {
+    "heading": "Statistiques d'étude",
+    "totalSessions": "Sessions totales",
+    "cardsMastered": "Cartes maîtrisées",
+    "accuracy": "Précision",
+    "dayStreak": "Jours consécutifs",
+    "dailyReviews": "Révisions quotidiennes",
+    "accuracyTrend": "Tendance de précision",
+    "notEnoughData": "Pas encore assez de données",
+    "cardDistribution": "Répartition des cartes",
+    "noCards": "Aucune carte pour le moment",
+    "cards": "cartes",
+    "statusNew": "Nouvelles",
+    "statusLearning": "En apprentissage",
+    "statusRelearning": "En réapprentissage",
+    "statusReview": "En révision",
+    "statusMastered": "Maîtrisées"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "heading": "Oups ! Cette page s'est égarée.",
+    "description": "La page que vous recherchez a peut-être été déplacée, supprimée, ou n'a jamais existé.",
+    "backHome": "Retour à l'accueil",
+    "helpCenter": "Centre d'aide"
+  }
+}

@@ -1,4 +1,5 @@
 import { Star, Download, Layers } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface MarketplaceListingCardProps {
   title: string;
@@ -23,6 +24,7 @@ export function MarketplaceListingCard({
   downloads,
   onClick,
 }: MarketplaceListingCardProps) {
+  const { t } = useTranslation("marketplace");
   const isFree = price === null || price === 0;
 
   return (
@@ -55,12 +57,12 @@ export function MarketplaceListingCard({
                 : "bg-primary-500 text-white"
             }`}
           >
-            {isFree ? "Free" : `$${price.toFixed(2)}`}
+            {isFree ? t("free") : `$${price.toFixed(2)}`}
           </span>
         </div>
 
         {/* Creator */}
-        <p className="mt-0.5 text-xs text-neutral-500">by {creator}</p>
+        <p className="mt-0.5 text-xs text-neutral-500">{t("byCreator", { name: creator })}</p>
 
         {/* Stats */}
         <div className="mt-1.5 flex items-center gap-3">

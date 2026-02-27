@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Input } from "@versado/ui";
 import { Modal } from "@/components/shared";
 import { marketplaceApi } from "@/lib/marketplace-api";
@@ -18,6 +19,7 @@ export function ListDeckModal({
   deckId,
   onListed,
 }: ListDeckModalProps) {
+  const { t } = useTranslation("marketplace");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [priceType, setPriceType] = useState<"free" | "paid">("free");
@@ -42,7 +44,7 @@ export function ListDeckModal({
     setIsSubmitting(true);
     try {
       await marketplaceApi.listDeck(deckId, priceInCents);
-      showToast("Listed on marketplace!");
+      showToast(t("listDeck.listed"));
       onListed();
     } catch (err) {
       showErrorNotification(err);
@@ -52,7 +54,7 @@ export function ListDeckModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="List on Marketplace">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("listDeck.title")}>
       <div className="space-y-4">
         <div>
           <p className="text-sm font-medium text-neutral-700">Pricing</p>
@@ -66,7 +68,7 @@ export function ListDeckModal({
                   : "border-neutral-200 text-neutral-600"
               }`}
             >
-              Free
+              {t("free")}
             </button>
             <button
               type="button"
@@ -108,7 +110,7 @@ export function ListDeckModal({
           onClick={handleSubmit}
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Listing..." : "List Deck"}
+          {isSubmitting ? t("listDeck.listing") : t("listDeck.list")}
         </Button>
       </div>
     </Modal>

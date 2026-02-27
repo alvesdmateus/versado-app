@@ -1,0 +1,183 @@
+{
+  "header": {
+    "title": "Mes Decks",
+    "moreOptions": "Plus d'options"
+  },
+  "search": {
+    "placeholder": "Recherchez vos decks..."
+  },
+  "filters": {
+    "all": "Tous",
+    "recentlyStudied": "Étudiés récemment",
+    "favorites": "Favoris"
+  },
+  "sort": {
+    "newest": "Plus récent",
+    "nameAZ": "Nom A-Z",
+    "mostCards": "Plus de cartes",
+    "bestProgress": "Meilleure progression"
+  },
+  "empty": {
+    "noDecks": "Aucun deck",
+    "noDecksDesc": "Créez votre premier deck pour commencer",
+    "createDeck": "Créer un deck",
+    "noFavorites": "Aucun favori",
+    "noFavoritesDesc": "Appuyez sur l'icône de cœur sur un deck pour l'ajouter aux favoris",
+    "noHistory": "Aucun historique d'étude",
+    "noHistoryDesc": "Commencez à étudier un deck pour le voir ici",
+    "noResults": "Aucun deck trouvé",
+    "noResultsDesc": "Essayez un terme de recherche différent"
+  },
+  "fab": {
+    "importDeck": "Importer un deck",
+    "createDeck": "Créer un nouveau deck"
+  },
+  "grid": {
+    "cards": "Cartes",
+    "removeFavorite": "Supprimer des favoris",
+    "addFavorite": "Ajouter aux favoris"
+  },
+  "detail": {
+    "back": "Retour",
+    "cards": "cartes",
+    "mastered": "maîtrisé",
+    "complete": "terminé",
+    "studyNow": "Étudier maintenant",
+    "addCards": "Ajouter des cartes",
+    "aiGenerate": "Générer avec l'IA",
+    "cardsHeading": "Cartes",
+    "noCards": "Aucune carte",
+    "noCardsDesc": "Ajoutez votre première carte pour commencer à étudier",
+    "noCardsMatch": "Aucune carte ne correspond à vos filtres",
+    "edit": "Modifier",
+    "unlistMarketplace": "Retirer de la marketplace",
+    "listMarketplace": "Ajouter à la marketplace",
+    "exportDeck": "Exporter le deck",
+    "delete": "DELETE",
+    "deckDeleted": "Deck supprimé",
+    "cardDeleted": "Carte supprimée",
+    "removedFromMarketplace": "Supprimé de la marketplace"
+  },
+  "deleteDeck": {
+    "title": "Supprimer le deck",
+    "message": "Cela supprimera définitivement ce deck et toutes ses cartes. Cette action ne peut pas être annulée.",
+    "confirm": "Supprimer"
+  },
+  "deleteCard": {
+    "title": "Supprimer la carte",
+    "message": "Êtes-vous sûr de vouloir supprimer cette carte ?",
+    "confirm": "Supprimer",
+    "ariaLabel": "Supprimer la carte"
+  },
+  "createModal": {
+    "title": "Créer un deck",
+    "nameLabel": "Nom",
+    "namePlaceholder": "p. ex. Vocabulaire espagnol",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "De quoi parle ce deck ? (facultatif)",
+    "nameRequired": "Le nom du deck est obligatoire",
+    "creating": "Création en cours...",
+    "create": "Créer un deck",
+    "created": "Deck créé !",
+    "failed": "Échec de la création du deck. Veuillez réessayer."
+  },
+  "editModal": {
+    "title": "Modifier le deck",
+    "nameLabel": "Nom",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "De quoi parle ce deck ? (facultatif)",
+    "nameRequired": "Le nom du deck est obligatoire",
+    "saving": "Enregistrement en cours...",
+    "save": "Enregistrer les modifications",
+    "updated": "Deck mis à jour !",
+    "failed": "Échec de la mise à jour du deck. Veuillez réessayer."
+  },
+  "importModal": {
+    "title": "Importer un deck",
+    "dropPrompt": "Déposez un fichier ici ou cliquez pour parcourir",
+    "supportedFormats": "Accepte les fichiers .json et .csv",
+    "json": "JSON",
+    "csv": "CSV",
+    "invalidFile": "Veuillez sélectionner un fichier .json ou .csv",
+    "readFailed": "Échec de la lecture du fichier",
+    "deckName": "Nom du deck",
+    "deckNamePlaceholder": "Entrez le nom du deck",
+    "descriptionLabel": "Description (facultatif)",
+    "descriptionPlaceholder": "Description du deck",
+    "cardsFound": "{{count}} cartes trouvées",
+    "andMore": "...et {{count}} autres",
+    "nameRequired": "Veuillez fournir un nom de deck",
+    "back": "Retour",
+    "importCards": "Importer {{count}} carte(s)",
+    "importing": "Importation en cours...",
+    "imported": "« {{name}} » importé avec {{count}} carte(s) !",
+    "importFailed": "Échec de l'importation du deck"
+  },
+  "addCardModal": {
+    "title": "Ajouter des cartes",
+    "frontPlaceholder": "Avant (question)",
+    "backPlaceholder": "Arrière (réponse)",
+    "cardNumber": "Carte {{number}}",
+    "addAnother": "Ajouter une autre carte",
+    "validation": "Ajoutez au moins une carte avec l'avant et l'arrière",
+    "adding": "Ajout en cours...",
+    "addCards": "Ajouter {{count}} carte(s)",
+    "added": "{{count}} carte(s) ajoutée(s) !",
+    "failed": "Échec de l'ajout des cartes. Veuillez réessayer."
+  },
+  "editCardModal": {
+    "title": "Modifier la carte",
+    "frontLabel": "Avant",
+    "backLabel": "Arrière",
+    "validation": "L'avant et l'arrière sont obligatoires",
+    "saving": "Enregistrement en cours...",
+    "save": "Enregistrer les modifications",
+    "updated": "Carte mise à jour !",
+    "failed": "Échec de la mise à jour de la carte. Veuillez réessayer."
+  },
+  "cardFilters": {
+    "searchPlaceholder": "Recherchez des cartes...",
+    "all": "Tous",
+    "easy": "Facile",
+    "medium": "Moyen",
+    "hard": "Difficile",
+    "newest": "Plus récent",
+    "oldest": "Plus ancien",
+    "az": "A-Z"
+  },
+  "aiGenerate": {
+    "title": "Générer des cartes avec l'IA",
+    "usageLabel": "Générations d'IA",
+    "used": "utilisé",
+    "limitTitle": "Limite de génération atteinte",
+    "limitMessage": "Go Fluent pour des générations IA illimitées.",
+    "goFluent": "Go Fluent",
+    "topicLabel": "Sujet ou invite",
+    "topicPlaceholder": "p. ex., vocabulaire culinaire espagnol, événements clés de la Seconde Guerre mondiale, méthodes de tableau JavaScript...",
+    "numberOfCards": "Nombre de cartes",
+    "cards": "cartes",
+    "topicRequired": "Veuillez entrer un sujet ou une invite",
+    "generateFailed": "Échec de la génération des cartes",
+    "generating": "Génération en cours...",
+    "generate": "Générer des cartes",
+    "selected": "{{selected}} sur {{total}} cartes sélectionnées",
+    "deselectAll": "Désélectionner tout",
+    "selectAll": "Sélectionner tout",
+    "selectValidation": "Sélectionnez au moins une carte à enregistrer",
+    "saveFailed": "Échec de l'enregistrement des cartes. Veuillez réessayer.",
+    "saving": "Enregistrement en cours...",
+    "saveCards": "Enregistrer {{count}} carte(s)",
+    "regenerate": "Régénérer",
+    "added": "{{count}} carte(s) ajoutée(s) !"
+  },
+  "exportModal": {
+    "title": "Exporter le deck",
+    "description": "Exporter « {{name}} » ({{count}} cartes)",
+    "jsonLabel": "JSON (Recommandé)",
+    "jsonDesc": "Données complètes du deck incluant les balises, la difficulté et les métadonnées",
+    "csvLabel": "CSV",
+    "csvDesc": "Format de feuille de calcul simple pour Excel, Google Sheets",
+    "exportAs": "Exporter en {{format}}",
+    "exported": "Deck exporté en {{format}} !"
+  }
+}

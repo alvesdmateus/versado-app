@@ -1,0 +1,43 @@
+{
+  "loading": "Cargando tarjetas...",
+  "empty": {
+    "heading": "Sin Tarjetas Pendientes",
+    "message": "¡Estás al día! Vuelve más tarde para más repasos.",
+    "backHome": "Volver a Inicio"
+  },
+  "session": {
+    "closeSession": "Cerrar sesión de estudio",
+    "moreOptions": "Más opciones"
+  },
+  "card": {
+    "question": "Pregunta",
+    "answerRevealed": "Respuesta Revelada",
+    "tapToReveal": "Toca para revelar la respuesta",
+    "howWell": "¿Qué tan bien sabías esto?"
+  },
+  "ratings": {
+    "again": "De Nuevo",
+    "hard": "Difícil",
+    "good": "Bien",
+    "easy": "Fácil"
+  },
+  "complete": {
+    "heading": "¡Sesión Completada!",
+    "reviewed": "Repasaste {{count}} tarjeta(s)",
+    "accuracy": "Precisión",
+    "avgTime": "Tiempo Prom.",
+    "ratingBreakdown": "Desglose de Calificaciones",
+    "studyAgain": "Estudiar de Nuevo",
+    "backToDeck": "Volver al Mazo",
+    "viewHistory": "Ver Historial",
+    "backHome": "Volver a Inicio"
+  },
+  "limitReached": {
+    "imageAlt": "Límite diario alcanzado",
+    "heading": "Has alcanzado tu límite diario",
+    "message": "¡Pero hey, no te desanimes! Continúa trabajando en tus objetivos y",
+    "goFluent": "Go Fluent",
+    "maybeLater": "Quizás Más Tarde",
+    "socialProof": "Únete a otros aprendices fluidos"
+  }
+}

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, Home } from "lucide-react";
 import { Button } from "@versado/ui";
 
@@ -34,6 +35,7 @@ function NotFoundIcon() {
 }
 
 export function NotFoundPage() {
+  const { t } = useTranslation(["home", "common"]);
   const navigate = useNavigate();
 
   return (
@@ -45,10 +47,10 @@ export function NotFoundPage() {
           className="flex items-center gap-1 text-neutral-600 transition-colors hover:text-neutral-900"
         >
           <ChevronLeft className="h-5 w-5" />
-          <span className="text-sm">Back</span>
+          <span className="text-sm">{t("common:actions.back")}</span>
         </button>
         <h1 className="flex-1 truncate text-center text-lg font-semibold text-neutral-900 pr-14">
-          Page Not Found
+          {t("notFound.title")}
         </h1>
       </div>
 
@@ -66,21 +68,20 @@ export function NotFoundPage() {
 
         {/* Copy */}
         <h2 className="mt-4 text-center text-lg font-bold text-neutral-900">
-          Oops! This page has wandered off.
+          {t("notFound.heading")}
         </h2>
         <p className="mt-2 text-center text-sm text-neutral-500">
-          The page you're looking for might have been moved, deleted, or never
-          existed in the first place.
+          {t("notFound.description")}
         </p>
 
         {/* Actions */}
         <div className="mt-8 flex w-full flex-col items-center gap-3">
           <Button fullWidth onClick={() => navigate("/")}>
             <Home className="mr-2 h-4 w-4" />
-            Back to Home
+            {t("notFound.backHome")}
           </Button>
           <button className="text-sm text-neutral-400 transition-colors hover:text-neutral-600">
-            Help Center
+            {t("notFound.helpCenter")}
           </button>
         </div>
       </div>

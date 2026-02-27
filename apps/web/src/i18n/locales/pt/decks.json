@@ -1,0 +1,183 @@
+{
+  "header": {
+    "title": "Meus Baralhos",
+    "moreOptions": "Mais opções"
+  },
+  "search": {
+    "placeholder": "Pesquisar seus baralhos..."
+  },
+  "filters": {
+    "all": "Todos",
+    "recentlyStudied": "Estudados Recentemente",
+    "favorites": "Favoritos"
+  },
+  "sort": {
+    "newest": "Mais Novo",
+    "nameAZ": "Nome A-Z",
+    "mostCards": "Mais Cartões",
+    "bestProgress": "Melhor Progresso"
+  },
+  "empty": {
+    "noDecks": "Nenhum baralho ainda",
+    "noDecksDesc": "Crie seu primeiro baralho para começar",
+    "createDeck": "Criar Baralho",
+    "noFavorites": "Nenhum favorito ainda",
+    "noFavoritesDesc": "Toque no ícone de coração em um baralho para adicioná-lo aos favoritos",
+    "noHistory": "Sem histórico de estudo",
+    "noHistoryDesc": "Comece a estudar um baralho para vê-lo aqui",
+    "noResults": "Nenhum baralho encontrado",
+    "noResultsDesc": "Tente um termo de busca diferente"
+  },
+  "fab": {
+    "importDeck": "Importar baralho",
+    "createDeck": "Criar novo baralho"
+  },
+  "grid": {
+    "cards": "Cartões",
+    "removeFavorite": "Remover dos favoritos",
+    "addFavorite": "Adicionar aos favoritos"
+  },
+  "detail": {
+    "back": "Voltar",
+    "cards": "cartões",
+    "mastered": "dominados",
+    "complete": "completo",
+    "studyNow": "Estudar Agora",
+    "addCards": "Adicionar Cartões",
+    "aiGenerate": "Gerar com AI",
+    "cardsHeading": "Cartões",
+    "noCards": "Nenhum cartão ainda",
+    "noCardsDesc": "Adicione seu primeiro cartão para começar a estudar",
+    "noCardsMatch": "Nenhum cartão corresponde aos seus filtros",
+    "edit": "Editar",
+    "unlistMarketplace": "Remover do Marketplace",
+    "listMarketplace": "Listar no Marketplace",
+    "exportDeck": "Exportar Baralho",
+    "delete": "Excluir",
+    "deckDeleted": "Baralho excluído",
+    "cardDeleted": "Cartão excluído",
+    "removedFromMarketplace": "Removido do marketplace"
+  },
+  "deleteDeck": {
+    "title": "Excluir Baralho",
+    "message": "Isso excluirá permanentemente este baralho e todos os seus cartões. Esta ação não pode ser desfeita.",
+    "confirm": "Excluir"
+  },
+  "deleteCard": {
+    "title": "Excluir Cartão",
+    "message": "Tem certeza de que deseja excluir este cartão?",
+    "confirm": "Excluir",
+    "ariaLabel": "Excluir cartão"
+  },
+  "createModal": {
+    "title": "Criar Baralho",
+    "nameLabel": "Nome",
+    "namePlaceholder": "ex. Vocabulário em Espanhol",
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Sobre o que é este baralho? (opcional)",
+    "nameRequired": "O nome do baralho é obrigatório",
+    "creating": "Criando...",
+    "create": "Criar Baralho",
+    "created": "Baralho criado!",
+    "failed": "Falha ao criar baralho. Por favor, tente novamente."
+  },
+  "editModal": {
+    "title": "Editar Baralho",
+    "nameLabel": "Nome",
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Sobre o que é este baralho? (opcional)",
+    "nameRequired": "O nome do baralho é obrigatório",
+    "saving": "Salvando...",
+    "save": "Salvar Alterações",
+    "updated": "Baralho atualizado!",
+    "failed": "Falha ao atualizar baralho. Por favor, tente novamente."
+  },
+  "importModal": {
+    "title": "Importar Baralho",
+    "dropPrompt": "Solte um arquivo aqui ou clique para procurar",
+    "supportedFormats": "Suporta arquivos .json e .csv",
+    "json": "JSON",
+    "csv": "CSV",
+    "invalidFile": "Por favor, selecione um arquivo .json ou .csv",
+    "readFailed": "Falha ao ler o arquivo",
+    "deckName": "Nome do Baralho",
+    "deckNamePlaceholder": "Digite o nome do baralho",
+    "descriptionLabel": "Descrição (opcional)",
+    "descriptionPlaceholder": "Descrição do baralho",
+    "cardsFound": "{{count}} cartões encontrados",
+    "andMore": "...e mais {{count}}",
+    "nameRequired": "Por favor, forneça um nome para o baralho",
+    "back": "Voltar",
+    "importCards": "Importar {{count}} Cartão(ões)",
+    "importing": "Importando...",
+    "imported": "\"{{name}}\" importado com {{count}} cartão(ões)!",
+    "importFailed": "Falha ao importar baralho"
+  },
+  "addCardModal": {
+    "title": "Adicionar Cartões",
+    "frontPlaceholder": "Frente (pergunta)",
+    "backPlaceholder": "Verso (resposta)",
+    "cardNumber": "Cartão {{number}}",
+    "addAnother": "Adicionar Outro Cartão",
+    "validation": "Adicione pelo menos um cartão com frente e verso",
+    "adding": "Adicionando...",
+    "addCards": "Adicionar {{count}} Cartão(ões)",
+    "added": "{{count}} cartão(ões) adicionado(s)!",
+    "failed": "Falha ao adicionar cartões. Por favor, tente novamente."
+  },
+  "editCardModal": {
+    "title": "Editar Cartão",
+    "frontLabel": "Frente",
+    "backLabel": "Verso",
+    "validation": "Frente e verso são obrigatórios",
+    "saving": "Salvando...",
+    "save": "Salvar Alterações",
+    "updated": "Cartão atualizado!",
+    "failed": "Falha ao atualizar cartão. Por favor, tente novamente."
+  },
+  "cardFilters": {
+    "searchPlaceholder": "Pesquisar cartões...",
+    "all": "Todos",
+    "easy": "Fácil",
+    "medium": "Médio",
+    "hard": "Difícil",
+    "newest": "Mais Novo",
+    "oldest": "Mais Antigo",
+    "az": "A-Z"
+  },
+  "aiGenerate": {
+    "title": "Gerar Cartões com AI",
+    "usageLabel": "Gerações de AI",
+    "used": "usadas",
+    "limitTitle": "Limite de Geração Atingido",
+    "limitMessage": "Go Fluent para gerações ilimitadas de AI.",
+    "goFluent": "Go Fluent",
+    "topicLabel": "Tópico ou Prompt",
+    "topicPlaceholder": "ex., vocabulário de comida espanhola, eventos-chave da Segunda Guerra Mundial, métodos de array em JavaScript...",
+    "numberOfCards": "Número de Cartões",
+    "cards": "cartões",
+    "topicRequired": "Por favor, insira um tópico ou prompt",
+    "generateFailed": "Falha ao gerar cartões",
+    "generating": "Gerando...",
+    "generate": "Gerar Cartões",
+    "selected": "{{selected}} de {{total}} cartões selecionados",
+    "deselectAll": "Desmarcar Todos",
+    "selectAll": "Selecionar Todos",
+    "selectValidation": "Selecione pelo menos um cartão para salvar",
+    "saveFailed": "Falha ao salvar cartões. Por favor, tente novamente.",
+    "saving": "Salvando...",
+    "saveCards": "Salvar {{count}} Cartão(ões)",
+    "regenerate": "Regenerar",
+    "added": "{{count}} cartão(ões) adicionado(s)!"
+  },
+  "exportModal": {
+    "title": "Exportar Baralho",
+    "description": "Exportar \"{{name}}\" ({{count}} cartões)",
+    "jsonLabel": "JSON (Recomendado)",
+    "jsonDesc": "Dados completos do baralho incluindo tags, dificuldade e metadados",
+    "csvLabel": "CSV",
+    "csvDesc": "Formato simples de planilha para Excel, Google Sheets",
+    "exportAs": "Exportar como {{format}}",
+    "exported": "Baralho exportado como {{format}}!"
+  }
+}

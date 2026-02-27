@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "decks": "Stapel",
+    "discover": "Entdecken",
+    "market": "Marktplatz",
+    "profile": "Profil"
+  },
+  "actions": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "confirm": "Bestätigen",
+    "retry": "Erneut versuchen",
+    "skip": "Überspringen",
+    "done": "Fertig"
+  },
+  "loading": "Wird geladen...",
+  "skipToContent": "Zum Hauptinhalt springen"
+}

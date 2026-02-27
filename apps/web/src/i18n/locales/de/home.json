@@ -1,0 +1,87 @@
+{
+  "greeting": "Hallo, {{name}}!",
+  "subtitle": "Bereit für eine kurze Lernrunde?",
+  "todayReview": "Heutige Wiederholung",
+  "cardsDue": "Karten fällig",
+  "studyNow": "Jetzt lernen",
+  "studyHistory": "Lernverlauf",
+  "stats": "Statistiken",
+  "yourDecks": "Deine Stapel",
+  "viewAll": "Alle anzeigen",
+  "trendingTopics": "Trendthemen",
+  "popularDecks": "Beliebte Stapel",
+  "recommendedForYou": "Für dich empfohlen",
+  "followTopicsTitle": "Folge Themen, um Empfehlungen zu erhalten",
+  "followTopicsDesc": "Tippe oben auf Trendthemen, um deinen Feed zu personalisieren",
+  "noRecommendations": "Gerade keine neuen Empfehlungen",
+  "suggestedCreators": "Vorgeschlagene Ersteller",
+  "statsRow": {
+    "mastered": "Gemeistert",
+    "accuracy": "Genauigkeit",
+    "streak": "Serie",
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  },
+  "activity": {
+    "heading": "Aktivität",
+    "emptyState": "Fang an zu lernen, um deine Aktivität zu sehen",
+    "accuracyLabel": "Genauigkeit",
+    "cardsPerDay": "Karten / Tag"
+  },
+  "feed": {
+    "all": "Alle",
+    "creators": "Ersteller",
+    "tags": "Tags",
+    "emptyTitle": "Noch keine Aktivität",
+    "emptyDescription": "Folge Erstellern oder Tags, um hier Aktivität zu sehen",
+    "browseMarketplace": "Marktplatz durchsuchen",
+    "showMore": "Mehr anzeigen",
+    "published": " hat veröffentlicht ",
+    "via": " über "
+  },
+  "time": {
+    "justNow": "gerade eben",
+    "minutesAgo": "vor {{minutes}} Min.",
+    "hoursAgo": "vor {{hours}} Std.",
+    "daysAgo": "vor {{days}} T.",
+    "weeksAgo": "vor {{weeks}} Wo."
+  },
+  "discover": {
+    "heading": "Entdecken",
+    "subtitle": "Finde neue Stapel, Ersteller und Themen"
+  },
+  "history": {
+    "heading": "Lernverlauf",
+    "noSessions": "Noch keine Lernsitzungen",
+    "emptyState": "Fang an zu lernen, um hier deinen Verlauf zu sehen",
+    "inProgress": "In Bearbeitung",
+    "deletedDeck": "Gelöschter Stapel",
+    "cards": "{{count}} Karten",
+    "loadMore": "Mehr laden"
+  },
+  "studyStats": {
+    "heading": "Lernstatistiken",
+    "totalSessions": "Sitzungen gesamt",
+    "cardsMastered": "Gemeisterte Karten",
+    "accuracy": "Genauigkeit",
+    "dayStreak": "Tage-Serie",
+    "dailyReviews": "Tägliche Wiederholungen",
+    "accuracyTrend": "Genauigkeitstrend",
+    "notEnoughData": "Noch nicht genügend Daten",
+    "cardDistribution": "Kartenverteilung",
+    "noCards": "Noch keine Karten",
+    "cards": "Karten",
+    "statusNew": "Neu",
+    "statusLearning": "Lernend",
+    "statusRelearning": "Erneut lernend",
+    "statusReview": "Wiederholung",
+    "statusMastered": "Gemeistert"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "heading": "Hoppla! Diese Seite hat sich verlaufen.",
+    "description": "Die Seite, die du suchst, wurde möglicherweise verschoben, gelöscht oder hat nie existiert.",
+    "backHome": "Zurück zur Startseite",
+    "helpCenter": "Hilfecenter"
+  }
+}

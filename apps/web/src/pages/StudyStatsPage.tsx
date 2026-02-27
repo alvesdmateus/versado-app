@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, BarChart3, Target, Layers, Calendar } from "lucide-react";
 import { studyApi, type DetailedStats } from "@/lib/study-api";
 import { dashboardApi, type DashboardStats } from "@/lib/dashboard-api";
@@ -13,13 +14,16 @@ const STATUS_COLORS: Record<string, string> = {
   mastered: "var(--color-success-400)",
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  new: "New",
-  learning: "Learning",
-  relearning: "Relearning",
-  review: "Review",
-  mastered: "Mastered",
-};
+function useStatusLabels(): Record<string, string> {
+  const { t } = useTranslation("home");
+  return {
+    new: t("studyStats.statusNew"),
+    learning: t("studyStats.statusLearning"),
+    relearning: t("studyStats.statusRelearning"),
+    review: t("studyStats.statusReview"),
+    mastered: t("studyStats.statusMastered"),
+  };
+}
 
 function StatCard({
   icon,
@@ -40,11 +44,12 @@ function StatCard({
 }
 
 function BarChart({ data }: { data: Array<{ date: string; reviews: number }> }) {
+  const { t } = useTranslation("home");
   const maxReviews = Math.max(...data.map((d) => d.reviews), 1);
 
   return (
     <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-      <h3 className="mb-3 text-sm font-semibold text-neutral-700">Daily Reviews</h3>
+      <h3 className="mb-3 text-sm font-semibold text-neutral-700">{t("studyStats.dailyReviews")}</h3>
       <svg viewBox="0 0 300 120" className="w-full" preserveAspectRatio="xMidYMid meet">
         {data.map((d, i) => {
           const height = (d.reviews / maxReviews) * 90;
@@ -80,6 +85,7 @@ function BarChart({ data }: { data: Array<{ date: string; reviews: number }> }) 
 }
 
 function AccuracyChart({ data }: { data: Array<{ date: string; accuracy: number | null }> }) {
+  const { t } = useTranslation("home");
   const points = data
     .map((d, i) => ({
       x: (i / (data.length - 1)) * 280 + 10,
@@ -91,8 +97,8 @@ function AccuracyChart({ data }: { data: Array<{ date: string; accuracy: number 
   if (validPoints.length < 2) {
     return (
       <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-        <h3 className="mb-3 text-sm font-semibold text-neutral-700">Accuracy Trend</h3>
-        <p className="text-center text-xs text-neutral-400 py-8">Not enough data yet</p>
+        <h3 className="mb-3 text-sm font-semibold text-neutral-700">{t("studyStats.accuracyTrend")}</h3>
+        <p className="text-center text-xs text-neutral-400 py-8">{t("studyStats.notEnoughData")}</p>
       </div>
     );
   }
@@ -106,7 +112,7 @@ function AccuracyChart({ data }: { data: Array<{ date: string; accuracy: number 
 
   return (
     <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-      <h3 className="mb-3 text-sm font-semibold text-neutral-700">Accuracy Trend</h3>
+      <h3 className="mb-3 text-sm font-semibold text-neutral-700">{t("studyStats.accuracyTrend")}</h3>
       <svg viewBox="0 0 300 100" className="w-full" preserveAspectRatio="xMidYMid meet">
         {/* Grid lines */}
         {[0, 25, 50, 75, 100].map((pct) => (
@@ -138,13 +144,15 @@ function AccuracyChart({ data }: { data: Array<{ date: string; accuracy: number 
 }
 
 function DonutChart({ distribution }: { distribution: Record<string, number> }) {
+  const { t } = useTranslation("home");
+  const STATUS_LABELS = useStatusLabels();
   const entries = Object.entries(distribution).filter(([, count]) => count > 0);
   const total = entries.reduce((sum, [, count]) => sum + count, 0);
   if (total === 0) {
     return (
       <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-        <h3 className="mb-3 text-sm font-semibold text-neutral-700">Card Distribution</h3>
-        <p className="text-center text-xs text-neutral-400 py-8">No cards yet</p>
+        <h3 className="mb-3 text-sm font-semibold text-neutral-700">{t("studyStats.cardDistribution")}</h3>
+        <p className="text-center text-xs text-neutral-400 py-8">{t("studyStats.noCards")}</p>
       </div>
     );
   }
@@ -167,7 +175,7 @@ function DonutChart({ distribution }: { distribution: Record<string, number> }) 
 
   return (
     <div className="rounded-xl bg-neutral-0 p-4 shadow-card">
-      <h3 className="mb-3 text-sm font-semibold text-neutral-700">Card Distribution</h3>
+      <h3 className="mb-3 text-sm font-semibold text-neutral-700">{t("studyStats.cardDistribution")}</h3>
       <div className="flex items-center gap-4">
         <svg viewBox="0 0 120 100" className="h-24 w-24 flex-shrink-0">
           {arcs.map((arc) => (
@@ -184,7 +192,7 @@ function DonutChart({ distribution }: { distribution: Record<string, number> }) 
             {total}
           </text>
           <text x={cx} y={cy + 10} textAnchor="middle" className="fill-neutral-400" fontSize="7">
-            cards
+            {t("studyStats.cards")}
           </text>
         </svg>
         <div className="flex flex-col gap-1.5">
@@ -211,6 +219,7 @@ function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
 }
 
 export function StudyStatsPage() {
+  const { t } = useTranslation(["home", "common"]);
   const navigate = useNavigate();
   const { showErrorNotification } = useErrorNotification();
   const [stats, setStats] = useState<DetailedStats | null>(null);
@@ -236,10 +245,10 @@ export function StudyStatsPage() {
           className="flex items-center gap-1 text-neutral-600 transition-colors hover:text-neutral-900"
         >
           <ChevronLeft className="h-5 w-5" />
-          <span className="text-sm">Back</span>
+          <span className="text-sm">{t("common:actions.back")}</span>
         </button>
         <h1 className="flex-1 truncate text-center text-lg font-semibold text-neutral-900 pr-14">
-          Study Stats
+          {t("studyStats.heading")}
         </h1>
       </div>
 
@@ -255,22 +264,22 @@ export function StudyStatsPage() {
           <div className="grid grid-cols-2 gap-3">
             <StatCard
               icon={<BarChart3 className="h-5 w-5" />}
-              label="Total Sessions"
+              label={t("studyStats.totalSessions")}
               value={stats?.totalSessions ?? 0}
             />
             <StatCard
               icon={<Layers className="h-5 w-5" />}
-              label="Cards Mastered"
+              label={t("studyStats.cardsMastered")}
               value={dashboard?.mastered ?? 0}
             />
             <StatCard
               icon={<Target className="h-5 w-5" />}
-              label="Accuracy"
+              label={t("studyStats.accuracy")}
               value={`${dashboard?.accuracy ?? 0}%`}
             />
             <StatCard
               icon={<Calendar className="h-5 w-5" />}
-              label="Day Streak"
+              label={t("studyStats.dayStreak")}
               value={dashboard?.streakDays ?? 0}
             />
           </div>

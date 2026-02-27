@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { Button } from "@versado/ui";
 
@@ -9,6 +10,7 @@ interface LimitReachedModalProps {
 
 export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation("study");
 
   if (!isOpen) return null;
 
@@ -27,7 +29,7 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
         <div className="overflow-hidden rounded-2xl">
           <img
             src="/images/limit-reached.svg"
-            alt="Daily limit reached"
+            alt={t("limitReached.imageAlt")}
             className="block w-full"
           />
         </div>
@@ -35,12 +37,10 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
         {/* Content */}
         <div className="px-6 pb-6 pt-5 text-center">
           <h2 className="text-xl font-bold text-neutral-900">
-            You've reached your
-            <br />
-            daily limit
+            {t("limitReached.heading")}
           </h2>
           <p className="mt-2 text-sm text-neutral-500">
-            But hey, don't be upset! Continue working on your goals and{" "}
+            {t("limitReached.message")}{" "}
             <button
               onClick={() => {
                 onClose();
@@ -48,7 +48,7 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
               }}
               className="font-semibold text-primary-500"
             >
-              Go Fluent
+              {t("limitReached.goFluent")}
             </button>
             .
           </p>
@@ -62,13 +62,13 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
                 navigate("/fluent");
               }}
             >
-              Go Fluent
+              {t("limitReached.goFluent")}
             </Button>
             <button
               onClick={onClose}
               className="py-2 text-sm font-medium text-primary-500 transition-colors hover:text-primary-600"
             >
-              Maybe Later
+              {t("limitReached.maybeLater")}
             </button>
           </div>
 
@@ -80,7 +80,7 @@ export function LimitReachedModal({ isOpen, onClose }: LimitReachedModalProps) {
               <div className="h-6 w-6 rounded-full bg-primary-400 ring-2 ring-neutral-0" />
             </div>
             <span className="text-xs text-neutral-500">
-              Join other fluent learners
+              {t("limitReached.socialProof")}
             </span>
           </div>
         </div>

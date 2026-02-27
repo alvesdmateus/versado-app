@@ -1,0 +1,66 @@
+{
+  "welcome": {
+    "heading": "Bienvenue sur Versado{{name}} !",
+    "subheading": "Votre outil personnel de répétition espacée. Configurons tout pour que vous puissiez mémoriser efficacement.",
+    "getStarted": "Commencer"
+  },
+  "language": {
+    "heading": "Quelle est votre langue maternelle ?",
+    "subheading": "Cela nous aide à personnaliser votre expérience."
+  },
+  "topics": {
+    "heading": "Que souhaitez-vous étudier ?",
+    "subheading": "Sélectionnez les sujets qui vous intéressent. Cela nous aide à suggérer du contenu pertinent.",
+    "continue": "Continuer ({{count}} sélectionnés)",
+    "continueDefault": "Continuer",
+    "skip": "Passer pour l'instant",
+    "languages": "Langues",
+    "science": "Sciences",
+    "math": "Mathématiques",
+    "history": "Histoire",
+    "geography": "Géographie",
+    "programming": "Programmation",
+    "medicine": "Médecine",
+    "law": "Droit",
+    "music": "Musique",
+    "art": "Art",
+    "literature": "Littérature",
+    "philosophy": "Philosophie",
+    "psychology": "Psychologie",
+    "economics": "Économie",
+    "business": "Commerce",
+    "cooking": "Cuisine"
+  },
+  "goal": {
+    "heading": "Définissez votre objectif quotidien",
+    "subheading": "Combien de cartes souhaitez-vous réviser chaque jour ? Vous pouvez toujours modifier cela plus tard.",
+    "casual": "Décontracté",
+    "casualDesc": "10 cartes/jour",
+    "regular": "Régulier",
+    "regularDesc": "25 cartes/jour",
+    "serious": "Sérieux",
+    "seriousDesc": "50 cartes/jour",
+    "intense": "Intensif",
+    "intenseDesc": "100 cartes/jour"
+  },
+  "appearance": {
+    "heading": "Personnaliser l'apparence",
+    "subheading": "Faites de Versado le vôtre. Vous pouvez toujours modifier ces réglages plus tard.",
+    "darkMode": "Mode sombre",
+    "cardTheme": "Thème des cartes",
+    "preview": "Aperçu",
+    "previewQuestion": "Qu'est-ce que la répétition espacée ?"
+  },
+  "tutorial": {
+    "heading": "Comment ça marche",
+    "subheading": "Voici un aperçu rapide pour tirer le meilleur parti de Versado.",
+    "createDecks": "Créer des paquets",
+    "createDecksDesc": "Organisez vos flashcards en paquets par matière, sujet ou comme vous le souhaitez.",
+    "studySmart": "Étudiez intelligemment",
+    "studySmartDesc": "Notre algorithme de répétition espacée vous présente les cartes au moment idéal pour une mémorisation à long terme.",
+    "reviewImprove": "Révisez et progressez",
+    "reviewImproveDesc": "Évaluez chaque carte et observez votre précision s'améliorer au fil du temps. La régularité est la clé !",
+    "startLearning": "Commencer à apprendre",
+    "settingUp": "Configuration..."
+  }
+}

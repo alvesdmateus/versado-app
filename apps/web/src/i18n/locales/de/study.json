@@ -1,0 +1,43 @@
+{
+  "loading": "Karten werden geladen...",
+  "empty": {
+    "heading": "Keine fälligen Karten",
+    "message": "Alles erledigt! Komme später zurück für weitere Wiederholungen.",
+    "backHome": "Zurück zur Startseite"
+  },
+  "session": {
+    "closeSession": "Lerneinheit beenden",
+    "moreOptions": "Weitere Optionen"
+  },
+  "card": {
+    "question": "Frage",
+    "answerRevealed": "Antwort angezeigt",
+    "tapToReveal": "Tippe um die Antwort zu sehen",
+    "howWell": "Wie gut hast du diese gekannt?"
+  },
+  "ratings": {
+    "again": "Nochmal",
+    "hard": "Schwierig",
+    "good": "Gut",
+    "easy": "Einfach"
+  },
+  "complete": {
+    "heading": "Lerneinheit abgeschlossen!",
+    "reviewed": "Du hast {{count}} Karte(n) gelernt",
+    "accuracy": "Genauigkeit",
+    "avgTime": "Durchschn. Zeit",
+    "ratingBreakdown": "Bewertungsaufschlüsselung",
+    "studyAgain": "Erneut lernen",
+    "backToDeck": "Zurück zum Kartenset",
+    "viewHistory": "Verlauf anzeigen",
+    "backHome": "Zurück zur Startseite"
+  },
+  "limitReached": {
+    "imageAlt": "Tägliches Limit erreicht",
+    "heading": "Du hast dein tägliches Limit erreicht",
+    "message": "Aber verzweifle nicht! Arbeite weiter an deinen Zielen und",
+    "goFluent": "Go Fluent",
+    "maybeLater": "Vielleicht später",
+    "socialProof": "Tritt anderen fließend sprechenden Lernenden bei"
+  }
+}
