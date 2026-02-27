@@ -23,23 +23,9 @@ import { profileApi } from "@/lib/profile-api";
 import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { CARD_THEMES, getCardTheme } from "@/lib/card-themes";
 import { socialApi } from "@/lib/social-api";
+import { SUPPORTED_LANGUAGES } from "@/i18n/supported-languages";
 
 /* ───────────── Constants ───────────── */
-
-const LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "pt", label: "Português" },
-  { code: "es", label: "Español" },
-  { code: "fr", label: "Français" },
-  { code: "de", label: "Deutsch" },
-  { code: "it", label: "Italiano" },
-  { code: "ja", label: "日本語" },
-  { code: "ko", label: "한국어" },
-  { code: "zh", label: "中文" },
-  { code: "ru", label: "Русский" },
-  { code: "ar", label: "العربية" },
-  { code: "hi", label: "हिन्दी" },
-] as const;
 
 const TOPIC_KEYS = [
   "languages",
@@ -109,10 +95,7 @@ export function OnboardingPage() {
 
   function handleLanguageSelect(code: string) {
     setNativeLanguage(code);
-    // Switch UI language immediately for supported languages
-    if (["en", "pt", "es", "fr", "de"].includes(code)) {
-      i18n.changeLanguage(code);
-    }
+    i18n.changeLanguage(code);
   }
 
   async function handleFinish() {
@@ -183,7 +166,7 @@ export function OnboardingPage() {
         </p>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-2 overflow-y-auto flex-1 pb-4">
-        {LANGUAGES.map(({ code, label }) => (
+        {SUPPORTED_LANGUAGES.map(({ code, label }) => (
           <button
             key={code}
             type="button"
