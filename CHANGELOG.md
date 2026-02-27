@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.5...versado-v0.1.6) (2026-02-27)
+
+
+### Features
+
+* **web:** study stats, OAuth fix, and 6-step onboarding ([#30](https://github.com/alvesdmateus/versado-app/issues/30)) ([a567445](https://github.com/alvesdmateus/versado-app/commit/a567445b738955afecb6bf6c2ffb1ca10d790cb0))
+
 ## [0.1.5](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.4...versado-v0.1.5) (2026-02-26)
 
 
