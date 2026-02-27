@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
   Check,
-  BookOpen,
   Target,
   Sparkles,
   Globe,
@@ -16,6 +15,20 @@ import {
   Monitor,
   Sun,
   Moon,
+  FlaskConical,
+  Calculator,
+  Landmark,
+  MapPin,
+  Code,
+  Stethoscope,
+  Scale,
+  Music,
+  Brush,
+  BookText,
+  Lightbulb,
+  TrendingUp,
+  Briefcase,
+  UtensilsCrossed,
 } from "lucide-react";
 import { Button } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,23 +40,23 @@ import { SUPPORTED_LANGUAGES } from "@/i18n/supported-languages";
 
 /* ───────────── Constants ───────────── */
 
-const TOPIC_KEYS = [
-  "languages",
-  "science",
-  "math",
-  "history",
-  "geography",
-  "programming",
-  "medicine",
-  "law",
-  "music",
-  "art",
-  "literature",
-  "philosophy",
-  "psychology",
-  "economics",
-  "business",
-  "cooking",
+const TOPICS = [
+  { key: "languages", icon: Globe },
+  { key: "science", icon: FlaskConical },
+  { key: "math", icon: Calculator },
+  { key: "history", icon: Landmark },
+  { key: "geography", icon: MapPin },
+  { key: "programming", icon: Code },
+  { key: "medicine", icon: Stethoscope },
+  { key: "law", icon: Scale },
+  { key: "music", icon: Music },
+  { key: "art", icon: Brush },
+  { key: "literature", icon: BookText },
+  { key: "philosophy", icon: Lightbulb },
+  { key: "psychology", icon: Brain },
+  { key: "economics", icon: TrendingUp },
+  { key: "business", icon: Briefcase },
+  { key: "cooking", icon: UtensilsCrossed },
 ] as const;
 
 const GOAL_PRESETS = [
@@ -194,33 +207,49 @@ export function OnboardingPage() {
 
   const renderTopics = () => (
     <div className="flex flex-1 flex-col">
-      <div className="flex flex-col items-center text-center pt-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
-          <BookOpen className="h-7 w-7 text-primary-500" />
-        </div>
-        <h1 className="mt-4 text-xl font-bold text-neutral-900">
+      <div className="pt-4">
+        <h1 className="text-xl font-bold text-neutral-900">
           {t("topics.heading")}
         </h1>
-        <p className="mt-2 max-w-xs text-sm text-neutral-500">
+        <p className="mt-1 text-sm text-neutral-500">
           {t("topics.subheading")}
         </p>
       </div>
-      <div className="mt-6 flex flex-wrap justify-center gap-2 overflow-y-auto flex-1 pb-4">
-        {TOPIC_KEYS.map((key) => {
+      <div className="mt-5 grid grid-cols-2 gap-3 overflow-y-auto flex-1 pb-4">
+        {TOPICS.map(({ key, icon: Icon }) => {
           const selected = selectedTopics.includes(key);
           return (
             <button
               key={key}
               type="button"
               onClick={() => toggleTopic(key)}
-              className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-all ${
+              className={`relative flex flex-col items-start gap-2 rounded-xl border-2 p-4 text-left transition-all ${
                 selected
-                  ? "border-primary-500 bg-primary-50 text-primary-700"
-                  : "border-neutral-200 text-neutral-600 bg-neutral-0"
+                  ? "border-primary-500 bg-primary-50"
+                  : "border-neutral-200 bg-neutral-0"
               }`}
             >
-              {selected && <Check className="mr-1 inline h-3.5 w-3.5" />}
-              {t(`topics.${key}`)}
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                  selected
+                    ? "bg-primary-100 text-primary-600"
+                    : "bg-neutral-100 text-neutral-400"
+                }`}
+              >
+                <Icon className="h-5 w-5" />
+              </div>
+              <span
+                className={`text-sm font-medium ${
+                  selected ? "text-primary-700" : "text-neutral-700"
+                }`}
+              >
+                {t(`topics.${key}`)}
+              </span>
+              {selected && (
+                <div className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500">
+                  <Check className="h-3 w-3 text-white" />
+                </div>
+              )}
             </button>
           );
         })}
