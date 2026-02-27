@@ -1,6 +1,24 @@
-import { describe, test, expect, afterEach } from "bun:test";
+import { describe, test, expect, afterEach, mock } from "bun:test";
 import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
+
+// Mock react-i18next to return English study translations
+const studyTranslations: Record<string, string> = {
+  "limitReached.imageAlt": "Daily limit reached",
+  "limitReached.heading": "You've reached your daily limit",
+  "limitReached.message": "But hey, don't be upset! Continue working on your goals and",
+  "limitReached.goFluent": "Go Fluent",
+  "limitReached.maybeLater": "Maybe Later",
+  "limitReached.socialProof": "Join other fluent learners",
+};
+
+mock.module("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => studyTranslations[key] ?? key,
+    i18n: { language: "en", changeLanguage: () => Promise.resolve() },
+  }),
+}));
+
 import { LimitReachedModal } from "./LimitReachedModal";
 
 afterEach(cleanup);
