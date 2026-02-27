@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "home": "Início",
+    "decks": "Baralhos",
+    "discover": "Explorar",
+    "market": "Loja",
+    "profile": "Perfil"
+  },
+  "actions": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "continue": "Continuar",
+    "back": "Voltar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "confirm": "Confirmar",
+    "retry": "Tentar novamente",
+    "skip": "Pular",
+    "done": "Concluído"
+  },
+  "loading": "Carregando...",
+  "skipToContent": "Pular para o conteúdo principal"
+}

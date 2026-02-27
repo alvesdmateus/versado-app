@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { BottomNav, type BottomNavItem } from "@versado/ui";
 import { SyncStatusIndicator } from "@/components/shared/SyncStatusIndicator";
 import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
@@ -10,6 +11,7 @@ import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { profileApi } from "@/lib/profile-api";
 import { TIER_LIMITS } from "@/lib/feature-limits";
 import type { UserTier } from "@versado/core/entities";
+import i18n from "@/i18n";
 
 function HomeIcon() {
   return (
@@ -57,14 +59,6 @@ function ProfileIcon() {
   );
 }
 
-const NAV_ITEMS: BottomNavItem[] = [
-  { key: "home", label: "Home", icon: <HomeIcon />, href: "/" },
-  { key: "decks", label: "Decks", icon: <DecksIcon />, href: "/decks" },
-  { key: "discover", label: "Discover", icon: <DiscoverIcon />, href: "/discover" },
-  { key: "market", label: "Market", icon: <MarketIcon />, href: "/market" },
-  { key: "profile", label: "Profile", icon: <ProfileIcon />, href: "/profile" },
-];
-
 function getActiveKey(pathname: string): string {
   if (pathname.startsWith("/decks")) return "decks";
   if (pathname.startsWith("/discover")) return "discover";
@@ -78,10 +72,19 @@ export function AppLayout() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { setDarkMode, setThemePreference } = useTheme();
+  const { t } = useTranslation("common");
   const hasSyncedPrefs = useRef(false);
 
   const showSync =
     user?.tier && TIER_LIMITS[user.tier as UserTier]?.canUseOffline;
+
+  const navItems: BottomNavItem[] = [
+    { key: "home", label: t("nav.home"), icon: <HomeIcon />, href: "/" },
+    { key: "decks", label: t("nav.decks"), icon: <DecksIcon />, href: "/decks" },
+    { key: "discover", label: t("nav.discover"), icon: <DiscoverIcon />, href: "/discover" },
+    { key: "market", label: t("nav.market"), icon: <MarketIcon />, href: "/market" },
+    { key: "profile", label: t("nav.profile"), icon: <ProfileIcon />, href: "/profile" },
+  ];
 
   useEffect(() => {
     if (!user || hasSyncedPrefs.current) return;
@@ -94,12 +97,16 @@ export function AppLayout() {
         } else {
           setDarkMode(prefs.darkMode);
         }
+        // Sync language preference
+        if (prefs.nativeLanguage && prefs.nativeLanguage !== i18n.language) {
+          i18n.changeLanguage(prefs.nativeLanguage);
+        }
         if (!prefs.onboardingCompleted) {
           navigate("/onboarding", { replace: true });
         }
       })
       .catch(() => {});
-  }, [user?.id]);
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -107,7 +114,7 @@ export function AppLayout() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-600 focus:shadow-md"
       >
-        Skip to main content
+        {t("skipToContent")}
       </a>
       <UpdatePrompt />
       <OfflineBanner />
@@ -121,7 +128,7 @@ export function AppLayout() {
         <Outlet />
       </main>
       <BottomNav
-        items={NAV_ITEMS}
+        items={navItems}
         activeKey={getActiveKey(location.pathname)}
         onNavigate={(href) => navigate(href)}
       />
