@@ -145,7 +145,7 @@ export function ProfilePage() {
           icon={<Moon className="h-5 w-5" />}
           label={t("settings.theme")}
           rightElement={
-            <div className="flex rounded-lg bg-neutral-100 dark:bg-neutral-800 p-0.5 gap-0.5">
+            <div className="flex rounded-lg bg-neutral-100 p-0.5 gap-0.5">
               {(["system", "light", "dark"] as ThemePreference[]).map((pref) => (
                 <button
                   key={pref}
@@ -153,8 +153,8 @@ export function ProfilePage() {
                   onClick={() => handleThemePreferenceChange(pref)}
                   className={`rounded-md px-3 py-1 text-xs font-medium capitalize transition-all ${
                     (preferences?.themePreference ?? themePreference) === pref
-                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm"
-                      : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+                      ? "bg-neutral-0 text-neutral-900 shadow-sm"
+                      : "text-neutral-500 hover:text-neutral-700"
                   }`}
                 >
                   {t(`settings.${pref}`)}

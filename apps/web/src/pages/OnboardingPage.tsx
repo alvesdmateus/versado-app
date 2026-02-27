@@ -13,12 +13,14 @@ import {
   Layers,
   Brain,
   RotateCcw,
+  Monitor,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Button } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { profileApi } from "@/lib/profile-api";
-import { useTheme } from "@/contexts/ThemeContext";
-import { ToggleSwitch } from "@/components/profile/ToggleSwitch";
+import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { CARD_THEMES, getCardTheme } from "@/lib/card-themes";
 import { socialApi } from "@/lib/social-api";
 
@@ -153,7 +155,7 @@ export function OnboardingPage() {
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
         <Sparkles className="h-8 w-8 text-primary-500" />
       </div>
-      <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="mt-6 text-2xl font-bold text-neutral-900">
         {t("welcome.heading", { name: user?.displayName ? `, ${user.displayName}` : "" })}
       </h1>
       <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
@@ -173,7 +175,7 @@ export function OnboardingPage() {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
           <Globe className="h-7 w-7 text-primary-500" />
         </div>
-        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+        <h1 className="mt-4 text-xl font-bold text-neutral-900">
           {t("language.heading")}
         </h1>
         <p className="mt-2 max-w-xs text-sm text-neutral-500">
@@ -188,8 +190,8 @@ export function OnboardingPage() {
             onClick={() => handleLanguageSelect(code)}
             className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition-all ${
               nativeLanguage === code
-                ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
-                : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-900"
+                ? "border-primary-500 bg-primary-50 text-primary-700"
+                : "border-neutral-200 text-neutral-700 bg-neutral-0"
             }`}
           >
             {label}
@@ -213,7 +215,7 @@ export function OnboardingPage() {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
           <BookOpen className="h-7 w-7 text-primary-500" />
         </div>
-        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+        <h1 className="mt-4 text-xl font-bold text-neutral-900">
           {t("topics.heading")}
         </h1>
         <p className="mt-2 max-w-xs text-sm text-neutral-500">
@@ -230,8 +232,8 @@ export function OnboardingPage() {
               onClick={() => toggleTopic(key)}
               className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-all ${
                 selected
-                  ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
-                  : "border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-900"
+                  ? "border-primary-500 bg-primary-50 text-primary-700"
+                  : "border-neutral-200 text-neutral-600 bg-neutral-0"
               }`}
             >
               {selected && <Check className="mr-1 inline h-3.5 w-3.5" />}
@@ -264,7 +266,7 @@ export function OnboardingPage() {
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
         <Target className="h-7 w-7 text-primary-500" />
       </div>
-      <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+      <h1 className="mt-4 text-xl font-bold text-neutral-900">
         {t("goal.heading")}
       </h1>
       <p className="mt-2 max-w-xs text-sm text-neutral-500">
@@ -278,12 +280,12 @@ export function OnboardingPage() {
             onClick={() => setDailyGoal(value)}
             className={`flex items-center justify-between rounded-xl border-2 px-5 py-4 text-left transition-all ${
               dailyGoal === value
-                ? "border-primary-500 bg-primary-50 dark:bg-primary-950"
-                : "border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900"
+                ? "border-primary-500 bg-primary-50"
+                : "border-neutral-200 bg-neutral-0"
             }`}
           >
             <span className="flex flex-col">
-              <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+              <span className="text-sm font-semibold text-neutral-900">
                 {t(`goal.${labelKey}`)}
               </span>
               <span className="text-xs text-neutral-500">{t(`goal.${descKey}`)}</span>
@@ -303,8 +305,13 @@ export function OnboardingPage() {
   );
 
   const renderAppearance = () => {
-    const isDark = themePreference === "dark";
     const activeTheme = getCardTheme(selectedCardTheme);
+
+    const themeOptions: { pref: ThemePreference; labelKey: string; icon: React.ReactNode }[] = [
+      { pref: "system", labelKey: "appearance.themeSystem", icon: <Monitor className="h-5 w-5" /> },
+      { pref: "light", labelKey: "appearance.themeLight", icon: <Sun className="h-5 w-5" /> },
+      { pref: "dark", labelKey: "appearance.themeDark", icon: <Moon className="h-5 w-5" /> },
+    ];
 
     return (
       <div className="flex flex-1 flex-col">
@@ -312,7 +319,7 @@ export function OnboardingPage() {
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
             <Palette className="h-7 w-7 text-primary-500" />
           </div>
-          <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h1 className="mt-4 text-xl font-bold text-neutral-900">
             {t("appearance.heading")}
           </h1>
           <p className="mt-2 max-w-xs text-sm text-neutral-500">
@@ -320,15 +327,23 @@ export function OnboardingPage() {
           </p>
         </div>
 
-        {/* Dark mode toggle */}
-        <div className="mt-6 flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
-          <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-            {t("appearance.darkMode")}
-          </span>
-          <ToggleSwitch
-            checked={isDark}
-            onChange={(val) => setThemePreference(val ? "dark" : "light")}
-          />
+        {/* Theme mode selector */}
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          {themeOptions.map(({ pref, labelKey, icon }) => (
+            <button
+              key={pref}
+              type="button"
+              onClick={() => setThemePreference(pref)}
+              className={`flex flex-col items-center gap-2 rounded-xl border-2 px-3 py-4 transition-all ${
+                themePreference === pref
+                  ? "border-primary-500 bg-primary-50 text-primary-700"
+                  : "border-neutral-200 text-neutral-600 bg-neutral-0"
+              }`}
+            >
+              {icon}
+              <span className="text-xs font-medium">{t(labelKey)}</span>
+            </button>
+          ))}
         </div>
 
         {/* Card theme grid */}
@@ -346,7 +361,7 @@ export function OnboardingPage() {
               <div
                 className={`h-14 w-full rounded-xl ${theme.previewColor} ${
                   selectedCardTheme === theme.key
-                    ? "ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-neutral-950"
+                    ? "ring-2 ring-primary-500 ring-offset-2"
                     : ""
                 }`}
               />
@@ -402,7 +417,7 @@ export function OnboardingPage() {
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
           <GraduationCap className="h-7 w-7 text-primary-500" />
         </div>
-        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+        <h1 className="mt-4 text-xl font-bold text-neutral-900">
           {t("tutorial.heading")}
         </h1>
         <p className="mt-2 max-w-xs text-sm text-neutral-500">
@@ -412,13 +427,13 @@ export function OnboardingPage() {
           {tutorialCards.map((card, i) => (
             <div
               key={i}
-              className="flex items-start gap-4 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4 text-left"
+              className="flex items-start gap-4 rounded-xl border border-neutral-200 bg-neutral-0 p-4 text-left"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-500">
                 {card.icon}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                <span className="text-sm font-semibold text-neutral-900">
                   {card.title}
                 </span>
                 <span className="mt-0.5 text-xs leading-relaxed text-neutral-500">
@@ -455,7 +470,7 @@ export function OnboardingPage() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-neutral-50 dark:bg-neutral-950 px-6">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-neutral-50 px-6">
       {/* Progress dots */}
       <div className="flex items-center justify-center gap-2 pt-8 pb-6">
         {STEPS.map((s, i) => (
@@ -466,7 +481,7 @@ export function OnboardingPage() {
                 ? "w-6 bg-primary-500"
                 : i < currentIndex
                   ? "w-1.5 bg-primary-300"
-                  : "w-1.5 bg-neutral-200 dark:bg-neutral-700"
+                  : "w-1.5 bg-neutral-200"
             }`}
           />
         ))}

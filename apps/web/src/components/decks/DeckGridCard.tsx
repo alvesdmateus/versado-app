@@ -40,7 +40,7 @@ export function DeckGridCard({
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br dark:brightness-75 ${gradient}`}>
+          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}>
             <Layers className="h-8 w-8 text-white/40" />
           </div>
         )}

@@ -46,7 +46,9 @@
   "appearance": {
     "heading": "Darstellung anpassen",
     "subheading": "Mach Versado zu deinem eigenen. Du kannst das jederzeit ändern.",
-    "darkMode": "Dunkelmodus",
+    "themeSystem": "Gerätestandard",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
     "cardTheme": "Kartendesign",
     "preview": "Vorschau",
     "previewQuestion": "Was ist verteilte Wiederholung?"

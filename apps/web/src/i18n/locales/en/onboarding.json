@@ -46,7 +46,9 @@
   "appearance": {
     "heading": "Customise Appearance",
     "subheading": "Make Versado feel like yours. You can always change these later.",
-    "darkMode": "Dark Mode",
+    "themeSystem": "Device Default",
+    "themeLight": "Light",
+    "themeDark": "Dark",
     "cardTheme": "Card Theme",
     "preview": "Preview",
     "previewQuestion": "What is spaced repetition?"

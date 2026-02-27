@@ -5,10 +5,10 @@ interface ActivityHeatmapProps {
 }
 
 function getCellColor(sessions: number): string {
-  if (sessions === 0) return "bg-neutral-100 dark:bg-neutral-800";
-  if (sessions === 1) return "bg-primary-200 dark:bg-primary-900";
-  if (sessions <= 3) return "bg-primary-400 dark:bg-primary-700";
-  return "bg-primary-600 dark:bg-primary-500";
+  if (sessions === 0) return "bg-neutral-100";
+  if (sessions === 1) return "bg-primary-200";
+  if (sessions <= 3) return "bg-primary-400";
+  return "bg-primary-600";
 }
 
 function getMonthLabel(dateStr: string): string {

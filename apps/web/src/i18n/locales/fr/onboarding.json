@@ -46,7 +46,9 @@
   "appearance": {
     "heading": "Personnaliser l'apparence",
     "subheading": "Faites de Versado le vôtre. Vous pouvez toujours modifier ces réglages plus tard.",
-    "darkMode": "Mode sombre",
+    "themeSystem": "Par défaut",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
     "cardTheme": "Thème des cartes",
     "preview": "Aperçu",
     "previewQuestion": "Qu'est-ce que la répétition espacée ?"

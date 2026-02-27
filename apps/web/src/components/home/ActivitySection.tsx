@@ -13,11 +13,11 @@ export function ActivitySection({ history }: ActivitySectionProps) {
     // Skeleton
     return (
       <div className="mt-5 px-5">
-        <div className="mb-3 h-4 w-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
-        <div className="h-20 animate-pulse rounded-xl bg-neutral-100 dark:bg-neutral-800" />
+        <div className="mb-3 h-4 w-24 animate-pulse rounded bg-neutral-200" />
+        <div className="h-20 animate-pulse rounded-xl bg-neutral-100" />
         <div className="mt-3 flex gap-3">
-          <div className="h-14 flex-1 animate-pulse rounded-xl bg-neutral-100 dark:bg-neutral-800" />
-          <div className="h-14 flex-1 animate-pulse rounded-xl bg-neutral-100 dark:bg-neutral-800" />
+          <div className="h-14 flex-1 animate-pulse rounded-xl bg-neutral-100" />
+          <div className="h-14 flex-1 animate-pulse rounded-xl bg-neutral-100" />
         </div>
       </div>
     );
@@ -53,7 +53,7 @@ export function ActivitySection({ history }: ActivitySectionProps) {
         {t("activity.heading")}
       </h2>
 
-      <div className="rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
+      <div className="rounded-2xl bg-neutral-0 p-4 shadow-card">
         {hasAnyActivity ? (
           <ActivityHeatmap days={days} />
         ) : (
@@ -64,14 +64,14 @@ export function ActivitySection({ history }: ActivitySectionProps) {
       </div>
 
       <div className="mt-3 flex gap-3">
-        <div className="flex-1 rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
+        <div className="flex-1 rounded-2xl bg-neutral-0 p-4 shadow-card">
           <StudySparkline
             data={accuracyData}
             label={t("activity.accuracyLabel")}
             currentValue={`${avgAccuracy}%`}
           />
         </div>
-        <div className="flex-1 rounded-2xl bg-white dark:bg-neutral-900 p-4 shadow-card">
+        <div className="flex-1 rounded-2xl bg-neutral-0 p-4 shadow-card">
           <StudySparkline
             data={cardsData}
             label={t("activity.cardsPerDay")}

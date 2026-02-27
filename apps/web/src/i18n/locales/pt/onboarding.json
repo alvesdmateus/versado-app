@@ -46,7 +46,9 @@
   "appearance": {
     "heading": "Personalizar Aparência",
     "subheading": "Deixe o Versado com a sua cara. Você pode alterar depois.",
-    "darkMode": "Modo Escuro",
+    "themeSystem": "Padrão do Dispositivo",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
     "cardTheme": "Tema do Cartão",
     "preview": "Prévia",
     "previewQuestion": "O que é repetição espaçada?"

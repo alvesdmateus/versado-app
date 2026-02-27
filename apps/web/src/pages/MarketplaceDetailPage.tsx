@@ -136,7 +136,7 @@ export function MarketplaceDetailPage() {
           />
         ) : (
           <div
-            className={`flex h-full w-full items-center justify-center bg-gradient-to-br dark:brightness-75 ${getGradient(detail.name)}`}
+            className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${getGradient(detail.name)}`}
           >
             <Layers className="h-12 w-12 text-white/40" />
           </div>
