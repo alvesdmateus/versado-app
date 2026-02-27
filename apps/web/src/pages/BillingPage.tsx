@@ -25,7 +25,7 @@ const FREE_FEATURE_KEYS: { key: string; included: boolean }[] = [
   { key: "sm2", included: true },
   { key: "basicStats", included: true },
   { key: "browseBuy", included: true },
-  { key: "10ai", included: true },
+  { key: "5ai", included: true },
   { key: "unlimitedDecks", included: false },
   { key: "unlimitedReviews", included: false },
   { key: "sellMarketplace", included: false },

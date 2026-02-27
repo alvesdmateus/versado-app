@@ -16,7 +16,7 @@ export const TIER_LIMITS: Record<UserTier, TierLimits> = {
     maxCardsPerDeck: 100,
     dailyReviewLimit: 50,
     canUseAI: true,
-    aiGenerationLimit: 10,
+    aiGenerationLimit: 5,
     canListPaidDecks: false,
     canUseOffline: false,
   },

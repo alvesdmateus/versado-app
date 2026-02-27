@@ -152,4 +152,11 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
     .update(subscriptions)
     .set({ status: "past_due", updatedAt: new Date() })
     .where(eq(subscriptions.id, subRecord.id));
+
+  // Downgrade user to free tier immediately on payment failure.
+  // If Stripe retries and succeeds, handleSubscriptionUpdated() restores "fluent".
+  await db
+    .update(users)
+    .set({ tier: "free", updatedAt: new Date() })
+    .where(eq(users.id, subRecord.userId));
 }
