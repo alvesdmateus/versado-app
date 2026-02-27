@@ -1,0 +1,66 @@
+{
+  "welcome": {
+    "heading": "Welcome to Versado{{name}}!",
+    "subheading": "Your personal spaced repetition learning tool. Let's set things up so you can start memorizing effectively.",
+    "getStarted": "Get Started"
+  },
+  "language": {
+    "heading": "What's your native language?",
+    "subheading": "This helps us personalise your experience."
+  },
+  "topics": {
+    "heading": "What do you want to study?",
+    "subheading": "Select topics that interest you. This helps us suggest relevant content.",
+    "continue": "Continue ({{count}} selected)",
+    "continueDefault": "Continue",
+    "skip": "Skip for now",
+    "languages": "Languages",
+    "science": "Science",
+    "math": "Math",
+    "history": "History",
+    "geography": "Geography",
+    "programming": "Programming",
+    "medicine": "Medicine",
+    "law": "Law",
+    "music": "Music",
+    "art": "Art",
+    "literature": "Literature",
+    "philosophy": "Philosophy",
+    "psychology": "Psychology",
+    "economics": "Economics",
+    "business": "Business",
+    "cooking": "Cooking"
+  },
+  "goal": {
+    "heading": "Set Your Daily Goal",
+    "subheading": "How many cards do you want to review each day? You can always change this later.",
+    "casual": "Casual",
+    "casualDesc": "10 cards/day",
+    "regular": "Regular",
+    "regularDesc": "25 cards/day",
+    "serious": "Serious",
+    "seriousDesc": "50 cards/day",
+    "intense": "Intense",
+    "intenseDesc": "100 cards/day"
+  },
+  "appearance": {
+    "heading": "Customise Appearance",
+    "subheading": "Make Versado feel like yours. You can always change these later.",
+    "darkMode": "Dark Mode",
+    "cardTheme": "Card Theme",
+    "preview": "Preview",
+    "previewQuestion": "What is spaced repetition?"
+  },
+  "tutorial": {
+    "heading": "How It Works",
+    "subheading": "Here's a quick overview of how to get the most out of Versado.",
+    "createDecks": "Create Decks",
+    "createDecksDesc": "Organize your flashcards into decks by subject, topic, or anything you like.",
+    "studySmart": "Study Smart",
+    "studySmartDesc": "Our spaced-repetition algorithm shows you cards at the perfect time for long-term retention.",
+    "reviewImprove": "Review & Improve",
+    "reviewImproveDesc": "Rate each card and watch your accuracy improve over time. Consistency is key!",
+    "startLearning": "Start Learning",
+    "settingUp": "Setting up..."
+  }
+}

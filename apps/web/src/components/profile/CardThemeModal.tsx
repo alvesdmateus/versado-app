@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
@@ -19,6 +20,7 @@ export function CardThemeModal({
   currentTheme,
   onSaved,
 }: CardThemeModalProps) {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [selected, setSelected] = useState(currentTheme);
@@ -27,7 +29,7 @@ export function CardThemeModal({
     setSelected(themeKey);
     try {
       await profileApi.updatePreferences({ cardTheme: themeKey });
-      showToast("Card theme updated!");
+      showToast(t("cardThemeModal.updated"));
       onSaved(themeKey);
       onClose();
     } catch (err) {
@@ -37,7 +39,7 @@ export function CardThemeModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Card Theme" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("cardThemeModal.title")} size="sm">
       <div className="grid grid-cols-4 gap-3">
         {CARD_THEMES.map((theme) => (
           <button

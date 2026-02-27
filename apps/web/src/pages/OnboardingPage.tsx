@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Check,
   BookOpen,
@@ -38,51 +39,30 @@ const LANGUAGES = [
   { code: "hi", label: "हिन्दी" },
 ] as const;
 
-const TOPICS = [
-  "Languages",
-  "Science",
-  "Math",
-  "History",
-  "Geography",
-  "Programming",
-  "Medicine",
-  "Law",
-  "Music",
-  "Art",
-  "Literature",
-  "Philosophy",
-  "Psychology",
-  "Economics",
-  "Business",
-  "Cooking",
+const TOPIC_KEYS = [
+  "languages",
+  "science",
+  "math",
+  "history",
+  "geography",
+  "programming",
+  "medicine",
+  "law",
+  "music",
+  "art",
+  "literature",
+  "philosophy",
+  "psychology",
+  "economics",
+  "business",
+  "cooking",
 ] as const;
 
 const GOAL_PRESETS = [
-  { value: 10, label: "Casual", description: "10 cards/day" },
-  { value: 25, label: "Regular", description: "25 cards/day" },
-  { value: 50, label: "Serious", description: "50 cards/day" },
-  { value: 100, label: "Intense", description: "100 cards/day" },
-] as const;
-
-const TUTORIAL_CARDS = [
-  {
-    icon: <Layers className="h-6 w-6" />,
-    title: "Create Decks",
-    description:
-      "Organize your flashcards into decks by subject, topic, or anything you like.",
-  },
-  {
-    icon: <Brain className="h-6 w-6" />,
-    title: "Study Smart",
-    description:
-      "Our spaced-repetition algorithm shows you cards at the perfect time for long-term retention.",
-  },
-  {
-    icon: <RotateCcw className="h-6 w-6" />,
-    title: "Review & Improve",
-    description:
-      "Rate each card and watch your accuracy improve over time. Consistency is key!",
-  },
+  { value: 10, labelKey: "casual", descKey: "casualDesc" },
+  { value: 25, labelKey: "regular", descKey: "regularDesc" },
+  { value: 50, labelKey: "serious", descKey: "seriousDesc" },
+  { value: 100, labelKey: "intense", descKey: "intenseDesc" },
 ] as const;
 
 const STEPS = [
@@ -101,6 +81,7 @@ export function OnboardingPage() {
   const navigate = useNavigate();
   const { user, refreshUser } = useAuth();
   const { themePreference, setThemePreference } = useTheme();
+  const { t, i18n } = useTranslation("onboarding");
 
   const [step, setStep] = useState<Step>("welcome");
   const [nativeLanguage, setNativeLanguage] = useState("en");
@@ -123,6 +104,14 @@ export function OnboardingPage() {
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
     );
   }, []);
+
+  function handleLanguageSelect(code: string) {
+    setNativeLanguage(code);
+    // Switch UI language immediately for supported languages
+    if (["en", "pt"].includes(code)) {
+      i18n.changeLanguage(code);
+    }
+  }
 
   async function handleFinish() {
     setIsSubmitting(true);
@@ -165,15 +154,14 @@ export function OnboardingPage() {
         <Sparkles className="h-8 w-8 text-primary-500" />
       </div>
       <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-        Welcome to Versado{user?.displayName ? `, ${user.displayName}` : ""}!
+        {t("welcome.heading", { name: user?.displayName ? `, ${user.displayName}` : "" })}
       </h1>
       <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-        Your personal spaced repetition learning tool. Let's set things up so
-        you can start memorizing effectively.
+        {t("welcome.subheading")}
       </p>
       <div className="mt-10 w-full">
         <Button fullWidth onClick={next}>
-          Get Started
+          {t("welcome.getStarted")}
         </Button>
       </div>
     </div>
@@ -186,10 +174,10 @@ export function OnboardingPage() {
           <Globe className="h-7 w-7 text-primary-500" />
         </div>
         <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-          What's your native language?
+          {t("language.heading")}
         </h1>
         <p className="mt-2 max-w-xs text-sm text-neutral-500">
-          This helps us personalise your experience.
+          {t("language.subheading")}
         </p>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-2 overflow-y-auto flex-1 pb-4">
@@ -197,7 +185,7 @@ export function OnboardingPage() {
           <button
             key={code}
             type="button"
-            onClick={() => setNativeLanguage(code)}
+            onClick={() => handleLanguageSelect(code)}
             className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition-all ${
               nativeLanguage === code
                 ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
@@ -213,7 +201,7 @@ export function OnboardingPage() {
       </div>
       <div className="pt-2 pb-4">
         <Button fullWidth onClick={next}>
-          Continue
+          {t("topics.continueDefault")}
         </Button>
       </div>
     </div>
@@ -226,21 +214,20 @@ export function OnboardingPage() {
           <BookOpen className="h-7 w-7 text-primary-500" />
         </div>
         <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-          What do you want to study?
+          {t("topics.heading")}
         </h1>
         <p className="mt-2 max-w-xs text-sm text-neutral-500">
-          Select topics that interest you. This helps us suggest relevant
-          content.
+          {t("topics.subheading")}
         </p>
       </div>
       <div className="mt-6 flex flex-wrap justify-center gap-2 overflow-y-auto flex-1 pb-4">
-        {TOPICS.map((topic) => {
-          const selected = selectedTopics.includes(topic);
+        {TOPIC_KEYS.map((key) => {
+          const selected = selectedTopics.includes(key);
           return (
             <button
-              key={topic}
+              key={key}
               type="button"
-              onClick={() => toggleTopic(topic)}
+              onClick={() => toggleTopic(key)}
               className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-all ${
                 selected
                   ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
@@ -248,15 +235,16 @@ export function OnboardingPage() {
               }`}
             >
               {selected && <Check className="mr-1 inline h-3.5 w-3.5" />}
-              {topic}
+              {t(`topics.${key}`)}
             </button>
           );
         })}
       </div>
       <div className="pt-2 pb-4 flex flex-col gap-2">
         <Button fullWidth onClick={next}>
-          Continue{" "}
-          {selectedTopics.length > 0 && `(${selectedTopics.length} selected)`}
+          {selectedTopics.length > 0
+            ? t("topics.continue", { count: selectedTopics.length })
+            : t("topics.continueDefault")}
         </Button>
         {selectedTopics.length === 0 && (
           <button
@@ -264,7 +252,7 @@ export function OnboardingPage() {
             onClick={next}
             className="text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors"
           >
-            Skip for now
+            {t("topics.skip")}
           </button>
         )}
       </div>
@@ -277,14 +265,13 @@ export function OnboardingPage() {
         <Target className="h-7 w-7 text-primary-500" />
       </div>
       <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-        Set Your Daily Goal
+        {t("goal.heading")}
       </h1>
       <p className="mt-2 max-w-xs text-sm text-neutral-500">
-        How many cards do you want to review each day? You can always change
-        this later.
+        {t("goal.subheading")}
       </p>
       <div className="mt-8 flex w-full flex-col gap-3">
-        {GOAL_PRESETS.map(({ value, label, description }) => (
+        {GOAL_PRESETS.map(({ value, labelKey, descKey }) => (
           <button
             key={value}
             type="button"
@@ -297,9 +284,9 @@ export function OnboardingPage() {
           >
             <span className="flex flex-col">
               <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                {label}
+                {t(`goal.${labelKey}`)}
               </span>
-              <span className="text-xs text-neutral-500">{description}</span>
+              <span className="text-xs text-neutral-500">{t(`goal.${descKey}`)}</span>
             </span>
             {dailyGoal === value && (
               <Check className="h-5 w-5 shrink-0 text-primary-500" />
@@ -309,7 +296,7 @@ export function OnboardingPage() {
       </div>
       <div className="mt-8 w-full">
         <Button fullWidth onClick={next}>
-          Continue
+          {t("topics.continueDefault")}
         </Button>
       </div>
     </div>
@@ -326,17 +313,17 @@ export function OnboardingPage() {
             <Palette className="h-7 w-7 text-primary-500" />
           </div>
           <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-            Customise Appearance
+            {t("appearance.heading")}
           </h1>
           <p className="mt-2 max-w-xs text-sm text-neutral-500">
-            Make Versado feel like yours. You can always change these later.
+            {t("appearance.subheading")}
           </p>
         </div>
 
         {/* Dark mode toggle */}
         <div className="mt-6 flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
           <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-            Dark Mode
+            {t("appearance.darkMode")}
           </span>
           <ToggleSwitch
             checked={isDark}
@@ -346,7 +333,7 @@ export function OnboardingPage() {
 
         {/* Card theme grid */}
         <p className="mt-6 text-xs font-medium uppercase tracking-wider text-neutral-400">
-          Card Theme
+          {t("appearance.cardTheme")}
         </p>
         <div className="mt-3 grid grid-cols-4 gap-3 overflow-y-auto flex-1 pb-4">
           {CARD_THEMES.map((theme) => (
@@ -375,66 +362,86 @@ export function OnboardingPage() {
           <span
             className={`text-[10px] font-semibold uppercase tracking-widest ${activeTheme.labelClassName}`}
           >
-            Preview
+            {t("appearance.preview")}
           </span>
           <p className={`mt-2 text-center text-lg font-semibold ${activeTheme.textClassName}`}>
-            What is spaced repetition?
+            {t("appearance.previewQuestion")}
           </p>
         </div>
 
         <div className="pt-4 pb-4">
           <Button fullWidth onClick={next}>
-            Continue
+            {t("topics.continueDefault")}
           </Button>
         </div>
       </div>
     );
   };
 
-  const renderTutorial = () => (
-    <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
-        <GraduationCap className="h-7 w-7 text-primary-500" />
-      </div>
-      <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
-        How It Works
-      </h1>
-      <p className="mt-2 max-w-xs text-sm text-neutral-500">
-        Here's a quick overview of how to get the most out of Versado.
-      </p>
-      <div className="mt-8 flex w-full flex-col gap-4">
-        {TUTORIAL_CARDS.map((card, i) => (
-          <div
-            key={i}
-            className="flex items-start gap-4 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4 text-left"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-500">
-              {card.icon}
+  const renderTutorial = () => {
+    const tutorialCards = [
+      {
+        icon: <Layers className="h-6 w-6" />,
+        title: t("tutorial.createDecks"),
+        description: t("tutorial.createDecksDesc"),
+      },
+      {
+        icon: <Brain className="h-6 w-6" />,
+        title: t("tutorial.studySmart"),
+        description: t("tutorial.studySmartDesc"),
+      },
+      {
+        icon: <RotateCcw className="h-6 w-6" />,
+        title: t("tutorial.reviewImprove"),
+        description: t("tutorial.reviewImproveDesc"),
+      },
+    ];
+
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+          <GraduationCap className="h-7 w-7 text-primary-500" />
+        </div>
+        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          {t("tutorial.heading")}
+        </h1>
+        <p className="mt-2 max-w-xs text-sm text-neutral-500">
+          {t("tutorial.subheading")}
+        </p>
+        <div className="mt-8 flex w-full flex-col gap-4">
+          {tutorialCards.map((card, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-4 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4 text-left"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-500">
+                {card.icon}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                  {card.title}
+                </span>
+                <span className="mt-0.5 text-xs leading-relaxed text-neutral-500">
+                  {card.description}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                {card.title}
+          ))}
+        </div>
+        <div className="mt-10 w-full">
+          <Button fullWidth onClick={handleFinish} disabled={isSubmitting}>
+            {isSubmitting ? (
+              t("tutorial.settingUp")
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                {t("tutorial.startLearning")} <ChevronRight className="h-4 w-4" />
               </span>
-              <span className="mt-0.5 text-xs leading-relaxed text-neutral-500">
-                {card.description}
-              </span>
-            </div>
-          </div>
-        ))}
+            )}
+          </Button>
+        </div>
       </div>
-      <div className="mt-10 w-full">
-        <Button fullWidth onClick={handleFinish} disabled={isSubmitting}>
-          {isSubmitting ? (
-            "Setting up..."
-          ) : (
-            <span className="flex items-center justify-center gap-2">
-              Start Learning <ChevronRight className="h-4 w-4" />
-            </span>
-          )}
-        </Button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   /* ───── Render ───── */
 

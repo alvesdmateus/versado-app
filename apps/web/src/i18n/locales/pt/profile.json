@@ -1,0 +1,129 @@
+{
+  "header": {
+    "title": "Perfil",
+    "goBack": "Voltar",
+    "moreOptions": "Mais opções"
+  },
+  "userInfo": {
+    "freeMember": "Membro Gratuito",
+    "fluentMember": "Membro Fluent"
+  },
+  "upgrade": {
+    "goFluent": "Assinar Fluent",
+    "description": "Domínio com IA, baralhos ilimitados e acesso offline — por menos que um café por semana."
+  },
+  "sections": {
+    "appearance": "Aparência",
+    "studyPreferences": "Preferências de Estudo",
+    "notifications": "Notificações",
+    "account": "Conta"
+  },
+  "settings": {
+    "theme": "Tema",
+    "system": "sistema",
+    "light": "claro",
+    "dark": "escuro",
+    "themeColor": "Cor do Tema",
+    "cardTheme": "Tema do Cartão",
+    "dailyGoal": "Meta Diária",
+    "cards": "{{count}} Cartões",
+    "reminderTimes": "Horários de Lembrete",
+    "remindersSet": "{{count}} definidos",
+    "remindersNone": "Nenhum",
+    "cardSorting": "Ordenação de Cartões",
+    "pushAlerts": "Alertas Push",
+    "pushDenied": "Notificações push não disponíveis ou permissão negada",
+    "changePassword": "Alterar Senha",
+    "exportData": "Exportar Dados",
+    "deleteAccount": "Excluir Conta",
+    "logOut": "Sair",
+    "language": "Idioma"
+  },
+  "sorting": {
+    "dueFirst": "Pendentes Primeiro",
+    "dueFirstDesc": "Cartões para revisão são mostrados primeiro",
+    "random": "Aleatório",
+    "randomDesc": "Cartões são mostrados em ordem aleatória",
+    "byDifficulty": "Por Dificuldade",
+    "byDifficultyDesc": "Cartões mais difíceis são mostrados primeiro"
+  },
+  "dailyGoalModal": {
+    "title": "Meta Diária",
+    "description": "Quantos cartões você quer estudar por dia?",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "updated": "Meta diária atualizada!"
+  },
+  "themeColorModal": {
+    "title": "Cor do Tema",
+    "updated": "Tema atualizado!"
+  },
+  "cardThemeModal": {
+    "title": "Tema do Cartão",
+    "updated": "Tema do cartão atualizado!"
+  },
+  "cardSortingModal": {
+    "title": "Ordenação de Cartões",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "updated": "Preferência de ordenação atualizada!"
+  },
+  "reminderTimesModal": {
+    "title": "Horários de Lembrete",
+    "noReminders": "Nenhum lembrete definido",
+    "addReminder": "Adicionar Lembrete",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "updated": "Lembretes atualizados!"
+  },
+  "changePasswordModal": {
+    "title": "Alterar Senha",
+    "currentPassword": "Senha Atual",
+    "newPassword": "Nova Senha",
+    "confirmPassword": "Confirmar Nova Senha",
+    "minLength": "A nova senha deve ter pelo menos 8 caracteres",
+    "mismatch": "As senhas não coincidem",
+    "changing": "Alterando...",
+    "change": "Alterar Senha",
+    "success": "Senha alterada!",
+    "failed": "Falha ao alterar senha"
+  },
+  "exportDataModal": {
+    "title": "Exportar Dados",
+    "description": "Exporte todos os seus baralhos e flashcards como um arquivo JSON. Isso inclui nomes, descrições e todo o conteúdo dos cartões.",
+    "exporting": "Exportando...",
+    "exportJson": "Exportar como JSON",
+    "success": "Dados exportados!"
+  },
+  "deleteAccountModal": {
+    "title": "Excluir Conta",
+    "warning": "Esta ação é permanente e não pode ser desfeita.",
+    "details": "Todos os seus baralhos, flashcards, progresso de estudo e dados da conta serão excluídos permanentemente.",
+    "confirmLabel": "Digite \"DELETE\" para confirmar",
+    "placeholder": "DELETE",
+    "cancel": "Cancelar",
+    "deleting": "Excluindo...",
+    "delete": "Excluir Conta",
+    "failed": "Falha ao excluir conta"
+  },
+  "subscription": {
+    "title": "Assinatura",
+    "currentPlan": "Plano Atual",
+    "fluent": "Fluent",
+    "accessUntil": "Acesso Até",
+    "nextBilling": "Próxima Cobrança",
+    "manageBilling": "Gerenciar Cobrança",
+    "resume": "Retomar Assinatura",
+    "cancel": "Cancelar Assinatura",
+    "cancelTitle": "Cancelar Assinatura",
+    "cancelDescription": "Seus recursos Fluent permanecerão ativos até o final do período de cobrança atual. Você pode retomar a qualquer momento antes disso.",
+    "cancelConfirm": "Cancelar Assinatura",
+    "resumed": "Assinatura retomada!",
+    "canceled": "Assinatura será cancelada no final do período de cobrança"
+  },
+  "footer": {
+    "terms": "Termos",
+    "privacy": "Privacidade",
+    "support": "Suporte"
+  }
+}

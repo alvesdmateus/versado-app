@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Check } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
@@ -29,6 +30,7 @@ export function ThemeColorModal({
   currentColor,
   onSaved,
 }: ThemeColorModalProps) {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [selected, setSelected] = useState(currentColor);
@@ -37,7 +39,7 @@ export function ThemeColorModal({
     setSelected(color);
     try {
       await profileApi.updatePreferences({ themeColor: color });
-      showToast("Theme updated!");
+      showToast(t("themeColorModal.updated"));
       onSaved(color);
       onClose();
     } catch (err) {
@@ -47,7 +49,7 @@ export function ThemeColorModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Theme Color" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("themeColorModal.title")} size="sm">
       <div className="grid grid-cols-4 gap-3">
         {THEME_COLORS.map((theme) => (
           <button

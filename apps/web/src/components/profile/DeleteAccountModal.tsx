@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Button, Input } from "@versado/ui";
 import { Modal } from "@/components/shared/Modal";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,6 +13,7 @@ interface DeleteAccountModalProps {
 }
 
 export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps) {
+  const { t } = useTranslation("profile");
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [confirmText, setConfirmText] = useState("");
@@ -35,7 +37,7 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Failed to delete account");
+        setError(t("deleteAccountModal.failed"));
       }
       setIsDeleting(false);
     }
@@ -48,24 +50,23 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Delete Account" size="sm">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("deleteAccountModal.title")} size="sm">
       <div className="space-y-4">
         <div className="rounded-lg bg-error-50 p-3">
           <p className="text-sm font-medium text-error-700">
-            This action is permanent and cannot be undone.
+            {t("deleteAccountModal.warning")}
           </p>
           <p className="mt-1 text-sm text-error-600">
-            All your decks, flashcards, study progress, and account data will be
-            permanently deleted.
+            {t("deleteAccountModal.details")}
           </p>
         </div>
 
         <form onSubmit={handleDelete}>
           <Input
-            label='Type "DELETE" to confirm'
+            label={t("deleteAccountModal.confirmLabel")}
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
-            placeholder="DELETE"
+            placeholder={t("deleteAccountModal.placeholder")}
           />
 
           {error && <p className="mt-2 text-sm text-error-500">{error}</p>}
@@ -77,14 +78,14 @@ export function DeleteAccountModal({ isOpen, onClose }: DeleteAccountModalProps)
               onClick={handleClose}
               disabled={isDeleting}
             >
-              Cancel
+              {t("deleteAccountModal.cancel")}
             </Button>
             <button
               type="submit"
               disabled={!canDelete || isDeleting}
               className="flex-1 rounded-lg bg-error-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-error-600 disabled:opacity-50"
             >
-              {isDeleting ? "Deleting..." : "Delete Account"}
+              {isDeleting ? t("deleteAccountModal.deleting") : t("deleteAccountModal.delete")}
             </button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
@@ -18,6 +19,7 @@ export function DailyGoalModal({
   currentGoal,
   onSaved,
 }: DailyGoalModalProps) {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [goal, setGoal] = useState(String(currentGoal));
@@ -31,7 +33,7 @@ export function DailyGoalModal({
     setIsSubmitting(true);
     try {
       await profileApi.updatePreferences({ dailyGoal: value });
-      showToast("Daily goal updated!");
+      showToast(t("dailyGoalModal.updated"));
       onSaved(value);
       onClose();
     } catch (err) {
@@ -42,10 +44,10 @@ export function DailyGoalModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Daily Goal" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={t("dailyGoalModal.title")} size="sm">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <p className="text-sm text-neutral-600">
-          How many cards do you want to study per day?
+          {t("dailyGoalModal.description")}
         </p>
         <Input
           type="number"
@@ -56,7 +58,7 @@ export function DailyGoalModal({
           autoFocus
         />
         <Button type="submit" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save"}
+          {isSubmitting ? t("dailyGoalModal.saving") : t("dailyGoalModal.save")}
         </Button>
       </form>
     </Modal>

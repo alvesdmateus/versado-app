@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   Moon,
   Palette,
@@ -12,6 +13,7 @@ import {
   Download,
   Trash2,
   LogOut,
+  Languages,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
@@ -36,10 +38,9 @@ import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { useToast } from "@/contexts/ToastContext";
 import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-manager";
 
-const SORTING_LABELS: Record<string, string> = {
-  due_first: "Due First",
-  random: "Random",
-  difficulty: "By Difficulty",
+const LANGUAGE_LABELS: Record<string, string> = {
+  en: "English",
+  pt: "Português",
 };
 
 export function ProfilePage() {
@@ -48,6 +49,7 @@ export function ProfilePage() {
   const { themePreference, setThemePreference } = useTheme();
   const { showErrorNotification } = useErrorNotification();
   const { showToast } = useToast();
+  const { t, i18n } = useTranslation("profile");
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
 
   // Modal states
@@ -78,6 +80,17 @@ export function ProfilePage() {
     }
   }
 
+  async function handleLanguageChange() {
+    const newLang = i18n.language === "en" ? "pt" : "en";
+    i18n.changeLanguage(newLang);
+    try {
+      await profileApi.updatePreferences({ nativeLanguage: newLang });
+      setPreferences((p) => (p ? { ...p, nativeLanguage: newLang } : p));
+    } catch {
+      i18n.changeLanguage(i18n.language === "en" ? "pt" : "en");
+    }
+  }
+
   async function handlePushToggle(value: boolean) {
     setPreferences((prev) => (prev ? { ...prev, pushAlerts: value } : prev));
     try {
@@ -87,10 +100,7 @@ export function ProfilePage() {
           setPreferences((prev) =>
             prev ? { ...prev, pushAlerts: false } : prev
           );
-          showToast(
-            "Push notifications not available or permission denied",
-            "error"
-          );
+          showToast(t("settings.pushDenied"), "error");
           return;
         }
       } else {
@@ -124,10 +134,10 @@ export function ProfilePage() {
       {user?.tier === "fluent" && <SubscriptionSection />}
 
       {/* Appearance */}
-      <SettingsSection label="Appearance">
+      <SettingsSection label={t("sections.appearance")}>
         <SettingRow
           icon={<Moon className="h-5 w-5" />}
-          label="Theme"
+          label={t("settings.theme")}
           rightElement={
             <div className="flex rounded-lg bg-neutral-100 dark:bg-neutral-800 p-0.5 gap-0.5">
               {(["system", "light", "dark"] as ThemePreference[]).map((pref) => (
@@ -141,7 +151,7 @@ export function ProfilePage() {
                       : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
                   }`}
                 >
-                  {pref}
+                  {t(`settings.${pref}`)}
                 </button>
               ))}
             </div>
@@ -149,52 +159,63 @@ export function ProfilePage() {
         />
         <SettingRow
           icon={<Palette className="h-5 w-5" />}
-          label="Theme Color"
+          label={t("settings.themeColor")}
           value={preferences?.themeColor ?? "Sky"}
           onClick={() => setIsThemeColorOpen(true)}
         />
         <SettingRow
           icon={<CreditCard className="h-5 w-5" />}
-          label="Card Theme"
+          label={t("settings.cardTheme")}
           value={getCardTheme(preferences?.cardTheme).name}
           onClick={() => setIsCardThemeOpen(true)}
+        />
+        <SettingRow
+          icon={<Languages className="h-5 w-5" />}
+          label={t("settings.language")}
+          value={LANGUAGE_LABELS[i18n.language] ?? i18n.language}
+          onClick={handleLanguageChange}
         />
       </SettingsSection>
 
       {/* Study Preferences */}
-      <SettingsSection label="Study Preferences">
+      <SettingsSection label={t("sections.studyPreferences")}>
         <SettingRow
           icon={<Target className="h-5 w-5" />}
-          label="Daily Goal"
-          value={`${preferences?.dailyGoal ?? 50} Cards`}
+          label={t("settings.dailyGoal")}
+          value={t("settings.cards", { count: preferences?.dailyGoal ?? 50 })}
           onClick={() => setIsDailyGoalOpen(true)}
         />
         <SettingRow
           icon={<Clock className="h-5 w-5" />}
-          label="Reminder Times"
+          label={t("settings.reminderTimes")}
           value={
             preferences?.reminderTimes?.length
-              ? `${preferences.reminderTimes.length} set`
-              : "None"
+              ? t("settings.remindersSet", { count: preferences.reminderTimes.length })
+              : t("settings.remindersNone")
           }
           onClick={() => setIsReminderTimesOpen(true)}
         />
         <SettingRow
           icon={<ArrowUpDown className="h-5 w-5" />}
-          label="Card Sorting Logic"
+          label={t("settings.cardSorting")}
           value={
-            SORTING_LABELS[preferences?.cardSortingLogic ?? "due_first"] ??
-            "Due First"
+            t(`sorting.${
+              preferences?.cardSortingLogic === "random"
+                ? "random"
+                : preferences?.cardSortingLogic === "difficulty"
+                  ? "byDifficulty"
+                  : "dueFirst"
+            }`)
           }
           onClick={() => setIsCardSortingOpen(true)}
         />
       </SettingsSection>
 
       {/* Notifications */}
-      <SettingsSection label="Notifications">
+      <SettingsSection label={t("sections.notifications")}>
         <SettingRow
           icon={<Bell className="h-5 w-5" />}
-          label="Push Alerts"
+          label={t("settings.pushAlerts")}
           rightElement={
             <ToggleSwitch
               checked={preferences?.pushAlerts ?? true}
@@ -205,26 +226,26 @@ export function ProfilePage() {
       </SettingsSection>
 
       {/* Account */}
-      <SettingsSection label="Account">
+      <SettingsSection label={t("sections.account")}>
         <SettingRow
           icon={<Lock className="h-5 w-5" />}
-          label="Change Password"
+          label={t("settings.changePassword")}
           onClick={() => setIsPasswordOpen(true)}
         />
         <SettingRow
           icon={<Download className="h-5 w-5" />}
-          label="Export Data"
+          label={t("settings.exportData")}
           onClick={() => setIsExportOpen(true)}
         />
         <SettingRow
           icon={<Trash2 className="h-5 w-5" />}
-          label="Delete Account"
+          label={t("settings.deleteAccount")}
           danger
           onClick={() => setIsDeleteOpen(true)}
         />
         <SettingRow
           icon={<LogOut className="h-5 w-5" />}
-          label="Log Out"
+          label={t("settings.logOut")}
           danger
           onClick={handleLogout}
         />
@@ -234,9 +255,9 @@ export function ProfilePage() {
       <div className="mt-8 mb-2 flex flex-col items-center gap-1 px-5">
         <p className="text-xs text-neutral-400">Versado v2.0.0</p>
         <div className="flex gap-3">
-          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">Terms</Link>
-          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">Privacy</Link>
-          <button className="text-xs text-neutral-400 hover:text-neutral-600">Support</button>
+          <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">{t("footer.terms")}</Link>
+          <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">{t("footer.privacy")}</Link>
+          <button className="text-xs text-neutral-400 hover:text-neutral-600">{t("footer.support")}</button>
         </div>
       </div>
 

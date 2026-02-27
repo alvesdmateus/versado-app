@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { User } from "lucide-react";
 
 export interface UserInfoCardProps {
@@ -7,12 +8,9 @@ export interface UserInfoCardProps {
   tier: "free" | "fluent";
 }
 
-const TIER_LABELS: Record<string, string> = {
-  free: "Free Member",
-  fluent: "Fluent Member",
-};
-
 export function UserInfoCard({ displayName, email, avatarUrl, tier }: UserInfoCardProps) {
+  const { t } = useTranslation("profile");
+
   return (
     <div className="mt-4 flex flex-col items-center px-5">
       <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-primary-100">
@@ -26,7 +24,7 @@ export function UserInfoCard({ displayName, email, avatarUrl, tier }: UserInfoCa
       <p className="mt-0.5 text-sm text-neutral-500">{email}</p>
       {tier !== "free" && (
         <span className="mt-2 rounded-full bg-warning-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-warning-700">
-          {TIER_LABELS[tier]}
+          {t(`userInfo.${tier === "fluent" ? "fluentMember" : "freeMember"}`)}
         </span>
       )}
     </div>

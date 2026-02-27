@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CreditCard,
   Calendar,
@@ -14,6 +15,7 @@ import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { ConfirmDialog } from "@/components/shared";
 
 export function SubscriptionSection() {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [subscription, setSubscription] = useState<Subscription | null>(null);
@@ -47,10 +49,7 @@ export function SubscriptionSection() {
       setSubscription((prev) =>
         prev ? { ...prev, cancelAtPeriodEnd: true } : prev
       );
-      showToast(
-        "Subscription will be canceled at end of billing period",
-        "info"
-      );
+      showToast(t("subscription.canceled"), "info");
     } catch (err) {
       showErrorNotification(err, { onRetry: handleCancel });
     } finally {
@@ -65,7 +64,7 @@ export function SubscriptionSection() {
       setSubscription((prev) =>
         prev ? { ...prev, cancelAtPeriodEnd: false } : prev
       );
-      showToast("Subscription resumed!");
+      showToast(t("subscription.resumed"));
     } catch (err) {
       showErrorNotification(err, { onRetry: handleResume });
     }
@@ -73,16 +72,18 @@ export function SubscriptionSection() {
 
   return (
     <>
-      <SettingsSection label="Subscription">
+      <SettingsSection label={t("subscription.title")}>
         <SettingRow
           icon={<CreditCard className="h-5 w-5" />}
-          label="Current Plan"
-          value="Fluent"
+          label={t("subscription.currentPlan")}
+          value={t("subscription.fluent")}
         />
         <SettingRow
           icon={<Calendar className="h-5 w-5" />}
           label={
-            subscription.cancelAtPeriodEnd ? "Access Until" : "Next Billing"
+            subscription.cancelAtPeriodEnd
+              ? t("subscription.accessUntil")
+              : t("subscription.nextBilling")
           }
           value={new Date(
             subscription.currentPeriodEnd
@@ -90,19 +91,19 @@ export function SubscriptionSection() {
         />
         <SettingRow
           icon={<ExternalLink className="h-5 w-5" />}
-          label="Manage Billing"
+          label={t("subscription.manageBilling")}
           onClick={handleManageBilling}
         />
         {subscription.cancelAtPeriodEnd ? (
           <SettingRow
             icon={<RefreshCw className="h-5 w-5" />}
-            label="Resume Subscription"
+            label={t("subscription.resume")}
             onClick={handleResume}
           />
         ) : (
           <SettingRow
             icon={<XCircle className="h-5 w-5" />}
-            label="Cancel Subscription"
+            label={t("subscription.cancel")}
             danger
             onClick={() => setIsCancelOpen(true)}
           />
@@ -113,9 +114,9 @@ export function SubscriptionSection() {
         isOpen={isCancelOpen}
         onClose={() => setIsCancelOpen(false)}
         onConfirm={handleCancel}
-        title="Cancel Subscription"
-        message="Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then."
-        confirmLabel="Cancel Subscription"
+        title={t("subscription.cancelTitle")}
+        message={t("subscription.cancelDescription")}
+        confirmLabel={t("subscription.cancelConfirm")}
         variant="danger"
         isLoading={isCanceling}
       />

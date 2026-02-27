@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { useToast } from "@/contexts/ToastContext";
 import { profileApi } from "@/lib/profile-api";
@@ -14,6 +15,7 @@ export function ChangePasswordModal({
   isOpen,
   onClose,
 }: ChangePasswordModalProps) {
+  const { t } = useTranslation("profile");
   const { showToast } = useToast();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -32,11 +34,11 @@ export function ChangePasswordModal({
     e.preventDefault();
 
     if (newPassword.length < 8) {
-      setError("New password must be at least 8 characters");
+      setError(t("changePasswordModal.minLength"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("changePasswordModal.mismatch"));
       return;
     }
 
@@ -44,14 +46,14 @@ export function ChangePasswordModal({
     setError("");
     try {
       await profileApi.changePassword({ currentPassword, newPassword, confirmPassword });
-      showToast("Password changed!");
+      showToast(t("changePasswordModal.success"));
       resetForm();
       onClose();
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Failed to change password");
+        setError(t("changePasswordModal.failed"));
       }
     } finally {
       setIsSubmitting(false);
@@ -64,30 +66,30 @@ export function ChangePasswordModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Change Password">
+    <Modal isOpen={isOpen} onClose={handleClose} title={t("changePasswordModal.title")}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input
-          label="Current Password"
+          label={t("changePasswordModal.currentPassword")}
           type="password"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           autoFocus
         />
         <Input
-          label="New Password"
+          label={t("changePasswordModal.newPassword")}
           type="password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
         <Input
-          label="Confirm New Password"
+          label={t("changePasswordModal.confirmPassword")}
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         {error && <p className="text-sm text-error-500">{error}</p>}
         <Button type="submit" fullWidth disabled={isSubmitting}>
-          {isSubmitting ? "Changing..." : "Change Password"}
+          {isSubmitting ? t("changePasswordModal.changing") : t("changePasswordModal.change")}
         </Button>
       </form>
     </Modal>
