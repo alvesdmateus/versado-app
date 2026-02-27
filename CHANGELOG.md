@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.1.5](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.4...versado-v0.1.5) (2026-02-26)
+
+
+### Features
+
+* **web:** add activity heatmap and sparklines to homepage ([#27](https://github.com/alvesdmateus/versado-app/issues/27)) ([b9e6ed0](https://github.com/alvesdmateus/versado-app/commit/b9e6ed08251597956e702990bd999d4cbbc1bd80))
+
+## [0.1.4](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.3...versado-v0.1.4) (2026-02-26)
+
+
+### Bug Fixes
+
+* improve accessibility, error handling, and rate limiting ([#22](https://github.com/alvesdmateus/versado-app/issues/22)) ([ca5f859](https://github.com/alvesdmateus/versado-app/commit/ca5f859168514bfcb6489a475256a671987c1802))
+
+
+### Documentation
+
+* add project README ([#21](https://github.com/alvesdmateus/versado-app/issues/21)) ([f95195a](https://github.com/alvesdmateus/versado-app/commit/f95195af1cc8b6a8e7e4df4a32a830f38a4b63a3))
+
+
+### Miscellaneous
+
+* **twa-setup:** Android TWA setup, system theme detection, and monorepo cleanup ([#26](https://github.com/alvesdmateus/versado-app/issues/26)) ([c99c0c5](https://github.com/alvesdmateus/versado-app/commit/c99c0c5b5320ab0ac8f27f65fa6e6234db062fcb))
+* **web:** add Digital Asset Links for Google TWA ([#24](https://github.com/alvesdmateus/versado-app/issues/24)) ([71e275f](https://github.com/alvesdmateus/versado-app/commit/71e275fe47c38e2c41874fac8ac9a4adb7b8d301))
+
 ## [0.1.3](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.2...versado-v0.1.3) (2026-02-26)
 
 
