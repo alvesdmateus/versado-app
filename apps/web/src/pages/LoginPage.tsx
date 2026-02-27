@@ -30,13 +30,6 @@ function GoogleIcon() {
   );
 }
 
-function AppleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
-      <path d="M14.94 9.88c-.02-2.05 1.67-3.03 1.75-3.08-0.95-1.39-2.43-1.58-2.96-1.6-1.26-.13-2.46.74-3.1.74-.64 0-1.62-.72-2.67-.7-1.37.02-2.64.8-3.34 2.03-1.43 2.47-.36 6.14 1.02 8.15.68.98 1.49 2.09 2.55 2.05 1.02-.04 1.41-.66 2.65-.66 1.23 0 1.58.66 2.65.64 1.1-.02 1.8-.99 2.47-1.98.78-1.14 1.1-2.24 1.12-2.3-.02-.01-2.14-.82-2.16-3.27l.02-.02ZM12.94 3.49c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.85 2.48.9.07 1.82-.46 2.38-1.12Z" />
-    </svg>
-  );
-}
 
 interface FormErrors {
   email?: string;
@@ -191,7 +184,6 @@ export function LoginPage() {
         >
           {isGoogleLoading ? "Redirecting..." : "Google"}
         </SocialButton>
-        <SocialButton icon={<AppleIcon />}>Apple</SocialButton>
       </div>
 
       {/* Register footer */}

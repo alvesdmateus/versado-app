@@ -12,6 +12,7 @@ export interface UserPreferences {
   pushAlerts: boolean;
   favoriteDeckIds: string[];
   onboardingCompleted?: boolean;
+  nativeLanguage?: string;
 }
 
 export const profileApi = {

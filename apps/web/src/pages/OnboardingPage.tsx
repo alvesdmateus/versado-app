@@ -1,42 +1,101 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { Check, BookOpen, Target, Sparkles, Monitor, Sun, Moon } from "lucide-react";
-import { Button, Input } from "@versado/ui";
+import {
+  Check,
+  BookOpen,
+  Target,
+  Sparkles,
+  Globe,
+  Palette,
+  GraduationCap,
+  ChevronRight,
+  Layers,
+  Brain,
+  RotateCcw,
+} from "lucide-react";
+import { Button } from "@versado/ui";
 import { useAuth } from "@/hooks/useAuth";
 import { profileApi } from "@/lib/profile-api";
-import { syncAwareApi } from "@/lib/sync-aware-api";
-import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ToggleSwitch } from "@/components/profile/ToggleSwitch";
+import { CARD_THEMES, getCardTheme } from "@/lib/card-themes";
+import { socialApi } from "@/lib/social-api";
 
-const GOAL_OPTIONS = [10, 25, 50, 100] as const;
+/* ───────────── Constants ───────────── */
 
-const STEPS = ["welcome", "theme", "goal", "deck", "done"] as const;
+const LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "pt", label: "Português" },
+  { code: "es", label: "Español" },
+  { code: "fr", label: "Français" },
+  { code: "de", label: "Deutsch" },
+  { code: "it", label: "Italiano" },
+  { code: "ja", label: "日本語" },
+  { code: "ko", label: "한국어" },
+  { code: "zh", label: "中文" },
+  { code: "ru", label: "Русский" },
+  { code: "ar", label: "العربية" },
+  { code: "hi", label: "हिन्दी" },
+] as const;
+
+const TOPICS = [
+  "Languages",
+  "Science",
+  "Math",
+  "History",
+  "Geography",
+  "Programming",
+  "Medicine",
+  "Law",
+  "Music",
+  "Art",
+  "Literature",
+  "Philosophy",
+  "Psychology",
+  "Economics",
+  "Business",
+  "Cooking",
+] as const;
+
+const GOAL_PRESETS = [
+  { value: 10, label: "Casual", description: "10 cards/day" },
+  { value: 25, label: "Regular", description: "25 cards/day" },
+  { value: 50, label: "Serious", description: "50 cards/day" },
+  { value: 100, label: "Intense", description: "100 cards/day" },
+] as const;
+
+const TUTORIAL_CARDS = [
+  {
+    icon: <Layers className="h-6 w-6" />,
+    title: "Create Decks",
+    description:
+      "Organize your flashcards into decks by subject, topic, or anything you like.",
+  },
+  {
+    icon: <Brain className="h-6 w-6" />,
+    title: "Study Smart",
+    description:
+      "Our spaced-repetition algorithm shows you cards at the perfect time for long-term retention.",
+  },
+  {
+    icon: <RotateCcw className="h-6 w-6" />,
+    title: "Review & Improve",
+    description:
+      "Rate each card and watch your accuracy improve over time. Consistency is key!",
+  },
+] as const;
+
+const STEPS = [
+  "welcome",
+  "language",
+  "topics",
+  "goal",
+  "appearance",
+  "tutorial",
+] as const;
 type Step = (typeof STEPS)[number];
 
-const THEME_OPTIONS: {
-  value: ThemePreference;
-  label: string;
-  description: string;
-  icon: React.ReactNode;
-}[] = [
-  {
-    value: "system",
-    label: "System",
-    description: "Follows your device setting",
-    icon: <Monitor className="h-6 w-6" />,
-  },
-  {
-    value: "light",
-    label: "Light",
-    description: "Always use light mode",
-    icon: <Sun className="h-6 w-6" />,
-  },
-  {
-    value: "dark",
-    label: "Dark",
-    description: "Always use dark mode",
-    icon: <Moon className="h-6 w-6" />,
-  },
-];
+/* ───────────── Component ───────────── */
 
 export function OnboardingPage() {
   const navigate = useNavigate();
@@ -44,33 +103,42 @@ export function OnboardingPage() {
   const { themePreference, setThemePreference } = useTheme();
 
   const [step, setStep] = useState<Step>("welcome");
-  const [selectedTheme, setSelectedTheme] = useState<ThemePreference>(themePreference);
+  const [nativeLanguage, setNativeLanguage] = useState("en");
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [dailyGoal, setDailyGoal] = useState(25);
-  const [deckName, setDeckName] = useState("");
+  const [selectedCardTheme, setSelectedCardTheme] = useState(
+    () => getCardTheme().key,
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentIndex = STEPS.indexOf(step);
 
-  function next() {
+  const next = useCallback(() => {
     const nextStep = STEPS[currentIndex + 1];
     if (nextStep) setStep(nextStep);
-  }
+  }, [currentIndex]);
 
-  function handleThemeSelect(pref: ThemePreference) {
-    setSelectedTheme(pref);
-    setThemePreference(pref);
-  }
+  const toggleTopic = useCallback((topic: string) => {
+    setSelectedTopics((prev) =>
+      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic],
+    );
+  }, []);
 
   async function handleFinish() {
     setIsSubmitting(true);
     try {
-      if (deckName.trim()) {
-        await syncAwareApi.createDeck({ name: deckName.trim() });
-      }
+      // Follow selected topics
+      const followPromises = selectedTopics.map((topic) =>
+        socialApi.followTag(topic.toLowerCase()).catch(() => {}),
+      );
+      await Promise.allSettled(followPromises);
 
+      // Save preferences
       await profileApi.updatePreferences({
         dailyGoal,
-        themePreference: selectedTheme,
+        nativeLanguage,
+        themePreference,
+        cardTheme: selectedCardTheme,
         onboardingCompleted: true,
       });
 
@@ -81,13 +149,303 @@ export function OnboardingPage() {
         await profileApi.updatePreferences({ onboardingCompleted: true });
         await refreshUser();
       } catch {
-        // Ignore — we'll redirect anyway
+        // Ignore — redirect anyway
       }
       navigate("/", { replace: true });
     } finally {
       setIsSubmitting(false);
     }
   }
+
+  /* ───── Step renderers ───── */
+
+  const renderWelcome = () => (
+    <div className="flex flex-1 flex-col items-center justify-center text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
+        <Sparkles className="h-8 w-8 text-primary-500" />
+      </div>
+      <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+        Welcome to Versado{user?.displayName ? `, ${user.displayName}` : ""}!
+      </h1>
+      <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
+        Your personal spaced repetition learning tool. Let's set things up so
+        you can start memorizing effectively.
+      </p>
+      <div className="mt-10 w-full">
+        <Button fullWidth onClick={next}>
+          Get Started
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderLanguage = () => (
+    <div className="flex flex-1 flex-col">
+      <div className="flex flex-col items-center text-center pt-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+          <Globe className="h-7 w-7 text-primary-500" />
+        </div>
+        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          What's your native language?
+        </h1>
+        <p className="mt-2 max-w-xs text-sm text-neutral-500">
+          This helps us personalise your experience.
+        </p>
+      </div>
+      <div className="mt-6 grid grid-cols-2 gap-2 overflow-y-auto flex-1 pb-4">
+        {LANGUAGES.map(({ code, label }) => (
+          <button
+            key={code}
+            type="button"
+            onClick={() => setNativeLanguage(code)}
+            className={`flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm font-medium transition-all ${
+              nativeLanguage === code
+                ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+                : "border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 bg-white dark:bg-neutral-900"
+            }`}
+          >
+            {label}
+            {nativeLanguage === code && (
+              <Check className="ml-auto h-4 w-4 text-primary-500" />
+            )}
+          </button>
+        ))}
+      </div>
+      <div className="pt-2 pb-4">
+        <Button fullWidth onClick={next}>
+          Continue
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderTopics = () => (
+    <div className="flex flex-1 flex-col">
+      <div className="flex flex-col items-center text-center pt-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+          <BookOpen className="h-7 w-7 text-primary-500" />
+        </div>
+        <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          What do you want to study?
+        </h1>
+        <p className="mt-2 max-w-xs text-sm text-neutral-500">
+          Select topics that interest you. This helps us suggest relevant
+          content.
+        </p>
+      </div>
+      <div className="mt-6 flex flex-wrap justify-center gap-2 overflow-y-auto flex-1 pb-4">
+        {TOPICS.map((topic) => {
+          const selected = selectedTopics.includes(topic);
+          return (
+            <button
+              key={topic}
+              type="button"
+              onClick={() => toggleTopic(topic)}
+              className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-all ${
+                selected
+                  ? "border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+                  : "border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-900"
+              }`}
+            >
+              {selected && <Check className="mr-1 inline h-3.5 w-3.5" />}
+              {topic}
+            </button>
+          );
+        })}
+      </div>
+      <div className="pt-2 pb-4 flex flex-col gap-2">
+        <Button fullWidth onClick={next}>
+          Continue{" "}
+          {selectedTopics.length > 0 && `(${selectedTopics.length} selected)`}
+        </Button>
+        {selectedTopics.length === 0 && (
+          <button
+            type="button"
+            onClick={next}
+            className="text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors"
+          >
+            Skip for now
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderGoal = () => (
+    <div className="flex flex-1 flex-col items-center justify-center text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+        <Target className="h-7 w-7 text-primary-500" />
+      </div>
+      <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+        Set Your Daily Goal
+      </h1>
+      <p className="mt-2 max-w-xs text-sm text-neutral-500">
+        How many cards do you want to review each day? You can always change
+        this later.
+      </p>
+      <div className="mt-8 flex w-full flex-col gap-3">
+        {GOAL_PRESETS.map(({ value, label, description }) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setDailyGoal(value)}
+            className={`flex items-center justify-between rounded-xl border-2 px-5 py-4 text-left transition-all ${
+              dailyGoal === value
+                ? "border-primary-500 bg-primary-50 dark:bg-primary-950"
+                : "border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900"
+            }`}
+          >
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                {label}
+              </span>
+              <span className="text-xs text-neutral-500">{description}</span>
+            </span>
+            {dailyGoal === value && (
+              <Check className="h-5 w-5 shrink-0 text-primary-500" />
+            )}
+          </button>
+        ))}
+      </div>
+      <div className="mt-8 w-full">
+        <Button fullWidth onClick={next}>
+          Continue
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderAppearance = () => {
+    const isDark = themePreference === "dark";
+    const activeTheme = getCardTheme(selectedCardTheme);
+
+    return (
+      <div className="flex flex-1 flex-col">
+        <div className="flex flex-col items-center text-center pt-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+            <Palette className="h-7 w-7 text-primary-500" />
+          </div>
+          <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+            Customise Appearance
+          </h1>
+          <p className="mt-2 max-w-xs text-sm text-neutral-500">
+            Make Versado feel like yours. You can always change these later.
+          </p>
+        </div>
+
+        {/* Dark mode toggle */}
+        <div className="mt-6 flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-4 py-3">
+          <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+            Dark Mode
+          </span>
+          <ToggleSwitch
+            checked={isDark}
+            onChange={(val) => setThemePreference(val ? "dark" : "light")}
+          />
+        </div>
+
+        {/* Card theme grid */}
+        <p className="mt-6 text-xs font-medium uppercase tracking-wider text-neutral-400">
+          Card Theme
+        </p>
+        <div className="mt-3 grid grid-cols-4 gap-3 overflow-y-auto flex-1 pb-4">
+          {CARD_THEMES.map((theme) => (
+            <button
+              key={theme.key}
+              type="button"
+              onClick={() => setSelectedCardTheme(theme.key)}
+              className="flex flex-col items-center gap-1.5"
+            >
+              <div
+                className={`h-14 w-full rounded-xl ${theme.previewColor} ${
+                  selectedCardTheme === theme.key
+                    ? "ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-neutral-950"
+                    : ""
+                }`}
+              />
+              <span className="text-[11px] text-neutral-500">{theme.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Card preview */}
+        <div
+          className={`mt-2 p-4 ${activeTheme.cardClassName} flex flex-col items-center`}
+        >
+          <span
+            className={`text-[10px] font-semibold uppercase tracking-widest ${activeTheme.labelClassName}`}
+          >
+            Preview
+          </span>
+          <p className={`mt-2 text-center text-lg font-semibold ${activeTheme.textClassName}`}>
+            What is spaced repetition?
+          </p>
+        </div>
+
+        <div className="pt-4 pb-4">
+          <Button fullWidth onClick={next}>
+            Continue
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderTutorial = () => (
+    <div className="flex flex-1 flex-col items-center justify-center text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
+        <GraduationCap className="h-7 w-7 text-primary-500" />
+      </div>
+      <h1 className="mt-4 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+        How It Works
+      </h1>
+      <p className="mt-2 max-w-xs text-sm text-neutral-500">
+        Here's a quick overview of how to get the most out of Versado.
+      </p>
+      <div className="mt-8 flex w-full flex-col gap-4">
+        {TUTORIAL_CARDS.map((card, i) => (
+          <div
+            key={i}
+            className="flex items-start gap-4 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4 text-left"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-500">
+              {card.icon}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                {card.title}
+              </span>
+              <span className="mt-0.5 text-xs leading-relaxed text-neutral-500">
+                {card.description}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-10 w-full">
+        <Button fullWidth onClick={handleFinish} disabled={isSubmitting}>
+          {isSubmitting ? (
+            "Setting up..."
+          ) : (
+            <span className="flex items-center justify-center gap-2">
+              Start Learning <ChevronRight className="h-4 w-4" />
+            </span>
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+
+  /* ───── Render ───── */
+
+  const stepRenderers: Record<Step, () => React.ReactNode> = {
+    welcome: renderWelcome,
+    language: renderLanguage,
+    topics: renderTopics,
+    goal: renderGoal,
+    appearance: renderAppearance,
+    tutorial: renderTutorial,
+  };
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-neutral-50 dark:bg-neutral-950 px-6">
@@ -107,182 +465,7 @@ export function OnboardingPage() {
         ))}
       </div>
 
-      <div className="flex flex-1 flex-col">
-        {/* Step: Welcome */}
-        {step === "welcome" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
-              <Sparkles className="h-8 w-8 text-primary-500" />
-            </div>
-            <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              Welcome to Versado
-              {user?.displayName ? `, ${user.displayName}` : ""}!
-            </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-              Your personal spaced repetition learning tool. Let's set things up
-              so you can start memorizing effectively.
-            </p>
-            <div className="mt-10 w-full">
-              <Button fullWidth onClick={next}>
-                Get Started
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Step: Theme */}
-        {step === "theme" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
-              <Sun className="h-8 w-8 text-primary-500" />
-            </div>
-            <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              Choose Your Theme
-            </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-              Pick how Versado looks. You can always change this later in your
-              profile.
-            </p>
-            <div className="mt-8 flex w-full flex-col gap-3">
-              {THEME_OPTIONS.map(({ value, label, description, icon }) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => handleThemeSelect(value)}
-                  className={`flex items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left transition-all ${
-                    selectedTheme === value
-                      ? "border-primary-500 bg-primary-50 dark:bg-primary-950"
-                      : "border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900"
-                  }`}
-                >
-                  <span
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                      selectedTheme === value
-                        ? "bg-primary-500 text-white"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-500"
-                    }`}
-                  >
-                    {icon}
-                  </span>
-                  <span className="flex flex-col">
-                    <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                      {label}
-                    </span>
-                    <span className="text-xs text-neutral-500">{description}</span>
-                  </span>
-                  {selectedTheme === value && (
-                    <Check className="ml-auto h-5 w-5 shrink-0 text-primary-500" />
-                  )}
-                </button>
-              ))}
-            </div>
-            <div className="mt-8 w-full">
-              <Button fullWidth onClick={next}>
-                Continue
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Step: Daily Goal */}
-        {step === "goal" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
-              <Target className="h-8 w-8 text-primary-500" />
-            </div>
-            <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              Set Your Daily Goal
-            </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-              How many cards do you want to review each day? You can always
-              change this later.
-            </p>
-            <div className="mt-8 flex gap-3">
-              {GOAL_OPTIONS.map((goal) => (
-                <button
-                  key={goal}
-                  type="button"
-                  onClick={() => setDailyGoal(goal)}
-                  className={`flex h-14 w-14 items-center justify-center rounded-xl text-sm font-semibold transition-all ${
-                    dailyGoal === goal
-                      ? "bg-primary-500 text-white shadow-md"
-                      : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                  }`}
-                >
-                  {goal}
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 text-xs text-neutral-400">cards per day</p>
-            <div className="mt-10 w-full">
-              <Button fullWidth onClick={next}>
-                Continue
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Step: First Deck */}
-        {step === "deck" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
-              <BookOpen className="h-8 w-8 text-primary-500" />
-            </div>
-            <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              Create Your First Deck
-            </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-              What would you like to study? Give your first deck a name.
-            </p>
-            <div className="mt-8 w-full text-left">
-              <Input
-                label="Deck Name"
-                placeholder="e.g. Spanish Vocabulary"
-                value={deckName}
-                onChange={(e) => setDeckName(e.target.value)}
-              />
-            </div>
-            <div className="mt-10 flex w-full flex-col gap-3">
-              <Button fullWidth onClick={next}>
-                Continue
-              </Button>
-              <button
-                type="button"
-                onClick={next}
-                className="text-sm font-medium text-neutral-400 transition-colors hover:text-neutral-600"
-              >
-                Skip for now
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step: Done */}
-        {step === "done" && (
-          <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-success-100">
-              <Check className="h-8 w-8 text-success-500" />
-            </div>
-            <h1 className="mt-6 text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              You're All Set!
-            </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
-              {deckName.trim()
-                ? `Your deck "${deckName.trim()}" will be created and you're ready to start learning.`
-                : "You're ready to start your learning journey. Create decks and add cards whenever you're ready."}
-            </p>
-            <div className="mt-10 w-full">
-              <Button
-                fullWidth
-                onClick={handleFinish}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Setting up..." : "Start Learning"}
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+      <div className="flex flex-1 flex-col">{stepRenderers[step]()}</div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export function AuthCallbackPage() {
   const navigate = useNavigate();
-  const { refreshUser } = useAuth();
+  const { loginWithToken } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,9 +26,7 @@ export function AuthCallbackPage() {
       return;
     }
 
-    setAccessToken(token);
-
-    refreshUser()
+    loginWithToken(token)
       .then(() => navigate("/", { replace: true }))
       .catch(() => {
         setAccessToken(null);

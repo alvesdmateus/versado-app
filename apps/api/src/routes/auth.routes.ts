@@ -27,10 +27,12 @@ export const authRoutes = new Hono();
 authRoutes.use("*", rateLimitMiddleware(5, 60_000));
 
 function setRefreshCookie(c: any, refreshToken: string) {
+  const isProd = env.NODE_ENV === "production";
   setCookie(c, REFRESH_TOKEN_COOKIE, refreshToken, {
     httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "Strict",
+    secure: isProd,
+    // Cross-domain (Vercel frontend + Render API): must use None in production
+    sameSite: isProd ? "None" : "Strict",
     maxAge: REFRESH_TOKEN_EXPIRY,
     path: "/auth",
   });

@@ -16,6 +16,7 @@ export interface AuthContextValue {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithToken: (accessToken: string) => Promise<void>;
   register: (
     email: string,
     password: string,
@@ -106,6 +107,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [scheduleRefresh]
   );
 
+  const loginWithToken = useCallback(
+    async (accessToken: string) => {
+      setAccessToken(accessToken);
+      const profile = await authApi.getMe();
+      setUser(profile);
+      scheduleRefresh();
+    },
+    [scheduleRefresh]
+  );
+
   const register = useCallback(
     async (email: string, password: string, displayName: string, turnstileToken?: string) => {
       const { accessToken, user: profile } = await authApi.register(
@@ -151,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: user !== null,
         isLoading,
         login,
+        loginWithToken,
         register,
         logout,
         refreshUser,
