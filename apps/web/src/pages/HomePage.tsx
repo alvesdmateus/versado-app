@@ -144,6 +144,7 @@ export function HomePage() {
             cardCount: d.cardCount,
             coverImageUrl: d.coverImageUrl,
             progress: d.progress,
+            onClick: () => navigate(`/decks/${d.id}`),
           })) ?? []
         }
         onViewAll={() => navigate("/decks")}
