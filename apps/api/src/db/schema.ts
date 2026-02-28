@@ -55,6 +55,7 @@ export const users = pgTable("users", {
       pushAlerts: true,
       favoriteDeckIds: [],
     }),
+  acceptedTermsAt: timestamp("accepted_terms_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
