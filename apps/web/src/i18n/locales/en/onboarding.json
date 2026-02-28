@@ -1,8 +1,21 @@
 {
+  "stepOf": "Step {{current}} of {{total}}",
+  "steps": {
+    "welcome": "Welcome",
+    "language": "Language",
+    "topics": "Interests",
+    "goal": "Goals",
+    "appearance": "Appearance",
+    "tutorial": "Usage"
+  },
   "welcome": {
     "heading": "Welcome to Versado{{name}}!",
-    "subheading": "Your personal spaced repetition learning tool. Let's set things up so you can start memorizing effectively.",
-    "getStarted": "Get Started"
+    "subheading": "Let's set up your learning profile to get started.",
+    "addPhoto": "Add Photo",
+    "changePhoto": "Change Photo",
+    "optional": "Optional",
+    "nextStep": "Next Step",
+    "skip": "Skip for now"
   },
   "language": {
     "heading": "What's your native language?",
@@ -34,9 +47,10 @@
   "goal": {
     "heading": "Set Your Daily Goal",
     "subheading": "How many cards do you want to review each day? You can always change this later.",
+    "cardsPerDay": "cards / day",
     "casual": "Casual",
     "casualDesc": "10 cards/day",
-    "regular": "Regular",
+    "regular": "Steady",
     "regularDesc": "25 cards/day",
     "serious": "Serious",
     "seriousDesc": "50 cards/day",

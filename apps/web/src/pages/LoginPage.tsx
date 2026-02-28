@@ -172,7 +172,7 @@ export function LoginPage() {
 
       <Divider label={t("login.orContinueWith")} className="my-6 w-full" />
 
-      <div className="grid w-full grid-cols-2 gap-3">
+      <div className="flex w-full justify-center">
         <SocialButton
           icon={<GoogleIcon />}
           onClick={handleGoogleSignIn}

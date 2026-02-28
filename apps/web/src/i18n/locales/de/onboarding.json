@@ -1,8 +1,21 @@
 {
+  "stepOf": "Schritt {{current}} von {{total}}",
+  "steps": {
+    "welcome": "Willkommen",
+    "language": "Sprache",
+    "topics": "Interessen",
+    "goal": "Ziele",
+    "appearance": "Aussehen",
+    "tutorial": "Nutzung"
+  },
   "welcome": {
     "heading": "Willkommen bei Versado{{name}}!",
-    "subheading": "Dein persönliches Lernwerkzeug mit verteilter Wiederholung. Lass uns alles einrichten, damit du effektiv lernen kannst.",
-    "getStarted": "Los geht's"
+    "subheading": "Richten wir dein Lernprofil ein, um loszulegen.",
+    "addPhoto": "Foto hinzufügen",
+    "changePhoto": "Foto ändern",
+    "optional": "Optional",
+    "nextStep": "Nächster Schritt",
+    "skip": "Erstmal überspringen"
   },
   "language": {
     "heading": "Was ist deine Muttersprache?",
@@ -34,6 +47,7 @@
   "goal": {
     "heading": "Setze dein Tagesziel",
     "subheading": "Wie viele Karten möchtest du pro Tag wiederholen? Du kannst das jederzeit ändern.",
+    "cardsPerDay": "Karten / Tag",
     "casual": "Entspannt",
     "casualDesc": "10 Karten/Tag",
     "regular": "Regelmäßig",

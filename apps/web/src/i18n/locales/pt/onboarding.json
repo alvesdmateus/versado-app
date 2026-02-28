@@ -1,8 +1,21 @@
 {
+  "stepOf": "Passo {{current}} de {{total}}",
+  "steps": {
+    "welcome": "Boas-vindas",
+    "language": "Idioma",
+    "topics": "Interesses",
+    "goal": "Metas",
+    "appearance": "Aparência",
+    "tutorial": "Uso"
+  },
   "welcome": {
     "heading": "Bem-vindo ao Versado{{name}}!",
-    "subheading": "Sua ferramenta pessoal de repetição espaçada. Vamos configurar tudo para você começar a memorizar de forma eficaz.",
-    "getStarted": "Começar"
+    "subheading": "Vamos configurar seu perfil de aprendizado para começar.",
+    "addPhoto": "Adicionar Foto",
+    "changePhoto": "Alterar Foto",
+    "optional": "Opcional",
+    "nextStep": "Próximo Passo",
+    "skip": "Pular por agora"
   },
   "language": {
     "heading": "Qual é o seu idioma nativo?",
@@ -34,6 +47,7 @@
   "goal": {
     "heading": "Defina Sua Meta Diária",
     "subheading": "Quantos cartões você quer revisar por dia? Você pode alterar isso depois.",
+    "cardsPerDay": "cartões / dia",
     "casual": "Casual",
     "casualDesc": "10 cartões/dia",
     "regular": "Regular",

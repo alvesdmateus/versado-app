@@ -38,14 +38,14 @@ import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { useToast } from "@/contexts/ToastContext";
 import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-manager";
 
-const SUPPORTED_LANGUAGES = ["en", "pt", "es", "fr", "de"] as const;
-const LANGUAGE_LABELS: Record<string, string> = {
-  en: "English",
-  pt: "Português",
-  es: "Español",
-  fr: "Français",
-  de: "Deutsch",
-};
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_LANGUAGE_CODES,
+} from "@/i18n/supported-languages";
+
+const LANGUAGE_LABELS: Record<string, string> = Object.fromEntries(
+  SUPPORTED_LANGUAGES.map((l) => [l.code, l.label])
+);
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -85,8 +85,8 @@ export function ProfilePage() {
   }
 
   async function handleLanguageChange() {
-    const currentIdx = SUPPORTED_LANGUAGES.indexOf(i18n.language as typeof SUPPORTED_LANGUAGES[number]);
-    const newLang = SUPPORTED_LANGUAGES[(currentIdx + 1) % SUPPORTED_LANGUAGES.length];
+    const currentIdx = SUPPORTED_LANGUAGE_CODES.indexOf(i18n.language);
+    const newLang = SUPPORTED_LANGUAGE_CODES[(currentIdx + 1) % SUPPORTED_LANGUAGE_CODES.length];
     const prevLang = i18n.language;
     i18n.changeLanguage(newLang);
     try {

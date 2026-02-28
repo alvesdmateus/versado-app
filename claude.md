@@ -2,6 +2,13 @@
 
 Monorepo flashcard application — React PWA + Hono API + PostgreSQL.
 
+## Deployment & Infrastructure
+
+- **Web:** Vercel (React PWA)
+- **API:** Render (Hono/Bun)
+- **DB:** Neon (serverless PostgreSQL)
+- **Target:** Mobile-first PWA → Android TWA on Google Play Console
+
 ## Architecture
 
 ```
