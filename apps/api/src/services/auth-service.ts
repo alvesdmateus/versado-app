@@ -57,7 +57,7 @@ export async function register(
 
   const rows = await db
     .insert(users)
-    .values({ email, passwordHash, displayName })
+    .values({ email, passwordHash, displayName, acceptedTermsAt: new Date() })
     .returning();
   const user = rows[0]!;
 
@@ -404,6 +404,7 @@ export async function findOrCreateGoogleUser(
         displayName,
         avatarUrl,
         emailVerified: true,
+        acceptedTermsAt: new Date(),
       })
       .returning();
     user = created[0]!;

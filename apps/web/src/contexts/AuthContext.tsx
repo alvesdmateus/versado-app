@@ -21,6 +21,7 @@ export interface AuthContextValue {
     email: string,
     password: string,
     displayName: string,
+    acceptedTerms: true,
     turnstileToken?: string
   ) => Promise<void>;
   logout: () => Promise<void>;
@@ -118,11 +119,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const register = useCallback(
-    async (email: string, password: string, displayName: string, turnstileToken?: string) => {
+    async (email: string, password: string, displayName: string, acceptedTerms: true, turnstileToken?: string) => {
       const { accessToken, user: profile } = await authApi.register(
         email,
         password,
         displayName,
+        acceptedTerms,
         turnstileToken
       );
       setAccessToken(accessToken);

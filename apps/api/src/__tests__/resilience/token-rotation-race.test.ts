@@ -16,6 +16,7 @@ describe("Token Rotation Race Condition", () => {
         email: "race@test.com",
         password: "Password1",
         displayName: "Race Test",
+        acceptedTerms: true,
       }),
     });
     expect(regRes.status).toBe(201);

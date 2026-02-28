@@ -54,10 +54,15 @@ export function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   async function handleGoogleSignIn() {
+    if (!acceptedTerms) {
+      setErrors({ general: t("register.acceptTermsRequired") });
+      return;
+    }
     setIsGoogleLoading(true);
     try {
       const { url } = await authApi.getGoogleAuthUrl();
@@ -71,7 +76,7 @@ export function RegisterPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    const result = registerSchema.safeParse({ email, password, displayName });
+    const result = registerSchema.safeParse({ email, password, displayName, acceptedTerms: acceptedTerms || undefined });
     if (!result.success) {
       const fieldErrors: FormErrors = {};
       for (const issue of result.error.issues) {
@@ -93,7 +98,7 @@ export function RegisterPage() {
     setIsSubmitting(true);
 
     try {
-      await register(result.data.email, result.data.password, result.data.displayName, turnstileToken ?? undefined);
+      await register(result.data.email, result.data.password, result.data.displayName, true, turnstileToken ?? undefined);
       navigate("/onboarding");
     } catch (err) {
       if (err instanceof ApiError) {
@@ -185,16 +190,24 @@ export function RegisterPage() {
           />
         )}
 
-        <p className="text-xs text-center text-neutral-400">
-          <Trans
-            i18nKey="register.termsAgreement"
-            ns="auth"
-            components={{
-              terms: <Link to="/terms" className="text-primary-500 hover:text-primary-600 underline" />,
-              privacy: <Link to="/privacy" className="text-primary-500 hover:text-primary-600 underline" />,
-            }}
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
           />
-        </p>
+          <span className="text-xs text-neutral-500">
+            <Trans
+              i18nKey="register.acceptTerms"
+              ns="auth"
+              components={{
+                terms: <Link to="/terms" className="text-primary-500 hover:text-primary-600 underline" />,
+                privacy: <Link to="/privacy" className="text-primary-500 hover:text-primary-600 underline" />,
+              }}
+            />
+          </span>
+        </label>
 
         <Button type="submit" variant="primary" size="lg" fullWidth disabled={isSubmitting}>
           {isSubmitting ? t("register.creatingAccount") : t("register.createAccount")}

@@ -12,6 +12,7 @@ describe("registerSchema", () => {
     email: "test@example.com",
     password: "Password1",
     displayName: "Test User",
+    acceptedTerms: true as const,
   };
 
   test("accepts valid input", () => {

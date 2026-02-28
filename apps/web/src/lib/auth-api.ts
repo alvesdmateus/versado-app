@@ -9,10 +9,10 @@ export const authApi = {
     });
   },
 
-  register(email: string, password: string, displayName: string, turnstileToken?: string) {
+  register(email: string, password: string, displayName: string, acceptedTerms: true, turnstileToken?: string) {
     return apiClient<AuthResponse>("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, displayName, turnstileToken }),
+      body: JSON.stringify({ email, password, displayName, acceptedTerms, turnstileToken }),
     });
   },
 
