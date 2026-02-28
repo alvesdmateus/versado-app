@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download } from "lucide-react";
+import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download, FileText } from "lucide-react";
 import type { DeckResponse, FlashcardResponse } from "@/lib/deck-api";
 import { ApiError } from "@/lib/api-client";
 import { syncAwareApi } from "@/lib/sync-aware-api";
@@ -15,6 +15,7 @@ import { EditDeckModal } from "@/components/decks/EditDeckModal";
 import { EditCardModal } from "@/components/decks/EditCardModal";
 import { ListDeckModal } from "@/components/marketplace/ListDeckModal";
 import { AIGenerateModal } from "@/components/decks/AIGenerateModal";
+import { TextExtractModal } from "@/components/decks/TextExtractModal";
 import { ExportDeckModal } from "@/components/decks/ExportDeckModal";
 import { CardFilters } from "@/components/decks/CardFilters";
 import { EmptyState, ConfirmDialog, CardListSkeleton } from "@/components/shared";
@@ -40,6 +41,7 @@ export function DeckDetailPage() {
   const [isDeleteDeckOpen, setIsDeleteDeckOpen] = useState(false);
   const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [isAIGenerateOpen, setIsAIGenerateOpen] = useState(false);
+  const [isTextExtractOpen, setIsTextExtractOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
 
   // Card filter state
@@ -260,6 +262,14 @@ export function DeckDetailPage() {
           <Sparkles className="h-4 w-4" />
           {t("detail.aiGenerate")}
         </Button>
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={() => setIsTextExtractOpen(true)}
+        >
+          <FileText className="h-4 w-4" />
+          {t("detail.textExtract")}
+        </Button>
       </div>
 
       {/* Card list */}
@@ -357,6 +367,29 @@ export function DeckDetailPage() {
               : prev
           );
           setIsAIGenerateOpen(false);
+        }}
+      />
+
+      {/* Text Extract Modal */}
+      <TextExtractModal
+        isOpen={isTextExtractOpen}
+        onClose={() => setIsTextExtractOpen(false)}
+        deckId={deckId!}
+        onGenerated={(newCards) => {
+          setCards((prev) => [...prev, ...newCards]);
+          setDeck((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  stats: {
+                    ...prev.stats,
+                    totalCards: prev.stats.totalCards + newCards.length,
+                    newCards: prev.stats.newCards + newCards.length,
+                  },
+                }
+              : prev
+          );
+          setIsTextExtractOpen(false);
         }}
       />
 

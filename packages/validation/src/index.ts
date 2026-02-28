@@ -73,6 +73,8 @@ export {
 export {
   generateFlashcardsSchema,
   type GenerateFlashcardsInput,
+  extractFlashcardsSchema,
+  type ExtractFlashcardsInput,
 } from "./ai";
 
 export {
