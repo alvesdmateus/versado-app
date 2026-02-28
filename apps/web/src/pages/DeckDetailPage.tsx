@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download } from "lucide-react";
 import type { DeckResponse, FlashcardResponse } from "@/lib/deck-api";
@@ -23,6 +23,7 @@ import { Button } from "@versado/ui";
 export function DeckDetailPage() {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation("decks");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
@@ -104,6 +105,14 @@ export function DeckDetailPage() {
       })
       .finally(() => setIsLoading(false));
   }, [deckId, navigate]);
+
+  useEffect(() => {
+    if (searchParams.get("addCards") === "true") {
+      setIsAddCardOpen(true);
+      searchParams.delete("addCards");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   async function handleDeleteDeck() {
     if (!deckId) return;

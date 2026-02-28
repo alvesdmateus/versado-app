@@ -179,5 +179,11 @@
     "csvDesc": "Simple spreadsheet format for Excel, Google Sheets",
     "exportAs": "Export as {{format}}",
     "exported": "Deck exported as {{format}}!"
+  },
+  "deckCreated": {
+    "heading": "Deck Created!",
+    "description": "Your deck <bold>{{name}}</bold> is ready. Add some cards to start studying!",
+    "addCards": "Add Cards",
+    "viewDeck": "View Deck"
   }
 }

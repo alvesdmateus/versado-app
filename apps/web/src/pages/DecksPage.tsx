@@ -10,6 +10,7 @@ import { DeckSearchBar } from "@/components/decks/DeckSearchBar";
 import { DeckFilterTabs } from "@/components/decks/DeckFilterTabs";
 import { DeckGridCard } from "@/components/decks/DeckGridCard";
 import { CreateDeckModal } from "@/components/decks/CreateDeckModal";
+import { DeckCreatedModal } from "@/components/decks/DeckCreatedModal";
 import { ImportDeckModal } from "@/components/decks/ImportDeckModal";
 import { SortSelect } from "@/components/shared/SortSelect";
 import { EmptyState, DeckGridSkeleton } from "@/components/shared";
@@ -46,6 +47,7 @@ export function DecksPage() {
   const [activeFilter, setActiveFilter] = useState<(typeof FILTER_KEYS)[number]>("all");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
+  const [createdDeck, setCreatedDeck] = useState<DeckResponse | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState("newest");
 
@@ -253,7 +255,22 @@ export function DecksPage() {
         onCreated={(deck) => {
           setDecks((prev) => [deck, ...prev]);
           setIsCreateOpen(false);
-          navigate(`/decks/${deck.id}`);
+          setCreatedDeck(deck);
+        }}
+      />
+
+      <DeckCreatedModal
+        isOpen={createdDeck !== null}
+        deck={createdDeck}
+        onAddCards={() => {
+          const id = createdDeck?.id;
+          setCreatedDeck(null);
+          navigate(`/decks/${id}?addCards=true`);
+        }}
+        onViewDeck={() => {
+          const id = createdDeck?.id;
+          setCreatedDeck(null);
+          navigate(`/decks/${id}`);
         }}
       />
     </div>

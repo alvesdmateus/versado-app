@@ -179,5 +179,11 @@
     "csvDesc": "Formato simple de hoja de cálculo para Excel, Google Sheets",
     "exportAs": "Exportar como {{format}}",
     "exported": "¡Mazo exportado como {{format}}!"
+  },
+  "deckCreated": {
+    "heading": "¡Mazo Creado!",
+    "description": "Tu mazo <bold>{{name}}</bold> está listo. ¡Agrega algunas tarjetas para empezar a estudiar!",
+    "addCards": "Agregar Tarjetas",
+    "viewDeck": "Ver Mazo"
   }
 }

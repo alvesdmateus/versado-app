@@ -14,7 +14,7 @@ export async function registerUser(
   const displayName = overrides?.displayName ?? "E2E User";
 
   const res = await request.post(`${API_URL}/auth/register`, {
-    data: { email, password, displayName },
+    data: { email, password, displayName, acceptedTerms: true },
     headers: { "x-forwarded-for": `e2e-${Date.now()}-${Math.random()}` },
   });
 

@@ -179,5 +179,11 @@
     "csvDesc": "Einfaches Tabellenkalkulationsformat für Excel, Google Sheets",
     "exportAs": "Exportieren als {{format}}",
     "exported": "Kartenset als {{format}} exportiert!"
+  },
+  "deckCreated": {
+    "heading": "Kartenset erstellt!",
+    "description": "Dein Kartenset <bold>{{name}}</bold> ist bereit. Füge einige Karten hinzu, um mit dem Lernen zu beginnen!",
+    "addCards": "Karten hinzufügen",
+    "viewDeck": "Kartenset ansehen"
   }
 }

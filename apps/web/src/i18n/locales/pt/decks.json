@@ -179,5 +179,11 @@
     "csvDesc": "Formato simples de planilha para Excel, Google Sheets",
     "exportAs": "Exportar como {{format}}",
     "exported": "Baralho exportado como {{format}}!"
+  },
+  "deckCreated": {
+    "heading": "Baralho Criado!",
+    "description": "Seu baralho <bold>{{name}}</bold> está pronto. Adicione algumas cartas para começar a estudar!",
+    "addCards": "Adicionar Cartas",
+    "viewDeck": "Ver Baralho"
   }
 }
