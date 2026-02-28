@@ -10,6 +10,7 @@ describe("Auth Routes", () => {
     email: "test@example.com",
     password: "Password1",
     displayName: "Test User",
+    acceptedTerms: true,
   };
 
   describe("POST /auth/register", () => {
