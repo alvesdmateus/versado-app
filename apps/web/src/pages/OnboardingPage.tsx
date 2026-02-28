@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
+  ArrowLeft,
   Check,
   Sparkles,
   Globe,
@@ -98,6 +99,15 @@ export function OnboardingPage() {
     const nextStep = STEPS[currentIndex + 1];
     if (nextStep) setStep(nextStep);
   }, [currentIndex]);
+
+  const prev = useCallback(() => {
+    const prevStep = STEPS[currentIndex - 1];
+    if (prevStep) setStep(prevStep);
+  }, [currentIndex]);
+
+  const totalSteps = STEPS.length;
+  const stepNumber = currentIndex + 1;
+  const progressPercent = Math.round((stepNumber / totalSteps) * 100);
 
   const toggleTopic = useCallback((topic: string) => {
     setSelectedTopics((prev) =>
@@ -497,20 +507,38 @@ export function OnboardingPage() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-neutral-50 px-6">
-      {/* Progress dots */}
-      <div className="flex items-center justify-center gap-2 pt-8 pb-6">
-        {STEPS.map((s, i) => (
+      {/* Header: back arrow + step title */}
+      <div className="relative flex items-center justify-center pt-6 pb-4">
+        {currentIndex > 0 && (
+          <button
+            type="button"
+            onClick={prev}
+            className="absolute left-0 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-neutral-100"
+          >
+            <ArrowLeft className="h-5 w-5 text-neutral-700" />
+          </button>
+        )}
+        <h2 className="text-base font-bold text-neutral-900">
+          {t(`steps.${step}`)}
+        </h2>
+      </div>
+
+      {/* Step indicator + progress bar */}
+      <div className="pb-4">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+            {t("stepOf", { current: stepNumber, total: totalSteps })}
+          </span>
+          <span className="text-[11px] font-semibold text-primary-500">
+            {progressPercent}%
+          </span>
+        </div>
+        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-neutral-200">
           <div
-            key={s}
-            className={`h-1.5 rounded-full transition-all ${
-              i === currentIndex
-                ? "w-6 bg-primary-500"
-                : i < currentIndex
-                  ? "w-1.5 bg-primary-300"
-                  : "w-1.5 bg-neutral-200"
-            }`}
+            className="h-full rounded-full bg-primary-500 transition-all duration-300"
+            style={{ width: `${progressPercent}%` }}
           />
-        ))}
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col">{stepRenderers[step]()}</div>

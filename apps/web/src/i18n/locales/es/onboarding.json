@@ -1,4 +1,13 @@
 {
+  "stepOf": "Paso {{current}} de {{total}}",
+  "steps": {
+    "welcome": "Bienvenida",
+    "language": "Idioma",
+    "topics": "Intereses",
+    "goal": "Metas",
+    "appearance": "Apariencia",
+    "tutorial": "Uso"
+  },
   "welcome": {
     "heading": "¡Bienvenido a Versado{{name}}!",
     "subheading": "Tu herramienta personal de aprendizaje con repetición espaciada. Vamos a configurar todo para que empieces a memorizar de forma efectiva.",
