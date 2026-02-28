@@ -34,6 +34,7 @@
   "goal": {
     "heading": "Définissez votre objectif quotidien",
     "subheading": "Combien de cartes souhaitez-vous réviser chaque jour ? Vous pouvez toujours modifier cela plus tard.",
+    "cardsPerDay": "cartes / jour",
     "casual": "Décontracté",
     "casualDesc": "10 cartes/jour",
     "regular": "Régulier",

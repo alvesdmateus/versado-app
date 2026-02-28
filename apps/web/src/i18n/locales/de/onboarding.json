@@ -34,6 +34,7 @@
   "goal": {
     "heading": "Setze dein Tagesziel",
     "subheading": "Wie viele Karten möchtest du pro Tag wiederholen? Du kannst das jederzeit ändern.",
+    "cardsPerDay": "Karten / Tag",
     "casual": "Entspannt",
     "casualDesc": "10 Karten/Tag",
     "regular": "Regelmäßig",

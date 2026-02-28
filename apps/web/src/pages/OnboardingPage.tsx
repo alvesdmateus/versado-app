@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
   Check,
-  Target,
   Sparkles,
   Globe,
   Palette,
@@ -274,41 +273,56 @@ export function OnboardingPage() {
   );
 
   const renderGoal = () => (
-    <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100">
-        <Target className="h-7 w-7 text-primary-500" />
+    <div className="flex flex-1 flex-col">
+      <div className="pt-4">
+        <h1 className="text-xl font-bold text-neutral-900">
+          {t("goal.heading")}
+        </h1>
+        <p className="mt-1 text-sm text-neutral-500">
+          {t("goal.subheading")}
+        </p>
       </div>
-      <h1 className="mt-4 text-xl font-bold text-neutral-900">
-        {t("goal.heading")}
-      </h1>
-      <p className="mt-2 max-w-xs text-sm text-neutral-500">
-        {t("goal.subheading")}
-      </p>
-      <div className="mt-8 flex w-full flex-col gap-3">
-        {GOAL_PRESETS.map(({ value, labelKey, descKey }) => (
+
+      {/* Large number display */}
+      <div className="mt-8 flex flex-col items-center">
+        <span className="text-5xl font-bold text-primary-500">{dailyGoal}</span>
+        <span className="mt-1 text-xs font-semibold uppercase tracking-widest text-neutral-400">
+          {t("goal.cardsPerDay")}
+        </span>
+      </div>
+
+      {/* 2x2 preset grid */}
+      <div className="mt-8 grid grid-cols-2 gap-3">
+        {GOAL_PRESETS.map(({ value, labelKey }) => (
           <button
             key={value}
             type="button"
             onClick={() => setDailyGoal(value)}
-            className={`flex items-center justify-between rounded-xl border-2 px-5 py-4 text-left transition-all ${
+            className={`flex flex-col items-center gap-1 rounded-xl border-2 py-4 transition-all ${
               dailyGoal === value
                 ? "border-primary-500 bg-primary-50"
                 : "border-neutral-200 bg-neutral-0"
             }`}
           >
-            <span className="flex flex-col">
-              <span className="text-sm font-semibold text-neutral-900">
-                {t(`goal.${labelKey}`)}
-              </span>
-              <span className="text-xs text-neutral-500">{t(`goal.${descKey}`)}</span>
+            <span
+              className={`text-[10px] font-bold uppercase tracking-wider ${
+                dailyGoal === value ? "text-primary-600" : "text-neutral-400"
+              }`}
+            >
+              {t(`goal.${labelKey}`)}
             </span>
-            {dailyGoal === value && (
-              <Check className="h-5 w-5 shrink-0 text-primary-500" />
-            )}
+            <span
+              className={`text-xl font-bold ${
+                dailyGoal === value ? "text-primary-700" : "text-neutral-700"
+              }`}
+            >
+              {value}
+            </span>
           </button>
         ))}
       </div>
-      <div className="mt-8 w-full">
+
+      <div className="mt-auto pt-6 pb-4">
         <Button fullWidth onClick={next}>
           {t("topics.continueDefault")}
         </Button>

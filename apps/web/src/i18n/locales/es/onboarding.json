@@ -34,6 +34,7 @@
   "goal": {
     "heading": "Define tu meta diaria",
     "subheading": "¿Cuántas tarjetas quieres repasar cada día? Puedes cambiarlo después.",
+    "cardsPerDay": "tarjetas / día",
     "casual": "Casual",
     "casualDesc": "10 tarjetas/día",
     "regular": "Regular",

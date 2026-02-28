@@ -34,9 +34,10 @@
   "goal": {
     "heading": "Set Your Daily Goal",
     "subheading": "How many cards do you want to review each day? You can always change this later.",
+    "cardsPerDay": "cards / day",
     "casual": "Casual",
     "casualDesc": "10 cards/day",
-    "regular": "Regular",
+    "regular": "Steady",
     "regularDesc": "25 cards/day",
     "serious": "Serious",
     "seriousDesc": "50 cards/day",
