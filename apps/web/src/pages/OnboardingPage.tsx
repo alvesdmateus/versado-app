@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -92,6 +92,8 @@ export function OnboardingPage() {
     () => getCardTheme().key,
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentIndex = STEPS.indexOf(step);
 
@@ -120,6 +122,31 @@ export function OnboardingPage() {
     i18n.changeLanguage(code);
   }
 
+  function handleAvatarSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const size = 256;
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d")!;
+
+      // Crop to square from center
+      const min = Math.min(img.width, img.height);
+      const sx = (img.width - min) / 2;
+      const sy = (img.height - min) / 2;
+      ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+      setAvatarPreview(dataUrl);
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
   async function handleFinish() {
     setIsSubmitting(true);
     try {
@@ -128,6 +155,11 @@ export function OnboardingPage() {
         socialApi.followTag(topic.toLowerCase()).catch(() => {}),
       );
       await Promise.allSettled(followPromises);
+
+      // Save avatar if selected
+      if (avatarPreview) {
+        await profileApi.update({ avatarUrl: avatarPreview });
+      }
 
       // Save preferences
       await profileApi.updatePreferences({
@@ -164,13 +196,27 @@ export function OnboardingPage() {
         {t("welcome.subheading")}
       </p>
 
-      {/* Avatar placeholder */}
-      <div className="mt-10 flex flex-col items-center gap-2">
-        <div className="flex h-28 w-28 items-center justify-center rounded-full border-2 border-dashed border-primary-300 bg-primary-50">
-          <Camera className="h-8 w-8 text-primary-400" />
+      {/* Avatar upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleAvatarSelect}
+      />
+      <div
+        className="mt-10 flex cursor-pointer flex-col items-center gap-2"
+        onClick={() => fileInputRef.current?.click()}
+      >
+        <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-primary-300 bg-primary-50">
+          {avatarPreview ? (
+            <img src={avatarPreview} alt="Avatar" className="h-full w-full object-cover" />
+          ) : (
+            <Camera className="h-8 w-8 text-primary-400" />
+          )}
         </div>
         <span className="text-sm font-semibold text-primary-500">
-          {t("welcome.addPhoto")}
+          {avatarPreview ? t("welcome.changePhoto") : t("welcome.addPhoto")}
         </span>
         <span className="text-xs text-neutral-400">
           {t("welcome.optional")}

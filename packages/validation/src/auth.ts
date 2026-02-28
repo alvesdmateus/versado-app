@@ -47,7 +47,15 @@ export const updateProfileSchema = z.object({
     .max(50, "Display name must be at most 50 characters")
     .trim()
     .optional(),
-  avatarUrl: z.string().url("Invalid URL").max(2048).nullable().optional(),
+  avatarUrl: z
+    .string()
+    .max(200000)
+    .refine(
+      (val) => val.startsWith("data:image/") || /^https?:\/\//.test(val),
+      "Must be a valid URL or data URI",
+    )
+    .nullable()
+    .optional(),
 });
 
 export const updatePreferencesSchema = z.object({

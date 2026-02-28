@@ -12,6 +12,7 @@
     "heading": "Welcome to Versado{{name}}!",
     "subheading": "Let's set up your learning profile to get started.",
     "addPhoto": "Add Photo",
+    "changePhoto": "Change Photo",
     "optional": "Optional",
     "nextStep": "Next Step",
     "skip": "Skip for now"
