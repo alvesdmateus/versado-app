@@ -10,8 +10,11 @@
   },
   "welcome": {
     "heading": "Welcome to Versado{{name}}!",
-    "subheading": "Your personal spaced repetition learning tool. Let's set things up so you can start memorizing effectively.",
-    "getStarted": "Get Started"
+    "subheading": "Let's set up your learning profile to get started.",
+    "addPhoto": "Add Photo",
+    "optional": "Optional",
+    "nextStep": "Next Step",
+    "skip": "Skip for now"
   },
   "language": {
     "heading": "What's your native language?",

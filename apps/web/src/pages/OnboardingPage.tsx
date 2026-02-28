@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
+  Camera,
   Check,
-  Sparkles,
   Globe,
   Palette,
   GraduationCap,
@@ -156,20 +156,38 @@ export function OnboardingPage() {
   /* ───── Step renderers ───── */
 
   const renderWelcome = () => (
-    <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100">
-        <Sparkles className="h-8 w-8 text-primary-500" />
-      </div>
+    <div className="flex flex-1 flex-col items-center text-center">
       <h1 className="mt-6 text-2xl font-bold text-neutral-900">
         {t("welcome.heading", { name: user?.displayName ? `, ${user.displayName}` : "" })}
       </h1>
-      <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
+      <p className="mt-2 max-w-xs text-sm leading-relaxed text-neutral-500">
         {t("welcome.subheading")}
       </p>
-      <div className="mt-10 w-full">
+
+      {/* Avatar placeholder */}
+      <div className="mt-10 flex flex-col items-center gap-2">
+        <div className="flex h-28 w-28 items-center justify-center rounded-full border-2 border-dashed border-primary-300 bg-primary-50">
+          <Camera className="h-8 w-8 text-primary-400" />
+        </div>
+        <span className="text-sm font-semibold text-primary-500">
+          {t("welcome.addPhoto")}
+        </span>
+        <span className="text-xs text-neutral-400">
+          {t("welcome.optional")}
+        </span>
+      </div>
+
+      <div className="mt-auto w-full pb-4 pt-6 flex flex-col gap-2">
         <Button fullWidth onClick={next}>
-          {t("welcome.getStarted")}
+          {t("welcome.nextStep")}
         </Button>
+        <button
+          type="button"
+          onClick={next}
+          className="text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors"
+        >
+          {t("welcome.skip")}
+        </button>
       </div>
     </div>
   );

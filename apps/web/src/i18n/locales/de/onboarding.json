@@ -10,8 +10,11 @@
   },
   "welcome": {
     "heading": "Willkommen bei Versado{{name}}!",
-    "subheading": "Dein persönliches Lernwerkzeug mit verteilter Wiederholung. Lass uns alles einrichten, damit du effektiv lernen kannst.",
-    "getStarted": "Los geht's"
+    "subheading": "Richten wir dein Lernprofil ein, um loszulegen.",
+    "addPhoto": "Foto hinzufügen",
+    "optional": "Optional",
+    "nextStep": "Nächster Schritt",
+    "skip": "Erstmal überspringen"
   },
   "language": {
     "heading": "Was ist deine Muttersprache?",

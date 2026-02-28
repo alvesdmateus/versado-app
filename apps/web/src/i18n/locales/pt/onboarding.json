@@ -10,8 +10,11 @@
   },
   "welcome": {
     "heading": "Bem-vindo ao Versado{{name}}!",
-    "subheading": "Sua ferramenta pessoal de repetição espaçada. Vamos configurar tudo para você começar a memorizar de forma eficaz.",
-    "getStarted": "Começar"
+    "subheading": "Vamos configurar seu perfil de aprendizado para começar.",
+    "addPhoto": "Adicionar Foto",
+    "optional": "Opcional",
+    "nextStep": "Próximo Passo",
+    "skip": "Pular por agora"
   },
   "language": {
     "heading": "Qual é o seu idioma nativo?",
