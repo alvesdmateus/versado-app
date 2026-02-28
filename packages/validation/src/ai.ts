@@ -8,3 +8,11 @@ export const generateFlashcardsSchema = z.object({
 });
 
 export type GenerateFlashcardsInput = z.infer<typeof generateFlashcardsSchema>;
+
+export const extractFlashcardsSchema = z.object({
+  deckId: idSchema,
+  text: z.string().min(50, "Text must be at least 50 characters").max(15000, "Text must be at most 15,000 characters").trim(),
+  count: z.number().int().min(1).max(30).default(10),
+});
+
+export type ExtractFlashcardsInput = z.infer<typeof extractFlashcardsSchema>;

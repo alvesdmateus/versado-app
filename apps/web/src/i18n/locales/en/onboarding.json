@@ -60,7 +60,7 @@
   "appearance": {
     "heading": "Customise Appearance",
     "subheading": "Make Versado feel like yours. You can always change these later.",
-    "themeSystem": "Device Default",
+    "themeSystem": "Device",
     "themeLight": "Light",
     "themeDark": "Dark",
     "cardTheme": "Card Theme",

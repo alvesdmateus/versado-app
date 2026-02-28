@@ -15,6 +15,13 @@ export const aiApi = {
     });
   },
 
+  extract(params: { deckId: string; text: string; count: number }) {
+    return apiClient<{ cards: GeneratedCard[] }>("/api/ai/extract", {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+  },
+
   getUsage() {
     return apiClient<{ used: number; limit: number }>("/api/ai/usage");
   },

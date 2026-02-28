@@ -79,6 +79,75 @@ Rules:
   return parsed.cards.slice(0, count);
 }
 
+export async function extractFlashcardsFromText(
+  text: string,
+  count: number
+): Promise<GeneratedCard[]> {
+  let response;
+  try {
+    response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `You are a flashcard extractor. Given a text passage, identify key concepts, terms, definitions, facts, and relationships, then create flashcards from them.
+
+Return a JSON object with this exact structure:
+{
+  "cards": [
+    {
+      "front": "Question or term",
+      "back": "Answer or definition",
+      "tags": ["tag1", "tag2"],
+      "difficulty": "easy" | "medium" | "hard"
+    }
+  ]
+}
+
+Rules:
+- Create exactly ${count} cards based on the provided text
+- Extract information directly from the text — do not invent or add external knowledge
+- Front should be a clear question, term, or concept from the text
+- Back should be a concise, accurate answer based on the text content
+- Focus on key terminology, definitions, important facts, and relationships
+- Tags should be 1-3 relevant topic keywords from the text
+- Difficulty should reflect the complexity of the concept
+- Vary difficulty across cards when appropriate
+- Prioritize the most important and testable information
+- Keep answers focused and memorable`,
+        },
+        {
+          role: "user",
+          content: text,
+        },
+      ],
+      temperature: 0.5,
+    });
+  } catch (error: unknown) {
+    const err = error as { status?: number; message?: string };
+    if (err.status === 401) {
+      throw new AppError(503, "AI service is not configured. Please set a valid OpenAI API key.", "AI_SERVICE_UNAVAILABLE");
+    }
+    if (err.status === 429) {
+      throw new AppError(429, "AI rate limit exceeded. Please try again later.", "AI_RATE_LIMITED");
+    }
+    throw new AppError(503, "AI service is temporarily unavailable. Please try again later.", "AI_SERVICE_UNAVAILABLE");
+  }
+
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
+    throw new AppError(500, "Failed to extract flashcards", "AI_GENERATION_FAILED");
+  }
+
+  const parsed = JSON.parse(content) as { cards: GeneratedCard[] };
+  if (!Array.isArray(parsed.cards) || parsed.cards.length === 0) {
+    throw new AppError(500, "AI returned invalid response", "AI_GENERATION_FAILED");
+  }
+
+  return parsed.cards.slice(0, count);
+}
+
 export async function checkAIUsage(userId: string, tier: UserTier) {
   const limits = TIER_LIMITS[tier];
   if (limits.aiGenerationLimit === Infinity) return;
