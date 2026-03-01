@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Plus, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download, FileText } from "lucide-react";
+import { Plus, X, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download, FileText } from "lucide-react";
 import type { DeckResponse, FlashcardResponse } from "@/lib/deck-api";
 import { ApiError } from "@/lib/api-client";
 import { syncAwareApi } from "@/lib/sync-aware-api";
@@ -43,6 +43,7 @@ export function DeckDetailPage() {
   const [isAIGenerateOpen, setIsAIGenerateOpen] = useState(false);
   const [isTextExtractOpen, setIsTextExtractOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isFabOpen, setIsFabOpen] = useState(false);
 
   // Card filter state
   const [cardSearch, setCardSearch] = useState("");
@@ -175,7 +176,7 @@ export function DeckDetailPage() {
   const progress = total > 0 ? Math.round((mastered / total) * 100) : 0;
 
   return (
-    <div className="pb-4">
+    <div className="pb-32">
       <DeckDetailHeader
         title={deck.name}
         onBack={() => navigate("/decks")}
@@ -236,8 +237,8 @@ export function DeckDetailPage() {
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="mx-5 mt-4 flex gap-3">
+      {/* Fixed Study Now bar */}
+      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-neutral-100 bg-neutral-0/95 px-5 py-3 backdrop-blur-sm">
         <Button
           fullWidth
           onClick={() => navigate(`/study/${deckId}`)}
@@ -246,31 +247,57 @@ export function DeckDetailPage() {
           <BookOpen className="h-4 w-4" />
           {t("detail.studyNow")}
         </Button>
-        <Button
-          variant="secondary"
-          fullWidth
-          onClick={() => setIsAddCardOpen(true)}
-        >
-          <Plus className="h-4 w-4" />
-          {t("detail.addCards")}
-        </Button>
-        <Button
-          variant="secondary"
-          fullWidth
-          onClick={() => setIsAIGenerateOpen(true)}
-        >
-          <Sparkles className="h-4 w-4" />
-          {t("detail.aiGenerate")}
-        </Button>
-        <Button
-          variant="secondary"
-          fullWidth
-          onClick={() => setIsTextExtractOpen(true)}
-        >
-          <FileText className="h-4 w-4" />
-          {t("detail.textExtract")}
-        </Button>
       </div>
+
+      {/* FAB overlay */}
+      {isFabOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px]"
+          onClick={() => setIsFabOpen(false)}
+        />
+      )}
+
+      {/* FAB menu items */}
+      <div
+        className={`fixed bottom-52 right-5 z-50 flex flex-col gap-3 transition-all duration-200 ${
+          isFabOpen
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-4 opacity-0"
+        }`}
+      >
+        {[
+          { label: t("detail.addCards"), icon: <Plus className="h-5 w-5" />, onClick: () => { setIsFabOpen(false); setIsAddCardOpen(true); } },
+          { label: t("detail.aiGenerate"), icon: <Sparkles className="h-5 w-5" />, onClick: () => { setIsFabOpen(false); setIsAIGenerateOpen(true); } },
+          { label: t("detail.textExtract"), icon: <FileText className="h-5 w-5" />, onClick: () => { setIsFabOpen(false); setIsTextExtractOpen(true); } },
+        ].map((item) => (
+          <button
+            key={item.label}
+            type="button"
+            onClick={item.onClick}
+            className="flex items-center gap-3 self-end"
+          >
+            <span className="rounded-lg bg-neutral-0 px-3 py-1.5 text-sm font-medium text-neutral-700 shadow-card">
+              {item.label}
+            </span>
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-0 text-primary-500 shadow-card">
+              {item.icon}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* FAB button */}
+      <button
+        type="button"
+        onClick={() => setIsFabOpen((prev) => !prev)}
+        className={`fixed bottom-36 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-card-lg transition-all active:scale-90 ${
+          isFabOpen
+            ? "bg-neutral-700 text-white rotate-0"
+            : "bg-primary-500 text-white"
+        }`}
+      >
+        {isFabOpen ? <X className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
+      </button>
 
       {/* Card list */}
       <div className="mt-6 px-5">
