@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.8](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.7...versado-v0.1.8) (2026-02-28)
+
+
+### Features
+
+* **api,web:** downgrade tier on payment failure, reduce free AI limit to 5 ([#35](https://github.com/alvesdmateus/versado-app/issues/35)) ([103e6ad](https://github.com/alvesdmateus/versado-app/commit/103e6ad5f1c04609f64e76ab2f3c5518746f9231))
+* **auth:** add terms and privacy consent tracking ([#39](https://github.com/alvesdmateus/versado-app/issues/39)) ([7e6d920](https://github.com/alvesdmateus/versado-app/commit/7e6d920b6ba9037b8af7e0a2e89b6d0baf134d84))
+* **web,api:** add text-to-flashcards extraction feature ([#41](https://github.com/alvesdmateus/versado-app/issues/41)) ([a02a6ed](https://github.com/alvesdmateus/versado-app/commit/a02a6ed2d4b16a789c2a0297a402cf9857febb72))
+* **web:** add deck creation success modal ([#40](https://github.com/alvesdmateus/versado-app/issues/40)) ([2cc2bee](https://github.com/alvesdmateus/versado-app/commit/2cc2bee5a65fcd266dc4759b11f2270d03b44d2b))
+* **web:** full i18n support with 5 languages and dark theme fix ([#34](https://github.com/alvesdmateus/versado-app/issues/34)) ([bf137b2](https://github.com/alvesdmateus/versado-app/commit/bf137b26e8b93421f897a5ebb56c473e16fe2841))
+* **web:** onboarding UI overhaul, avatar upload, and infrastructure docs ([#37](https://github.com/alvesdmateus/versado-app/issues/37)) ([20f4adf](https://github.com/alvesdmateus/versado-app/commit/20f4adf4a987985dcaaa99231cbfa188d5ebea22))
+* **web:** polish onboarding UI steps ([#38](https://github.com/alvesdmateus/versado-app/issues/38)) ([136bfbd](https://github.com/alvesdmateus/versado-app/commit/136bfbd5b0d639177bdd85b0d99545a20d5c63c2))
+
 ## [0.1.7](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.6...versado-v0.1.7) (2026-02-27)
 
 
