@@ -185,11 +185,23 @@ body {
 .flip-card-face {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
 }
 .flip-card-back {
   position: absolute;
   inset: 0;
   transform: rotateY(180deg);
+}
+/* Swipe exit animations */
+.flip-card-inner.swipe-exit-left {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transform: rotateY(180deg) translateX(-150%) rotate(-15deg) !important;
+  opacity: 0;
+}
+.flip-card-inner.swipe-exit-right {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transform: rotateY(180deg) translateX(150%) rotate(15deg) !important;
+  opacity: 0;
 }
 
 /* Subtle bounce for "tap to reveal" hint */
