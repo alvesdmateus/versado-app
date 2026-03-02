@@ -450,8 +450,17 @@ export function StudySessionPage() {
       {/* Card area — 3D flip + swipe */}
       <div className="flex flex-1 flex-col items-center justify-center px-5">
         <div
-          className="flip-card w-full max-w-md"
-          style={{ touchAction: isReviewing ? "pan-y" : "auto" }}
+          className={`flip-card w-full max-w-md ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
+          style={{
+            touchAction: isReviewing ? "pan-y" : "auto",
+            ...(!swipeExit && swipeOffset !== 0
+              ? {
+                  transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                  opacity: 1 - Math.abs(swipeOffset) / 600,
+                  transition: "none",
+                }
+              : {}),
+          }}
           onClick={!isReviewing && !isDragging.current ? handleFlip : undefined}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -460,16 +469,7 @@ export function StudySessionPage() {
           tabIndex={!isReviewing ? 0 : undefined}
         >
           <div
-            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
-            style={
-              !swipeExit && swipeOffset !== 0
-                ? {
-                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
-                    opacity: 1 - Math.abs(swipeOffset) / 600,
-                    transition: "none",
-                  }
-                : undefined
-            }
+            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
           >
             {/* Swipe direction hint overlays */}
             {isReviewing && swipeOffset !== 0 && !swipeExit && (

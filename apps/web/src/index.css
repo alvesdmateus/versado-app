@@ -192,15 +192,15 @@ body {
   inset: 0;
   transform: rotateY(180deg);
 }
-/* Swipe exit animations */
-.flip-card-inner.swipe-exit-left {
+/* Swipe exit animations (on outer .flip-card so flip transform is not affected) */
+.flip-card.swipe-exit-left {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  transform: rotateY(180deg) translateX(-150%) rotate(-15deg) !important;
+  transform: translateX(-150%) rotate(-15deg) !important;
   opacity: 0;
 }
-.flip-card-inner.swipe-exit-right {
+.flip-card.swipe-exit-right {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  transform: rotateY(180deg) translateX(150%) rotate(15deg) !important;
+  transform: translateX(150%) rotate(15deg) !important;
   opacity: 0;
 }
 
