@@ -13,7 +13,14 @@
     "question": "Question",
     "answerRevealed": "Réponse révélée",
     "tapToReveal": "Appuyez pour révéler la réponse",
-    "howWell": "Avec quelle facilité connaissiez-vous cette carte ?"
+    "howWell": "Avec quelle facilité connaissiez-vous cette carte ?",
+    "masteryProgress": "{{percent}}% maîtrisé"
+  },
+  "status": {
+    "new": "Nouveau",
+    "learning": "Apprentissage",
+    "review": "Révision",
+    "mastered": "Maîtrisé"
   },
   "ratings": {
     "again": "Encore",

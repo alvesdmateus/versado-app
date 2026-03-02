@@ -12,6 +12,8 @@ export const submitReviewSchema = z.object({
   progressId: idSchema,
   rating: reviewRatingSchema,
   responseTimeMs: z.number().int().min(0).max(300_000).default(0),
+  sessionId: idSchema.optional(),
+  forceMaster: z.boolean().optional(),
 });
 
 export const startSessionSchema = z.object({

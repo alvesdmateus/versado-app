@@ -295,10 +295,12 @@ export const syncAwareApi = {
   async submitReview(
     progressId: string,
     rating: number,
-    responseTimeMs?: number
+    responseTimeMs?: number,
+    sessionId?: string,
+    forceMaster?: boolean
   ): Promise<ReviewResult> {
     try {
-      const result = await studyApi.submitReview(progressId, rating, responseTimeMs);
+      const result = await studyApi.submitReview(progressId, rating, responseTimeMs, sessionId, forceMaster);
       // Cache updated progress
       if (syncStorage) {
         await syncStorage.cacheCardProgress([

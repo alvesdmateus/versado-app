@@ -36,6 +36,7 @@ import { profileApi } from "@/lib/profile-api";
 import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { CARD_THEMES, getCardTheme } from "@/lib/card-themes";
 import { socialApi } from "@/lib/social-api";
+import { onboardingApi } from "@/lib/onboarding-api";
 import { SUPPORTED_LANGUAGES } from "@/i18n/supported-languages";
 
 /* ───────────── Constants ───────────── */
@@ -208,6 +209,11 @@ export function OnboardingPage() {
         socialApi.followTag(topic.toLowerCase()).catch(() => {}),
       );
       await Promise.allSettled(followPromises);
+
+      // Claim starter decks for selected topics
+      if (selectedTopics.length > 0) {
+        await onboardingApi.claimStarterDecks(selectedTopics).catch(() => {});
+      }
 
       // Save avatar if selected
       if (avatarPreview) {

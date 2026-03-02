@@ -13,7 +13,14 @@
     "question": "Frage",
     "answerRevealed": "Antwort angezeigt",
     "tapToReveal": "Tippe um die Antwort zu sehen",
-    "howWell": "Wie gut hast du diese gekannt?"
+    "howWell": "Wie gut hast du diese gekannt?",
+    "masteryProgress": "{{percent}}% gemeistert"
+  },
+  "status": {
+    "new": "Neu",
+    "learning": "Lernen",
+    "review": "Wiederholen",
+    "mastered": "Gemeistert"
   },
   "ratings": {
     "again": "Nochmal",

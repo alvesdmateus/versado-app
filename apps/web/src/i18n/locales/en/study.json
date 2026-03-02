@@ -13,7 +13,14 @@
     "question": "Question",
     "answerRevealed": "Answer Revealed",
     "tapToReveal": "Tap to reveal answer",
-    "howWell": "How well did you know this?"
+    "howWell": "How well did you know this?",
+    "masteryProgress": "{{percent}}% mastered"
+  },
+  "status": {
+    "new": "New",
+    "learning": "Learning",
+    "review": "Reviewing",
+    "mastered": "Mastered"
   },
   "ratings": {
     "again": "Again",

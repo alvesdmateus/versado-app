@@ -122,30 +122,46 @@ studyRoutes.post("/review", async (c) => {
     throw new AppError(404, "Card progress not found", "NOT_FOUND");
   }
 
-  const sm2Result = calculateSM2(
-    {
-      easeFactor: progress.easeFactor,
-      interval: progress.interval,
-      repetitions: progress.repetitions,
-    },
-    data.rating as ReviewRating
-  );
-
-  // Determine status from SM-2 values
+  const previousStatus = progress.status;
   let status: string;
-  if (sm2Result.repetitions === 0) {
-    status = "relearning";
-  } else if (sm2Result.interval >= 21) {
-    status = "mastered";
-  } else if (sm2Result.repetitions <= 2) {
-    status = "learning";
-  } else {
-    status = "review";
-  }
+  let updateSet: Record<string, unknown>;
 
-  const rows = await db
-    .update(cardProgress)
-    .set({
+  if (data.forceMaster) {
+    // Instant master: bypass SM-2, set interval to 21+ days
+    const masteredDate = new Date();
+    masteredDate.setDate(masteredDate.getDate() + 21);
+    status = "mastered";
+    updateSet = {
+      easeFactor: Math.max(progress.easeFactor, 2.5),
+      interval: 21,
+      repetitions: Math.max(progress.repetitions + 1, 4),
+      status,
+      dueDate: masteredDate,
+      lastReviewedAt: new Date(),
+      version: progress.version + 1,
+    };
+  } else {
+    const sm2Result = calculateSM2(
+      {
+        easeFactor: progress.easeFactor,
+        interval: progress.interval,
+        repetitions: progress.repetitions,
+      },
+      data.rating as ReviewRating
+    );
+
+    // Determine status from SM-2 values
+    if (sm2Result.repetitions === 0) {
+      status = "relearning";
+    } else if (sm2Result.interval >= 21) {
+      status = "mastered";
+    } else if (sm2Result.repetitions <= 2) {
+      status = "learning";
+    } else {
+      status = "review";
+    }
+
+    updateSet = {
       easeFactor: sm2Result.easeFactor,
       interval: sm2Result.interval,
       repetitions: sm2Result.repetitions,
@@ -153,13 +169,57 @@ studyRoutes.post("/review", async (c) => {
       dueDate: sm2Result.nextReviewDate,
       lastReviewedAt: new Date(),
       version: progress.version + 1,
-    })
+    };
+  }
+
+  const rows = await db
+    .update(cardProgress)
+    .set(updateSet)
     .where(eq(cardProgress.id, progress.id))
     .returning();
 
+  // Append review to session (if sessionId provided)
+  if (data.sessionId) {
+    const review = {
+      id: crypto.randomUUID(),
+      cardId: progress.cardId,
+      rating: data.rating,
+      responseTimeMs: data.responseTimeMs ?? 0,
+      reviewedAt: new Date().toISOString(),
+    };
+    await db
+      .update(studySessions)
+      .set({
+        reviews: sql`${studySessions.reviews} || ${JSON.stringify([review])}::jsonb`,
+      })
+      .where(
+        and(
+          eq(studySessions.id, data.sessionId),
+          eq(studySessions.userId, user.id)
+        )
+      );
+  }
+
+  // Update deck stats when mastered status changes
+  if (status === "mastered" && previousStatus !== "mastered") {
+    await db
+      .update(decks)
+      .set({
+        stats: sql`jsonb_set(${decks.stats}, '{masteredCards}', to_jsonb((${decks.stats}->>'masteredCards')::int + 1))`,
+      })
+      .where(eq(decks.id, progress.deckId));
+  } else if (status !== "mastered" && previousStatus === "mastered") {
+    await db
+      .update(decks)
+      .set({
+        stats: sql`jsonb_set(${decks.stats}, '{masteredCards}', to_jsonb(GREATEST(0, (${decks.stats}->>'masteredCards')::int - 1)))`,
+      })
+      .where(eq(decks.id, progress.deckId));
+  }
+
   return c.json({
     updatedProgress: rows[0]!,
-    nextReviewDate: sm2Result.nextReviewDate,
+    nextReviewDate: updateSet.dueDate,
   });
 });
 
@@ -201,13 +261,28 @@ studyRoutes.patch("/sessions/:id/end", async (c) => {
     .where(and(eq(studySessions.id, id), eq(studySessions.userId, user.id)))
     .limit(1);
 
-  if (!results[0]) {
+  const session = results[0];
+  if (!session) {
     throw new AppError(404, "Session not found", "NOT_FOUND");
   }
 
+  // Compute stats from accumulated reviews
+  const reviews = (session.reviews ?? []) as Array<{
+    rating: number;
+    responseTimeMs: number;
+  }>;
+  const cardsStudied = reviews.length;
+  const correctCount = reviews.filter((r) => r.rating >= 3).length;
+  const incorrectCount = cardsStudied - correctCount;
+  const totalTimeMs = reviews.reduce((sum, r) => sum + (r.responseTimeMs ?? 0), 0);
+  const averageTimeMs = cardsStudied > 0 ? Math.round(totalTimeMs / cardsStudied) : 0;
+
   const rows = await db
     .update(studySessions)
-    .set({ endedAt: new Date() })
+    .set({
+      endedAt: new Date(),
+      stats: { cardsStudied, correctCount, incorrectCount, averageTimeMs },
+    })
     .where(eq(studySessions.id, id))
     .returning();
 

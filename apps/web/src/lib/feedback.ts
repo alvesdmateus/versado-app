@@ -88,6 +88,7 @@ export type SoundType =
   | "flip"
   | "swipeRight"
   | "swipeLeft"
+  | "swipeUp"
   | "rate"
   | "complete";
 
@@ -110,6 +111,13 @@ export function playSound(type: SoundType) {
       // Descending minor — negative
       playTone(440, 0.1, "sine", 0.06);
       setTimeout(() => playTone(370, 0.1, "sine", 0.06), 60);
+      break;
+
+    case "swipeUp":
+      // Triumphant ascending — mastered!
+      playTone(523, 0.1, "sine", 0.06); // C
+      setTimeout(() => playTone(659, 0.1, "sine", 0.06), 70); // E
+      setTimeout(() => playTone(784, 0.15, "sine", 0.07), 140); // G
       break;
 
     case "rate":

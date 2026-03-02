@@ -92,11 +92,13 @@ export const studyApi = {
   submitReview(
     progressId: string,
     rating: number,
-    responseTimeMs?: number
+    responseTimeMs?: number,
+    sessionId?: string,
+    forceMaster?: boolean
   ) {
     return apiClient<ReviewResult>("/api/study/review", {
       method: "POST",
-      body: JSON.stringify({ progressId, rating, responseTimeMs }),
+      body: JSON.stringify({ progressId, rating, responseTimeMs, sessionId, forceMaster }),
     });
   },
 
