@@ -1,15 +1,31 @@
-import { Layers } from "lucide-react";
+import { useState } from "react";
+import { Layers, Plus, Check, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { FeedItem } from "@/lib/social-api";
 
 interface FeedItemCardProps {
   item: FeedItem;
   onDeckClick: (deckId: string) => void;
+  onAdd?: () => Promise<void>;
 }
 
-export function FeedItemCard({ item, onDeckClick }: FeedItemCardProps) {
+export function FeedItemCard({ item, onDeckClick, onAdd }: FeedItemCardProps) {
   const { t } = useTranslation("home");
   const initial = item.creator.displayName.charAt(0).toUpperCase();
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+
+  async function handleAdd(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!onAdd || isAdding || isAdded) return;
+    setIsAdding(true);
+    try {
+      await onAdd();
+      setIsAdded(true);
+    } finally {
+      setIsAdding(false);
+    }
+  }
 
   function timeAgo(date: string): string {
     const seconds = Math.floor(
@@ -94,6 +110,31 @@ export function FeedItemCard({ item, onDeckClick }: FeedItemCardProps) {
               </div>
             )}
           </div>
+          {onAdd && (
+            <span
+              role="button"
+              onClick={handleAdd}
+              className={`flex-shrink-0 flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors ${
+                isAdded
+                  ? "bg-success-100 text-success-700"
+                  : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700"
+              }`}
+            >
+              {isAdding ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : isAdded ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  {t("feed.added")}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3 w-3" />
+                  {t("feed.get")}
+                </>
+              )}
+            </span>
+          )}
         </div>
       </div>
     </button>

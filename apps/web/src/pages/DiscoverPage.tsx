@@ -1,7 +1,10 @@
+import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Compass } from "lucide-react";
 import { useDiscover } from "@/hooks/useDiscover";
+import { marketplaceApi } from "@/lib/marketplace-api";
+import { useToast } from "@/contexts/ToastContext";
 import { TrendingTagsSection } from "@/components/home/TrendingTagsSection";
 import { PopularDeckCarousel } from "@/components/home/PopularDeckCarousel";
 import { ActivityFeed } from "@/components/home/ActivityFeed";
@@ -40,8 +43,9 @@ function DiscoverSkeleton() {
 }
 
 export function DiscoverPage() {
-  const { t } = useTranslation("home");
+  const { t } = useTranslation(["home", "marketplace"]);
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const {
     popularDecks,
     feedItems,
@@ -59,6 +63,11 @@ export function DiscoverPage() {
     toggleFollowUser,
     toggleFollowTag,
   } = useDiscover();
+
+  const handleAddDeck = useCallback(async (deckId: string) => {
+    await marketplaceApi.addToLibrary(deckId);
+    showToast(t("marketplace:addedToLibrary"));
+  }, [showToast, t]);
 
   if (isLoading) {
     return (
@@ -102,6 +111,7 @@ export function DiscoverPage() {
         decks={popularDecks}
         onDeckClick={(id) => navigate(`/market/${id}`)}
         onViewAll={() => navigate("/market")}
+        onAddDeck={handleAddDeck}
       />
 
       {/* Activity Feed */}
@@ -114,6 +124,7 @@ export function DiscoverPage() {
         onLoadMore={loadMoreFeed}
         onDeckClick={(id) => navigate(`/market/${id}`)}
         onBrowseMarketplace={() => navigate("/market")}
+        onAddDeck={handleAddDeck}
       />
 
       {/* Recommended Decks */}
@@ -121,6 +132,7 @@ export function DiscoverPage() {
         decks={recommendations}
         hasFollowedTags={followedTags.size > 0}
         onDeckClick={(id) => navigate(`/market/${id}`)}
+        onAddDeck={handleAddDeck}
       />
 
       {/* Suggested Creators */}

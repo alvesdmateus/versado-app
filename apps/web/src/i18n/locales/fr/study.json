@@ -7,7 +7,8 @@
   },
   "session": {
     "closeSession": "Fermer la session d'étude",
-    "moreOptions": "Plus d'options"
+    "moreOptions": "Plus d'options",
+    "practice": "Entraînement"
   },
   "card": {
     "question": "Question",

@@ -7,7 +7,8 @@
   },
   "session": {
     "closeSession": "Cerrar sesión de estudio",
-    "moreOptions": "Más opciones"
+    "moreOptions": "Más opciones",
+    "practice": "Práctica"
   },
   "card": {
     "question": "Pregunta",

@@ -28,6 +28,8 @@
   "sales": "{{count}} Verkäufe",
   "downloads": "{{count}} Downloads",
   "free": "Kostenlos",
+  "get": "Holen",
+  "added": "Hinzugefügt",
   "cards": "{{count}} Karten",
   "byCreator": "von {{name}}",
   "sampleCards": "Beispielkarten",
