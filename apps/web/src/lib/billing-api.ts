@@ -26,10 +26,10 @@ export const billingApi = {
     return apiClient<{ prices: Price[] }>("/api/billing/prices");
   },
 
-  createCheckout(priceId: string) {
+  createCheckout(priceId: string, couponId?: string) {
     return apiClient<{ url: string }>("/api/billing/checkout", {
       method: "POST",
-      body: JSON.stringify({ priceId }),
+      body: JSON.stringify({ priceId, ...(couponId ? { couponId } : {}) }),
     });
   },
 

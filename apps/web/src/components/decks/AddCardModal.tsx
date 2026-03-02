@@ -4,6 +4,7 @@ import { Plus, X } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
+import { ApiError } from "@/lib/api-client";
 import type { FlashcardResponse } from "@/lib/deck-api";
 import { syncAwareApi } from "@/lib/sync-aware-api";
 import { Button } from "@versado/ui";
@@ -18,6 +19,7 @@ interface AddCardModalProps {
   onClose: () => void;
   deckId: string;
   onAdded: (cards: FlashcardResponse[]) => void;
+  onLimitReached?: () => void;
 }
 
 function emptyRow(): CardRow {
@@ -29,6 +31,7 @@ export function AddCardModal({
   onClose,
   deckId,
   onAdded,
+  onLimitReached,
 }: AddCardModalProps) {
   const { t } = useTranslation("decks");
   const { showToast } = useToast();
@@ -80,7 +83,12 @@ export function AddCardModal({
       showToast(t("addCardModal.added", { count: cards.length }));
       resetForm();
       onAdded(cards);
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "CARD_LIMIT_REACHED") {
+        handleClose();
+        onLimitReached?.();
+        return;
+      }
       setError(t("addCardModal.failed"));
     } finally {
       setIsSubmitting(false);
