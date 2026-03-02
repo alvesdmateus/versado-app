@@ -22,21 +22,27 @@ export function StatsRow({
 
   return (
     <div className="mt-5 flex gap-3 px-5">
-      <StatCard
-        label={t("statsRow.mastered")}
-        value={mastered.toLocaleString()}
-        trend={`↗ ${masteredTrend}`}
-      />
-      <StatCard
-        label={t("statsRow.accuracy")}
-        value={accuracy}
-        trend={`↗ ${accuracyTrend}`}
-      />
-      <StatCard
-        label={t("statsRow.streak")}
-        value={`${streakDays}d`}
-        trend={streakActive ? `⚡ ${t("statsRow.active")}` : t("statsRow.inactive")}
-      />
+      <div className="flex-1 animate-fade-in-up" style={{ animationDelay: "0ms" }}>
+        <StatCard
+          label={t("statsRow.mastered")}
+          value={mastered.toLocaleString()}
+          trend={`↗ ${masteredTrend}`}
+        />
+      </div>
+      <div className="flex-1 animate-fade-in-up" style={{ animationDelay: "80ms" }}>
+        <StatCard
+          label={t("statsRow.accuracy")}
+          value={accuracy}
+          trend={`↗ ${accuracyTrend}`}
+        />
+      </div>
+      <div className={`flex-1 animate-fade-in-up ${streakActive ? "animate-pop" : ""}`} style={{ animationDelay: "160ms" }}>
+        <StatCard
+          label={t("statsRow.streak")}
+          value={`${streakDays}d`}
+          trend={streakActive ? `⚡ ${t("statsRow.active")}` : t("statsRow.inactive")}
+        />
+      </div>
     </div>
   );
 }

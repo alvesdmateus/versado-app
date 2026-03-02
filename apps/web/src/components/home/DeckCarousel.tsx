@@ -25,7 +25,11 @@ export function DeckCarousel({ decks, onViewAll }: DeckCarouselProps) {
 
       <div className="scrollbar-hide mt-3 flex gap-3 overflow-x-auto px-5 pb-2 snap-x snap-mandatory">
         {decks.map((deck, index) => (
-          <div key={index} className="flex-shrink-0 snap-start">
+          <div
+            key={index}
+            className="flex-shrink-0 snap-start animate-fade-in-up"
+            style={{ animationDelay: `${index * 80}ms` }}
+          >
             <DeckPreviewCard {...deck} />
           </div>
         ))}

@@ -33,6 +33,8 @@
     "cardSorting": "Ordenação de Cartões",
     "pushAlerts": "Alertas Push",
     "pushDenied": "Notificações push não disponíveis ou permissão negada",
+    "hapticFeedback": "Vibração",
+    "soundFeedback": "Efeitos Sonoros",
     "changePassword": "Alterar Senha",
     "exportData": "Exportar Dados",
     "deleteAccount": "Excluir Conta",

@@ -9,6 +9,7 @@ import { syncAwareApi } from "@/lib/sync-aware-api";
 import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
+import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
 import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
 
 // ---------------------------------------------------------------------------
@@ -125,6 +126,8 @@ export function StudySessionPage() {
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
       setCardTheme(getCardTheme(prefs.cardTheme));
+      setHapticEnabled(prefs.hapticFeedback ?? true);
+      setSoundEnabled(prefs.soundFeedback ?? true);
     }).catch(() => {});
   }, []);
 
@@ -161,12 +164,18 @@ export function StudySessionPage() {
     if (sessionState === "studying") {
       setIsFlipped(true);
       setSessionState("reviewing");
+      haptic("light");
+      playSound("flip");
     }
   }, [sessionState]);
 
   const handleReview = useCallback(
     async (rating: ReviewRating) => {
       if (!currentCard) return;
+
+      // Tactile + audio feedback
+      haptic(rating === 1 ? "error" : rating === 4 ? "success" : "medium");
+      playSound("rate");
 
       const responseTimeMs = Date.now() - cardStartTimeRef.current;
 
@@ -247,6 +256,8 @@ export function StudySessionPage() {
       if (Math.abs(dx) > SWIPE_THRESHOLD) {
         // Swipe confirmed — animate exit then rate
         const direction = dx > 0 ? "right" : "left";
+        haptic("heavy");
+        playSound(direction === "right" ? "swipeRight" : "swipeLeft");
         setSwipeExit(direction);
         setTimeout(() => {
           setSwipeExit(null);
@@ -281,6 +292,14 @@ export function StudySessionPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [sessionState, handleFlip, handleReview]);
+
+  // Celebrate session completion
+  useEffect(() => {
+    if (sessionState === "complete") {
+      haptic("success");
+      playSound("complete");
+    }
+  }, [sessionState]);
 
   // Loading
   if (sessionState === "loading") {

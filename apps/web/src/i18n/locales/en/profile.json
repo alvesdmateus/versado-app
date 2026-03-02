@@ -33,6 +33,8 @@
     "cardSorting": "Card Sorting Logic",
     "pushAlerts": "Push Alerts",
     "pushDenied": "Push notifications not available or permission denied",
+    "hapticFeedback": "Haptic Feedback",
+    "soundFeedback": "Sound Effects",
     "changePassword": "Change Password",
     "exportData": "Export Data",
     "deleteAccount": "Delete Account",
