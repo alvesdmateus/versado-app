@@ -1,4 +1,5 @@
-import { Star, Download, Layers } from "lucide-react";
+import { useState } from "react";
+import { Star, Download, Layers, Plus, Check, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export interface MarketplaceListingCardProps {
@@ -11,6 +12,7 @@ export interface MarketplaceListingCardProps {
   reviewCount: string;
   downloads: string;
   onClick?: () => void;
+  onAdd?: () => Promise<void>;
 }
 
 export function MarketplaceListingCard({
@@ -23,9 +25,24 @@ export function MarketplaceListingCard({
   reviewCount,
   downloads,
   onClick,
+  onAdd,
 }: MarketplaceListingCardProps) {
   const { t } = useTranslation("marketplace");
   const isFree = price === null || price === 0;
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+
+  async function handleAdd(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!onAdd || isAdding || isAdded) return;
+    setIsAdding(true);
+    try {
+      await onAdd();
+      setIsAdded(true);
+    } finally {
+      setIsAdding(false);
+    }
+  }
 
   return (
     <button
@@ -64,7 +81,7 @@ export function MarketplaceListingCard({
         {/* Creator */}
         <p className="mt-0.5 text-xs text-neutral-500">{t("byCreator", { name: creator })}</p>
 
-        {/* Stats */}
+        {/* Stats + Add button */}
         <div className="mt-1.5 flex items-center gap-3">
           <div className="flex items-center gap-1">
             <Star className="h-3.5 w-3.5 fill-warning-500 text-warning-500" />
@@ -75,6 +92,31 @@ export function MarketplaceListingCard({
             <Download className="h-3.5 w-3.5 text-neutral-400" />
             <span className="text-xs text-neutral-400">{downloads}</span>
           </div>
+          {onAdd && (
+            <span
+              role="button"
+              onClick={handleAdd}
+              className={`ml-auto flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors ${
+                isAdded
+                  ? "bg-success-100 text-success-700"
+                  : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700"
+              }`}
+            >
+              {isAdding ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : isAdded ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  {t("added")}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3 w-3" />
+                  {t("get")}
+                </>
+              )}
+            </span>
+          )}
         </div>
       </div>
     </button>

@@ -37,7 +37,9 @@
     "browseMarketplace": "Marktplatz durchsuchen",
     "showMore": "Mehr anzeigen",
     "published": " hat veröffentlicht ",
-    "via": " über "
+    "via": " über ",
+    "get": "Holen",
+    "added": "Hinzugefügt"
   },
   "time": {
     "justNow": "gerade eben",

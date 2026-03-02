@@ -7,7 +7,7 @@ import {
   createReviewSchema,
 } from "@versado/validation";
 import { db } from "../db";
-import { decks, users, flashcards, marketplaceReviews, purchases } from "../db/schema";
+import { decks, users, flashcards, cardProgress, marketplaceReviews, purchases } from "../db/schema";
 import { validate } from "../lib/validate";
 import { AppError } from "../middleware/error-handler";
 import { requireFeature } from "../lib/feature-gates";
@@ -258,7 +258,7 @@ marketplaceRoutes.post("/:deckId/add-to-library", async (c) => {
     .where(and(eq(flashcards.deckId, deckId), eq(flashcards.tombstone, false)));
 
   if (sourceCards.length > 0) {
-    await db.insert(flashcards).values(
+    const clonedCards = await db.insert(flashcards).values(
       sourceCards.map((card) => ({
         deckId: clonedDeck!.id,
         front: card.front,
@@ -266,6 +266,15 @@ marketplaceRoutes.post("/:deckId/add-to-library", async (c) => {
         tags: card.tags,
         difficulty: card.difficulty,
         source: { type: "imported" as const, source: `marketplace:${deckId}` },
+      }))
+    ).returning();
+
+    // Create card progress so cards are immediately due
+    await db.insert(cardProgress).values(
+      clonedCards.map((card) => ({
+        userId: user.id,
+        cardId: card.id,
+        deckId: clonedDeck!.id,
       }))
     );
 

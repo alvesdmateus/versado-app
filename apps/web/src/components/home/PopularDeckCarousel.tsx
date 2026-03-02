@@ -7,12 +7,14 @@ interface PopularDeckCarouselProps {
   decks: PopularDeck[];
   onDeckClick: (deckId: string) => void;
   onViewAll: () => void;
+  onAddDeck?: (deckId: string) => Promise<void>;
 }
 
 export function PopularDeckCarousel({
   decks,
   onDeckClick,
   onViewAll,
+  onAddDeck,
 }: PopularDeckCarouselProps) {
   const { t } = useTranslation("home");
 
@@ -24,7 +26,11 @@ export function PopularDeckCarousel({
       <div className="scrollbar-hide mt-3 flex gap-3 overflow-x-auto px-5 pb-2 snap-x snap-mandatory">
         {decks.map((deck) => (
           <div key={deck.id} className="flex-shrink-0 snap-start">
-            <PopularDeckCard deck={deck} onClick={() => onDeckClick(deck.id)} />
+            <PopularDeckCard
+              deck={deck}
+              onClick={() => onDeckClick(deck.id)}
+              onAdd={onAddDeck ? () => onAddDeck(deck.id) : undefined}
+            />
           </div>
         ))}
       </div>

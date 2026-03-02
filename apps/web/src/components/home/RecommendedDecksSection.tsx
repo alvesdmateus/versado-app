@@ -9,6 +9,7 @@ interface RecommendedDecksSectionProps {
   decks: PopularDeck[];
   hasFollowedTags: boolean;
   onDeckClick: (deckId: string) => void;
+  onAddDeck?: (deckId: string) => Promise<void>;
 }
 
 function formatCount(n: number): string {
@@ -20,6 +21,7 @@ export function RecommendedDecksSection({
   decks,
   hasFollowedTags,
   onDeckClick,
+  onAddDeck,
 }: RecommendedDecksSectionProps) {
   const { t } = useTranslation("home");
 
@@ -51,6 +53,7 @@ export function RecommendedDecksSection({
               reviewCount={formatCount(deck.purchaseCount)}
               downloads={`${formatCount(deck.purchaseCount)} downloads`}
               onClick={() => onDeckClick(deck.id)}
+              onAdd={onAddDeck ? () => onAddDeck(deck.id) : undefined}
             />
           ))
         )}

@@ -28,6 +28,8 @@
   "sales": "{{count}} sales",
   "downloads": "{{count}} downloads",
   "free": "Free",
+  "get": "Get",
+  "added": "Added",
   "cards": "{{count}} cards",
   "byCreator": "by {{name}}",
   "sampleCards": "Sample Cards",

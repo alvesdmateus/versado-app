@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { marketplaceApi, type MarketplaceListing } from "@/lib/marketplace-api";
+import { useToast } from "@/contexts/ToastContext";
 import { MarketplaceHeader } from "@/components/marketplace/MarketplaceHeader";
 import { MarketplaceSearchBar } from "@/components/marketplace/MarketplaceSearchBar";
 import { MarketplaceListingCard } from "@/components/marketplace/MarketplaceListingCard";
@@ -40,6 +41,7 @@ export function MarketplacePage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["marketplace", "common"]);
   const { showErrorNotification } = useErrorNotification();
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<(typeof CATEGORY_KEYS)[number]>("all");
   const [sortBy, setSortBy] = useState("popular");
@@ -49,6 +51,11 @@ export function MarketplacePage() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const offsetRef = useRef(0);
+
+  const handleAddDeck = useCallback(async (deckId: string) => {
+    await marketplaceApi.addToLibrary(deckId);
+    showToast(t("marketplace:addedToLibrary"));
+  }, [showToast, t]);
 
   const fetchListings = useCallback(async (append = false) => {
     if (append) {
@@ -160,6 +167,7 @@ export function MarketplacePage() {
                   : t("marketplace:downloads", { count: listing.purchaseCount })
               }
               onClick={() => navigate(`/market/${listing.id}`)}
+              onAdd={() => handleAddDeck(listing.id)}
             />
           ))}
           {hasMore && listings.length > 0 && (

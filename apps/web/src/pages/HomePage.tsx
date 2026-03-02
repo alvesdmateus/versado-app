@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { BarChart3, Clock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { marketplaceApi } from "@/lib/marketplace-api";
+import { useToast } from "@/contexts/ToastContext";
 import { useSocialHome } from "@/hooks/useSocialHome";
 import { HomeHeader } from "@/components/home/HomeHeader";
 import { TodayReviewCard } from "@/components/home/TodayReviewCard";
@@ -18,9 +20,10 @@ import { HomeSkeleton } from "@/components/shared";
 import { dashboardApi, type DashboardHistory } from "@/lib/dashboard-api";
 
 export function HomePage() {
-  const { t } = useTranslation("home");
+  const { t } = useTranslation(["home", "marketplace"]);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showToast } = useToast();
   const {
     stats,
     popularDecks,
@@ -39,6 +42,11 @@ export function HomePage() {
     toggleFollowUser,
     toggleFollowTag,
   } = useSocialHome();
+
+  const handleAddDeck = useCallback(async (deckId: string) => {
+    await marketplaceApi.addToLibrary(deckId);
+    showToast(t("marketplace:addedToLibrary"));
+  }, [showToast, t]);
 
   const [history, setHistory] = useState<DashboardHistory | null>(null);
 
@@ -111,6 +119,7 @@ export function HomePage() {
         decks={popularDecks}
         onDeckClick={(id) => navigate(`/market/${id}`)}
         onViewAll={() => navigate("/market")}
+        onAddDeck={handleAddDeck}
       />
 
       <ActivityFeed
@@ -122,12 +131,14 @@ export function HomePage() {
         onLoadMore={loadMoreFeed}
         onDeckClick={(id) => navigate(`/market/${id}`)}
         onBrowseMarketplace={() => navigate("/market")}
+        onAddDeck={handleAddDeck}
       />
 
       <RecommendedDecksSection
         decks={recommendations}
         hasFollowedTags={followedTags.size > 0}
         onDeckClick={(id) => navigate(`/market/${id}`)}
+        onAddDeck={handleAddDeck}
       />
 
       <SuggestedCreatorsSection

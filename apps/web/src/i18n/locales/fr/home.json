@@ -37,7 +37,9 @@
     "browseMarketplace": "Parcourir la boutique",
     "showMore": "Voir plus",
     "published": " a publié ",
-    "via": " via "
+    "via": " via ",
+    "get": "Obtenir",
+    "added": "Ajouté"
   },
   "time": {
     "justNow": "à l'instant",

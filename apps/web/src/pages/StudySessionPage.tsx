@@ -139,7 +139,7 @@ export function StudySessionPage() {
 
     async function loadCards() {
       try {
-        // Initialize progress for new cards, then fetch due cards
+        // Initialize progress for new cards, then fetch non-mastered cards
         await studyApi.initProgress(deckId!);
         const cards = await syncAwareApi.getDueCards(deckId!);
 
