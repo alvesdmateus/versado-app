@@ -68,7 +68,7 @@ studyRoutes.get("/decks/:deckId/stats", async (c) => {
     ).length,
     review: allProgress.filter((p) => p.status === "review").length,
     mastered: allProgress.filter((p) => p.status === "mastered").length,
-    dueToday: allProgress.filter((p) => p.status !== "mastered").length,
+    dueToday: totalCards.length - allProgress.filter((p) => p.status === "mastered").length,
   };
 
   return c.json(stats);
