@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.8...versado-v0.1.9) (2026-03-02)
+
+
+### Features
+
+* **web,api:** text-to-flashcards extraction and UI improvements ([#42](https://github.com/alvesdmateus/versado-app/issues/42)) ([85da585](https://github.com/alvesdmateus/versado-app/commit/85da585d6afa66fb63854cc13f532465947313b7))
+* **web:** add swipe gestures and fix text overflow in study session ([#44](https://github.com/alvesdmateus/versado-app/issues/44)) ([c6eacef](https://github.com/alvesdmateus/versado-app/commit/c6eacef1cd28f2f8c2d5e23ce5efc87098177fb7))
+
 ## [0.1.8](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.7...versado-v0.1.8) (2026-02-28)
 
 
