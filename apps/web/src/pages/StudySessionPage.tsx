@@ -112,6 +112,12 @@ export function StudySessionPage() {
   const isResettingRef = useRef(false);
   const cardStartTimeRef = useRef(Date.now());
 
+  // Swipe gesture state
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const [swipeExit, setSwipeExit] = useState<"left" | "right" | null>(null);
+  const swipeStartX = useRef(0);
+  const isDragging = useRef(false);
+
   const currentCard = dueCards[currentIndex] ?? null;
   const total = dueCards.length;
   const current = currentIndex + 1;
@@ -194,6 +200,8 @@ export function StudySessionPage() {
         // Instantly reset card to front (no transition)
         isResettingRef.current = true;
         setIsFlipped(false);
+        setSwipeOffset(0);
+        setSwipeExit(null);
         setCurrentIndex(nextIndex);
         setSessionState("studying");
         cardStartTimeRef.current = Date.now();
@@ -207,6 +215,50 @@ export function StudySessionPage() {
       }
     },
     [currentIndex, dueCards.length, currentCard, sessionId]
+  );
+
+  // Swipe gesture handlers (only active in reviewing state)
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (sessionState !== "reviewing" || swipeExit) return;
+      swipeStartX.current = e.clientX;
+      isDragging.current = true;
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    },
+    [sessionState, swipeExit]
+  );
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDragging.current) return;
+      const dx = e.clientX - swipeStartX.current;
+      setSwipeOffset(dx);
+    },
+    []
+  );
+
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      const dx = e.clientX - swipeStartX.current;
+      const SWIPE_THRESHOLD = 100;
+
+      if (Math.abs(dx) > SWIPE_THRESHOLD) {
+        // Swipe confirmed — animate exit then rate
+        const direction = dx > 0 ? "right" : "left";
+        setSwipeExit(direction);
+        setTimeout(() => {
+          setSwipeExit(null);
+          setSwipeOffset(0);
+          handleReview(direction === "right" ? (4 as ReviewRating) : (1 as ReviewRating));
+        }, 300);
+      } else {
+        // Snap back
+        setSwipeOffset(0);
+      }
+    },
+    [handleReview]
   );
 
   const handleClose = useCallback(() => {
@@ -395,37 +447,70 @@ export function StudySessionPage() {
         </div>
       </header>
 
-      {/* Card area — 3D flip */}
+      {/* Card area — 3D flip + swipe */}
       <div className="flex flex-1 flex-col items-center justify-center px-5">
         <div
           className="flip-card w-full max-w-md"
-          onClick={!isReviewing ? handleFlip : undefined}
+          style={{ touchAction: isReviewing ? "pan-y" : "auto" }}
+          onClick={!isReviewing && !isDragging.current ? handleFlip : undefined}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
           role={!isReviewing ? "button" : undefined}
           tabIndex={!isReviewing ? 0 : undefined}
         >
           <div
-            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
+            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
+            style={
+              !swipeExit && swipeOffset !== 0
+                ? {
+                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                    opacity: 1 - Math.abs(swipeOffset) / 600,
+                    transition: "none",
+                  }
+                : undefined
+            }
           >
+            {/* Swipe direction hint overlays */}
+            {isReviewing && swipeOffset !== 0 && !swipeExit && (
+              <>
+                {/* Right swipe = know = green */}
+                <div
+                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-success-500"
+                  style={{ opacity: Math.max(0, swipeOffset / 200) }}
+                />
+                {/* Left swipe = don't know = red */}
+                <div
+                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-error-500"
+                  style={{ opacity: Math.max(0, -swipeOffset / 200) }}
+                />
+              </>
+            )}
+
             {/* Front face — Question */}
-            <div className={`flip-card-face flex w-full flex-col items-center gap-5 p-8 transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
-              <span className={`text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
+            <div className={`flip-card-face flex w-full flex-col items-center gap-4 p-8 min-h-[280px] max-h-[60vh] transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
+              <span className={`shrink-0 text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
                 {t("card.question")}
               </span>
-              <p className={`text-xl font-bold text-center ${cardTheme.textClassName}`}>
+              <p className={`flex-1 overflow-y-auto break-words text-xl font-bold text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.front}
               </p>
-              <GraduationCapIcon />
+              <div className="shrink-0">
+                <GraduationCapIcon />
+              </div>
             </div>
 
             {/* Back face — Answer */}
-            <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-5 p-8 ${cardTheme.cardClassName}`}>
-              <span className={`rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${cardTheme.answerLabelClassName}`}>
+            <div className={`flip-card-face flip-card-back flex w-full flex-col items-center gap-4 p-8 min-h-[280px] max-h-[60vh] ${cardTheme.cardClassName}`}>
+              <span className={`shrink-0 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wider ${cardTheme.answerLabelClassName}`}>
                 {t("card.answerRevealed")}
               </span>
-              <p className={`text-base leading-relaxed text-center ${cardTheme.textClassName}`}>
+              <p className={`flex-1 overflow-y-auto break-words text-base leading-relaxed text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.back}
               </p>
-              <ShieldIcon />
+              <div className="shrink-0">
+                <ShieldIcon />
+              </div>
             </div>
           </div>
         </div>
