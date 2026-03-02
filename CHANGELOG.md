@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.9...versado-v0.1.10) (2026-03-02)
+
+
+### Features
+
+* **web,api:** study session enhancements, mastery gestures, and starter decks ([#45](https://github.com/alvesdmateus/versado-app/issues/45)) ([3f064e8](https://github.com/alvesdmateus/versado-app/commit/3f064e8237b07dce6ffa03cbb17659ca0d283481))
+
 ## [0.1.9](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.8...versado-v0.1.9) (2026-03-02)
 
 
