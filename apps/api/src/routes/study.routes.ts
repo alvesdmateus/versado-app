@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { eq, and, lte, gte, sql, desc } from "drizzle-orm";
+import { eq, and, gte, sql, desc } from "drizzle-orm";
 import { submitReviewSchema, startSessionSchema, idSchema } from "@versado/validation";
 import { calculateSM2 } from "@versado/algorithms";
 import type { ReviewRating } from "@versado/algorithms";
@@ -11,7 +11,7 @@ import { getLimits } from "../lib/feature-gates";
 
 export const studyRoutes = new Hono();
 
-// Get due cards for a deck
+// Get cards available for study (all non-mastered cards)
 studyRoutes.get("/decks/:deckId/due", async (c) => {
   const user = c.get("user");
   const deckId = validate(idSchema, c.req.param("deckId"));
@@ -30,7 +30,7 @@ studyRoutes.get("/decks/:deckId/due", async (c) => {
         eq(cardProgress.userId, user.id),
         eq(cardProgress.tombstone, false),
         eq(flashcards.tombstone, false),
-        lte(cardProgress.dueDate, new Date())
+        sql`${cardProgress.status} != 'mastered'`
       )
     )
     .orderBy(cardProgress.dueDate)
@@ -60,7 +60,6 @@ studyRoutes.get("/decks/:deckId/stats", async (c) => {
     .from(flashcards)
     .where(and(eq(flashcards.deckId, deckId), eq(flashcards.tombstone, false)));
 
-  const now = new Date();
   const stats = {
     total: totalCards.length,
     new: totalCards.length - allProgress.length,
@@ -69,7 +68,7 @@ studyRoutes.get("/decks/:deckId/stats", async (c) => {
     ).length,
     review: allProgress.filter((p) => p.status === "review").length,
     mastered: allProgress.filter((p) => p.status === "mastered").length,
-    dueToday: allProgress.filter((p) => p.dueDate <= now).length,
+    dueToday: totalCards.length - allProgress.filter((p) => p.status === "mastered").length,
   };
 
   return c.json(stats);
@@ -293,7 +292,6 @@ studyRoutes.patch("/sessions/:id/end", async (c) => {
 studyRoutes.post("/decks/:deckId/init-progress", async (c) => {
   const user = c.get("user");
   const deckId = validate(idSchema, c.req.param("deckId"));
-  const limit = Math.min(Number(c.req.query("limit") ?? 20), 100);
 
   const allCards = await db
     .select()
@@ -309,8 +307,7 @@ studyRoutes.post("/decks/:deckId/init-progress", async (c) => {
 
   const existingCardIds = new Set(existingProgress.map((p) => p.cardId));
   const newCards = allCards
-    .filter((card) => !existingCardIds.has(card.id))
-    .slice(0, limit);
+    .filter((card) => !existingCardIds.has(card.id));
 
   if (newCards.length === 0) {
     return c.json([]);
