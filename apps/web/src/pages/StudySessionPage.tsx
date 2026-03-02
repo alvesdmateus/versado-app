@@ -292,6 +292,7 @@ export function StudySessionPage() {
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (sessionState !== "reviewing" || swipeExit) return;
+      e.preventDefault();
       swipeStartX.current = e.clientX;
       swipeStartY.current = e.clientY;
       swipeAxis.current = null;
@@ -304,12 +305,18 @@ export function StudySessionPage() {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!isDragging.current) return;
+      e.preventDefault();
       const dx = e.clientX - swipeStartX.current;
       const dy = e.clientY - swipeStartY.current;
 
-      // Lock axis after 10px of movement
+      // Lock axis after 10px of movement — favor Y when moving upward
       if (!swipeAxis.current && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-        swipeAxis.current = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+        // Favor vertical when the upward component is significant
+        if (dy < -10 && Math.abs(dy) > Math.abs(dx) * 0.7) {
+          swipeAxis.current = "y";
+        } else {
+          swipeAxis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        }
       }
 
       if (swipeAxis.current === "y") {
@@ -333,8 +340,9 @@ export function StudySessionPage() {
       const axis = swipeAxis.current;
       swipeAxis.current = null;
       const SWIPE_THRESHOLD = 100;
+      const SWIPE_UP_THRESHOLD = 70;
 
-      if (axis === "y" && dy < -SWIPE_THRESHOLD) {
+      if (axis === "y" && dy < -SWIPE_UP_THRESHOLD) {
         // Swipe up — master the card
         haptic("heavy");
         playSound("swipeUp");
@@ -597,7 +605,8 @@ export function StudySessionPage() {
             style={
               !swipeExit && swipeOffset !== 0
                 ? {
-                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                    // When flipped, X-axis is mirrored by rotateY(180deg), so negate offset
+                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${isFlipped ? -swipeOffset : swipeOffset}px) rotate(${(isFlipped ? -swipeOffset : swipeOffset) * 0.05}deg)`,
                     opacity: 1 - Math.abs(swipeOffset) / 600,
                     transition: "none",
                   }
