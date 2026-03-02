@@ -66,7 +66,7 @@ describe("Study Routes", () => {
       expect(body[0].flashcard.id).toBe(card.id);
     });
 
-    test("does not return cards not yet due", async () => {
+    test("does not return mastered cards", async () => {
       const { user, token } = await createTestUser();
       const deck = await createTestDeck(user.id);
       const card = await createTestFlashcard(deck.id);
@@ -75,7 +75,7 @@ describe("Study Routes", () => {
         userId: user.id,
         cardId: card.id,
         deckId: deck.id,
-        dueDate: new Date(Date.now() + 86400000), // tomorrow
+        status: "mastered",
       });
 
       const res = await authRequest(
