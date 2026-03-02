@@ -562,16 +562,9 @@ export function StudySessionPage() {
       {/* Card area — 3D flip + swipe */}
       <div className="flex flex-1 flex-col items-center justify-center px-5">
         <div
-          className={`flip-card w-full max-w-md ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""} ${swipeExit === "up" ? "swipe-exit-up" : ""}`}
+          className={`flip-card w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""}`}
           style={{
             touchAction: isReviewing ? "none" : "auto",
-            ...(!swipeExit && swipeOffset !== 0
-              ? {
-                  transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
-                  opacity: 1 - Math.abs(swipeOffset) / 600,
-                  transition: "none",
-                }
-              : {}),
             ...(!swipeExit && swipeOffsetY < 0
               ? {
                   transform: `translateY(${swipeOffsetY}px) scale(${1 + swipeOffsetY / 1000})`,
@@ -588,7 +581,16 @@ export function StudySessionPage() {
           tabIndex={!isReviewing ? 0 : undefined}
         >
           <div
-            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
+            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
+            style={
+              !swipeExit && swipeOffset !== 0
+                ? {
+                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                    opacity: 1 - Math.abs(swipeOffset) / 600,
+                    transition: "none",
+                  }
+                : undefined
+            }
           >
             {/* Swipe direction hint overlays */}
             {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
