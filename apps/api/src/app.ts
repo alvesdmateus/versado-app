@@ -19,6 +19,7 @@ import { webhookRoutes } from "./routes/webhook.routes";
 import { aiRoutes } from "./routes/ai.routes";
 import { socialRoutes } from "./routes/social.routes";
 import { pushRoutes } from "./routes/push.routes";
+import { onboardingRoutes } from "./routes/onboarding.routes";
 
 export function createApp() {
   const app = new Hono();
@@ -68,6 +69,7 @@ export function createApp() {
   api.route("/ai", aiRoutes);
   api.route("/social", socialRoutes);
   api.route("/push", pushRoutes);
+  api.route("/onboarding", onboardingRoutes);
 
   app.route("/api", api);
 

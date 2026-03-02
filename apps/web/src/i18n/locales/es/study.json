@@ -13,7 +13,14 @@
     "question": "Pregunta",
     "answerRevealed": "Respuesta Revelada",
     "tapToReveal": "Toca para revelar la respuesta",
-    "howWell": "¿Qué tan bien sabías esto?"
+    "howWell": "¿Qué tan bien sabías esto?",
+    "masteryProgress": "{{percent}}% dominado"
+  },
+  "status": {
+    "new": "Nuevo",
+    "learning": "Aprendiendo",
+    "review": "Repasando",
+    "mastered": "Dominado"
   },
   "ratings": {
     "again": "De Nuevo",

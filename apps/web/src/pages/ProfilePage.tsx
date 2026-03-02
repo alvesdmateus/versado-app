@@ -9,6 +9,8 @@ import {
   Clock,
   ArrowUpDown,
   Bell,
+  Vibrate,
+  Volume2,
   Lock,
   Download,
   Trash2,
@@ -217,7 +219,7 @@ export function ProfilePage() {
         />
       </SettingsSection>
 
-      {/* Notifications */}
+      {/* Notifications & Feedback */}
       <SettingsSection label={t("sections.notifications")}>
         <SettingRow
           icon={<Bell className="h-5 w-5" />}
@@ -226,6 +228,40 @@ export function ProfilePage() {
             <ToggleSwitch
               checked={preferences?.pushAlerts ?? true}
               onChange={(v) => handlePushToggle(v)}
+            />
+          }
+        />
+        <SettingRow
+          icon={<Vibrate className="h-5 w-5" />}
+          label={t("settings.hapticFeedback")}
+          rightElement={
+            <ToggleSwitch
+              checked={preferences?.hapticFeedback ?? true}
+              onChange={async (v) => {
+                setPreferences((prev) => (prev ? { ...prev, hapticFeedback: v } : prev));
+                try {
+                  await profileApi.updatePreferences({ hapticFeedback: v });
+                } catch {
+                  setPreferences((prev) => (prev ? { ...prev, hapticFeedback: !v } : prev));
+                }
+              }}
+            />
+          }
+        />
+        <SettingRow
+          icon={<Volume2 className="h-5 w-5" />}
+          label={t("settings.soundFeedback")}
+          rightElement={
+            <ToggleSwitch
+              checked={preferences?.soundFeedback ?? true}
+              onChange={async (v) => {
+                setPreferences((prev) => (prev ? { ...prev, soundFeedback: v } : prev));
+                try {
+                  await profileApi.updatePreferences({ soundFeedback: v });
+                } catch {
+                  setPreferences((prev) => (prev ? { ...prev, soundFeedback: !v } : prev));
+                }
+              }}
             />
           }
         />

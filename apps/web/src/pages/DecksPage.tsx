@@ -192,24 +192,29 @@ export function DecksPage() {
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 px-5">
-        {filteredDecks.map((deck) => {
+        {filteredDecks.map((deck, index) => {
           const total = deck.stats.totalCards;
           const mastered = deck.stats.masteredCards;
           const progress = total > 0 ? Math.round((mastered / total) * 100) : 0;
 
           return (
-            <DeckGridCard
+            <div
               key={deck.id}
-              name={deck.name}
-              cardCount={total}
-              coverImageUrl={deck.coverImageUrl}
-              gradient={getGradient(deck.name)}
-              progress={progress}
-              lastStudied=""
-              isFavorite={favoriteIds.has(deck.id)}
-              onToggleFavorite={() => toggleFavorite(deck.id)}
-              onClick={() => navigate(`/decks/${deck.id}`)}
-            />
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <DeckGridCard
+                name={deck.name}
+                cardCount={total}
+                coverImageUrl={deck.coverImageUrl}
+                gradient={getGradient(deck.name)}
+                progress={progress}
+                lastStudied=""
+                isFavorite={favoriteIds.has(deck.id)}
+                onToggleFavorite={() => toggleFavorite(deck.id)}
+                onClick={() => navigate(`/decks/${deck.id}`)}
+              />
+            </div>
           );
         })}
       </div>

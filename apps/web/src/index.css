@@ -65,7 +65,7 @@
   --color-neutral-950: #030712;
 
   /* Typography */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
@@ -192,7 +192,7 @@ body {
   inset: 0;
   transform: rotateY(180deg);
 }
-/* Swipe exit animations */
+/* Swipe exit animations (on inner to preserve flip transform) */
 .flip-card-inner.swipe-exit-left {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   transform: rotateY(180deg) translateX(-150%) rotate(-15deg) !important;
@@ -203,6 +203,12 @@ body {
   transform: rotateY(180deg) translateX(150%) rotate(15deg) !important;
   opacity: 0;
 }
+/* Swipe up exit (on outer .flip-card for vertical movement) */
+.flip-card.swipe-exit-up {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transform: translateY(-150%) scale(0.9) !important;
+  opacity: 0;
+}
 
 /* Subtle bounce for "tap to reveal" hint */
 @keyframes bounce-subtle {
@@ -211,4 +217,23 @@ body {
 }
 .animate-bounce-subtle {
   animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* Staggered fade-in-up for lists */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+/* Pop animation for counters */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: pop 0.3s ease-out;
 }

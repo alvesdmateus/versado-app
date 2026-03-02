@@ -33,6 +33,8 @@
     "cardSorting": "Tri des cartes",
     "pushAlerts": "Notifications push",
     "pushDenied": "Les notifications push ne sont pas disponibles ou l'autorisation a été refusée",
+    "hapticFeedback": "Retour Haptique",
+    "soundFeedback": "Effets Sonores",
     "changePassword": "Changer le mot de passe",
     "exportData": "Exporter les données",
     "deleteAccount": "Supprimer le compte",

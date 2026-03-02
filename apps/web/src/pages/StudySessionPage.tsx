@@ -9,6 +9,7 @@ import { syncAwareApi } from "@/lib/sync-aware-api";
 import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
+import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
 import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
 
 // ---------------------------------------------------------------------------
@@ -112,11 +113,14 @@ export function StudySessionPage() {
   const isResettingRef = useRef(false);
   const cardStartTimeRef = useRef(Date.now());
 
-  // Swipe gesture state
+  // Swipe gesture state (X = left/right, Y = up for master)
   const [swipeOffset, setSwipeOffset] = useState(0);
-  const [swipeExit, setSwipeExit] = useState<"left" | "right" | null>(null);
+  const [swipeOffsetY, setSwipeOffsetY] = useState(0);
+  const [swipeExit, setSwipeExit] = useState<"left" | "right" | "up" | null>(null);
   const swipeStartX = useRef(0);
+  const swipeStartY = useRef(0);
   const isDragging = useRef(false);
+  const swipeAxis = useRef<"x" | "y" | null>(null);
 
   const currentCard = dueCards[currentIndex] ?? null;
   const total = dueCards.length;
@@ -125,6 +129,8 @@ export function StudySessionPage() {
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
       setCardTheme(getCardTheme(prefs.cardTheme));
+      setHapticEnabled(prefs.hapticFeedback ?? true);
+      setSoundEnabled(prefs.soundFeedback ?? true);
     }).catch(() => {});
   }, []);
 
@@ -161,12 +167,18 @@ export function StudySessionPage() {
     if (sessionState === "studying") {
       setIsFlipped(true);
       setSessionState("reviewing");
+      haptic("light");
+      playSound("flip");
     }
   }, [sessionState]);
 
   const handleReview = useCallback(
     async (rating: ReviewRating) => {
       if (!currentCard) return;
+
+      // Tactile + audio feedback
+      haptic(rating === 1 ? "error" : rating === 4 ? "success" : "medium");
+      playSound("rate");
 
       const responseTimeMs = Date.now() - cardStartTimeRef.current;
 
@@ -175,7 +187,8 @@ export function StudySessionPage() {
         await syncAwareApi.submitReview(
           currentCard.progress.id,
           rating,
-          responseTimeMs
+          responseTimeMs,
+          sessionId ?? undefined
         );
       } catch (err) {
         if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
@@ -201,6 +214,7 @@ export function StudySessionPage() {
         isResettingRef.current = true;
         setIsFlipped(false);
         setSwipeOffset(0);
+        setSwipeOffsetY(0);
         setSwipeExit(null);
         setCurrentIndex(nextIndex);
         setSessionState("studying");
@@ -217,11 +231,67 @@ export function StudySessionPage() {
     [currentIndex, dueCards.length, currentCard, sessionId]
   );
 
+  const handleMaster = useCallback(
+    async () => {
+      if (!currentCard) return;
+
+      haptic("success");
+      playSound("swipeUp");
+
+      const responseTimeMs = Date.now() - cardStartTimeRef.current;
+
+      try {
+        await syncAwareApi.submitReview(
+          currentCard.progress.id,
+          4 as ReviewRating,
+          responseTimeMs,
+          sessionId ?? undefined,
+          true // forceMaster
+        );
+      } catch (err) {
+        if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
+          setIsLimitReached(true);
+          return;
+        }
+      }
+
+      setReviewedCount((prev) => prev + 1);
+      setRatingCounts((prev) => ({ ...prev, 4: prev[4] + 1 }));
+      setTotalResponseTime((prev) => prev + responseTimeMs);
+
+      const nextIndex = currentIndex + 1;
+      if (nextIndex >= dueCards.length) {
+        if (sessionId) {
+          syncAwareApi.endSession(sessionId).catch(console.error);
+        }
+        setSessionState("complete");
+      } else {
+        isResettingRef.current = true;
+        setIsFlipped(false);
+        setSwipeOffset(0);
+        setSwipeOffsetY(0);
+        setSwipeExit(null);
+        setCurrentIndex(nextIndex);
+        setSessionState("studying");
+        cardStartTimeRef.current = Date.now();
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            isResettingRef.current = false;
+          });
+        });
+      }
+    },
+    [currentIndex, dueCards.length, currentCard, sessionId]
+  );
+
   // Swipe gesture handlers (only active in reviewing state)
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (sessionState !== "reviewing" || swipeExit) return;
       swipeStartX.current = e.clientX;
+      swipeStartY.current = e.clientY;
+      swipeAxis.current = null;
       isDragging.current = true;
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     },
@@ -232,7 +302,21 @@ export function StudySessionPage() {
     (e: React.PointerEvent) => {
       if (!isDragging.current) return;
       const dx = e.clientX - swipeStartX.current;
-      setSwipeOffset(dx);
+      const dy = e.clientY - swipeStartY.current;
+
+      // Lock axis after 10px of movement
+      if (!swipeAxis.current && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
+        swipeAxis.current = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+      }
+
+      if (swipeAxis.current === "y") {
+        // Only track upward movement (negative dy)
+        setSwipeOffsetY(Math.min(0, dy));
+        setSwipeOffset(0);
+      } else {
+        setSwipeOffset(dx);
+        setSwipeOffsetY(0);
+      }
     },
     []
   );
@@ -242,23 +326,41 @@ export function StudySessionPage() {
       if (!isDragging.current) return;
       isDragging.current = false;
       const dx = e.clientX - swipeStartX.current;
+      const dy = e.clientY - swipeStartY.current;
+      const axis = swipeAxis.current;
+      swipeAxis.current = null;
       const SWIPE_THRESHOLD = 100;
 
-      if (Math.abs(dx) > SWIPE_THRESHOLD) {
-        // Swipe confirmed — animate exit then rate
+      if (axis === "y" && dy < -SWIPE_THRESHOLD) {
+        // Swipe up — master the card
+        haptic("heavy");
+        playSound("swipeUp");
+        setSwipeExit("up");
+        setTimeout(() => {
+          setSwipeExit(null);
+          setSwipeOffset(0);
+          setSwipeOffsetY(0);
+          handleMaster();
+        }, 300);
+      } else if (axis !== "y" && Math.abs(dx) > SWIPE_THRESHOLD) {
+        // Swipe left/right
         const direction = dx > 0 ? "right" : "left";
+        haptic("heavy");
+        playSound(direction === "right" ? "swipeRight" : "swipeLeft");
         setSwipeExit(direction);
         setTimeout(() => {
           setSwipeExit(null);
           setSwipeOffset(0);
+          setSwipeOffsetY(0);
           handleReview(direction === "right" ? (4 as ReviewRating) : (1 as ReviewRating));
         }, 300);
       } else {
         // Snap back
         setSwipeOffset(0);
+        setSwipeOffsetY(0);
       }
     },
-    [handleReview]
+    [handleReview, handleMaster]
   );
 
   const handleClose = useCallback(() => {
@@ -276,11 +378,21 @@ export function StudySessionPage() {
         handleFlip();
       } else if (sessionState === "reviewing" && e.key >= "1" && e.key <= "4") {
         handleReview(Number(e.key) as ReviewRating);
+      } else if (sessionState === "reviewing" && (e.key === "m" || e.key === "M")) {
+        handleMaster();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [sessionState, handleFlip, handleReview]);
+  }, [sessionState, handleFlip, handleReview, handleMaster]);
+
+  // Celebrate session completion
+  useEffect(() => {
+    if (sessionState === "complete") {
+      haptic("success");
+      playSound("complete");
+    }
+  }, [sessionState]);
 
   // Loading
   if (sessionState === "loading") {
@@ -450,8 +562,17 @@ export function StudySessionPage() {
       {/* Card area — 3D flip + swipe */}
       <div className="flex flex-1 flex-col items-center justify-center px-5">
         <div
-          className="flip-card w-full max-w-md"
-          style={{ touchAction: isReviewing ? "pan-y" : "auto" }}
+          className={`flip-card w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""}`}
+          style={{
+            touchAction: isReviewing ? "none" : "auto",
+            ...(!swipeExit && swipeOffsetY < 0
+              ? {
+                  transform: `translateY(${swipeOffsetY}px) scale(${1 + swipeOffsetY / 1000})`,
+                  opacity: 1 - Math.abs(swipeOffsetY) / 400,
+                  transition: "none",
+                }
+              : {}),
+          }}
           onClick={!isReviewing && !isDragging.current ? handleFlip : undefined}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -472,7 +593,7 @@ export function StudySessionPage() {
             }
           >
             {/* Swipe direction hint overlays */}
-            {isReviewing && swipeOffset !== 0 && !swipeExit && (
+            {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
               <>
                 {/* Right swipe = know = green */}
                 <div
@@ -483,6 +604,11 @@ export function StudySessionPage() {
                 <div
                   className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-error-500"
                   style={{ opacity: Math.max(0, -swipeOffset / 200) }}
+                />
+                {/* Up swipe = master = purple */}
+                <div
+                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-purple-500"
+                  style={{ opacity: Math.max(0, -swipeOffsetY / 150) }}
                 />
               </>
             )}
@@ -514,6 +640,43 @@ export function StudySessionPage() {
             </div>
           </div>
         </div>
+
+        {/* Mastery indicator */}
+        {currentCard && (() => {
+          const interval = currentCard.progress.interval;
+          const masteryPercent = Math.min(100, Math.round((interval / 21) * 100));
+          const status = currentCard.progress.status;
+          const statusConfig = {
+            new: { label: t("status.new"), color: "text-neutral-400", ring: "stroke-neutral-300" },
+            learning: { label: t("status.learning"), color: "text-primary-500", ring: "stroke-primary-500" },
+            relearning: { label: t("status.learning"), color: "text-primary-500", ring: "stroke-primary-500" },
+            review: { label: t("status.review"), color: "text-warning-500", ring: "stroke-warning-500" },
+            mastered: { label: t("status.mastered"), color: "text-success-500", ring: "stroke-success-500" },
+          }[status] ?? { label: status, color: "text-neutral-400", ring: "stroke-neutral-300" };
+
+          return (
+            <div className="mt-3 flex items-center gap-2">
+              {/* Mini circular progress ring */}
+              <svg className="h-5 w-5 -rotate-90" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="none" className="stroke-neutral-200" strokeWidth="2.5" />
+                <circle
+                  cx="10" cy="10" r="8" fill="none"
+                  className={statusConfig.ring}
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeDasharray={`${masteryPercent * 0.5} 50`}
+                  style={{ transition: "stroke-dasharray 0.5s ease" }}
+                />
+              </svg>
+              <span className={`text-xs font-medium ${statusConfig.color}`}>
+                {statusConfig.label}
+              </span>
+              <span className="text-xs text-neutral-400">
+                {t("card.masteryProgress", { percent: masteryPercent })}
+              </span>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Footer */}

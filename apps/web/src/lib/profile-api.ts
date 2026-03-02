@@ -13,6 +13,8 @@ export interface UserPreferences {
   favoriteDeckIds: string[];
   onboardingCompleted?: boolean;
   nativeLanguage?: string;
+  hapticFeedback: boolean;
+  soundFeedback: boolean;
 }
 
 export const profileApi = {
