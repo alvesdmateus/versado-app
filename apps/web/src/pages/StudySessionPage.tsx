@@ -582,7 +582,7 @@ export function StudySessionPage() {
       {/* Card area — 3D flip + swipe */}
       <div className="flex flex-1 flex-col items-center justify-center px-5">
         <div
-          className={`flip-card w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""}`}
+          className={`flip-card relative w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
           style={{
             touchAction: isReviewing ? "none" : "auto",
             ...(!swipeExit && swipeOffsetY < 0
@@ -591,7 +591,13 @@ export function StudySessionPage() {
                   opacity: 1 - Math.abs(swipeOffsetY) / 400,
                   transition: "none",
                 }
-              : {}),
+              : !swipeExit && swipeOffset !== 0
+                ? {
+                    transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                    opacity: 1 - Math.abs(swipeOffset) / 600,
+                    transition: "none",
+                  }
+                : {}),
           }}
           onClick={!isReviewing && !isDragging.current ? handleFlip : undefined}
           onPointerDown={handlePointerDown}
@@ -600,40 +606,30 @@ export function StudySessionPage() {
           role={!isReviewing ? "button" : undefined}
           tabIndex={!isReviewing ? 0 : undefined}
         >
-          <div
-            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
-            style={
-              !swipeExit && swipeOffset !== 0
-                ? {
-                    // When flipped, X-axis is mirrored by rotateY(180deg), so negate offset
-                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${isFlipped ? -swipeOffset : swipeOffset}px) rotate(${(isFlipped ? -swipeOffset : swipeOffset) * 0.05}deg)`,
-                    opacity: 1 - Math.abs(swipeOffset) / 600,
-                    transition: "none",
-                  }
-                : undefined
-            }
-          >
-            {/* Swipe direction hint overlays */}
-            {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
-              <>
-                {/* Right swipe = know = green */}
-                <div
-                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-success-500"
-                  style={{ opacity: Math.max(0, swipeOffset / 200) }}
-                />
-                {/* Left swipe = don't know = red */}
-                <div
-                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-error-500"
-                  style={{ opacity: Math.max(0, -swipeOffset / 200) }}
-                />
-                {/* Up swipe = master = purple */}
-                <div
-                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-purple-500"
-                  style={{ opacity: Math.max(0, -swipeOffsetY / 150) }}
-                />
-              </>
-            )}
+          {/* Swipe direction hint overlays */}
+          {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
+            <>
+              {/* Right swipe = know = green */}
+              <div
+                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-success-500"
+                style={{ opacity: Math.max(0, swipeOffset / 200) }}
+              />
+              {/* Left swipe = don't know = red */}
+              <div
+                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-error-500"
+                style={{ opacity: Math.max(0, -swipeOffset / 200) }}
+              />
+              {/* Up swipe = master = purple */}
+              <div
+                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-purple-500"
+                style={{ opacity: Math.max(0, -swipeOffsetY / 150) }}
+              />
+            </>
+          )}
 
+          <div
+            className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
+          >
             {/* Front face — Question */}
             <div className={`flip-card-face flex w-full flex-col items-center gap-4 p-8 min-h-[280px] max-h-[60vh] transition-shadow ${cardTheme.cardClassName} ${!isReviewing ? "cursor-pointer hover:shadow-card-hover active:scale-[0.98]" : ""}`}>
               <span className={`shrink-0 text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>

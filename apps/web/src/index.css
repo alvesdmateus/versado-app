@@ -192,19 +192,17 @@ body {
   inset: 0;
   transform: rotateY(180deg);
 }
-/* Swipe exit animations (on inner to preserve flip transform) */
-/* Note: translateX is negated because rotateY(180deg) mirrors the X-axis */
-.flip-card-inner.swipe-exit-left {
+/* Swipe exit animations — all on outer .flip-card so they're independent of flip state */
+.flip-card.swipe-exit-left {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  transform: rotateY(180deg) translateX(150%) rotate(15deg) !important;
+  transform: translateX(-150%) rotate(-15deg) !important;
   opacity: 0;
 }
-.flip-card-inner.swipe-exit-right {
+.flip-card.swipe-exit-right {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  transform: rotateY(180deg) translateX(-150%) rotate(-15deg) !important;
+  transform: translateX(150%) rotate(15deg) !important;
   opacity: 0;
 }
-/* Swipe up exit (on outer .flip-card for vertical movement) */
 .flip-card.swipe-exit-up {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   transform: translateY(-150%) scale(0.9) !important;
