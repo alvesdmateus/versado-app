@@ -25,7 +25,7 @@ dashboardRoutes.get("/", async (c) => {
 
   const now = new Date();
   const mastered = allProgress.filter((p) => p.status === "mastered").length;
-  const dueToday = allProgress.filter((p) => p.dueDate <= now).length;
+  const dueToday = allProgress.filter((p) => p.status !== "mastered").length;
 
   // Get study sessions for streak and accuracy calculation (last 30 days)
   const thirtyDaysAgo = new Date();

@@ -37,7 +37,9 @@
     "browseMarketplace": "Browse Marketplace",
     "showMore": "Show More",
     "published": " published ",
-    "via": " via "
+    "via": " via ",
+    "get": "Get",
+    "added": "Added"
   },
   "time": {
     "justNow": "just now",

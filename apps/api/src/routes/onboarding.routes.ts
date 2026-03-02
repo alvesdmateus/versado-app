@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { eq, and, sql } from "drizzle-orm";
 import { db } from "../db";
-import { users, decks, flashcards, purchases } from "../db/schema";
+import { users, decks, flashcards, cardProgress, purchases } from "../db/schema";
 import { validate } from "../lib/validate";
 
 const SYSTEM_EMAIL = "system@versado.app";
@@ -92,7 +92,7 @@ onboardingRoutes.post("/claim-starter-decks", async (c) => {
       .where(and(eq(flashcards.deckId, sourceDeck.id), eq(flashcards.tombstone, false)));
 
     if (sourceCards.length > 0) {
-      await db.insert(flashcards).values(
+      const clonedCards = await db.insert(flashcards).values(
         sourceCards.map((card) => ({
           deckId: clonedDeck!.id,
           front: card.front,
@@ -100,6 +100,15 @@ onboardingRoutes.post("/claim-starter-decks", async (c) => {
           tags: card.tags,
           difficulty: card.difficulty,
           source: { type: "imported" as const, source: `starter:${sourceDeck.id}` },
+        })),
+      ).returning();
+
+      // Create card progress so cards are immediately available for study
+      await db.insert(cardProgress).values(
+        clonedCards.map((card) => ({
+          userId: user.id,
+          cardId: card.id,
+          deckId: clonedDeck!.id,
         })),
       );
 

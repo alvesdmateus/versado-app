@@ -14,6 +14,7 @@ interface ActivityFeedProps {
   onLoadMore: () => void;
   onDeckClick: (deckId: string) => void;
   onBrowseMarketplace: () => void;
+  onAddDeck?: (deckId: string) => Promise<void>;
 }
 
 export function ActivityFeed({
@@ -25,6 +26,7 @@ export function ActivityFeed({
   onLoadMore,
   onDeckClick,
   onBrowseMarketplace,
+  onAddDeck,
 }: ActivityFeedProps) {
   const { t } = useTranslation(["home", "common"]);
 
@@ -74,6 +76,7 @@ export function ActivityFeed({
                 key={`${item.deck.id}-${index}`}
                 item={item}
                 onDeckClick={onDeckClick}
+                onAdd={onAddDeck ? () => onAddDeck(item.deck.id) : undefined}
               />
             ))}
             {hasMore && (

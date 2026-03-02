@@ -7,7 +7,8 @@
   },
   "session": {
     "closeSession": "Lerneinheit beenden",
-    "moreOptions": "Weitere Optionen"
+    "moreOptions": "Weitere Optionen",
+    "practice": "Übung"
   },
   "card": {
     "question": "Frage",
