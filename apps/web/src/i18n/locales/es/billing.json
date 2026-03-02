@@ -52,5 +52,17 @@
   "canceledAtEnd": "La suscripción se cancelará al final del período de facturación",
   "subscriptionResumed": "¡Suscripción reanudada!",
   "cancelDialogTitle": "Cancelar suscripción",
-  "cancelDialogMessage": "Tus funciones de Fluent seguirán activas hasta el final de tu período de facturación actual. Puedes reanudar en cualquier momento antes de esa fecha."
+  "cancelDialogMessage": "Tus funciones de Fluent seguirán activas hasta el final de tu período de facturación actual. Puedes reanudar en cualquier momento antes de esa fecha.",
+  "goFluent.headline": "Desbloquea Todo Tu Potencial",
+  "goFluent.subtitle.limit": "Has alcanzado el límite del plan gratuito. ¡Mejora para seguir adelante!",
+  "goFluent.subtitle.session": "¡Estás progresando mucho! Ve Fluent para aprender sin límites.",
+  "goFluent.subtitle.feature": "Esta función está disponible en el plan Fluent.",
+  "goFluent.saleTag": "30% off primer mes",
+  "goFluent.firstMonth": "Solo el primer mes, luego precio regular",
+  "goFluent.benefits.unlimitedReviews": "Repasos diarios ilimitados",
+  "goFluent.benefits.unlimitedAI": "Generación de tarjetas con AI ilimitada",
+  "goFluent.benefits.offlineMode": "Modo de estudio sin conexión",
+  "goFluent.cta": "Empieza por {{price}}",
+  "goFluent.maybeLater": "Quizás Después",
+  "goFluent.socialProof": "Únete a miles de estudiantes fluidos"
 }

@@ -107,7 +107,8 @@ export function BillingPage() {
     if (!selectedPrice) return;
     setIsLoading(true);
     try {
-      const { url } = await billingApi.createCheckout(selectedPrice.id);
+      const coupon = searchParams.get("coupon") ?? undefined;
+      const { url } = await billingApi.createCheckout(selectedPrice.id, coupon);
       window.location.href = url;
     } catch (err) {
       showErrorNotification(err, { onRetry: handleUpgrade });

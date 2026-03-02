@@ -75,7 +75,8 @@ export async function getOrCreateStripeCustomer(
 export async function createCheckoutSession(
   userId: string,
   email: string,
-  priceId: string
+  priceId: string,
+  couponId?: string
 ): Promise<string> {
   const customerId = await getOrCreateStripeCustomer(userId, email);
 
@@ -83,6 +84,7 @@ export async function createCheckoutSession(
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
+    ...(couponId ? { discounts: [{ coupon: couponId }] } : {}),
     success_url: `${env.WEB_URL}/billing?success=true`,
     cancel_url: `${env.WEB_URL}/billing?canceled=true`,
     metadata: { userId },

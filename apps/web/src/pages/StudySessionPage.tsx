@@ -10,7 +10,8 @@ import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
 import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
-import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
+import { GoFluentModal } from "@/components/shared/GoFluentModal";
+import { useAuth } from "@/hooks/useAuth";
 
 // ---------------------------------------------------------------------------
 // Rating button config
@@ -99,6 +100,7 @@ export function StudySessionPage() {
   const navigate = useNavigate();
   const { deckId } = useParams<{ deckId: string }>();
   const { t } = useTranslation("study");
+  const { user } = useAuth();
 
   const [sessionState, setSessionState] = useState<SessionState>("loading");
   const [dueCards, setDueCards] = useState<DueCard[]>([]);
@@ -109,6 +111,7 @@ export function StudySessionPage() {
   const [ratingCounts, setRatingCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
   const [totalResponseTime, setTotalResponseTime] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
+  const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
   const [cardTheme, setCardTheme] = useState<CardTheme>(getCardTheme());
   const isResettingRef = useRef(false);
   const cardStartTimeRef = useRef(Date.now());
@@ -386,13 +389,22 @@ export function StudySessionPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [sessionState, handleFlip, handleReview, handleMaster]);
 
-  // Celebrate session completion
+  // Celebrate session completion + prompt upgrade every 3rd session
   useEffect(() => {
     if (sessionState === "complete") {
       haptic("success");
       playSound("complete");
+
+      if (user?.tier === "free") {
+        const key = "versado:study-session-count";
+        const count = Number(localStorage.getItem(key) || "0") + 1;
+        localStorage.setItem(key, String(count));
+        if (count % 3 === 0) {
+          setIsGoFluentOpen(true);
+        }
+      }
     }
-  }, [sessionState]);
+  }, [sessionState, user?.tier]);
 
   // Loading
   if (sessionState === "loading") {
@@ -719,7 +731,7 @@ export function StudySessionPage() {
         )}
       </footer>
 
-      <LimitReachedModal
+      <GoFluentModal
         isOpen={isLimitReached}
         onClose={() => {
           setIsLimitReached(false);
@@ -728,6 +740,13 @@ export function StudySessionPage() {
           }
           navigate("/");
         }}
+        trigger="limit"
+      />
+
+      <GoFluentModal
+        isOpen={isGoFluentOpen}
+        onClose={() => setIsGoFluentOpen(false)}
+        trigger="session"
       />
     </div>
   );

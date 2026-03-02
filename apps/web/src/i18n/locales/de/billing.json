@@ -52,5 +52,17 @@
   "canceledAtEnd": "Das Abonnement wird zum Ende des Abrechnungszeitraums gekündigt",
   "subscriptionResumed": "Abonnement fortgesetzt!",
   "cancelDialogTitle": "Abonnement kündigen",
-  "cancelDialogMessage": "Deine Fluent-Funktionen bleiben bis zum Ende deines aktuellen Abrechnungszeitraums aktiv. Du kannst jederzeit vorher fortsetzen."
+  "cancelDialogMessage": "Deine Fluent-Funktionen bleiben bis zum Ende deines aktuellen Abrechnungszeitraums aktiv. Du kannst jederzeit vorher fortsetzen.",
+  "goFluent.headline": "Entfalte Dein Volles Potenzial",
+  "goFluent.subtitle.limit": "Du hast das Limit des kostenlosen Plans erreicht. Upgrade, um weiterzumachen!",
+  "goFluent.subtitle.session": "Du machst tolle Fortschritte! Werde Fluent und lerne ohne Grenzen.",
+  "goFluent.subtitle.feature": "Diese Funktion ist im Fluent-Plan verfügbar.",
+  "goFluent.saleTag": "30% Rabatt im ersten Monat",
+  "goFluent.firstMonth": "Nur im ersten Monat, danach regulärer Preis",
+  "goFluent.benefits.unlimitedReviews": "Unbegrenzte tägliche Wiederholungen",
+  "goFluent.benefits.unlimitedAI": "Unbegrenzte AI-Kartengenerierung",
+  "goFluent.benefits.offlineMode": "Offline-Lernmodus",
+  "goFluent.cta": "Starte für {{price}}",
+  "goFluent.maybeLater": "Vielleicht Später",
+  "goFluent.socialProof": "Schließe dich Tausenden fließenden Lernenden an"
 }

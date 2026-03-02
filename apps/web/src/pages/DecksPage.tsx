@@ -13,7 +13,7 @@ import { CreateDeckModal } from "@/components/decks/CreateDeckModal";
 import { DeckCreatedModal } from "@/components/decks/DeckCreatedModal";
 import { ImportDeckModal } from "@/components/decks/ImportDeckModal";
 import { SortSelect } from "@/components/shared/SortSelect";
-import { EmptyState, DeckGridSkeleton } from "@/components/shared";
+import { EmptyState, DeckGridSkeleton, GoFluentModal } from "@/components/shared";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const FILTER_KEYS = ["all", "recentlyStudied", "favorites"] as const;
@@ -50,6 +50,7 @@ export function DecksPage() {
   const [createdDeck, setCreatedDeck] = useState<DeckResponse | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState("newest");
+  const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -262,6 +263,7 @@ export function DecksPage() {
           setIsCreateOpen(false);
           setCreatedDeck(deck);
         }}
+        onLimitReached={() => setIsGoFluentOpen(true)}
       />
 
       <DeckCreatedModal
@@ -277,6 +279,12 @@ export function DecksPage() {
           setCreatedDeck(null);
           navigate(`/decks/${id}`);
         }}
+      />
+
+      <GoFluentModal
+        isOpen={isGoFluentOpen}
+        onClose={() => setIsGoFluentOpen(false)}
+        trigger="feature"
       />
     </div>
   );
