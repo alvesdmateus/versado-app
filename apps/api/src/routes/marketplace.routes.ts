@@ -269,7 +269,7 @@ marketplaceRoutes.post("/:deckId/add-to-library", async (c) => {
       }))
     ).returning();
 
-    // Create card progress so cards are immediately due
+    // Create card progress so cards are immediately available for study
     await db.insert(cardProgress).values(
       clonedCards.map((card) => ({
         userId: user.id,

@@ -7,7 +7,7 @@ import {
   idSchema,
 } from "@versado/validation";
 import { db } from "../db";
-import { flashcards, decks } from "../db/schema";
+import { flashcards, decks, cardProgress } from "../db/schema";
 import { AppError } from "../middleware/error-handler";
 import { validate } from "../lib/validate";
 import { checkCardLimit } from "../lib/feature-gates";
@@ -49,6 +49,15 @@ flashcardRoutes.post("/batch", async (c) => {
       }))
     )
     .returning();
+
+  // Create card progress for each new card
+  await db.insert(cardProgress).values(
+    rows.map((card) => ({
+      userId: user.id,
+      cardId: card.id,
+      deckId: data.deckId,
+    }))
+  );
 
   // Update deck card count
   await db
@@ -136,6 +145,13 @@ flashcardRoutes.post("/", async (c) => {
       source: data.source,
     })
     .returning();
+
+  // Create card progress
+  await db.insert(cardProgress).values({
+    userId: user.id,
+    cardId: rows[0]!.id,
+    deckId: data.deckId,
+  });
 
   // Update deck card count
   await db

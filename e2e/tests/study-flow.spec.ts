@@ -27,14 +27,15 @@ test.describe("Study Flow", () => {
     });
     expect(cardsRes.ok()).toBe(true);
 
-    // Init card progress
-    const initRes = await request.post(
-      `${apiBase}/api/study/decks/${deck.id}/init-progress`,
+    // Fetch due cards (progress records created automatically with cards)
+    const dueRes = await request.get(
+      `${apiBase}/api/study/decks/${deck.id}/due`,
       { headers: apiHeaders }
     );
-    expect(initRes.ok()).toBe(true);
-    const progressRecords = await initRes.json();
-    expect(progressRecords.length).toBe(2);
+    expect(dueRes.ok()).toBe(true);
+    const dueCards = await dueRes.json();
+    expect(dueCards.length).toBe(2);
+    const progressRecords = dueCards.map((c: { progress: { id: string } }) => c.progress);
 
     // Start study session
     const sessionRes = await request.post(`${apiBase}/api/study/sessions`, {

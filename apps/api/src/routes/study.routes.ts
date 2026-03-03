@@ -68,7 +68,7 @@ studyRoutes.get("/decks/:deckId/stats", async (c) => {
     ).length,
     review: allProgress.filter((p) => p.status === "review").length,
     mastered: allProgress.filter((p) => p.status === "mastered").length,
-    dueToday: allProgress.filter((p) => p.status !== "mastered").length,
+    dueToday: totalCards.length - allProgress.filter((p) => p.status === "mastered").length,
   };
 
   return c.json(stats);
@@ -292,7 +292,6 @@ studyRoutes.patch("/sessions/:id/end", async (c) => {
 studyRoutes.post("/decks/:deckId/init-progress", async (c) => {
   const user = c.get("user");
   const deckId = validate(idSchema, c.req.param("deckId"));
-  const limit = Math.min(Number(c.req.query("limit") ?? 20), 100);
 
   const allCards = await db
     .select()
@@ -308,8 +307,7 @@ studyRoutes.post("/decks/:deckId/init-progress", async (c) => {
 
   const existingCardIds = new Set(existingProgress.map((p) => p.cardId));
   const newCards = allCards
-    .filter((card) => !existingCardIds.has(card.id))
-    .slice(0, limit);
+    .filter((card) => !existingCardIds.has(card.id));
 
   if (newCards.length === 0) {
     return c.json([]);

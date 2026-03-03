@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import { eq, and, gte } from "drizzle-orm";
+import { eq, and, gte, inArray, sql } from "drizzle-orm";
 import { db } from "../db";
-import { decks, cardProgress, studySessions } from "../db/schema";
+import { decks, flashcards, cardProgress, studySessions } from "../db/schema";
 
 export const dashboardRoutes = new Hono();
 
@@ -25,7 +25,20 @@ dashboardRoutes.get("/", async (c) => {
 
   const now = new Date();
   const mastered = allProgress.filter((p) => p.status === "mastered").length;
-  const dueToday = allProgress.filter((p) => p.status !== "mastered").length;
+
+  // Count total flashcards across all user's decks
+  const deckIds = userDecks.map((d) => d.id);
+  let totalFlashcards = 0;
+  if (deckIds.length > 0) {
+    const [result] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(flashcards)
+      .where(and(inArray(flashcards.deckId, deckIds), eq(flashcards.tombstone, false)));
+    totalFlashcards = result?.count ?? 0;
+  }
+
+  // Due = all cards minus mastered (includes cards without progress records)
+  const dueToday = totalFlashcards - mastered;
 
   // Get study sessions for streak and accuracy calculation (last 30 days)
   const thirtyDaysAgo = new Date();
