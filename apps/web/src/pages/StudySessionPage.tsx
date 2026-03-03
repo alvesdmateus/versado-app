@@ -26,16 +26,6 @@ interface RatingOption {
   icon: React.ReactNode;
 }
 
-function UndoIcon() {
-  return (
-    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 10h10a5 5 0 0 1 0 10H9" />
-      <path d="M3 10l4-4" />
-      <path d="M3 10l4 4" />
-    </svg>
-  );
-}
-
 function FrownIcon() {
   return (
     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -85,7 +75,6 @@ function ShieldIcon() {
 }
 
 const RATING_OPTIONS: RatingOption[] = [
-  { rating: 1 as ReviewRating, labelKey: "again", interval: "< 1m", bgClass: "bg-error-500", icon: <UndoIcon /> },
   { rating: 2 as ReviewRating, labelKey: "hard", interval: "< 20m", bgClass: "bg-warning-500", icon: <FrownIcon /> },
   { rating: 3 as ReviewRating, labelKey: "good", interval: "< 40m", bgClass: "bg-primary-500", icon: <ThumbsUpIcon /> },
   { rating: 4 as ReviewRating, labelKey: "easy", interval: "< 78m", bgClass: "bg-success-500", icon: <SmileIcon /> },
@@ -111,7 +100,7 @@ export function StudySessionPage() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [reviewedCount, setReviewedCount] = useState(0);
-  const [ratingCounts, setRatingCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
+  const [ratingCounts, setRatingCounts] = useState({ 2: 0, 3: 0, 4: 0 });
   const [totalResponseTime, setTotalResponseTime] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
   const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
@@ -186,7 +175,7 @@ export function StudySessionPage() {
       if (!currentCard) return;
 
       // Tactile + audio feedback
-      haptic(rating === 1 ? "error" : rating === 4 ? "success" : "medium");
+      haptic(rating === 4 ? "success" : "medium");
       playSound("rate");
 
       const responseTimeMs = Date.now() - cardStartTimeRef.current;
@@ -393,7 +382,7 @@ export function StudySessionPage() {
       if (sessionState === "studying" && (e.key === " " || e.key === "Enter")) {
         e.preventDefault();
         handleFlip();
-      } else if (sessionState === "reviewing" && e.key >= "1" && e.key <= "4") {
+      } else if (sessionState === "reviewing" && e.key >= "2" && e.key <= "4") {
         handleReview(Number(e.key) as ReviewRating);
       } else if (sessionState === "reviewing" && (e.key === "m" || e.key === "M")) {
         handleMaster();
@@ -457,7 +446,6 @@ export function StudySessionPage() {
       : 0;
 
     const ratingBars = [
-      { label: t("ratings.again"), count: ratingCounts[1], color: "bg-error-500" },
       { label: t("ratings.hard"), count: ratingCounts[2], color: "bg-warning-500" },
       { label: t("ratings.good"), count: ratingCounts[3], color: "bg-primary-500" },
       { label: t("ratings.easy"), count: ratingCounts[4], color: "bg-success-500" },
