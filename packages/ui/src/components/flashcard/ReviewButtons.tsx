@@ -9,7 +9,6 @@ export interface ReviewButtonConfig {
 }
 
 export const DEFAULT_REVIEW_BUTTONS: ReviewButtonConfig[] = [
-  { rating: 1, label: "Again", shortcut: "1", description: "Complete blank, wrong answer" },
   { rating: 2, label: "Hard", shortcut: "2", description: "Correct but with difficulty" },
   { rating: 3, label: "Good", shortcut: "3", description: "Correct with some hesitation" },
   { rating: 4, label: "Easy", shortcut: "4", description: "Perfect, instant recall" },
@@ -33,7 +32,6 @@ export function ReviewButtons({
   const getRatingClass = (rating: ReviewRating): string => {
     switch (rating) {
       case 1:
-        return "review-button--again";
       case 2:
         return "review-button--hard";
       case 3:
@@ -80,7 +78,7 @@ export function ReviewKeyboardHandler({
     if (!enabled) return;
 
     const key = e.key;
-    if (key >= "1" && key <= "4") {
+    if (key >= "2" && key <= "4") {
       e.preventDefault();
       onReview(parseInt(key, 10) as ReviewRating);
     }
