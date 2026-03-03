@@ -87,3 +87,12 @@ export {
   type FeedQueryInput,
   type PopularDecksQueryInput,
 } from "./social";
+
+export {
+  createReportSchema,
+  reportTargetTypeSchema,
+  reportReasonSchema,
+  type CreateReportInput,
+  type ReportTargetType,
+  type ReportReason,
+} from "./moderation";

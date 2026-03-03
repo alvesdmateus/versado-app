@@ -16,6 +16,7 @@ export const marketplaceRoutes = new Hono();
 
 // Browse marketplace listings
 marketplaceRoutes.get("/", async (c) => {
+  const user = c.get("user");
   const query = c.req.query();
   const params = validate(listMarketplaceSchema, {
     ...query,
@@ -30,6 +31,9 @@ marketplaceRoutes.get("/", async (c) => {
     eq(decks.tombstone, false),
     sql`${decks.marketplace} IS NOT NULL`,
     sql`(${decks.marketplace}->>'listed')::boolean = true`,
+    sql`${decks.ownerId} NOT IN (
+      SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${user.id}
+    )`,
   ];
 
   if (params.search) {
@@ -153,7 +157,14 @@ marketplaceRoutes.get("/:deckId", async (c) => {
       })
       .from(marketplaceReviews)
       .innerJoin(users, eq(marketplaceReviews.userId, users.id))
-      .where(eq(marketplaceReviews.deckId, deckId))
+      .where(
+        and(
+          eq(marketplaceReviews.deckId, deckId),
+          sql`${marketplaceReviews.userId} NOT IN (
+            SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${user.id}
+          )`
+        )
+      )
       .orderBy(sql`${marketplaceReviews.createdAt} DESC`)
       .limit(20),
     db
@@ -390,6 +401,7 @@ marketplaceRoutes.delete("/:deckId/list", async (c) => {
 
 // Get reviews for a marketplace listing
 marketplaceRoutes.get("/:deckId/reviews", async (c) => {
+  const user = c.get("user");
   const deckId = validate(idSchema, c.req.param("deckId"));
   const query = c.req.query();
   const limit = Math.min(Number(query.limit) || 20, 50);
@@ -407,7 +419,14 @@ marketplaceRoutes.get("/:deckId/reviews", async (c) => {
     })
     .from(marketplaceReviews)
     .innerJoin(users, eq(marketplaceReviews.userId, users.id))
-    .where(eq(marketplaceReviews.deckId, deckId))
+    .where(
+      and(
+        eq(marketplaceReviews.deckId, deckId),
+        sql`${marketplaceReviews.userId} NOT IN (
+          SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${user.id}
+        )`
+      )
+    )
     .orderBy(sql`${marketplaceReviews.createdAt} DESC`)
     .limit(limit)
     .offset(offset);

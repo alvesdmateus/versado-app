@@ -241,7 +241,10 @@ socialRoutes.get("/feed", async (c) => {
       and(
         eq(decks.tombstone, false),
         sql`${decks.visibility} IN ('marketplace', 'public')`,
-        followCondition
+        followCondition,
+        sql`${decks.ownerId} NOT IN (
+          SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${me.id}
+        )`
       )
     )
     .orderBy(sql`${decks.updatedAt} DESC`)
@@ -406,6 +409,9 @@ socialRoutes.get("/recommendations", async (c) => {
         sql`${decks.ownerId} != ${me.id}`,
         sql`${decks.id} NOT IN (
           SELECT deck_id FROM purchases WHERE buyer_id = ${me.id} AND status = 'completed'
+        )`,
+        sql`${decks.ownerId} NOT IN (
+          SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${me.id}
         )`
       )
     )
@@ -476,6 +482,9 @@ socialRoutes.get("/suggested-creators", async (c) => {
           sql`${users.id} NOT IN (
             SELECT followed_user_id FROM follows
             WHERE follower_id = ${me.id} AND follow_type = 'user' AND followed_user_id IS NOT NULL
+          )`,
+          sql`${users.id} NOT IN (
+            SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${me.id}
           )`
         )
       )
@@ -526,6 +535,9 @@ socialRoutes.get("/suggested-creators", async (c) => {
         sql`${users.id} NOT IN (
           SELECT followed_user_id FROM follows
           WHERE follower_id = ${me.id} AND follow_type = 'user' AND followed_user_id IS NOT NULL
+        )`,
+        sql`${users.id} NOT IN (
+          SELECT blocked_user_id FROM user_blocks WHERE blocker_id = ${me.id}
         )`
       )
     )

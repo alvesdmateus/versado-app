@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Trash2 } from "lucide-react";
+import { Trash2, MoreVertical, Flag, Ban } from "lucide-react";
 import type { MarketplaceReview } from "@/lib/marketplace-api";
-import { ConfirmDialog } from "@/components/shared";
+import { ConfirmDialog, DropdownMenu } from "@/components/shared";
 import { StarRating } from "./StarRating";
 
 interface ReviewListProps {
   reviews: MarketplaceReview[];
   currentUserId?: string;
   onDelete?: (reviewId: string) => void;
+  onReportReview?: (reviewId: string, userName: string) => void;
+  onBlockUser?: (userId: string, userName: string) => void;
 }
 
 function formatDate(dateStr: string): string {
@@ -23,7 +25,7 @@ function getInitial(name: string): string {
   return name.charAt(0).toUpperCase();
 }
 
-export function ReviewList({ reviews, currentUserId, onDelete }: ReviewListProps) {
+export function ReviewList({ reviews, currentUserId, onDelete, onReportReview, onBlockUser }: ReviewListProps) {
   const { t } = useTranslation(["marketplace", "common"]);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
@@ -61,6 +63,32 @@ export function ReviewList({ reviews, currentUserId, onDelete }: ReviewListProps
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
+              )}
+              {currentUserId && review.userId !== currentUserId && (onReportReview || onBlockUser) && (
+                <DropdownMenu
+                  trigger={
+                    <span className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100">
+                      <MoreVertical className="h-4 w-4" />
+                    </span>
+                  }
+                  items={[
+                    ...(onReportReview
+                      ? [{
+                          label: t("common:menu.reportReview"),
+                          icon: <Flag className="h-4 w-4" />,
+                          onClick: () => onReportReview(review.id, review.userName),
+                        }]
+                      : []),
+                    ...(onBlockUser
+                      ? [{
+                          label: t("common:menu.blockUser"),
+                          icon: <Ban className="h-4 w-4" />,
+                          onClick: () => onBlockUser(review.userId, review.userName),
+                          variant: "danger" as const,
+                        }]
+                      : []),
+                  ]}
+                />
               )}
             </div>
             {review.comment && (

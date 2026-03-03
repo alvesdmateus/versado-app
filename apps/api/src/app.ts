@@ -20,6 +20,8 @@ import { aiRoutes } from "./routes/ai.routes";
 import { socialRoutes } from "./routes/social.routes";
 import { pushRoutes } from "./routes/push.routes";
 import { onboardingRoutes } from "./routes/onboarding.routes";
+import { blocksRoutes } from "./routes/blocks.routes";
+import { moderationRoutes } from "./routes/moderation.routes";
 
 export function createApp() {
   const app = new Hono();
@@ -70,6 +72,8 @@ export function createApp() {
   api.route("/social", socialRoutes);
   api.route("/push", pushRoutes);
   api.route("/onboarding", onboardingRoutes);
+  api.route("/blocks", blocksRoutes);
+  api.route("/moderation", moderationRoutes);
 
   app.route("/api", api);
 

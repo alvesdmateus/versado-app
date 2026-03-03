@@ -20,5 +20,33 @@
     "done": "Terminé"
   },
   "loading": "Chargement...",
-  "skipToContent": "Aller au contenu principal"
+  "skipToContent": "Aller au contenu principal",
+  "report": {
+    "title": "Signaler {{name}}",
+    "description": "Pourquoi signalez-vous ce contenu ?",
+    "reasons": {
+      "inappropriate_content": "Contenu inapproprié",
+      "spam": "Spam",
+      "harassment": "Harcèlement ou intimidation",
+      "intellectual_property": "Violation de propriété intellectuelle",
+      "other": "Autre"
+    },
+    "detailsPlaceholder": "Détails supplémentaires (optionnel)",
+    "submit": "Signaler",
+    "submitted": "Signalement envoyé. Merci.",
+    "error": "Échec de l'envoi du signalement. Réessayez."
+  },
+  "block": {
+    "title": "Bloquer {{name}} ?",
+    "message": "Cette personne ne pourra pas voir votre contenu, et vous ne verrez pas le sien.",
+    "confirm": "Bloquer",
+    "success": "{{name}} a été bloqué(e).",
+    "error": "Échec du blocage. Réessayez."
+  },
+  "menu": {
+    "reportDeck": "Signaler le paquet",
+    "reportReview": "Signaler l'avis",
+    "reportUser": "Signaler l'utilisateur",
+    "blockUser": "Bloquer l'utilisateur"
+  }
 }

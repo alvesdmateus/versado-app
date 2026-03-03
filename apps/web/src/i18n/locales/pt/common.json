@@ -20,5 +20,33 @@
     "done": "Concluído"
   },
   "loading": "Carregando...",
-  "skipToContent": "Pular para o conteúdo principal"
+  "skipToContent": "Pular para o conteúdo principal",
+  "report": {
+    "title": "Denunciar {{name}}",
+    "description": "Por que você está denunciando este conteúdo?",
+    "reasons": {
+      "inappropriate_content": "Conteúdo inapropriado",
+      "spam": "Spam",
+      "harassment": "Assédio ou bullying",
+      "intellectual_property": "Violação de propriedade intelectual",
+      "other": "Outro"
+    },
+    "detailsPlaceholder": "Detalhes adicionais (opcional)",
+    "submit": "Denunciar",
+    "submitted": "Denúncia enviada. Obrigado.",
+    "error": "Falha ao enviar denúncia. Tente novamente."
+  },
+  "block": {
+    "title": "Bloquear {{name}}?",
+    "message": "Essa pessoa não poderá ver seu conteúdo, e você não verá o dela.",
+    "confirm": "Bloquear",
+    "success": "{{name}} foi bloqueado(a).",
+    "error": "Falha ao bloquear usuário. Tente novamente."
+  },
+  "menu": {
+    "reportDeck": "Denunciar baralho",
+    "reportReview": "Denunciar avaliação",
+    "reportUser": "Denunciar usuário",
+    "blockUser": "Bloquear usuário"
+  }
 }
