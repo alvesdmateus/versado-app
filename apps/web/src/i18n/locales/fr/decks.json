@@ -207,6 +207,17 @@
     "limitMessage": "Go Fluent pour des générations IA illimitées.",
     "goFluent": "Go Fluent"
   },
+  "onboard": {
+    "createDeck": "Créez Votre Deck",
+    "createDeckDesc": "Organisez vos cartes en decks par sujet, thème ou comme vous le souhaitez.",
+    "addCards": "Ajouter des Cartes",
+    "addCardsDesc": "Créez des cartes avec une question au recto et une réponse au verso.",
+    "aiGeneration": "Génération par IA",
+    "aiGenerationDesc": "Collez n'importe quel texte et laissez l'IA extraire des cartes pour vous automatiquement.",
+    "next": "Suivant",
+    "skip": "Passer",
+    "getStarted": "Commencer"
+  },
   "deckCreated": {
     "heading": "Deck Créé !",
     "description": "Votre deck <bold>{{name}}</bold> est prêt. Ajoutez des cartes pour commencer à étudier !",

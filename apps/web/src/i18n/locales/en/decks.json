@@ -207,6 +207,17 @@
     "limitMessage": "Go Fluent for unlimited AI generations.",
     "goFluent": "Go Fluent"
   },
+  "onboard": {
+    "createDeck": "Create Your Deck",
+    "createDeckDesc": "Organize your flashcards into decks by subject, topic, or anything you like.",
+    "addCards": "Add Flashcards",
+    "addCardsDesc": "Create cards with a question on the front and answer on the back.",
+    "aiGeneration": "AI Generation",
+    "aiGenerationDesc": "Paste any text and let AI extract flashcards for you automatically.",
+    "next": "Next",
+    "skip": "Skip",
+    "getStarted": "Get Started"
+  },
   "deckCreated": {
     "heading": "Deck Created!",
     "description": "Your deck <bold>{{name}}</bold> is ready. Add some cards to start studying!",

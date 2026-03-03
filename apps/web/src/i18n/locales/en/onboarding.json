@@ -76,6 +76,8 @@
     "studySmartDesc": "Our spaced-repetition algorithm shows you cards at the perfect time for long-term retention.",
     "reviewImprove": "Review & Improve",
     "reviewImproveDesc": "Rate each card and watch your accuracy improve over time. Consistency is key!",
+    "swipeGestures": "Swipe to Rate",
+    "swipeGesturesDesc": "During review, swipe right for Easy, left for Hard, or up to Master a card instantly.",
     "startLearning": "Start Learning",
     "settingUp": "Setting up..."
   }

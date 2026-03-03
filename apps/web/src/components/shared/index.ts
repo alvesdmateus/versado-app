@@ -10,3 +10,5 @@ export { ErrorNotification } from "./ErrorNotification";
 export { SyncStatusIndicator } from "./SyncStatusIndicator";
 export { LimitReachedModal } from "./LimitReachedModal";
 export { GoFluentModal } from "./GoFluentModal";
+export { StudyOnboardOverlay, useStudyOnboard } from "./StudyOnboardOverlay";
+export { DeckOnboardOverlay, useDeckOnboard } from "./DeckOnboardOverlay";

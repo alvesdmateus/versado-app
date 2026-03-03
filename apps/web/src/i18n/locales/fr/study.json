@@ -40,6 +40,25 @@
     "viewHistory": "Voir l'historique",
     "backHome": "Retour à l'accueil"
   },
+  "swipe": {
+    "easy": "FACILE",
+    "hard": "DIFFICILE",
+    "mastered": "MAÎTRISÉ"
+  },
+  "onboard": {
+    "tapToFlip": "Appuyez pour Retourner",
+    "tapToFlipDesc": "Appuyez sur la carte pour révéler la réponse de l'autre côté.",
+    "swipeToRate": "Glissez pour Évaluer",
+    "swipeToRateDesc": "Après avoir révélé la réponse, glissez pour évaluer à quel point vous la connaissiez.",
+    "swipeRight": "Glissez à droite — Facile",
+    "swipeLeft": "Glissez à gauche — Difficile",
+    "swipeUp": "Glissez vers le haut — Maîtrisé",
+    "trackProgress": "Suivez Vos Progrès",
+    "trackProgressDesc": "Observez votre maîtrise grandir au fil du temps. Notre algorithme de répétition espacée optimise vos révisions pour une rétention à long terme.",
+    "next": "Suivant",
+    "skip": "Passer",
+    "startStudying": "Commencer à Étudier"
+  },
   "limitReached": {
     "imageAlt": "Limite quotidienne atteinte",
     "heading": "Vous avez atteint votre limite quotidienne",

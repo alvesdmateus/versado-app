@@ -13,7 +13,7 @@ import { CreateDeckModal } from "@/components/decks/CreateDeckModal";
 import { DeckCreatedModal } from "@/components/decks/DeckCreatedModal";
 import { ImportDeckModal } from "@/components/decks/ImportDeckModal";
 import { SortSelect } from "@/components/shared/SortSelect";
-import { EmptyState, DeckGridSkeleton, GoFluentModal } from "@/components/shared";
+import { EmptyState, DeckGridSkeleton, GoFluentModal, DeckOnboardOverlay, useDeckOnboard } from "@/components/shared";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 
 const FILTER_KEYS = ["all", "recentlyStudied", "favorites"] as const;
@@ -51,6 +51,8 @@ export function DecksPage() {
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState("newest");
   const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
+  const { seen: deckOnboardSeen, markSeen: markDeckOnboardSeen } = useDeckOnboard();
+  const [showDeckOnboard, setShowDeckOnboard] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -238,7 +240,13 @@ export function DecksPage() {
         <Upload className="h-6 w-6" />
       </button>
       <button
-        onClick={() => setIsCreateOpen(true)}
+        onClick={() => {
+          if (!deckOnboardSeen) {
+            setShowDeckOnboard(true);
+          } else {
+            setIsCreateOpen(true);
+          }
+        }}
         aria-label={t("fab.createDeck")}
         className="fixed bottom-24 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-card-lg transition-all hover:bg-primary-600 active:scale-90"
       >
@@ -286,6 +294,16 @@ export function DecksPage() {
         onClose={() => setIsGoFluentOpen(false)}
         trigger="feature"
       />
+
+      {showDeckOnboard && (
+        <DeckOnboardOverlay
+          onComplete={() => {
+            markDeckOnboardSeen();
+            setShowDeckOnboard(false);
+            setIsCreateOpen(true);
+          }}
+        />
+      )}
     </div>
   );
 }

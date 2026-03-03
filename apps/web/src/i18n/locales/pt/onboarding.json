@@ -76,6 +76,8 @@
     "studySmartDesc": "Nosso algoritmo de repetição espaçada mostra os cartões no momento perfeito para retenção a longo prazo.",
     "reviewImprove": "Revise e Melhore",
     "reviewImproveDesc": "Avalie cada cartão e veja sua precisão melhorar com o tempo. Consistência é a chave!",
+    "swipeGestures": "Deslize para Avaliar",
+    "swipeGesturesDesc": "Durante a revisão, deslize para a direita para Fácil, esquerda para Difícil, ou para cima para Dominar instantaneamente.",
     "startLearning": "Começar a Estudar",
     "settingUp": "Configurando..."
   }

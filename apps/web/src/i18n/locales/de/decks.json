@@ -207,6 +207,17 @@
     "limitMessage": "Go Fluent für unbegrenzte KI-Generierungen.",
     "goFluent": "Go Fluent"
   },
+  "onboard": {
+    "createDeck": "Erstelle Dein Kartenset",
+    "createDeckDesc": "Organisiere deine Karten in Kartensets nach Fach, Thema oder wie du möchtest.",
+    "addCards": "Karten Hinzufügen",
+    "addCardsDesc": "Erstelle Karten mit einer Frage auf der Vorderseite und einer Antwort auf der Rückseite.",
+    "aiGeneration": "KI-Generierung",
+    "aiGenerationDesc": "Füge einen beliebigen Text ein und lass die KI automatisch Karten für dich erstellen.",
+    "next": "Weiter",
+    "skip": "Überspringen",
+    "getStarted": "Loslegen"
+  },
   "deckCreated": {
     "heading": "Kartenset erstellt!",
     "description": "Dein Kartenset <bold>{{name}}</bold> ist bereit. Füge einige Karten hinzu, um mit dem Lernen zu beginnen!",

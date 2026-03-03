@@ -76,6 +76,8 @@
     "studySmartDesc": "Unser Algorithmus für verteilte Wiederholung zeigt dir Karten zum optimalen Zeitpunkt für langfristiges Behalten.",
     "reviewImprove": "Wiederholen & Verbessern",
     "reviewImproveDesc": "Bewerte jede Karte und beobachte, wie sich deine Genauigkeit verbessert. Regelmäßigkeit ist der Schlüssel!",
+    "swipeGestures": "Wischen zum Bewerten",
+    "swipeGesturesDesc": "Wische beim Lernen nach rechts für Einfach, nach links für Schwierig oder nach oben zum sofortigen Meistern.",
     "startLearning": "Loslegen",
     "settingUp": "Wird eingerichtet..."
   }

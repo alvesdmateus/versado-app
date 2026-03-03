@@ -40,6 +40,25 @@
     "viewHistory": "View History",
     "backHome": "Back to Home"
   },
+  "swipe": {
+    "easy": "EASY",
+    "hard": "HARD",
+    "mastered": "MASTERED"
+  },
+  "onboard": {
+    "tapToFlip": "Tap to Flip",
+    "tapToFlipDesc": "Tap the card to reveal the answer on the other side.",
+    "swipeToRate": "Swipe to Rate",
+    "swipeToRateDesc": "After revealing the answer, swipe to rate how well you knew it.",
+    "swipeRight": "Swipe right — Easy",
+    "swipeLeft": "Swipe left — Hard",
+    "swipeUp": "Swipe up — Mastered",
+    "trackProgress": "Track Your Progress",
+    "trackProgressDesc": "Watch your mastery grow over time. Our spaced repetition algorithm optimizes your reviews for long-term retention.",
+    "next": "Next",
+    "skip": "Skip",
+    "startStudying": "Start Studying"
+  },
   "limitReached": {
     "imageAlt": "Daily limit reached",
     "heading": "You've reached your daily limit",
