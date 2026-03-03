@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import {
   ArrowLeft,
@@ -10,11 +9,8 @@ import {
   Store,
   Infinity,
   Sparkles,
-  ArrowRight,
 } from "lucide-react";
-import { billingApi, type Price } from "@/lib/billing-api";
-import { getCurrencyFromLocale, formatPrice } from "@/lib/currency";
-import { Button } from "@versado/ui";
+import { useAuth } from "@/hooks/useAuth";
 
 const FLUENT_BENEFITS = [
   {
@@ -69,37 +65,12 @@ const FLUENT_BENEFITS = [
 
 export function FluentPage() {
   const navigate = useNavigate();
-  const [prices, setPrices] = useState<Price[]>([]);
-
-  const userCurrency = useMemo(() => getCurrencyFromLocale(), []);
-
-  const selectedPrice = useMemo(() => {
-    const byUserCurrency = prices.filter((p) => p.currency === userCurrency);
-    const pool =
-      byUserCurrency.length > 0
-        ? byUserCurrency
-        : prices.filter((p) => p.currency === "usd");
-    return pool.find((p) => p.recurring?.interval === "month") ?? pool[0] ?? null;
-  }, [prices, userCurrency]);
-
-  useEffect(() => {
-    billingApi
-      .getPrices()
-      .then(({ prices }) => setPrices(prices))
-      .catch(() => {});
-  }, []);
-
-  const dailyCost = selectedPrice
-    ? `Less than ${formatPrice(
-        Math.ceil(selectedPrice.unitAmount / 30),
-        selectedPrice.currency
-      )}`
-    : "Less than $0.50";
+  const { user } = useAuth();
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col bg-neutral-50">
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-5 pb-28">
+      <div className="flex-1 overflow-y-auto px-5 pb-8">
         {/* Hero */}
         <div className="relative mt-4 text-center">
           {/* Back button */}
@@ -130,7 +101,7 @@ export function FluentPage() {
               Daily Cost
             </p>
             <p className="mt-1 text-lg font-bold text-neutral-900">
-              {dailyCost}
+              Less than $0.50
             </p>
             <p className="mt-0.5 text-xs text-neutral-500">
               Cheaper than a coffee per week.
@@ -192,14 +163,17 @@ export function FluentPage() {
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Sticky CTA */}
-      <div className="fixed inset-x-0 bottom-0 bg-gradient-to-t from-neutral-50 via-neutral-50 to-transparent px-5 pt-4 pb-6">
-        <Button fullWidth onClick={() => navigate("/billing")}>
-          Go Fluent
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+        {/* Stripe Pricing Table */}
+        <div className="mt-8">
+          {/* @ts-expect-error Stripe Pricing Table web component */}
+          <stripe-pricing-table
+            pricing-table-id="prctbl_1T6x2Z4ZISSLoYxJtj9R7Vmo"
+            publishable-key="pk_live_51T1o8y4ZISSLoYxJfKtqR2AYZVuuXHMcfCagGbRT4ylFfYg8g9j85Z9ASdoyxIr7gsVdYk1IlEaO9c1ooC99ztO2005mgVKGdv"
+            client-reference-id={user?.id}
+            customer-email={user?.email}
+          />
+        </div>
       </div>
     </div>
   );
