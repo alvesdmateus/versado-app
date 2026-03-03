@@ -592,8 +592,11 @@ export function StudySessionPage() {
           <>
             {/* Right swipe = easy = green gradient on right */}
             <div
-              className="pointer-events-none absolute inset-y-0 right-0 w-1/2 flex items-center justify-center bg-gradient-to-l from-success-500/80 to-transparent"
-              style={{ opacity: Math.max(0, swipeOffset / 150) }}
+              className="pointer-events-none absolute inset-y-0 right-0 w-1/2 flex items-center justify-center"
+              style={{
+                background: "linear-gradient(to left, rgba(34,197,94,0.8), transparent)",
+                opacity: Math.max(0, swipeOffset / 150),
+              }}
             >
               <span className="text-3xl font-black uppercase text-white/90 tracking-widest -rotate-90">
                 {t("swipe.easy")}
@@ -601,8 +604,11 @@ export function StudySessionPage() {
             </div>
             {/* Left swipe = hard = red gradient on left */}
             <div
-              className="pointer-events-none absolute inset-y-0 left-0 w-1/2 flex items-center justify-center bg-gradient-to-r from-error-500/80 to-transparent"
-              style={{ opacity: Math.max(0, -swipeOffset / 150) }}
+              className="pointer-events-none absolute inset-y-0 left-0 w-1/2 flex items-center justify-center"
+              style={{
+                background: "linear-gradient(to right, rgba(239,68,68,0.8), transparent)",
+                opacity: Math.max(0, -swipeOffset / 150),
+              }}
             >
               <span className="text-3xl font-black uppercase text-white/90 tracking-widest rotate-90">
                 {t("swipe.hard")}
@@ -610,8 +616,11 @@ export function StudySessionPage() {
             </div>
             {/* Up swipe = mastered = light blue gradient on top */}
             <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 flex items-center justify-center bg-gradient-to-b from-sky-400/80 to-transparent"
-              style={{ opacity: Math.max(0, -swipeOffsetY / 120) }}
+              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 flex items-center justify-center"
+              style={{
+                background: "linear-gradient(to bottom, rgba(56,189,248,0.8), transparent)",
+                opacity: Math.max(0, -swipeOffsetY / 120),
+              }}
             >
               <span className="text-3xl font-black uppercase text-white/90 tracking-widest">
                 {t("swipe.mastered")}
