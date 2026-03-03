@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.11](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.10...versado-v0.1.11) (2026-03-03)
+
+
+### Features
+
+* **web,api:** add Get button to marketplace cards and simplify study logic ([#50](https://github.com/alvesdmateus/versado-app/issues/50)) ([425c63e](https://github.com/alvesdmateus/versado-app/commit/425c63eb9f0e26af41fb8cc1fe33d3c538bbe977))
+* **web,api:** add GoFluent premium upgrade modal with coupon support ([#52](https://github.com/alvesdmateus/versado-app/issues/52)) ([e7d24bf](https://github.com/alvesdmateus/versado-app/commit/e7d24bfa29f47176b8f08f4e6f1486a5e49786fc))
+* **web:** add swipe UX improvements and contextual onboarding overlays ([#55](https://github.com/alvesdmateus/versado-app/issues/55)) ([cb4d4ac](https://github.com/alvesdmateus/versado-app/commit/cb4d4aca31583d86facc24ce2a152368d3d37d52))
+
+
+### Bug Fixes
+
+* **api:** create card progress on flashcard creation and fix due counts ([#51](https://github.com/alvesdmateus/versado-app/issues/51)) ([c836aa2](https://github.com/alvesdmateus/versado-app/commit/c836aa2d16136482459e2f28ce8645564631d89d))
+* **ui:** use Nunito font in typography token instead of Inter ([#47](https://github.com/alvesdmateus/versado-app/issues/47)) ([d3d15b2](https://github.com/alvesdmateus/versado-app/commit/d3d15b24701b67e2a79f87d132f2996dd1e58af6))
+* **web:** decouple swipe transforms from card flip ([#54](https://github.com/alvesdmateus/versado-app/issues/54)) ([42942d2](https://github.com/alvesdmateus/versado-app/commit/42942d262bb98ff51ebcd28daf6c8ae4d9e7603e))
+* **web:** fix swipe gesture directions and swipe-up master ([#53](https://github.com/alvesdmateus/versado-app/issues/53)) ([6936d1b](https://github.com/alvesdmateus/versado-app/commit/6936d1b047a803111fbcd72ecf242cfd213dcbfc))
+
 ## [0.1.10](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.9...versado-v0.1.10) (2026-03-02)
 
 
