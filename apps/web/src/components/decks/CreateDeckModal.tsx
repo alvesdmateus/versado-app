@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/shared/Modal";
 import { Textarea } from "@/components/shared/Textarea";
 import { useToast } from "@/contexts/ToastContext";
+import { ApiError } from "@/lib/api-client";
 import type { DeckResponse } from "@/lib/deck-api";
 import { syncAwareApi } from "@/lib/sync-aware-api";
 import { Input, Button } from "@versado/ui";
@@ -11,12 +12,14 @@ interface CreateDeckModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreated: (deck: DeckResponse) => void;
+  onLimitReached?: () => void;
 }
 
 export function CreateDeckModal({
   isOpen,
   onClose,
   onCreated,
+  onLimitReached,
 }: CreateDeckModalProps) {
   const { t } = useTranslation("decks");
   const { showToast } = useToast();
@@ -49,7 +52,12 @@ export function CreateDeckModal({
       showToast(t("createModal.created"));
       resetForm();
       onCreated(deck);
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "DECK_LIMIT_REACHED") {
+        handleClose();
+        onLimitReached?.();
+        return;
+      }
       setError(t("createModal.failed"));
     } finally {
       setIsSubmitting(false);

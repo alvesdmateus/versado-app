@@ -23,11 +23,12 @@ billingRoutes.post("/checkout", async (c) => {
   }
 
   const body = await c.req.json();
-  const { priceId } = validate(createCheckoutSchema, body);
+  const { priceId, couponId } = validate(createCheckoutSchema, body);
   const url = await billingService.createCheckoutSession(
     user.id,
     user.email,
-    priceId
+    priceId,
+    couponId
   );
   return c.json({ url });
 });

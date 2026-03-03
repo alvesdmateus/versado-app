@@ -18,7 +18,7 @@ import { AIGenerateModal } from "@/components/decks/AIGenerateModal";
 import { TextExtractModal } from "@/components/decks/TextExtractModal";
 import { ExportDeckModal } from "@/components/decks/ExportDeckModal";
 import { CardFilters } from "@/components/decks/CardFilters";
-import { EmptyState, ConfirmDialog, CardListSkeleton } from "@/components/shared";
+import { EmptyState, ConfirmDialog, CardListSkeleton, GoFluentModal } from "@/components/shared";
 import { Button } from "@versado/ui";
 
 export function DeckDetailPage() {
@@ -44,6 +44,7 @@ export function DeckDetailPage() {
   const [isTextExtractOpen, setIsTextExtractOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isFabOpen, setIsFabOpen] = useState(false);
+  const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
 
   // Card filter state
   const [cardSearch, setCardSearch] = useState("");
@@ -372,6 +373,7 @@ export function DeckDetailPage() {
           );
           setIsAddCardOpen(false);
         }}
+        onLimitReached={() => setIsGoFluentOpen(true)}
       />
 
       {/* AI Generate Modal */}
@@ -490,6 +492,12 @@ export function DeckDetailPage() {
           );
           setIsListModalOpen(false);
         }}
+      />
+
+      <GoFluentModal
+        isOpen={isGoFluentOpen}
+        onClose={() => setIsGoFluentOpen(false)}
+        trigger="feature"
       />
     </div>
   );

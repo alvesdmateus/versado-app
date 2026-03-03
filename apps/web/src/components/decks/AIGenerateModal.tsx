@@ -10,6 +10,7 @@ import { flashcardApi } from "@/lib/flashcard-api";
 import { TIER_LIMITS } from "@/lib/feature-limits";
 import type { FlashcardResponse } from "@/lib/deck-api";
 import { Button } from "@versado/ui";
+import { GoFluentModal } from "@/components/shared/GoFluentModal";
 
 interface AIGenerateModalProps {
   isOpen: boolean;
@@ -151,23 +152,11 @@ export function AIGenerateModal({
 
         {isLimitReached ? (
           /* Upgrade CTA when limit reached */
-          <div className="rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 p-5 text-center">
-            <Sparkles className="mx-auto h-8 w-8 text-primary-500" />
-            <h3 className="mt-2 font-semibold text-neutral-900">{t("aiGenerate.limitTitle")}</h3>
-            <p className="mt-1 text-sm text-neutral-600">
-              {t("aiGenerate.limitMessage")}
-            </p>
-            <Button
-              className="mt-3"
-              size="sm"
-              onClick={() => {
-                handleClose();
-                window.location.href = "/fluent";
-              }}
-            >
-              {t("aiGenerate.goFluent")}
-            </Button>
-          </div>
+          <GoFluentModal
+            isOpen={true}
+            onClose={() => handleClose()}
+            trigger="limit"
+          />
         ) : !hasCards ? (
           /* Step 1: Prompt Input */
           <>

@@ -10,7 +10,8 @@ import { profileApi } from "@/lib/profile-api";
 import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
 import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
-import { LimitReachedModal } from "@/components/shared/LimitReachedModal";
+import { GoFluentModal } from "@/components/shared/GoFluentModal";
+import { useAuth } from "@/hooks/useAuth";
 
 // ---------------------------------------------------------------------------
 // Rating button config
@@ -99,6 +100,7 @@ export function StudySessionPage() {
   const navigate = useNavigate();
   const { deckId } = useParams<{ deckId: string }>();
   const { t } = useTranslation("study");
+  const { user } = useAuth();
 
   const [sessionState, setSessionState] = useState<SessionState>("loading");
   const [dueCards, setDueCards] = useState<DueCard[]>([]);
@@ -109,6 +111,7 @@ export function StudySessionPage() {
   const [ratingCounts, setRatingCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0 });
   const [totalResponseTime, setTotalResponseTime] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
+  const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
   const [cardTheme, setCardTheme] = useState<CardTheme>(getCardTheme());
   const isResettingRef = useRef(false);
   const cardStartTimeRef = useRef(Date.now());
@@ -289,6 +292,7 @@ export function StudySessionPage() {
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (sessionState !== "reviewing" || swipeExit) return;
+      e.preventDefault();
       swipeStartX.current = e.clientX;
       swipeStartY.current = e.clientY;
       swipeAxis.current = null;
@@ -301,12 +305,18 @@ export function StudySessionPage() {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!isDragging.current) return;
+      e.preventDefault();
       const dx = e.clientX - swipeStartX.current;
       const dy = e.clientY - swipeStartY.current;
 
-      // Lock axis after 10px of movement
+      // Lock axis after 10px of movement — favor Y when moving upward
       if (!swipeAxis.current && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-        swipeAxis.current = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+        // Favor vertical when the upward component is significant
+        if (dy < -10 && Math.abs(dy) > Math.abs(dx) * 0.7) {
+          swipeAxis.current = "y";
+        } else {
+          swipeAxis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        }
       }
 
       if (swipeAxis.current === "y") {
@@ -330,8 +340,9 @@ export function StudySessionPage() {
       const axis = swipeAxis.current;
       swipeAxis.current = null;
       const SWIPE_THRESHOLD = 100;
+      const SWIPE_UP_THRESHOLD = 70;
 
-      if (axis === "y" && dy < -SWIPE_THRESHOLD) {
+      if (axis === "y" && dy < -SWIPE_UP_THRESHOLD) {
         // Swipe up — master the card
         haptic("heavy");
         playSound("swipeUp");
@@ -386,13 +397,22 @@ export function StudySessionPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [sessionState, handleFlip, handleReview, handleMaster]);
 
-  // Celebrate session completion
+  // Celebrate session completion + prompt upgrade every 3rd session
   useEffect(() => {
     if (sessionState === "complete") {
       haptic("success");
       playSound("complete");
+
+      if (user?.tier === "free") {
+        const key = "versado:study-session-count";
+        const count = Number(localStorage.getItem(key) || "0") + 1;
+        localStorage.setItem(key, String(count));
+        if (count % 3 === 0) {
+          setIsGoFluentOpen(true);
+        }
+      }
     }
-  }, [sessionState]);
+  }, [sessionState, user?.tier]);
 
   // Loading
   if (sessionState === "loading") {
@@ -585,7 +605,8 @@ export function StudySessionPage() {
             style={
               !swipeExit && swipeOffset !== 0
                 ? {
-                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
+                    // When flipped, X-axis is mirrored by rotateY(180deg), so negate offset
+                    transform: `${isFlipped ? "rotateY(180deg) " : ""}translateX(${isFlipped ? -swipeOffset : swipeOffset}px) rotate(${(isFlipped ? -swipeOffset : swipeOffset) * 0.05}deg)`,
                     opacity: 1 - Math.abs(swipeOffset) / 600,
                     transition: "none",
                   }
@@ -719,7 +740,7 @@ export function StudySessionPage() {
         )}
       </footer>
 
-      <LimitReachedModal
+      <GoFluentModal
         isOpen={isLimitReached}
         onClose={() => {
           setIsLimitReached(false);
@@ -728,6 +749,13 @@ export function StudySessionPage() {
           }
           navigate("/");
         }}
+        trigger="limit"
+      />
+
+      <GoFluentModal
+        isOpen={isGoFluentOpen}
+        onClose={() => setIsGoFluentOpen(false)}
+        trigger="session"
       />
     </div>
   );

@@ -52,5 +52,17 @@
   "canceledAtEnd": "Subscription will be canceled at end of billing period",
   "subscriptionResumed": "Subscription resumed!",
   "cancelDialogTitle": "Cancel Subscription",
-  "cancelDialogMessage": "Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then."
+  "cancelDialogMessage": "Your Fluent features will remain active until the end of your current billing period. You can resume anytime before then.",
+  "goFluent.headline": "Unlock Your Full Potential",
+  "goFluent.subtitle.limit": "You've hit your free plan limit. Upgrade to keep going!",
+  "goFluent.subtitle.session": "You're making great progress! Go Fluent to learn without limits.",
+  "goFluent.subtitle.feature": "This feature is available on the Fluent plan.",
+  "goFluent.saleTag": "30% off first month",
+  "goFluent.firstMonth": "First month only, then regular price",
+  "goFluent.benefits.unlimitedReviews": "Unlimited daily reviews",
+  "goFluent.benefits.unlimitedAI": "Unlimited AI card generation",
+  "goFluent.benefits.offlineMode": "Offline study mode",
+  "goFluent.cta": "Start for {{price}}",
+  "goFluent.maybeLater": "Maybe Later",
+  "goFluent.socialProof": "Join thousands of fluent learners"
 }

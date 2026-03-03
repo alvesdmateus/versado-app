@@ -9,3 +9,4 @@ export { ErrorBoundary } from "./ErrorBoundary";
 export { ErrorNotification } from "./ErrorNotification";
 export { SyncStatusIndicator } from "./SyncStatusIndicator";
 export { LimitReachedModal } from "./LimitReachedModal";
+export { GoFluentModal } from "./GoFluentModal";
