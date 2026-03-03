@@ -207,6 +207,17 @@
     "limitMessage": "Go Fluent para gerações ilimitadas de AI.",
     "goFluent": "Go Fluent"
   },
+  "onboard": {
+    "createDeck": "Crie Seu Baralho",
+    "createDeckDesc": "Organize seus cartões em baralhos por assunto, tópico ou como preferir.",
+    "addCards": "Adicionar Cartões",
+    "addCardsDesc": "Crie cartões com uma pergunta na frente e resposta no verso.",
+    "aiGeneration": "Geração com IA",
+    "aiGenerationDesc": "Cole qualquer texto e deixe a IA extrair cartões para você automaticamente.",
+    "next": "Próximo",
+    "skip": "Pular",
+    "getStarted": "Começar"
+  },
   "deckCreated": {
     "heading": "Baralho Criado!",
     "description": "Seu baralho <bold>{{name}}</bold> está pronto. Adicione algumas cartas para começar a estudar!",

@@ -40,6 +40,25 @@
     "viewHistory": "Verlauf anzeigen",
     "backHome": "Zurück zur Startseite"
   },
+  "swipe": {
+    "easy": "EINFACH",
+    "hard": "SCHWIERIG",
+    "mastered": "GEMEISTERT"
+  },
+  "onboard": {
+    "tapToFlip": "Tippen zum Umdrehen",
+    "tapToFlipDesc": "Tippe auf die Karte, um die Antwort auf der Rückseite zu sehen.",
+    "swipeToRate": "Wischen zum Bewerten",
+    "swipeToRateDesc": "Nach dem Aufdecken der Antwort wische, um zu bewerten, wie gut du sie wusstest.",
+    "swipeRight": "Nach rechts wischen — Einfach",
+    "swipeLeft": "Nach links wischen — Schwierig",
+    "swipeUp": "Nach oben wischen — Gemeistert",
+    "trackProgress": "Verfolge Deinen Fortschritt",
+    "trackProgressDesc": "Beobachte, wie dein Wissen mit der Zeit wächst. Unser Algorithmus für verteilte Wiederholung optimiert deine Lerneinheiten für langfristiges Behalten.",
+    "next": "Weiter",
+    "skip": "Überspringen",
+    "startStudying": "Loslegen"
+  },
   "limitReached": {
     "imageAlt": "Tägliches Limit erreicht",
     "heading": "Du hast dein tägliches Limit erreicht",

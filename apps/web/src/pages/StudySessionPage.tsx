@@ -11,6 +11,7 @@ import { ApiError } from "@/lib/api-client";
 import { getCardTheme, type CardTheme } from "@/lib/card-themes";
 import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
 import { GoFluentModal } from "@/components/shared/GoFluentModal";
+import { StudyOnboardOverlay, useStudyOnboard } from "@/components/shared/StudyOnboardOverlay";
 import { useAuth } from "@/hooks/useAuth";
 
 // ---------------------------------------------------------------------------
@@ -101,6 +102,8 @@ export function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>();
   const { t } = useTranslation("study");
   const { user } = useAuth();
+  const { seen: onboardSeen, markSeen: markOnboardSeen } = useStudyOnboard();
+  const [showOnboard, setShowOnboard] = useState(false);
 
   const [sessionState, setSessionState] = useState<SessionState>("loading");
   const [dueCards, setDueCards] = useState<DueCard[]>([]);
@@ -157,6 +160,9 @@ export function StudySessionPage() {
         const session = await syncAwareApi.startSession(deckId!);
         if (session) setSessionId(session.id);
         cardStartTimeRef.current = Date.now();
+        if (!onboardSeen) {
+          setShowOnboard(true);
+        }
         setSessionState("studying");
       } catch {
         setSessionState("empty");
@@ -363,7 +369,7 @@ export function StudySessionPage() {
           setSwipeExit(null);
           setSwipeOffset(0);
           setSwipeOffsetY(0);
-          handleReview(direction === "right" ? (4 as ReviewRating) : (1 as ReviewRating));
+          handleReview(direction === "right" ? (4 as ReviewRating) : (2 as ReviewRating));
         }, 300);
       } else {
         // Snap back
@@ -580,9 +586,42 @@ export function StudySessionPage() {
       </header>
 
       {/* Card area — 3D flip + swipe */}
-      <div className="flex flex-1 flex-col items-center justify-center px-5">
+      <div className="relative flex flex-1 flex-col items-center justify-center px-5 overflow-hidden">
+        {/* Swipe direction gradient backgrounds (behind the card) */}
+        {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
+          <>
+            {/* Right swipe = easy = green gradient on right */}
+            <div
+              className="pointer-events-none absolute inset-y-0 right-0 w-1/2 flex items-center justify-center bg-gradient-to-l from-success-500/80 to-transparent"
+              style={{ opacity: Math.max(0, swipeOffset / 150) }}
+            >
+              <span className="text-3xl font-black uppercase text-white/90 tracking-widest -rotate-90">
+                {t("swipe.easy")}
+              </span>
+            </div>
+            {/* Left swipe = hard = red gradient on left */}
+            <div
+              className="pointer-events-none absolute inset-y-0 left-0 w-1/2 flex items-center justify-center bg-gradient-to-r from-error-500/80 to-transparent"
+              style={{ opacity: Math.max(0, -swipeOffset / 150) }}
+            >
+              <span className="text-3xl font-black uppercase text-white/90 tracking-widest rotate-90">
+                {t("swipe.hard")}
+              </span>
+            </div>
+            {/* Up swipe = mastered = light blue gradient on top */}
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 flex items-center justify-center bg-gradient-to-b from-sky-400/80 to-transparent"
+              style={{ opacity: Math.max(0, -swipeOffsetY / 120) }}
+            >
+              <span className="text-3xl font-black uppercase text-white/90 tracking-widest">
+                {t("swipe.mastered")}
+              </span>
+            </div>
+          </>
+        )}
+
         <div
-          className={`flip-card relative w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
+          className={`flip-card relative z-10 w-full max-w-md ${swipeExit === "up" ? "swipe-exit-up" : ""} ${swipeExit === "left" ? "swipe-exit-left" : ""} ${swipeExit === "right" ? "swipe-exit-right" : ""}`}
           style={{
             touchAction: isReviewing ? "none" : "auto",
             ...(!swipeExit && swipeOffsetY < 0
@@ -606,27 +645,6 @@ export function StudySessionPage() {
           role={!isReviewing ? "button" : undefined}
           tabIndex={!isReviewing ? 0 : undefined}
         >
-          {/* Swipe direction hint overlays */}
-          {isReviewing && !swipeExit && (swipeOffset !== 0 || swipeOffsetY < 0) && (
-            <>
-              {/* Right swipe = know = green */}
-              <div
-                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-success-500"
-                style={{ opacity: Math.max(0, swipeOffset / 200) }}
-              />
-              {/* Left swipe = don't know = red */}
-              <div
-                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-error-500"
-                style={{ opacity: Math.max(0, -swipeOffset / 200) }}
-              />
-              {/* Up swipe = master = purple */}
-              <div
-                className="pointer-events-none absolute inset-0 z-10 rounded-2xl border-4 border-purple-500"
-                style={{ opacity: Math.max(0, -swipeOffsetY / 150) }}
-              />
-            </>
-          )}
-
           <div
             className={`flip-card-inner w-full ${isFlipped ? "flipped" : ""} ${isResettingRef.current ? "no-transition" : ""}`}
           >
@@ -753,6 +771,15 @@ export function StudySessionPage() {
         onClose={() => setIsGoFluentOpen(false)}
         trigger="session"
       />
+
+      {showOnboard && (
+        <StudyOnboardOverlay
+          onComplete={() => {
+            markOnboardSeen();
+            setShowOnboard(false);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -207,6 +207,17 @@
     "limitMessage": "Go Fluent para generaciones ilimitadas de AI.",
     "goFluent": "Go Fluent"
   },
+  "onboard": {
+    "createDeck": "Crea Tu Mazo",
+    "createDeckDesc": "Organiza tus tarjetas en mazos por tema, materia o lo que prefieras.",
+    "addCards": "Agregar Tarjetas",
+    "addCardsDesc": "Crea tarjetas con una pregunta en el frente y una respuesta en el reverso.",
+    "aiGeneration": "Generación con IA",
+    "aiGenerationDesc": "Pega cualquier texto y deja que la IA extraiga tarjetas para ti automáticamente.",
+    "next": "Siguiente",
+    "skip": "Omitir",
+    "getStarted": "Empezar"
+  },
   "deckCreated": {
     "heading": "¡Mazo Creado!",
     "description": "Tu mazo <bold>{{name}}</bold> está listo. ¡Agrega algunas tarjetas para empezar a estudiar!",

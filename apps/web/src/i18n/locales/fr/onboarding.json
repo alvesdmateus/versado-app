@@ -76,6 +76,8 @@
     "studySmartDesc": "Notre algorithme de répétition espacée vous présente les cartes au moment idéal pour une mémorisation à long terme.",
     "reviewImprove": "Révisez et progressez",
     "reviewImproveDesc": "Évaluez chaque carte et observez votre précision s'améliorer au fil du temps. La régularité est la clé !",
+    "swipeGestures": "Glissez pour Évaluer",
+    "swipeGesturesDesc": "Pendant la révision, glissez à droite pour Facile, à gauche pour Difficile, ou vers le haut pour Maîtriser instantanément.",
     "startLearning": "Commencer à apprendre",
     "settingUp": "Configuration..."
   }
