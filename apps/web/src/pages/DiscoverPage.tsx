@@ -1,10 +1,12 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Compass } from "lucide-react";
 import { useDiscover } from "@/hooks/useDiscover";
 import { marketplaceApi } from "@/lib/marketplace-api";
+import { blocksApi } from "@/lib/blocks-api";
 import { useToast } from "@/contexts/ToastContext";
+import { ConfirmDialog, ReportModal } from "@/components/shared";
 import { TrendingTagsSection } from "@/components/home/TrendingTagsSection";
 import { PopularDeckCarousel } from "@/components/home/PopularDeckCarousel";
 import { ActivityFeed } from "@/components/home/ActivityFeed";
@@ -43,9 +45,21 @@ function DiscoverSkeleton() {
 }
 
 export function DiscoverPage() {
-  const { t } = useTranslation(["home", "marketplace"]);
+  const { t } = useTranslation(["home", "marketplace", "common"]);
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  // Report & block state
+  const [reportTarget, setReportTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [blockTarget, setBlockTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [isBlocking, setIsBlocking] = useState(false);
+  const [hiddenCreatorIds, setHiddenCreatorIds] = useState<Set<string>>(new Set());
   const {
     popularDecks,
     feedItems,
@@ -68,6 +82,21 @@ export function DiscoverPage() {
     await marketplaceApi.addToLibrary(deckId);
     showToast(t("marketplace:addedToLibrary"));
   }, [showToast, t]);
+
+  async function handleBlock() {
+    if (!blockTarget) return;
+    setIsBlocking(true);
+    try {
+      await blocksApi.blockUser(blockTarget.id);
+      showToast(t("common:block.success", { name: blockTarget.name }));
+      setHiddenCreatorIds((prev) => new Set([...prev, blockTarget.id]));
+      setBlockTarget(null);
+    } catch {
+      showToast(t("common:block.error"), "error");
+    } finally {
+      setIsBlocking(false);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -137,9 +166,34 @@ export function DiscoverPage() {
 
       {/* Suggested Creators */}
       <SuggestedCreatorsSection
-        creators={suggestedCreators}
+        creators={suggestedCreators.filter((c) => !hiddenCreatorIds.has(c.id))}
         followedUserIds={followedUserIds}
         onToggleFollow={toggleFollowUser}
+        onReportCreator={(id, name) => setReportTarget({ id, name })}
+        onBlockCreator={(id, name) => setBlockTarget({ id, name })}
+      />
+
+      {/* Report modal */}
+      {reportTarget && (
+        <ReportModal
+          isOpen
+          onClose={() => setReportTarget(null)}
+          targetType="user"
+          targetId={reportTarget.id}
+          displayName={reportTarget.name}
+        />
+      )}
+
+      {/* Block confirm dialog */}
+      <ConfirmDialog
+        isOpen={!!blockTarget}
+        onClose={() => setBlockTarget(null)}
+        onConfirm={handleBlock}
+        title={t("common:block.title", { name: blockTarget?.name })}
+        message={t("common:block.message")}
+        confirmLabel={t("common:block.confirm")}
+        variant="danger"
+        isLoading={isBlocking}
       />
     </div>
   );

@@ -7,12 +7,16 @@ interface SuggestedCreatorsSectionProps {
   creators: SuggestedCreator[];
   followedUserIds: Set<string>;
   onToggleFollow: (creatorId: string) => void;
+  onReportCreator?: (creatorId: string, displayName: string) => void;
+  onBlockCreator?: (creatorId: string, displayName: string) => void;
 }
 
 export function SuggestedCreatorsSection({
   creators,
   followedUserIds,
   onToggleFollow,
+  onReportCreator,
+  onBlockCreator,
 }: SuggestedCreatorsSectionProps) {
   const { t } = useTranslation("home");
 
@@ -28,6 +32,8 @@ export function SuggestedCreatorsSection({
               creator={creator}
               isFollowing={followedUserIds.has(creator.id)}
               onToggleFollow={() => onToggleFollow(creator.id)}
+              onReport={onReportCreator}
+              onBlock={onBlockCreator}
             />
           </div>
         ))}

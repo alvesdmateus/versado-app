@@ -1,22 +1,58 @@
-import { Layers } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Layers, MoreVertical, Flag, Ban } from "lucide-react";
 import type { SuggestedCreator } from "@/lib/social-api";
+import { DropdownMenu } from "@/components/shared";
 import { FollowButton } from "./FollowButton";
 
 interface SuggestedCreatorCardProps {
   creator: SuggestedCreator;
   isFollowing: boolean;
   onToggleFollow: () => void;
+  onReport?: (creatorId: string, displayName: string) => void;
+  onBlock?: (creatorId: string, displayName: string) => void;
 }
 
 export function SuggestedCreatorCard({
   creator,
   isFollowing,
   onToggleFollow,
+  onReport,
+  onBlock,
 }: SuggestedCreatorCardProps) {
+  const { t } = useTranslation("common");
   const initial = creator.displayName.charAt(0).toUpperCase();
 
   return (
-    <div className="flex w-40 flex-shrink-0 flex-col items-center rounded-xl bg-neutral-0 p-4 shadow-card">
+    <div className="relative flex w-40 flex-shrink-0 flex-col items-center rounded-xl bg-neutral-0 p-4 shadow-card">
+      {/* Report/block menu */}
+      {(onReport || onBlock) && (
+        <div className="absolute right-1 top-1">
+          <DropdownMenu
+            trigger={
+              <span className="rounded-lg p-1 text-neutral-300 transition-colors hover:bg-neutral-100 hover:text-neutral-500">
+                <MoreVertical className="h-3.5 w-3.5" />
+              </span>
+            }
+            items={[
+              ...(onReport
+                ? [{
+                    label: t("menu.reportUser"),
+                    icon: <Flag className="h-4 w-4" />,
+                    onClick: () => onReport(creator.id, creator.displayName),
+                  }]
+                : []),
+              ...(onBlock
+                ? [{
+                    label: t("menu.blockUser"),
+                    icon: <Ban className="h-4 w-4" />,
+                    onClick: () => onBlock(creator.id, creator.displayName),
+                    variant: "danger" as const,
+                  }]
+                : []),
+            ]}
+          />
+        </div>
+      )}
       {/* Avatar */}
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-600">
         {creator.avatarUrl ? (

@@ -20,5 +20,33 @@
     "done": "Done"
   },
   "loading": "Loading...",
-  "skipToContent": "Skip to main content"
+  "skipToContent": "Skip to main content",
+  "report": {
+    "title": "Report {{name}}",
+    "description": "Why are you reporting this content?",
+    "reasons": {
+      "inappropriate_content": "Inappropriate content",
+      "spam": "Spam",
+      "harassment": "Harassment or bullying",
+      "intellectual_property": "Intellectual property violation",
+      "other": "Other"
+    },
+    "detailsPlaceholder": "Additional details (optional)",
+    "submit": "Report",
+    "submitted": "Report submitted. Thank you.",
+    "error": "Failed to submit report. Try again."
+  },
+  "block": {
+    "title": "Block {{name}}?",
+    "message": "They won't be able to see your content, and you won't see theirs.",
+    "confirm": "Block",
+    "success": "{{name}} has been blocked.",
+    "error": "Failed to block user. Try again."
+  },
+  "menu": {
+    "reportDeck": "Report deck",
+    "reportReview": "Report review",
+    "reportUser": "Report user",
+    "blockUser": "Block user"
+  }
 }

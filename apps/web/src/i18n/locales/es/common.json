@@ -20,5 +20,33 @@
     "done": "Listo"
   },
   "loading": "Cargando...",
-  "skipToContent": "Ir al contenido principal"
+  "skipToContent": "Ir al contenido principal",
+  "report": {
+    "title": "Reportar {{name}}",
+    "description": "¿Por qué reportas este contenido?",
+    "reasons": {
+      "inappropriate_content": "Contenido inapropiado",
+      "spam": "Spam",
+      "harassment": "Acoso o intimidación",
+      "intellectual_property": "Violación de propiedad intelectual",
+      "other": "Otro"
+    },
+    "detailsPlaceholder": "Detalles adicionales (opcional)",
+    "submit": "Reportar",
+    "submitted": "Reporte enviado. Gracias.",
+    "error": "Error al enviar el reporte. Intenta de nuevo."
+  },
+  "block": {
+    "title": "¿Bloquear a {{name}}?",
+    "message": "No podrán ver tu contenido y tú no verás el suyo.",
+    "confirm": "Bloquear",
+    "success": "{{name}} ha sido bloqueado/a.",
+    "error": "Error al bloquear usuario. Intenta de nuevo."
+  },
+  "menu": {
+    "reportDeck": "Reportar mazo",
+    "reportReview": "Reportar reseña",
+    "reportUser": "Reportar usuario",
+    "blockUser": "Bloquear usuario"
+  }
 }

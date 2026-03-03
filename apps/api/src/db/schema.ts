@@ -368,3 +368,56 @@ export const follows = pgTable(
     ),
   ]
 );
+
+// User blocks
+export const userBlocks = pgTable(
+  "user_blocks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    blockerId: uuid("blocker_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    blockedUserId: uuid("blocked_user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("user_blocks_blocker_blocked_idx").on(
+      table.blockerId,
+      table.blockedUserId
+    ),
+  ]
+);
+
+// Content reports
+export const reportTargetTypeEnum = pgEnum("report_target_type", [
+  "deck",
+  "review",
+  "user",
+]);
+
+export const reportReasonEnum = pgEnum("report_reason", [
+  "inappropriate_content",
+  "spam",
+  "harassment",
+  "intellectual_property",
+  "other",
+]);
+
+export const reports = pgTable("reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  reporterId: uuid("reporter_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  targetType: reportTargetTypeEnum("target_type").notNull(),
+  targetId: text("target_id").notNull(),
+  reason: reportReasonEnum("reason").notNull(),
+  details: text("details"),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});

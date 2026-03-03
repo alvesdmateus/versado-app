@@ -20,5 +20,33 @@
     "done": "Fertig"
   },
   "loading": "Wird geladen...",
-  "skipToContent": "Zum Hauptinhalt springen"
+  "skipToContent": "Zum Hauptinhalt springen",
+  "report": {
+    "title": "{{name}} melden",
+    "description": "Warum meldest du diesen Inhalt?",
+    "reasons": {
+      "inappropriate_content": "Unangemessener Inhalt",
+      "spam": "Spam",
+      "harassment": "Belästigung oder Mobbing",
+      "intellectual_property": "Verletzung geistigen Eigentums",
+      "other": "Sonstiges"
+    },
+    "detailsPlaceholder": "Zusätzliche Details (optional)",
+    "submit": "Melden",
+    "submitted": "Meldung gesendet. Danke.",
+    "error": "Meldung fehlgeschlagen. Versuche es erneut."
+  },
+  "block": {
+    "title": "{{name}} blockieren?",
+    "message": "Diese Person kann deine Inhalte nicht sehen, und du siehst ihre nicht.",
+    "confirm": "Blockieren",
+    "success": "{{name}} wurde blockiert.",
+    "error": "Blockierung fehlgeschlagen. Versuche es erneut."
+  },
+  "menu": {
+    "reportDeck": "Stapel melden",
+    "reportReview": "Bewertung melden",
+    "reportUser": "Benutzer melden",
+    "blockUser": "Benutzer blockieren"
+  }
 }
