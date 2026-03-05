@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.12...versado-v0.1.13) (2026-03-05)
+
+
+### Bug Fixes
+
+* **ci:** use correct release-please output keys for android build ([#64](https://github.com/alvesdmateus/versado-app/issues/64)) ([372c44e](https://github.com/alvesdmateus/versado-app/commit/372c44e6a752dd2b1747fc893ef924a6dc3d2dfe))
+
 ## [0.1.12](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.11...versado-v0.1.12) (2026-03-05)
 
 
