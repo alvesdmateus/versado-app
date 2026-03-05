@@ -1,0 +1,60 @@
+{
+  "heading": "Community",
+  "searchPlaceholder": "Search for decks, creators, or topics...",
+  "categories": {
+    "all": "All",
+    "languages": "Languages",
+    "science": "Science",
+    "history": "History"
+  },
+  "rating": {
+    "label": "Rating:",
+    "any": "Any",
+    "2plus": "2+",
+    "3plus": "3+",
+    "4plus": "4+"
+  },
+  "sort": {
+    "popular": "Popular",
+    "newest": "Newest",
+    "highestRated": "Highest Rated"
+  },
+  "loadMore": "Load More",
+  "noDecksFound": "No decks found",
+  "tryDifferentSearch": "Try a different search or category",
+  "downloads": "{{count}} downloads",
+  "free": "Free",
+  "get": "Get",
+  "added": "Added",
+  "cards": "{{count}} cards",
+  "byCreator": "by {{name}}",
+  "sampleCards": "Sample Cards",
+  "reviews": "Reviews ({{count}})",
+  "yourDeck": "Your Deck",
+  "alreadyInLibrary": "Already in Library",
+  "addToLibrary": "Add to Library",
+  "adding": "Adding...",
+  "addedToLibrary": "Added to your library!",
+  "alreadyInLibraryToast": "Already in your library",
+  "reviewDeleted": "Review deleted",
+  "noReviews": "No reviews yet",
+  "deleteReviewTitle": "Delete Review",
+  "deleteReviewMessage": "Are you sure you want to delete your review? This action cannot be undone.",
+  "deleteReviewLabel": "Delete review",
+  "writeReview": "Write a Review",
+  "editReview": "Edit Your Review",
+  "pleaseSelectRating": "Please select a rating",
+  "reviewPlaceholder": "Share your experience (optional)",
+  "submitReview": "Submit Review",
+  "updateReview": "Update Review",
+  "submitting": "Submitting...",
+  "reviewSubmitted": "Review submitted!",
+  "reviewUpdated": "Review updated!",
+  "shareDeck": {
+    "title": "Share with Community",
+    "description": "Share your deck with the community so other learners can benefit from it.",
+    "sharing": "Sharing...",
+    "share": "Share Deck",
+    "shared": "Deck shared with the community!"
+  }
+}

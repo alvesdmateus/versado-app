@@ -9,11 +9,11 @@ import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 import { HomePage } from "./pages/HomePage";
 import { DecksPage } from "./pages/DecksPage";
-import { MarketplacePage } from "./pages/MarketplacePage";
+import { CommunityPage } from "./pages/CommunityPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { StudySessionPage } from "./pages/StudySessionPage";
 import { DeckDetailPage } from "./pages/DeckDetailPage";
-import { MarketplaceDetailPage } from "./pages/MarketplaceDetailPage";
+import { CommunityDetailPage } from "./pages/CommunityDetailPage";
 import { BillingPage } from "./pages/BillingPage";
 import { FluentPage } from "./pages/FluentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -49,8 +49,8 @@ export const router = createBrowserRouter([
       { path: "decks", element: <DecksPage /> },
       { path: "decks/:deckId", element: <DeckDetailPage /> },
       { path: "discover", element: <DiscoverPage /> },
-      { path: "market", element: <MarketplacePage /> },
-      { path: "market/:deckId", element: <MarketplaceDetailPage /> },
+      { path: "community", element: <CommunityPage /> },
+      { path: "community/:deckId", element: <CommunityDetailPage /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "billing", element: <BillingPage /> },
       { path: "fluent", element: <FluentPage /> },

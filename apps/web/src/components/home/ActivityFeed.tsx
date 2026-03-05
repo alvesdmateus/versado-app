@@ -1,4 +1,4 @@
-import { Store } from "lucide-react";
+import { Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { FeedItem } from "@/lib/social-api";
 import { SectionHeader } from "./SectionHeader";
@@ -13,7 +13,7 @@ interface ActivityFeedProps {
   onFilterChange: (filter: string) => void;
   onLoadMore: () => void;
   onDeckClick: (deckId: string) => void;
-  onBrowseMarketplace: () => void;
+  onBrowseCommunity: () => void;
   onAddDeck?: (deckId: string) => Promise<void>;
 }
 
@@ -25,7 +25,7 @@ export function ActivityFeed({
   onFilterChange,
   onLoadMore,
   onDeckClick,
-  onBrowseMarketplace,
+  onBrowseCommunity,
   onAddDeck,
 }: ActivityFeedProps) {
   const { t } = useTranslation(["home", "common"]);
@@ -61,12 +61,12 @@ export function ActivityFeed({
       <div className="mt-3 flex flex-col gap-2 px-5">
         {items.length === 0 ? (
           <EmptyState
-            icon={<Store className="h-10 w-10" />}
+            icon={<Users className="h-10 w-10" />}
             title={t("feed.emptyTitle")}
             description={t("feed.emptyDescription")}
             action={{
-              label: t("feed.browseMarketplace"),
-              onClick: onBrowseMarketplace,
+              label: t("feed.browseCommunity"),
+              onClick: onBrowseCommunity,
             }}
           />
         ) : (

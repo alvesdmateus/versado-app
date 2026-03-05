@@ -20,7 +20,7 @@ import { HomeSkeleton } from "@/components/shared";
 import { dashboardApi, type DashboardHistory } from "@/lib/dashboard-api";
 
 export function HomePage() {
-  const { t } = useTranslation(["home", "marketplace"]);
+  const { t } = useTranslation(["home", "community"]);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -45,7 +45,7 @@ export function HomePage() {
 
   const handleAddDeck = useCallback(async (deckId: string) => {
     await marketplaceApi.addToLibrary(deckId);
-    showToast(t("marketplace:addedToLibrary"));
+    showToast(t("community:addedToLibrary"));
   }, [showToast, t]);
 
   const [history, setHistory] = useState<DashboardHistory | null>(null);
@@ -117,8 +117,8 @@ export function HomePage() {
 
       <PopularDeckCarousel
         decks={popularDecks}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
-        onViewAll={() => navigate("/market")}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
+        onViewAll={() => navigate("/community")}
         onAddDeck={handleAddDeck}
       />
 
@@ -129,15 +129,15 @@ export function HomePage() {
         filter={feedFilter}
         onFilterChange={setFeedFilter}
         onLoadMore={loadMoreFeed}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
-        onBrowseMarketplace={() => navigate("/market")}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
+        onBrowseCommunity={() => navigate("/community")}
         onAddDeck={handleAddDeck}
       />
 
       <RecommendedDecksSection
         decks={recommendations}
         hasFollowedTags={followedTags.size > 0}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
         onAddDeck={handleAddDeck}
       />
 

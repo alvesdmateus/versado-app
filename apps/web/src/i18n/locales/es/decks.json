@@ -51,13 +51,13 @@
     "noCardsDesc": "Agrega tu primera tarjeta para empezar a estudiar",
     "noCardsMatch": "Ninguna tarjeta coincide con tus filtros",
     "edit": "Editar",
-    "unlistMarketplace": "Deslistar del Marketplace",
-    "listMarketplace": "Listar en Marketplace",
+    "unshareCommunity": "Dejar de compartir en la Comunidad",
+    "shareCommunity": "Compartir en la Comunidad",
     "exportDeck": "Exportar Mazo",
     "delete": "Eliminar",
     "deckDeleted": "Mazo eliminado",
     "cardDeleted": "Tarjeta eliminada",
-    "removedFromMarketplace": "Eliminado del marketplace"
+    "removedFromCommunity": "Eliminado de la comunidad"
   },
   "deleteDeck": {
     "title": "Eliminar Mazo",

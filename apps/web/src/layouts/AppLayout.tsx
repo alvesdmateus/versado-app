@@ -43,10 +43,10 @@ function DiscoverIcon() {
   );
 }
 
-function MarketIcon() {
+function CommunityIcon() {
   return (
     <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-      <path fillRule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clipRule="evenodd" />
+      <path d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 19.827a7.5 7.5 0 0 1 11.38 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695c0-.484.058-.965.169-1.432.11-.464.254-.91.39-1.346ZM2.816 18.966a.75.75 0 0 1-.455-.682 5.25 5.25 0 0 1 4.884-3.534 7.47 7.47 0 0 0-1.595 2.349c-.232.532-.42 1.077-.58 1.617a18.678 18.678 0 0 1-2.254.25ZM21.184 18.966a18.678 18.678 0 0 1-2.254-.25c-.16-.54-.348-1.085-.58-1.617a7.47 7.47 0 0 0-1.595-2.349 5.25 5.25 0 0 1 4.884 3.534.75.75 0 0 1-.455.682Z" />
     </svg>
   );
 }
@@ -62,7 +62,7 @@ function ProfileIcon() {
 function getActiveKey(pathname: string): string {
   if (pathname.startsWith("/decks")) return "decks";
   if (pathname.startsWith("/discover")) return "discover";
-  if (pathname.startsWith("/market")) return "market";
+  if (pathname.startsWith("/community")) return "community";
   if (pathname.startsWith("/profile")) return "profile";
   return "home";
 }
@@ -82,7 +82,7 @@ export function AppLayout() {
     { key: "home", label: t("nav.home"), icon: <HomeIcon />, href: "/" },
     { key: "decks", label: t("nav.decks"), icon: <DecksIcon />, href: "/decks" },
     { key: "discover", label: t("nav.discover"), icon: <DiscoverIcon />, href: "/discover" },
-    { key: "market", label: t("nav.market"), icon: <MarketIcon />, href: "/market" },
+    { key: "community", label: t("nav.community"), icon: <CommunityIcon />, href: "/community" },
     { key: "profile", label: t("nav.profile"), icon: <ProfileIcon />, href: "/profile" },
   ];
 

@@ -1,0 +1,60 @@
+{
+  "heading": "Comunidade",
+  "searchPlaceholder": "Pesquise baralhos, criadores ou tópicos...",
+  "categories": {
+    "all": "Todos",
+    "languages": "Idiomas",
+    "science": "Ciência",
+    "history": "História"
+  },
+  "rating": {
+    "label": "Avaliação:",
+    "any": "Qualquer",
+    "2plus": "2+",
+    "3plus": "3+",
+    "4plus": "4+"
+  },
+  "sort": {
+    "popular": "Popular",
+    "newest": "Mais Recente",
+    "highestRated": "Melhor Avaliado"
+  },
+  "loadMore": "Carregar Mais",
+  "noDecksFound": "Nenhum baralho encontrado",
+  "tryDifferentSearch": "Tente uma pesquisa ou categoria diferente",
+  "downloads": "{{count}} downloads",
+  "free": "Grátis",
+  "get": "Obter",
+  "added": "Adicionado",
+  "cards": "{{count}} cartões",
+  "byCreator": "por {{name}}",
+  "sampleCards": "Cartões de Exemplo",
+  "reviews": "Avaliações ({{count}})",
+  "yourDeck": "Seu Baralho",
+  "alreadyInLibrary": "Já na Biblioteca",
+  "addToLibrary": "Adicionar à Biblioteca",
+  "adding": "Adicionando...",
+  "addedToLibrary": "Adicionado à sua biblioteca!",
+  "alreadyInLibraryToast": "Já está na sua biblioteca",
+  "reviewDeleted": "Avaliação excluída",
+  "noReviews": "Nenhuma avaliação ainda",
+  "deleteReviewTitle": "Excluir Avaliação",
+  "deleteReviewMessage": "Tem certeza de que deseja excluir sua avaliação? Esta ação não pode ser desfeita.",
+  "deleteReviewLabel": "Excluir avaliação",
+  "writeReview": "Escrever uma Avaliação",
+  "editReview": "Editar Sua Avaliação",
+  "pleaseSelectRating": "Por favor, selecione uma avaliação",
+  "reviewPlaceholder": "Compartilhe sua experiência (opcional)",
+  "submitReview": "Enviar Avaliação",
+  "updateReview": "Atualizar Avaliação",
+  "submitting": "Enviando...",
+  "reviewSubmitted": "Avaliação enviada!",
+  "reviewUpdated": "Avaliação atualizada!",
+  "shareDeck": {
+    "title": "Compartilhar com a Comunidade",
+    "description": "Compartilhe seu baralho com a comunidade para que outros aprendizes possam se beneficiar.",
+    "sharing": "Compartilhando...",
+    "share": "Compartilhar Baralho",
+    "shared": "Baralho compartilhado com a comunidade!"
+  }
+}

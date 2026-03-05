@@ -14,7 +14,7 @@ interface ReviewFormProps {
 }
 
 export function ReviewForm({ deckId, existingReview, onSubmitted }: ReviewFormProps) {
-  const { t } = useTranslation("marketplace");
+  const { t } = useTranslation("community");
   const { showToast } = useToast();
   const { showErrorNotification } = useErrorNotification();
   const [rating, setRating] = useState(existingReview?.rating ?? 0);

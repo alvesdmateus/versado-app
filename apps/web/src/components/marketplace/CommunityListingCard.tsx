@@ -1,0 +1,115 @@
+import { useState } from "react";
+import { Star, Download, Layers, Plus, Check, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+export interface CommunityListingCardProps {
+  title: string;
+  creator: string;
+  thumbnailUrl: string | null;
+  gradient?: string;
+  rating: number;
+  reviewCount: string;
+  downloads: string;
+  onClick?: () => void;
+  onAdd?: () => Promise<void>;
+}
+
+export function CommunityListingCard({
+  title,
+  creator,
+  thumbnailUrl,
+  gradient = "from-primary-100 to-primary-200",
+  rating,
+  reviewCount,
+  downloads,
+  onClick,
+  onAdd,
+}: CommunityListingCardProps) {
+  const { t } = useTranslation("community");
+  const [isAdding, setIsAdding] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+
+  async function handleAdd(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!onAdd || isAdding || isAdded) return;
+    setIsAdding(true);
+    try {
+      await onAdd();
+      setIsAdded(true);
+    } finally {
+      setIsAdding(false);
+    }
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className="flex gap-3 rounded-xl bg-neutral-0 p-3 text-left shadow-card transition-all hover:shadow-card-hover active:scale-[0.99]"
+    >
+      {/* Thumbnail */}
+      <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-neutral-200">
+        {thumbnailUrl ? (
+          <img src={thumbnailUrl} alt={title} className="h-full w-full object-cover" />
+        ) : (
+          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${gradient}`}>
+            <Layers className="h-6 w-6 text-white/40" />
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Title + Free badge */}
+        <div className="flex items-start gap-2">
+          <h3 className="min-w-0 flex-1 truncate text-sm font-bold text-neutral-900">
+            {title}
+          </h3>
+          <span className="flex-shrink-0 rounded-full bg-success-100 px-2 py-0.5 text-xs font-bold text-success-700">
+            {t("free")}
+          </span>
+        </div>
+
+        {/* Creator */}
+        <p className="mt-0.5 text-xs text-neutral-500">{t("byCreator", { name: creator })}</p>
+
+        {/* Stats + Add button */}
+        <div className="mt-1.5 flex items-center gap-3">
+          <div className="flex items-center gap-1">
+            <Star className="h-3.5 w-3.5 fill-warning-500 text-warning-500" />
+            <span className="text-xs font-semibold text-neutral-700">{rating}</span>
+            <span className="text-xs text-neutral-400">({reviewCount})</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Download className="h-3.5 w-3.5 text-neutral-400" />
+            <span className="text-xs text-neutral-400">{downloads}</span>
+          </div>
+          {onAdd && (
+            <span
+              role="button"
+              onClick={handleAdd}
+              className={`ml-auto flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors ${
+                isAdded
+                  ? "bg-success-100 text-success-700"
+                  : "bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700"
+              }`}
+            >
+              {isAdding ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : isAdded ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  {t("added")}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3 w-3" />
+                  {t("get")}
+                </>
+              )}
+            </span>
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}

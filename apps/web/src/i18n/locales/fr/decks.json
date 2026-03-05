@@ -51,13 +51,13 @@
     "noCardsDesc": "Ajoutez votre première carte pour commencer à étudier",
     "noCardsMatch": "Aucune carte ne correspond à vos filtres",
     "edit": "Modifier",
-    "unlistMarketplace": "Retirer de la marketplace",
-    "listMarketplace": "Ajouter à la marketplace",
+    "unshareCommunity": "Retirer de la communauté",
+    "shareCommunity": "Partager dans la communauté",
     "exportDeck": "Exporter le deck",
     "delete": "DELETE",
     "deckDeleted": "Deck supprimé",
     "cardDeleted": "Carte supprimée",
-    "removedFromMarketplace": "Supprimé de la marketplace"
+    "removedFromCommunity": "Retiré de la communauté"
   },
   "deleteDeck": {
     "title": "Supprimer le deck",

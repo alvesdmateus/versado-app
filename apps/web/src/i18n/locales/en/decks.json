@@ -51,13 +51,13 @@
     "noCardsDesc": "Add your first card to start studying",
     "noCardsMatch": "No cards match your filters",
     "edit": "Edit",
-    "unlistMarketplace": "Unlist from Marketplace",
-    "listMarketplace": "List on Marketplace",
+    "unshareCommunity": "Remove from Community",
+    "shareCommunity": "Share with Community",
     "exportDeck": "Export Deck",
     "delete": "Delete",
     "deckDeleted": "Deck deleted",
     "cardDeleted": "Card deleted",
-    "removedFromMarketplace": "Removed from marketplace"
+    "removedFromCommunity": "Removed from community"
   },
   "deleteDeck": {
     "title": "Delete Deck",

@@ -10,7 +10,7 @@ interface PopularDeckCardProps {
 }
 
 export function PopularDeckCard({ deck, onClick, onAdd }: PopularDeckCardProps) {
-  const { t } = useTranslation("marketplace");
+  const { t } = useTranslation("community");
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
