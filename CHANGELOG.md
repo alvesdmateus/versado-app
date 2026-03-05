@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.12](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.11...versado-v0.1.12) (2026-03-05)
+
+
+### Features
+
+* add report and block features for Google Play compliance ([#62](https://github.com/alvesdmateus/versado-app/issues/62)) ([6b7f284](https://github.com/alvesdmateus/versado-app/commit/6b7f284d1e6871bcc2e371e4cc55d362abe225fb))
+* **web:** integrate Stripe Pricing Table for checkout ([#60](https://github.com/alvesdmateus/versado-app/issues/60)) ([6a6bfc4](https://github.com/alvesdmateus/versado-app/commit/6a6bfc4c8c6ae7915d84a059e1932057f513cdd2))
+* **web:** integrate Stripe Pricing Table with swipeable Fluent page ([#61](https://github.com/alvesdmateus/versado-app/issues/61)) ([43122af](https://github.com/alvesdmateus/versado-app/commit/43122af6c274c2ec03681cbec12ff7a9d3d75b73))
+
+
+### Bug Fixes
+
+* **web:** remove "Again" rating option from study session ([#59](https://github.com/alvesdmateus/versado-app/issues/59)) ([72c1eaf](https://github.com/alvesdmateus/versado-app/commit/72c1eaf2870a98885d2764619f58b29775e525cd))
+* **web:** use inline rgba gradients for swipe direction backgrounds ([#56](https://github.com/alvesdmateus/versado-app/issues/56)) ([7eda3a3](https://github.com/alvesdmateus/versado-app/commit/7eda3a36816d97ab7ff57c1b948b99b3c59ba951))
+
+
+### Code Refactoring
+
+* **web:** rebrand marketplace as community hub ([#63](https://github.com/alvesdmateus/versado-app/issues/63)) ([0981823](https://github.com/alvesdmateus/versado-app/commit/098182315d35da7143b39a3feb7794f748b0f477))
+
 ## [0.1.11](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.10...versado-v0.1.11) (2026-03-03)
 
 
