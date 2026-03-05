@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.15...versado-v0.1.16) (2026-03-05)
+
+
+### Bug Fixes
+
+* add keystore verification to android release build ([#70](https://github.com/alvesdmateus/versado-app/issues/70)) ([45c464d](https://github.com/alvesdmateus/versado-app/commit/45c464ddc521bb7dea062f3b6fc07333265c29bd))
+
 ## [0.1.15](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.14...versado-v0.1.15) (2026-03-05)
 
 
