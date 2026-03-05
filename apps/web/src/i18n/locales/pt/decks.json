@@ -51,13 +51,13 @@
     "noCardsDesc": "Adicione seu primeiro cartão para começar a estudar",
     "noCardsMatch": "Nenhum cartão corresponde aos seus filtros",
     "edit": "Editar",
-    "unlistMarketplace": "Remover do Marketplace",
-    "listMarketplace": "Listar no Marketplace",
+    "unshareCommunity": "Remover da Comunidade",
+    "shareCommunity": "Compartilhar na Comunidade",
     "exportDeck": "Exportar Baralho",
     "delete": "Excluir",
     "deckDeleted": "Baralho excluído",
     "cardDeleted": "Cartão excluído",
-    "removedFromMarketplace": "Removido do marketplace"
+    "removedFromCommunity": "Removido da comunidade"
   },
   "deleteDeck": {
     "title": "Excluir Baralho",

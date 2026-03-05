@@ -1,7 +1,7 @@
 import { Hash } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { PopularDeck } from "@/lib/social-api";
-import { MarketplaceListingCard } from "@/components/marketplace/MarketplaceListingCard";
+import { CommunityListingCard } from "@/components/marketplace/CommunityListingCard";
 import { SectionHeader } from "./SectionHeader";
 import { EmptyState } from "@/components/shared";
 
@@ -43,12 +43,11 @@ export function RecommendedDecksSection({
           )
         ) : (
           decks.map((deck) => (
-            <MarketplaceListingCard
+            <CommunityListingCard
               key={deck.id}
               title={deck.name}
               creator={deck.creator.displayName}
               thumbnailUrl={deck.coverImageUrl}
-              price={deck.price > 0 ? deck.price / 100 : null}
               rating={deck.rating}
               reviewCount={formatCount(deck.purchaseCount)}
               downloads={`${formatCount(deck.purchaseCount)} downloads`}

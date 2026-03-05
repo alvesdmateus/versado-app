@@ -7,7 +7,7 @@ export interface MarketplaceSearchBarProps {
 }
 
 export function MarketplaceSearchBar({ value, onChange }: MarketplaceSearchBarProps) {
-  const { t } = useTranslation("marketplace");
+  const { t } = useTranslation("community");
 
   return (
     <div className="mx-5 mt-3">

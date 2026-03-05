@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Plus, X, BookOpen, Layers, Pencil, Trash2, Store, Sparkles, Download, FileText } from "lucide-react";
+import { Plus, X, BookOpen, Layers, Pencil, Trash2, Share2, Sparkles, Download, FileText } from "lucide-react";
 import type { DeckResponse, FlashcardResponse } from "@/lib/deck-api";
 import { ApiError } from "@/lib/api-client";
 import { syncAwareApi } from "@/lib/sync-aware-api";
@@ -13,7 +13,7 @@ import { CardListItem } from "@/components/decks/CardListItem";
 import { AddCardModal } from "@/components/decks/AddCardModal";
 import { EditDeckModal } from "@/components/decks/EditDeckModal";
 import { EditCardModal } from "@/components/decks/EditCardModal";
-import { ListDeckModal } from "@/components/marketplace/ListDeckModal";
+import { ShareDeckModal } from "@/components/marketplace/ShareDeckModal";
 import { AIGenerateModal } from "@/components/decks/AIGenerateModal";
 import { TextExtractModal } from "@/components/decks/TextExtractModal";
 import { ExportDeckModal } from "@/components/decks/ExportDeckModal";
@@ -146,18 +146,18 @@ export function DeckDetailPage() {
     }
   }
 
-  async function handleUnlist() {
+  async function handleUnshare() {
     if (!deckId) return;
     try {
       await marketplaceApi.unlistDeck(deckId);
       setDeck((prev) => (prev ? { ...prev, visibility: "private" } : prev));
-      showToast(t("detail.removedFromMarketplace"));
+      showToast(t("detail.removedFromCommunity"));
     } catch (err) {
-      showErrorNotification(err, { onRetry: handleUnlist });
+      showErrorNotification(err, { onRetry: handleUnshare });
     }
   }
 
-  const isListed = deck?.visibility === "marketplace";
+  const isShared = deck?.visibility === "marketplace";
 
   if (isLoading) {
     return (
@@ -187,15 +187,15 @@ export function DeckDetailPage() {
             icon: <Pencil className="h-4 w-4" />,
             onClick: () => setIsEditDeckOpen(true),
           },
-          isListed
+          isShared
             ? {
-                label: t("detail.unlistMarketplace"),
-                icon: <Store className="h-4 w-4" />,
-                onClick: handleUnlist,
+                label: t("detail.unshareCommunity"),
+                icon: <Share2 className="h-4 w-4" />,
+                onClick: handleUnshare,
               }
             : {
-                label: t("detail.listMarketplace"),
-                icon: <Store className="h-4 w-4" />,
+                label: t("detail.shareCommunity"),
+                icon: <Share2 className="h-4 w-4" />,
                 onClick: () => setIsListModalOpen(true),
               },
           {
@@ -481,12 +481,12 @@ export function DeckDetailPage() {
         cards={cards}
       />
 
-      {/* List on Marketplace Modal */}
-      <ListDeckModal
+      {/* Share to Community Modal */}
+      <ShareDeckModal
         isOpen={isListModalOpen}
         onClose={() => setIsListModalOpen(false)}
         deckId={deckId!}
-        onListed={() => {
+        onShared={() => {
           setDeck((prev) =>
             prev ? { ...prev, visibility: "marketplace" } : prev
           );

@@ -51,13 +51,13 @@
     "noCardsDesc": "Füge deine erste Karte hinzu, um zu lernen",
     "noCardsMatch": "Keine Karten entsprechen deinen Filtern",
     "edit": "Bearbeiten",
-    "unlistMarketplace": "Aus dem Marktplatz entfernen",
-    "listMarketplace": "Im Marktplatz auflisten",
+    "unshareCommunity": "Aus der Community entfernen",
+    "shareCommunity": "In der Community teilen",
     "exportDeck": "Kartenset exportieren",
     "delete": "DELETE",
     "deckDeleted": "Kartenset gelöscht",
     "cardDeleted": "Karte gelöscht",
-    "removedFromMarketplace": "Aus dem Marktplatz entfernt"
+    "removedFromCommunity": "Aus der Community entfernt"
   },
   "deleteDeck": {
     "title": "Kartenset löschen",

@@ -9,7 +9,7 @@ import enProfile from "./locales/en/profile.json";
 import enDecks from "./locales/en/decks.json";
 import enStudy from "./locales/en/study.json";
 import enHome from "./locales/en/home.json";
-import enMarketplace from "./locales/en/marketplace.json";
+import enCommunity from "./locales/en/community.json";
 import enBilling from "./locales/en/billing.json";
 import enErrors from "./locales/en/errors.json";
 import ptCommon from "./locales/pt/common.json";
@@ -19,7 +19,7 @@ import ptProfile from "./locales/pt/profile.json";
 import ptDecks from "./locales/pt/decks.json";
 import ptStudy from "./locales/pt/study.json";
 import ptHome from "./locales/pt/home.json";
-import ptMarketplace from "./locales/pt/marketplace.json";
+import ptCommunity from "./locales/pt/community.json";
 import ptBilling from "./locales/pt/billing.json";
 import ptErrors from "./locales/pt/errors.json";
 import esCommon from "./locales/es/common.json";
@@ -29,7 +29,7 @@ import esProfile from "./locales/es/profile.json";
 import esDecks from "./locales/es/decks.json";
 import esStudy from "./locales/es/study.json";
 import esHome from "./locales/es/home.json";
-import esMarketplace from "./locales/es/marketplace.json";
+import esCommunity from "./locales/es/community.json";
 import esBilling from "./locales/es/billing.json";
 import esErrors from "./locales/es/errors.json";
 import frCommon from "./locales/fr/common.json";
@@ -39,7 +39,7 @@ import frProfile from "./locales/fr/profile.json";
 import frDecks from "./locales/fr/decks.json";
 import frStudy from "./locales/fr/study.json";
 import frHome from "./locales/fr/home.json";
-import frMarketplace from "./locales/fr/marketplace.json";
+import frCommunity from "./locales/fr/community.json";
 import frBilling from "./locales/fr/billing.json";
 import frErrors from "./locales/fr/errors.json";
 import deCommon from "./locales/de/common.json";
@@ -49,7 +49,7 @@ import deProfile from "./locales/de/profile.json";
 import deDecks from "./locales/de/decks.json";
 import deStudy from "./locales/de/study.json";
 import deHome from "./locales/de/home.json";
-import deMarketplace from "./locales/de/marketplace.json";
+import deCommunity from "./locales/de/community.json";
 import deBilling from "./locales/de/billing.json";
 import deErrors from "./locales/de/errors.json";
 
@@ -58,15 +58,15 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: { common: enCommon, auth: enAuth, onboarding: enOnboarding, profile: enProfile, decks: enDecks, study: enStudy, home: enHome, marketplace: enMarketplace, billing: enBilling, errors: enErrors },
-      pt: { common: ptCommon, auth: ptAuth, onboarding: ptOnboarding, profile: ptProfile, decks: ptDecks, study: ptStudy, home: ptHome, marketplace: ptMarketplace, billing: ptBilling, errors: ptErrors },
-      es: { common: esCommon, auth: esAuth, onboarding: esOnboarding, profile: esProfile, decks: esDecks, study: esStudy, home: esHome, marketplace: esMarketplace, billing: esBilling, errors: esErrors },
-      fr: { common: frCommon, auth: frAuth, onboarding: frOnboarding, profile: frProfile, decks: frDecks, study: frStudy, home: frHome, marketplace: frMarketplace, billing: frBilling, errors: frErrors },
-      de: { common: deCommon, auth: deAuth, onboarding: deOnboarding, profile: deProfile, decks: deDecks, study: deStudy, home: deHome, marketplace: deMarketplace, billing: deBilling, errors: deErrors },
+      en: { common: enCommon, auth: enAuth, onboarding: enOnboarding, profile: enProfile, decks: enDecks, study: enStudy, home: enHome, community: enCommunity, billing: enBilling, errors: enErrors },
+      pt: { common: ptCommon, auth: ptAuth, onboarding: ptOnboarding, profile: ptProfile, decks: ptDecks, study: ptStudy, home: ptHome, community: ptCommunity, billing: ptBilling, errors: ptErrors },
+      es: { common: esCommon, auth: esAuth, onboarding: esOnboarding, profile: esProfile, decks: esDecks, study: esStudy, home: esHome, community: esCommunity, billing: esBilling, errors: esErrors },
+      fr: { common: frCommon, auth: frAuth, onboarding: frOnboarding, profile: frProfile, decks: frDecks, study: frStudy, home: frHome, community: frCommunity, billing: frBilling, errors: frErrors },
+      de: { common: deCommon, auth: deAuth, onboarding: deOnboarding, profile: deProfile, decks: deDecks, study: deStudy, home: deHome, community: deCommunity, billing: deBilling, errors: deErrors },
     },
     fallbackLng: "en",
     defaultNS: "common",
-    ns: ["common", "auth", "onboarding", "profile", "decks", "study", "home", "marketplace", "billing", "errors"],
+    ns: ["common", "auth", "onboarding", "profile", "decks", "study", "home", "community", "billing", "errors"],
     interpolation: { escapeValue: false },
     detection: {
       order: ["localStorage", "navigator"],

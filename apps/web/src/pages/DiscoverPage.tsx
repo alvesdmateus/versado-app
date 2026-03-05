@@ -45,7 +45,7 @@ function DiscoverSkeleton() {
 }
 
 export function DiscoverPage() {
-  const { t } = useTranslation(["home", "marketplace", "common"]);
+  const { t } = useTranslation(["home", "community", "common"]);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -80,7 +80,7 @@ export function DiscoverPage() {
 
   const handleAddDeck = useCallback(async (deckId: string) => {
     await marketplaceApi.addToLibrary(deckId);
-    showToast(t("marketplace:addedToLibrary"));
+    showToast(t("community:addedToLibrary"));
   }, [showToast, t]);
 
   async function handleBlock() {
@@ -138,8 +138,8 @@ export function DiscoverPage() {
       {/* Popular Decks */}
       <PopularDeckCarousel
         decks={popularDecks}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
-        onViewAll={() => navigate("/market")}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
+        onViewAll={() => navigate("/community")}
         onAddDeck={handleAddDeck}
       />
 
@@ -151,8 +151,8 @@ export function DiscoverPage() {
         filter={feedFilter}
         onFilterChange={setFeedFilter}
         onLoadMore={loadMoreFeed}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
-        onBrowseMarketplace={() => navigate("/market")}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
+        onBrowseCommunity={() => navigate("/community")}
         onAddDeck={handleAddDeck}
       />
 
@@ -160,7 +160,7 @@ export function DiscoverPage() {
       <RecommendedDecksSection
         decks={recommendations}
         hasFollowedTags={followedTags.size > 0}
-        onDeckClick={(id) => navigate(`/market/${id}`)}
+        onDeckClick={(id) => navigate(`/community/${id}`)}
         onAddDeck={handleAddDeck}
       />
 

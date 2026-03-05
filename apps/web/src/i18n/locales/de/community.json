@@ -1,0 +1,60 @@
+{
+  "heading": "Community",
+  "searchPlaceholder": "Suche nach Kartensets, Erstellern oder Themen...",
+  "categories": {
+    "all": "Alle",
+    "languages": "Sprachen",
+    "science": "Wissenschaft",
+    "history": "Geschichte"
+  },
+  "rating": {
+    "label": "Bewertung:",
+    "any": "Alle",
+    "2plus": "2+",
+    "3plus": "3+",
+    "4plus": "4+"
+  },
+  "sort": {
+    "popular": "Beliebt",
+    "newest": "Neueste",
+    "highestRated": "Am besten bewertet"
+  },
+  "loadMore": "Mehr laden",
+  "noDecksFound": "Keine Kartensets gefunden",
+  "tryDifferentSearch": "Versuche eine andere Suche oder Kategorie",
+  "downloads": "{{count}} Downloads",
+  "free": "Kostenlos",
+  "get": "Holen",
+  "added": "Hinzugefügt",
+  "cards": "{{count}} Karten",
+  "byCreator": "von {{name}}",
+  "sampleCards": "Beispielkarten",
+  "reviews": "Bewertungen ({{count}})",
+  "yourDeck": "Dein Kartenset",
+  "alreadyInLibrary": "Bereits in der Bibliothek",
+  "addToLibrary": "Zur Bibliothek hinzufügen",
+  "adding": "Wird hinzugefügt...",
+  "addedToLibrary": "Zu deiner Bibliothek hinzugefügt!",
+  "alreadyInLibraryToast": "Bereits in deiner Bibliothek",
+  "reviewDeleted": "Bewertung gelöscht",
+  "noReviews": "Noch keine Bewertungen",
+  "deleteReviewTitle": "Bewertung löschen",
+  "deleteReviewMessage": "Möchtest du deine Bewertung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "deleteReviewLabel": "Bewertung löschen",
+  "writeReview": "Eine Bewertung schreiben",
+  "editReview": "Deine Bewertung bearbeiten",
+  "pleaseSelectRating": "Bitte wähle eine Bewertung",
+  "reviewPlaceholder": "Teile deine Erfahrung (optional)",
+  "submitReview": "Bewertung abgeben",
+  "updateReview": "Bewertung aktualisieren",
+  "submitting": "Wird gesendet...",
+  "reviewSubmitted": "Bewertung abgegeben!",
+  "reviewUpdated": "Bewertung aktualisiert!",
+  "shareDeck": {
+    "title": "Mit der Community teilen",
+    "description": "Teile dein Kartenset mit der Community, damit andere Lernende davon profitieren können.",
+    "sharing": "Wird geteilt...",
+    "share": "Kartenset teilen",
+    "shared": "Kartenset mit der Community geteilt!"
+  }
+}

@@ -26,12 +26,12 @@ function getInitial(name: string): string {
 }
 
 export function ReviewList({ reviews, currentUserId, onDelete, onReportReview, onBlockUser }: ReviewListProps) {
-  const { t } = useTranslation(["marketplace", "common"]);
+  const { t } = useTranslation(["community", "common"]);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   if (reviews.length === 0) {
     return (
-      <p className="text-center text-sm text-neutral-400">{t("marketplace:noReviews")}</p>
+      <p className="text-center text-sm text-neutral-400">{t("community:noReviews")}</p>
     );
   }
 
@@ -59,7 +59,7 @@ export function ReviewList({ reviews, currentUserId, onDelete, onReportReview, o
                 <button
                   onClick={() => setDeleteTarget(review.id)}
                   className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-error-50 hover:text-error-500"
-                  aria-label={t("marketplace:deleteReviewLabel")}
+                  aria-label={t("community:deleteReviewLabel")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -107,8 +107,8 @@ export function ReviewList({ reviews, currentUserId, onDelete, onReportReview, o
             setDeleteTarget(null);
           }
         }}
-        title={t("marketplace:deleteReviewTitle")}
-        message={t("marketplace:deleteReviewMessage")}
+        title={t("community:deleteReviewTitle")}
+        message={t("community:deleteReviewMessage")}
         confirmLabel={t("common:actions.delete")}
         variant="danger"
       />

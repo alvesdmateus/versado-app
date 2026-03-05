@@ -1,0 +1,60 @@
+{
+  "heading": "Communauté",
+  "searchPlaceholder": "Recherchez des paquets, créateurs ou sujets...",
+  "categories": {
+    "all": "Tous",
+    "languages": "Langues",
+    "science": "Sciences",
+    "history": "Histoire"
+  },
+  "rating": {
+    "label": "Note :",
+    "any": "Toutes",
+    "2plus": "2+",
+    "3plus": "3+",
+    "4plus": "4+"
+  },
+  "sort": {
+    "popular": "Populaire",
+    "newest": "Plus récent",
+    "highestRated": "Mieux noté"
+  },
+  "loadMore": "Charger plus",
+  "noDecksFound": "Aucun paquet trouvé",
+  "tryDifferentSearch": "Essayez une recherche ou catégorie différente",
+  "downloads": "{{count}} téléchargements",
+  "free": "Gratuit",
+  "get": "Obtenir",
+  "added": "Ajouté",
+  "cards": "{{count}} cartes",
+  "byCreator": "par {{name}}",
+  "sampleCards": "Cartes d'exemple",
+  "reviews": "Avis ({{count}})",
+  "yourDeck": "Votre paquet",
+  "alreadyInLibrary": "Déjà dans la bibliothèque",
+  "addToLibrary": "Ajouter à la bibliothèque",
+  "adding": "Ajout en cours...",
+  "addedToLibrary": "Ajouté à votre bibliothèque !",
+  "alreadyInLibraryToast": "Déjà dans votre bibliothèque",
+  "reviewDeleted": "Avis supprimé",
+  "noReviews": "Aucun avis pour le moment",
+  "deleteReviewTitle": "Supprimer l'avis",
+  "deleteReviewMessage": "Êtes-vous sûr de vouloir supprimer votre avis ? Cette action ne peut pas être annulée.",
+  "deleteReviewLabel": "Supprimer l'avis",
+  "writeReview": "Écrire un avis",
+  "editReview": "Modifier votre avis",
+  "pleaseSelectRating": "Veuillez sélectionner une note",
+  "reviewPlaceholder": "Partagez votre expérience (facultatif)",
+  "submitReview": "Soumettre l'avis",
+  "updateReview": "Mettre à jour l'avis",
+  "submitting": "Envoi en cours...",
+  "reviewSubmitted": "Avis soumis !",
+  "reviewUpdated": "Avis mis à jour !",
+  "shareDeck": {
+    "title": "Partager avec la communauté",
+    "description": "Partagez votre paquet avec la communauté pour que d'autres apprenants puissent en bénéficier.",
+    "sharing": "Partage en cours...",
+    "share": "Partager le paquet",
+    "shared": "Paquet partagé avec la communauté !"
+  }
+}
