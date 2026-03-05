@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.13...versado-v0.1.14) (2026-03-05)
+
+
+### Bug Fixes
+
+* add android release signing config for CI builds ([#66](https://github.com/alvesdmateus/versado-app/issues/66)) ([c82883e](https://github.com/alvesdmateus/versado-app/commit/c82883eac8588020cff1dcbca558e349ea760dfb))
+
 ## [0.1.13](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.12...versado-v0.1.13) (2026-03-05)
 
 
