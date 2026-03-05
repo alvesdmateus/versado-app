@@ -45,6 +45,18 @@ jobs:
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > versado.keystore
           echo "Keystore size: $(stat --format=%s versado.keystore) bytes"
 
+      - name: Set version from tag
+        run: |
+          TAG="${{ needs.release-please.outputs.tag_name }}"
+          VERSION="${TAG#versado-v}"
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+          CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "Version: $VERSION (code: $CODE)"
+          sed -i "s/versionCode [0-9]*/versionCode $CODE/" app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"$VERSION\"/" app/build.gradle
+
       - name: Make gradlew executable
         run: chmod +x gradlew
 
