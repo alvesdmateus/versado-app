@@ -41,7 +41,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Decode keystore
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > versado.keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > versado.keystore
+          echo "Keystore size: $(stat --format=%s versado.keystore) bytes"
 
       - name: Make gradlew executable
         run: chmod +x gradlew
