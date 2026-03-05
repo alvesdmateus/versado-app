@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.16...versado-v0.1.17) (2026-03-05)
+
+
+### Bug Fixes
+
+* auto-derive android versionCode from release tag ([#72](https://github.com/alvesdmateus/versado-app/issues/72)) ([0d025d7](https://github.com/alvesdmateus/versado-app/commit/0d025d742a14eddf044b9f9d9450674d66755f6f))
+
 ## [0.1.16](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.15...versado-v0.1.16) (2026-03-05)
 
 
