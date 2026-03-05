@@ -53,6 +53,14 @@ def twaManifest = [
 android {
     compileSdkVersion 36
     namespace "live.versado.app"
+    signingConfigs {
+        release {
+            storeFile file("${rootDir}/versado.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: ""
+            keyAlias "android"
+            keyPassword System.getenv("KEYSTORE_PASSWORD") ?: ""
+        }
+    }
     defaultConfig {
         applicationId "live.versado.app"
         minSdkVersion 21
@@ -153,6 +161,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
