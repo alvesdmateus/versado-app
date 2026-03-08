@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.18](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.17...versado-v0.1.18) (2026-03-08)
+
+
+### Features
+
+* **web:** add branded loading screen and UI improvements ([#74](https://github.com/alvesdmateus/versado-app/issues/74)) ([2c79604](https://github.com/alvesdmateus/versado-app/commit/2c79604878865adb95facd728196e527fb60263e))
+
 ## [0.1.17](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.16...versado-v0.1.17) (2026-03-05)
 
 
