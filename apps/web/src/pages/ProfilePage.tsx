@@ -34,16 +34,14 @@ import { ChangePasswordModal } from "@/components/profile/ChangePasswordModal";
 import { ExportDataModal } from "@/components/profile/ExportDataModal";
 import { CardThemeModal } from "@/components/profile/CardThemeModal";
 import { DeleteAccountModal } from "@/components/profile/DeleteAccountModal";
+import { LanguageModal } from "@/components/profile/LanguageModal";
 import { SubscriptionSection } from "@/components/profile/SubscriptionSection";
 import { getCardTheme } from "@/lib/card-themes";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
 import { useToast } from "@/contexts/ToastContext";
 import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-manager";
 
-import {
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_LANGUAGE_CODES,
-} from "@/i18n/supported-languages";
+import { SUPPORTED_LANGUAGES } from "@/i18n/supported-languages";
 
 const LANGUAGE_LABELS: Record<string, string> = Object.fromEntries(
   SUPPORTED_LANGUAGES.map((l) => [l.code, l.label])
@@ -67,6 +65,7 @@ export function ProfilePage() {
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
 
   useEffect(() => {
     profileApi.getPreferences().then((prefs) => {
@@ -83,19 +82,6 @@ export function ProfilePage() {
     } catch {
       setThemePreference(prev);
       setPreferences((p) => (p ? { ...p, themePreference: prev } : p));
-    }
-  }
-
-  async function handleLanguageChange() {
-    const currentIdx = SUPPORTED_LANGUAGE_CODES.indexOf(i18n.language);
-    const newLang = SUPPORTED_LANGUAGE_CODES[(currentIdx + 1) % SUPPORTED_LANGUAGE_CODES.length];
-    const prevLang = i18n.language;
-    i18n.changeLanguage(newLang);
-    try {
-      await profileApi.updatePreferences({ nativeLanguage: newLang });
-      setPreferences((p) => (p ? { ...p, nativeLanguage: newLang } : p));
-    } catch {
-      i18n.changeLanguage(prevLang);
     }
   }
 
@@ -181,7 +167,7 @@ export function ProfilePage() {
           icon={<Languages className="h-5 w-5" />}
           label={t("settings.language")}
           value={LANGUAGE_LABELS[i18n.language] ?? i18n.language}
-          onClick={handleLanguageChange}
+          onClick={() => setIsLanguageOpen(true)}
         />
       </SettingsSection>
 
@@ -359,6 +345,14 @@ export function ProfilePage() {
       <ExportDataModal
         isOpen={isExportOpen}
         onClose={() => setIsExportOpen(false)}
+      />
+      <LanguageModal
+        isOpen={isLanguageOpen}
+        onClose={() => setIsLanguageOpen(false)}
+        currentLanguage={i18n.language}
+        onSaved={(lang) =>
+          setPreferences((prev) => (prev ? { ...prev, nativeLanguage: lang } : prev))
+        }
       />
       <DeleteAccountModal
         isOpen={isDeleteOpen}

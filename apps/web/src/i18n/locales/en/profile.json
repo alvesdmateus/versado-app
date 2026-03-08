@@ -64,6 +64,12 @@
     "title": "Card Theme",
     "updated": "Card theme updated!"
   },
+  "languageModal": {
+    "title": "Language",
+    "saving": "Saving...",
+    "save": "Save",
+    "updated": "Language updated!"
+  },
   "cardSortingModal": {
     "title": "Card Sorting",
     "saving": "Saving...",

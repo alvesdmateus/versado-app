@@ -64,6 +64,12 @@
     "title": "Kartendesign",
     "updated": "Kartendesign aktualisiert!"
   },
+  "languageModal": {
+    "title": "Sprache",
+    "saving": "Wird gespeichert...",
+    "save": "Speichern",
+    "updated": "Sprache aktualisiert!"
+  },
   "cardSortingModal": {
     "title": "Kartensortierung",
     "saving": "Wird gespeichert...",

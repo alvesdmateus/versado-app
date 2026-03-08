@@ -64,6 +64,12 @@
     "title": "Tema do Cartão",
     "updated": "Tema do cartão atualizado!"
   },
+  "languageModal": {
+    "title": "Idioma",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "updated": "Idioma atualizado!"
+  },
   "cardSortingModal": {
     "title": "Ordenação de Cartões",
     "saving": "Salvando...",
