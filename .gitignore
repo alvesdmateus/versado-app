@@ -34,5 +34,8 @@ coverage/
 # Claude Code
 .claude/
 
+# Vite temp files
+*.timestamp-*
+
 # Windows artifacts
 nul
