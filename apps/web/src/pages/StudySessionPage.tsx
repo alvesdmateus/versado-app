@@ -635,7 +635,7 @@ export function StudySessionPage() {
                   }
                 : {}),
           }}
-          onClick={!isReviewing && !isDragging.current ? handleFlip : undefined}
+          onClick={sessionState === "studying" ? handleFlip : undefined}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}

@@ -13,3 +13,4 @@ export { GoFluentModal } from "./GoFluentModal";
 export { StudyOnboardOverlay, useStudyOnboard } from "./StudyOnboardOverlay";
 export { DeckOnboardOverlay, useDeckOnboard } from "./DeckOnboardOverlay";
 export { ReportModal } from "./ReportModal";
+export { LoadingScreen } from "./LoadingScreen";

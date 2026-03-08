@@ -1,15 +1,12 @@
 import { Navigate } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
+import { LoadingScreen } from "@/components/shared";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50">
-        <p className="text-sm text-neutral-400">Loading...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!isAuthenticated) {

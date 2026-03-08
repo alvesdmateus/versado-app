@@ -1,4 +1,3 @@
-import { Flame } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { StreakBadge } from "@versado/ui";
 
@@ -22,7 +21,7 @@ export function HomeHeader({ userName, streakCount }: HomeHeaderProps) {
       </div>
       <StreakBadge
         count={streakCount}
-        icon={<Flame className="h-4 w-4 text-success-500" />}
+        icon={<span className="animate-fire text-base leading-none">🔥</span>}
       />
     </header>
   );

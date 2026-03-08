@@ -64,6 +64,12 @@
     "title": "Thème des cartes",
     "updated": "Thème des cartes mis à jour !"
   },
+  "languageModal": {
+    "title": "Langue",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer",
+    "updated": "Langue mise à jour !"
+  },
   "cardSortingModal": {
     "title": "Tri des cartes",
     "saving": "Enregistrement...",

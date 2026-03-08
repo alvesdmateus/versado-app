@@ -40,7 +40,7 @@ export function StatsRow({
         <StatCard
           label={t("statsRow.streak")}
           value={`${streakDays}d`}
-          trend={streakActive ? `⚡ ${t("statsRow.active")}` : t("statsRow.inactive")}
+          trend={streakActive ? `🔥 ${t("statsRow.active")}` : t("statsRow.inactive")}
         />
       </div>
     </div>
