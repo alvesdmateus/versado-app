@@ -6,5 +6,5 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="96" fill="url(#bg)"/>
-  <text x="256" y="350" font-family="system-ui, sans-serif" font-size="340" font-weight="700" fill="white" text-anchor="middle">V</text>
+  <path fill-rule="evenodd" fill="white" d="M145,158 L241,158 L241,162 L220,170 L279,332 L322,170 L302,162 L302,158 L365,158 L365,162 L354,170 L247,383 L159,170 L145,162 Z"/>
 </svg>
