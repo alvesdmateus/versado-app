@@ -7,6 +7,7 @@ import { UpdatePrompt } from "@/components/shared/UpdatePrompt";
 import { OfflineBanner } from "@/components/shared/OfflineBanner";
 import { EmailVerificationBanner } from "@/components/shared/EmailVerificationBanner";
 import { useAuth } from "@/hooks/useAuth";
+import { useTrack } from "@/hooks/useTrack";
 import { useTheme, type ThemePreference } from "@/contexts/ThemeContext";
 import { profileApi } from "@/lib/profile-api";
 import { TIER_LIMITS } from "@/lib/feature-limits";
@@ -71,6 +72,7 @@ export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { track, initFromPreferences } = useTrack();
   const { setDarkMode, setThemePreference } = useTheme();
   const { t } = useTranslation("common");
   const hasSyncedPrefs = useRef(false);
@@ -78,13 +80,17 @@ export function AppLayout() {
   const showSync =
     user?.tier && TIER_LIMITS[user.tier as UserTier]?.canUseOffline;
 
-  const navItems: BottomNavItem[] = [
+  const allNavItems: BottomNavItem[] = [
     { key: "home", label: t("nav.home"), icon: <HomeIcon />, href: "/" },
     { key: "decks", label: t("nav.decks"), icon: <DecksIcon />, href: "/decks" },
     { key: "discover", label: t("nav.discover"), icon: <DiscoverIcon />, href: "/discover" },
     { key: "community", label: t("nav.community"), icon: <CommunityIcon />, href: "/community" },
     { key: "profile", label: t("nav.profile"), icon: <ProfileIcon />, href: "/profile" },
   ];
+
+  const navItems = track?.hideNavItems.length
+    ? allNavItems.filter((item) => !track.hideNavItems.includes(item.key))
+    : allNavItems;
 
   useEffect(() => {
     if (!user || hasSyncedPrefs.current) return;
@@ -101,8 +107,11 @@ export function AppLayout() {
         if (prefs.nativeLanguage && prefs.nativeLanguage !== i18n.language) {
           i18n.changeLanguage(prefs.nativeLanguage);
         }
+        initFromPreferences(prefs.activeTrackId);
         if (!prefs.onboardingCompleted) {
           navigate("/onboarding", { replace: true });
+        } else if (!prefs.activeTrackId) {
+          navigate("/select-track", { replace: true });
         }
       })
       .catch(() => {});

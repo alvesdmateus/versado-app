@@ -79,6 +79,17 @@
     "statusReview": "Review",
     "statusMastered": "Mastered"
   },
+  "trackOverrides": {
+    "cka": {
+      "greeting": "CKA Prep",
+      "subtitle": "Keep building exam confidence",
+      "studyNow": "Practice",
+      "statsRow": {
+        "mastered": "Confident",
+        "examReadiness": "Exam Readiness"
+      }
+    }
+  },
   "notFound": {
     "title": "Page Not Found",
     "heading": "Oops! This page has wandered off.",

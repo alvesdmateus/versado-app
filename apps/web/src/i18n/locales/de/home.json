@@ -79,6 +79,17 @@
     "statusReview": "Wiederholung",
     "statusMastered": "Gemeistert"
   },
+  "trackOverrides": {
+    "cka": {
+      "greeting": "CKA-Vorbereitung",
+      "subtitle": "Stärke dein Prüfungsvertrauen",
+      "studyNow": "Üben",
+      "statsRow": {
+        "mastered": "Sicher",
+        "examReadiness": "Prüfungsbereitschaft"
+      }
+    }
+  },
   "notFound": {
     "title": "Seite nicht gefunden",
     "heading": "Hoppla! Diese Seite hat sich verlaufen.",

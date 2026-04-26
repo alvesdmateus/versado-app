@@ -44,6 +44,7 @@ export const users = pgTable("users", {
       pushAlerts: boolean;
       favoriteDeckIds: string[];
       onboardingCompleted?: boolean;
+      activeTrackId?: string;
     }>()
     .notNull()
     .default({
@@ -259,6 +260,35 @@ export const studySessions = pgTable("study_sessions", {
       incorrectCount: 0,
       averageTimeMs: 0,
     }),
+});
+
+// Exam sessions (exam simulation mode, separate from SM-2 study sessions)
+export const examSessions = pgTable("exam_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  trackId: text("track_id").notNull(),
+  questionCount: integer("question_count").notNull(),
+  correctCount: integer("correct_count").notNull().default(0),
+  passingScore: integer("passing_score").notNull(),
+  passed: boolean("passed"),
+  timeLimitSeconds: integer("time_limit_seconds").notNull(),
+  timeSpentSeconds: integer("time_spent_seconds"),
+  answers: jsonb("answers")
+    .$type<
+      Array<{
+        cardId: string;
+        knew: boolean;
+        answeredAt: string;
+      }>
+    >()
+    .notNull()
+    .default([]),
+  startedAt: timestamp("started_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
 });
 
 // Marketplace purchases

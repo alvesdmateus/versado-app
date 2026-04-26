@@ -58,6 +58,25 @@
     "skip": "Passer",
     "startStudying": "Commencer à Étudier"
   },
+  "exam": {
+    "title": "Simulation d'Examen",
+    "starting": "Préparation de votre examen...",
+    "iKnowThis": "Je le sais",
+    "iDontKnowThis": "Je ne le sais pas",
+    "timeRemaining": "Temps restant",
+    "question": "Question {{current}} sur {{total}}",
+    "passed": "Vous avez réussi !",
+    "failed": "Pas encore",
+    "score": "Score : {{score}}%",
+    "passingScore": "Réussite : {{score}}%",
+    "correct": "{{count}} correctes",
+    "timeTaken": "Temps : {{minutes}}m {{seconds}}s",
+    "tryAgain": "Réessayer",
+    "backHome": "Retour à l'accueil",
+    "timeUp": "Temps écoulé !",
+    "simulate": "Simulation d'Examen",
+    "noCards": "Aucune carte d'examen disponible"
+  },
   "limitReached": {
     "imageAlt": "Limite quotidienne atteinte",
     "heading": "Vous avez atteint votre limite quotidienne",

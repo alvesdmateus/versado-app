@@ -58,6 +58,25 @@
     "skip": "Skip",
     "startStudying": "Start Studying"
   },
+  "exam": {
+    "title": "Exam Simulation",
+    "starting": "Preparing your exam...",
+    "iKnowThis": "I know this",
+    "iDontKnowThis": "I don't know this",
+    "timeRemaining": "Time remaining",
+    "question": "Question {{current}} of {{total}}",
+    "passed": "You Passed!",
+    "failed": "Not Yet",
+    "score": "Score: {{score}}%",
+    "passingScore": "Passing: {{score}}%",
+    "correct": "{{count}} correct",
+    "timeTaken": "Time: {{minutes}}m {{seconds}}s",
+    "tryAgain": "Try Again",
+    "backHome": "Back to Home",
+    "timeUp": "Time's Up!",
+    "simulate": "Exam Simulation",
+    "noCards": "No exam cards available yet"
+  },
   "limitReached": {
     "imageAlt": "Daily limit reached",
     "heading": "You've reached your daily limit",

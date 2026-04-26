@@ -8,6 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { SyncProvider } from "./contexts/SyncContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import { ErrorNotificationProvider } from "./contexts/ErrorNotificationContext";
+import { TrackProvider } from "./contexts/TrackContext";
 import { ErrorBoundary } from "./components/shared/ErrorBoundary";
 import { router } from "./router";
 import "./index.css";
@@ -20,6 +21,7 @@ createRoot(root).render(
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
+        <TrackProvider>
         <SyncProvider>
           <ToastProvider>
             <ErrorNotificationProvider>
@@ -27,6 +29,7 @@ createRoot(root).render(
             </ErrorNotificationProvider>
           </ToastProvider>
         </SyncProvider>
+        </TrackProvider>
       </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -7,7 +7,9 @@ import { db } from "../db";
 import { cardProgress, flashcards, decks, studySessions } from "../db/schema";
 import { AppError } from "../middleware/error-handler";
 import { validate } from "../lib/validate";
-import { getLimits } from "../lib/feature-gates";
+import { getLimits, checkTrackCardLimit } from "../lib/feature-gates";
+import { getTrack, isValidTrackId } from "@versado/core";
+import { users } from "../db/schema";
 
 export const studyRoutes = new Hono();
 
@@ -103,6 +105,17 @@ studyRoutes.post("/review", async (c) => {
         "REVIEW_LIMIT_REACHED"
       );
     }
+  }
+
+  // Check track-based card limit
+  const [userRow] = await db
+    .select({ preferences: users.preferences })
+    .from(users)
+    .where(eq(users.id, user.id));
+  const activeTrackId = userRow?.preferences?.activeTrackId;
+  if (activeTrackId && isValidTrackId(activeTrackId)) {
+    const track = getTrack(activeTrackId);
+    await checkTrackCardLimit(user.id, user.tier, track.freeCardLimit);
   }
 
   const results = await db

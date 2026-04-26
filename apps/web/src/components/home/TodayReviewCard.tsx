@@ -1,5 +1,5 @@
 import { ArrowRight, BookOpen } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTrackT } from "@/hooks/useTrackT";
 
 export interface TodayReviewCardProps {
   cardsDue: number;
@@ -10,7 +10,7 @@ export function TodayReviewCard({
   cardsDue,
   onStudyNow,
 }: TodayReviewCardProps) {
-  const { t } = useTranslation("home");
+  const t = useTrackT("home");
 
   return (
     <div className="relative mx-5 mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 p-5 shadow-card-lg">

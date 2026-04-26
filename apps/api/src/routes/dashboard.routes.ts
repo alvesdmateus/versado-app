@@ -94,6 +94,7 @@ dashboardRoutes.get("/", async (c) => {
       name: deck.name,
       cardCount: total,
       coverImageUrl: deck.coverImageUrl,
+      tags: deck.tags,
       progress,
     };
   });

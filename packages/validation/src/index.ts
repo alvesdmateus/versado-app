@@ -48,8 +48,14 @@ export {
   reviewRatingSchema,
   submitReviewSchema,
   startSessionSchema,
+  startExamSchema,
+  submitExamAnswerSchema,
+  completeExamSchema,
   type SubmitReviewInput,
   type StartSessionInput,
+  type StartExamInput,
+  type SubmitExamAnswerInput,
+  type CompleteExamInput,
 } from "./study";
 
 export {
