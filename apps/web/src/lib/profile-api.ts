@@ -15,6 +15,7 @@ export interface UserPreferences {
   nativeLanguage?: string;
   hapticFeedback: boolean;
   soundFeedback: boolean;
+  activeTrackId?: string;
 }
 
 export const profileApi = {

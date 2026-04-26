@@ -58,6 +58,25 @@
     "skip": "Überspringen",
     "startStudying": "Loslegen"
   },
+  "exam": {
+    "title": "Prüfungssimulation",
+    "starting": "Prüfung wird vorbereitet...",
+    "iKnowThis": "Das weiß ich",
+    "iDontKnowThis": "Das weiß ich nicht",
+    "timeRemaining": "Verbleibende Zeit",
+    "question": "Frage {{current}} von {{total}}",
+    "passed": "Bestanden!",
+    "failed": "Noch nicht",
+    "score": "Ergebnis: {{score}}%",
+    "passingScore": "Bestehen: {{score}}%",
+    "correct": "{{count}} richtig",
+    "timeTaken": "Zeit: {{minutes}}m {{seconds}}s",
+    "tryAgain": "Erneut versuchen",
+    "backHome": "Zurück zur Startseite",
+    "timeUp": "Zeit abgelaufen!",
+    "simulate": "Prüfungssimulation",
+    "noCards": "Keine Prüfungskarten verfügbar"
+  },
   "limitReached": {
     "imageAlt": "Tägliches Limit erreicht",
     "heading": "Du hast dein tägliches Limit erreicht",

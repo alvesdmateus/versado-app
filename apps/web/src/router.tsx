@@ -19,11 +19,13 @@ import { FluentPage } from "./pages/FluentPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 import { OnboardingPage } from "./pages/OnboardingPage";
+import { TrackSelectionPage } from "./pages/TrackSelectionPage";
 import { StudyHistoryPage } from "./pages/StudyHistoryPage";
 import { StudyStatsPage } from "./pages/StudyStatsPage";
 import { DiscoverPage } from "./pages/DiscoverPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
+import { ExamPage } from "./pages/ExamPage";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +75,14 @@ export const router = createBrowserRouter([
     element: <TermsOfServicePage />,
   },
   {
+    path: "/select-track",
+    element: (
+      <ProtectedRoute>
+        <TrackSelectionPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/onboarding",
     element: (
       <ProtectedRoute>
@@ -85,6 +95,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <StudySessionPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/exam",
+    element: (
+      <ProtectedRoute>
+        <ExamPage />
       </ProtectedRoute>
     ),
   },

@@ -11,6 +11,7 @@ export interface DashboardStats {
     name: string;
     cardCount: number;
     coverImageUrl: string | null;
+    tags: string[];
     progress: number;
   }>;
 }

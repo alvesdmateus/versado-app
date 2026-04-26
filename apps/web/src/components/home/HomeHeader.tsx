@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { StreakBadge } from "@versado/ui";
+import { useTrackT } from "@/hooks/useTrackT";
 
 export interface HomeHeaderProps {
   userName: string;
@@ -7,7 +7,7 @@ export interface HomeHeaderProps {
 }
 
 export function HomeHeader({ userName, streakCount }: HomeHeaderProps) {
-  const { t } = useTranslation("home");
+  const t = useTrackT("home");
 
   return (
     <header className="flex items-start justify-between px-5 pt-6 pb-2">

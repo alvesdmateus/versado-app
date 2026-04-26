@@ -22,5 +22,23 @@ export const startSessionSchema = z.object({
   includeNew: z.boolean().default(true),
 });
 
+export const startExamSchema = z.object({
+  trackId: z.string().min(1),
+});
+
+export const submitExamAnswerSchema = z.object({
+  examSessionId: idSchema,
+  cardId: idSchema,
+  knew: z.boolean(),
+});
+
+export const completeExamSchema = z.object({
+  examSessionId: idSchema,
+  timeSpentSeconds: z.number().int().min(0),
+});
+
 export type SubmitReviewInput = z.infer<typeof submitReviewSchema>;
 export type StartSessionInput = z.infer<typeof startSessionSchema>;
+export type StartExamInput = z.infer<typeof startExamSchema>;
+export type SubmitExamAnswerInput = z.infer<typeof submitExamAnswerSchema>;
+export type CompleteExamInput = z.infer<typeof completeExamSchema>;

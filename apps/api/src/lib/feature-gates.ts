@@ -1,7 +1,7 @@
 import type { UserTier } from "@versado/core/entities";
 import { sql, eq, and } from "drizzle-orm";
 import { db } from "../db";
-import { decks } from "../db/schema";
+import { decks, cardProgress, examSessions } from "../db/schema";
 import { AppError } from "../middleware/error-handler";
 
 export interface TierLimits {
@@ -80,6 +80,57 @@ export function checkCardLimit(tier: UserTier, currentCount: number) {
       403,
       `Free plan is limited to ${limits.maxCardsPerDeck} cards per deck. Go Fluent for unlimited cards.`,
       "CARD_LIMIT_REACHED"
+    );
+  }
+}
+
+export async function checkTrackCardLimit(
+  userId: string,
+  tier: UserTier,
+  freeCardLimit: number
+) {
+  if (tier === "fluent" || freeCardLimit === Infinity) return;
+
+  const [result] = await db
+    .select({ count: sql<number>`count(distinct ${cardProgress.cardId})::int` })
+    .from(cardProgress)
+    .where(
+      and(eq(cardProgress.userId, userId), eq(cardProgress.tombstone, false))
+    );
+
+  if ((result?.count ?? 0) >= freeCardLimit) {
+    throw new AppError(
+      403,
+      `Free plan is limited to ${freeCardLimit} cards. Go Fluent for unlimited access.`,
+      "TRACK_CARD_LIMIT_REACHED"
+    );
+  }
+}
+
+export async function checkExamLimit(
+  userId: string,
+  tier: UserTier,
+  trackId: string,
+  freeExamSimulations: number
+) {
+  if (tier === "fluent" || freeExamSimulations === 0) return;
+
+  const [result] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(examSessions)
+    .where(
+      and(
+        eq(examSessions.userId, userId),
+        eq(examSessions.trackId, trackId),
+        sql`${examSessions.completedAt} IS NOT NULL`
+      )
+    );
+
+  if ((result?.count ?? 0) >= freeExamSimulations) {
+    throw new AppError(
+      403,
+      "Free exam simulation limit reached. Go Fluent for unlimited exams.",
+      "EXAM_LIMIT_REACHED"
     );
   }
 }

@@ -15,6 +15,7 @@ import { ImportDeckModal } from "@/components/decks/ImportDeckModal";
 import { SortSelect } from "@/components/shared/SortSelect";
 import { EmptyState, DeckGridSkeleton, GoFluentModal, DeckOnboardOverlay, useDeckOnboard } from "@/components/shared";
 import { useErrorNotification } from "@/contexts/ErrorNotificationContext";
+import { useTrack } from "@/hooks/useTrack";
 
 const FILTER_KEYS = ["all", "recentlyStudied", "favorites"] as const;
 
@@ -53,6 +54,7 @@ export function DecksPage() {
   const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
   const { seen: deckOnboardSeen, markSeen: markDeckOnboardSeen } = useDeckOnboard();
   const [showDeckOnboard, setShowDeckOnboard] = useState(false);
+  const { track } = useTrack();
 
   useEffect(() => {
     Promise.all([
@@ -93,6 +95,14 @@ export function DecksPage() {
   const filteredDecks = useMemo(() => {
     let result = decks;
 
+    // Track filter
+    if (track?.tagFilter.length) {
+      const tags = new Set(track.tagFilter);
+      result = result.filter((d) =>
+        d.tags?.some((t: string) => tags.has(t))
+      );
+    }
+
     // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
@@ -127,7 +137,7 @@ export function DecksPage() {
     });
 
     return result;
-  }, [searchQuery, decks, activeFilter, favoriteIds, sortBy]);
+  }, [searchQuery, decks, activeFilter, favoriteIds, sortBy, track]);
 
   const filterLabels = FILTER_KEYS.map((k) => t(`filters.${k}`));
 

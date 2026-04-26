@@ -79,6 +79,17 @@
     "statusReview": "En révision",
     "statusMastered": "Maîtrisées"
   },
+  "trackOverrides": {
+    "cka": {
+      "greeting": "Prépa CKA",
+      "subtitle": "Continuez à renforcer votre confiance",
+      "studyNow": "Pratiquer",
+      "statsRow": {
+        "mastered": "Confiant",
+        "examReadiness": "Préparation à l'examen"
+      }
+    }
+  },
   "notFound": {
     "title": "Page introuvable",
     "heading": "Oups ! Cette page s'est égarée.",

@@ -79,6 +79,17 @@
     "statusReview": "Revisão",
     "statusMastered": "Dominado"
   },
+  "trackOverrides": {
+    "cka": {
+      "greeting": "Preparação CKA",
+      "subtitle": "Continue construindo confiança para o exame",
+      "studyNow": "Praticar",
+      "statsRow": {
+        "mastered": "Confiante",
+        "examReadiness": "Prontidão para o Exame"
+      }
+    }
+  },
   "notFound": {
     "title": "Página Não Encontrada",
     "heading": "Ops! Esta página se perdeu.",
