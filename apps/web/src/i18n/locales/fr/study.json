@@ -1,4 +1,10 @@
 {
+  "labels": {
+    "common-in-exam": "Fréquent à l'examen",
+    "high-frequency": "Haute fréquence",
+    "high-weight": "Fort coefficient",
+    "must-know": "Indispensable"
+  },
   "loading": "Chargement des cartes...",
   "empty": {
     "heading": "Aucune carte à réviser",

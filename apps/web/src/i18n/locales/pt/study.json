@@ -1,4 +1,10 @@
 {
+  "labels": {
+    "common-in-exam": "Comum no Exame",
+    "high-frequency": "Alta Frequência",
+    "high-weight": "Alto Peso",
+    "must-know": "Essencial"
+  },
   "loading": "Carregando cartões...",
   "empty": {
     "heading": "Nenhum Cartão Pendente",

@@ -7,6 +7,7 @@ import { Button } from "@versado/ui";
 import { useTrack } from "@/hooks/useTrack";
 import { examApi, type ExamCard, type ExamResult } from "@/lib/exam-api";
 import { GoFluentModal } from "@/components/shared/GoFluentModal";
+import { CardLabelBadges } from "@/components/shared/CardLabelBadges";
 
 type Phase = "loading" | "examining" | "results";
 
@@ -269,9 +270,12 @@ export function ExamPage() {
         <div className="w-full max-w-md">
           <FlashcardView
             front={
-              <p className="text-center text-lg font-medium text-neutral-900">
-                {card.front}
-              </p>
+              <div className="flex flex-col items-center gap-2">
+                <CardLabelBadges tags={card.tags} />
+                <p className="text-center text-lg font-medium text-neutral-900">
+                  {card.front}
+                </p>
+              </div>
             }
             back={
               <p className="text-center text-base text-neutral-700">

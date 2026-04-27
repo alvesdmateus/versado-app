@@ -14,3 +14,4 @@ export { StudyOnboardOverlay, useStudyOnboard } from "./StudyOnboardOverlay";
 export { DeckOnboardOverlay, useDeckOnboard } from "./DeckOnboardOverlay";
 export { ReportModal } from "./ReportModal";
 export { LoadingScreen } from "./LoadingScreen";
+export { CardLabelBadges } from "./CardLabelBadges";
