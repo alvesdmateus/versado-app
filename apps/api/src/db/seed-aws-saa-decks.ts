@@ -27,7 +27,7 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What is the AWS Shared Responsibility Model?",
     back: "AWS is responsible for security OF the cloud (hardware, networking, data centers, hypervisor). The customer is responsible for security IN the cloud (OS patching, data encryption, IAM policies, security groups, NACLs, application-level security).",
-    tags: ["aws-saa", "security"],
+    tags: ["aws-saa", "security", "must-know", "common-in-exam"],
   },
   {
     front: "What is the difference between IAM Roles and IAM Users?",
@@ -37,12 +37,12 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What are the key differences between Security Groups and NACLs?",
     back: "Security Groups: stateful (return traffic auto-allowed), instance-level, allow rules only, evaluate all rules. NACLs: stateless (must explicitly allow return traffic), subnet-level, allow AND deny rules, evaluate rules in order by number. Use NACLs for subnet-wide blocking, SGs for instance-level access.",
-    tags: ["aws-saa", "security"],
+    tags: ["aws-saa", "security", "must-know", "high-frequency"],
   },
   {
     front: "How does AWS KMS work for encryption?",
     back: "KMS manages Customer Master Keys (CMKs) that generate data encryption keys. Supports envelope encryption: KMS encrypts a data key, which encrypts your data. Key types: AWS-managed (aws/service), Customer-managed (you control rotation/policies), Custom key stores (CloudHSM-backed). Supports automatic annual rotation for customer-managed keys.",
-    tags: ["aws-saa", "security"],
+    tags: ["aws-saa", "security", "common-in-exam", "high-weight"],
   },
   {
     front: "What is AWS Organizations and how does it enable multi-account security?",
@@ -67,7 +67,7 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "How do VPC endpoints improve security?",
     back: "VPC Endpoints allow private connectivity to AWS services without traversing the internet. Interface endpoints (powered by PrivateLink): ENI with private IP, supports most services. Gateway endpoints: route table entry, supports S3 and DynamoDB only (free). Eliminates need for NAT Gateway/internet for AWS API calls.",
-    tags: ["aws-saa", "security"],
+    tags: ["aws-saa", "security", "common-in-exam", "high-frequency"],
   },
   {
     front: "What is IAM Identity Center (formerly AWS SSO)?",
@@ -104,12 +104,12 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What are the key components of a highly available architecture on AWS?",
     back: "Multi-AZ deployment (minimum 2 AZs), Elastic Load Balancer across AZs, Auto Scaling Groups for dynamic capacity, Multi-AZ RDS for database HA, S3 for durable storage (11 nines durability), Route 53 health checks with failover routing. Design for failure: assume any single component can fail.",
-    tags: ["aws-saa", "resilience"],
+    tags: ["aws-saa", "resilience", "must-know", "high-weight"],
   },
   {
     front: "What is the difference between Multi-AZ and Read Replicas for RDS?",
     back: "Multi-AZ: synchronous replication to standby in another AZ, automatic failover (1-2 min), same endpoint, purpose is HA not performance. Read Replicas: asynchronous replication, separate endpoint, purpose is read scaling, can be cross-region, can be promoted to standalone DB. Use both together for HA + read scaling.",
-    tags: ["aws-saa", "resilience"],
+    tags: ["aws-saa", "resilience", "must-know", "common-in-exam"],
   },
   {
     front: "How does Auto Scaling work and what are its key policies?",
@@ -124,12 +124,12 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What is the difference between RPO and RTO?",
     back: "RPO (Recovery Point Objective): maximum acceptable data loss measured in time — how far back you can afford to lose. RTO (Recovery Time Objective): maximum acceptable downtime — how fast you must recover. Example: RPO of 1 hour means hourly backups; RTO of 15 min means rapid failover (e.g., Multi-AZ, pilot light).",
-    tags: ["aws-saa", "resilience"],
+    tags: ["aws-saa", "resilience", "must-know", "high-frequency"],
   },
   {
     front: "What are the AWS disaster recovery strategies from cheapest to fastest?",
     back: "1. Backup & Restore: lowest cost, highest RTO (hours). 2. Pilot Light: core services running, scale up on failover (minutes-hours). 3. Warm Standby: scaled-down full environment, scale up on failover (minutes). 4. Multi-Site Active-Active: full production in multiple regions, near-zero RTO, highest cost.",
-    tags: ["aws-saa", "resilience"],
+    tags: ["aws-saa", "resilience", "common-in-exam", "high-weight"],
   },
   {
     front: "How does Route 53 support high availability?",
@@ -176,7 +176,7 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What are the DynamoDB capacity modes and when to use each?",
     back: "On-Demand: pay per request, auto-scales instantly, no capacity planning. Best for unpredictable/spiky workloads. Provisioned: set RCU/WCU, use Auto Scaling, cheaper for predictable workloads. Reserved capacity for further savings. DAX (DynamoDB Accelerator): in-memory cache, microsecond reads. Global Tables: multi-region, active-active replication.",
-    tags: ["aws-saa", "performance"],
+    tags: ["aws-saa", "performance", "common-in-exam", "high-frequency"],
   },
   {
     front: "What is Amazon ElastiCache and when should you use Redis vs Memcached?",
@@ -186,7 +186,7 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What EBS volume types should you choose for different workloads?",
     back: "gp3/gp2 (General Purpose SSD): balanced, boot volumes, dev/test (up to 16,000 IOPS). io2/io1 (Provisioned IOPS SSD): databases needing >16K IOPS (up to 64,000). st1 (Throughput Optimized HDD): big data, data warehouses, logs (500 MB/s). sc1 (Cold HDD): infrequent access, cheapest. Instance Store: ephemeral, highest IOPS for temp data.",
-    tags: ["aws-saa", "performance"],
+    tags: ["aws-saa", "performance", "must-know", "common-in-exam"],
   },
   {
     front: "How does Amazon EFS differ from EBS and S3?",
@@ -233,12 +233,12 @@ const AWS_SAA_CARDS: AWSSAACard[] = [
   {
     front: "What are the EC2 purchasing options and when to use each?",
     back: "On-Demand: pay by second, no commitment, unpredictable workloads. Reserved (1/3 year): up to 72% savings, predictable usage. Savings Plans: flexible across instance families/regions. Spot: up to 90% savings, interruptible, batch/fault-tolerant workloads. Dedicated Hosts: compliance/licensing needs. Dedicated Instances: single-tenant hardware.",
-    tags: ["aws-saa", "cost"],
+    tags: ["aws-saa", "cost", "must-know", "common-in-exam", "high-weight"],
   },
   {
     front: "What are the S3 storage classes and their use cases?",
     back: "Standard: frequently accessed. Intelligent-Tiering: unknown patterns, auto-moves between tiers. Standard-IA: infrequent, rapid access needed. One Zone-IA: infrequent, non-critical (single AZ). Glacier Instant: archive with ms retrieval. Glacier Flexible: archive, 1-12 hours. Glacier Deep Archive: cheapest, 12-48 hours. Use lifecycle policies to auto-transition.",
-    tags: ["aws-saa", "cost"],
+    tags: ["aws-saa", "cost", "must-know", "high-frequency", "common-in-exam"],
   },
   {
     front: "How do you use AWS Cost Explorer and Budgets for cost management?",

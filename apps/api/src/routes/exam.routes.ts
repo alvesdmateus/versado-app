@@ -37,6 +37,7 @@ examRoutes.post("/start", async (c) => {
       id: flashcards.id,
       front: flashcards.front,
       back: flashcards.back,
+      tags: flashcards.tags,
     })
     .from(flashcards)
     .innerJoin(decks, eq(flashcards.deckId, decks.id))

@@ -12,6 +12,7 @@ import { getCardTheme, type CardTheme } from "@/lib/card-themes";
 import { haptic, playSound, setHapticEnabled, setSoundEnabled } from "@/lib/feedback";
 import { GoFluentModal } from "@/components/shared/GoFluentModal";
 import { StudyOnboardOverlay, useStudyOnboard } from "@/components/shared/StudyOnboardOverlay";
+import { CardLabelBadges } from "@/components/shared/CardLabelBadges";
 import { useAuth } from "@/hooks/useAuth";
 
 // ---------------------------------------------------------------------------
@@ -671,6 +672,9 @@ export function StudySessionPage() {
               <span className={`shrink-0 text-xs font-semibold uppercase tracking-wider ${cardTheme.labelClassName}`}>
                 {t("card.question")}
               </span>
+              {currentCard?.flashcard.tags && (
+                <CardLabelBadges tags={currentCard.flashcard.tags} />
+              )}
               <p className={`flex-1 overflow-y-auto break-words text-xl font-bold text-center ${cardTheme.textClassName}`}>
                 {currentCard?.flashcard.front}
               </p>

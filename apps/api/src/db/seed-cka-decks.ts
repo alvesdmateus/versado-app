@@ -27,17 +27,17 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What are the main components of a Kubernetes control plane?",
     back: "kube-apiserver (API gateway), etcd (key-value store for cluster state), kube-scheduler (assigns pods to nodes), kube-controller-manager (runs control loops like ReplicaSet, Node, and Endpoint controllers), and cloud-controller-manager (cloud-provider integrations).",
-    tags: ["cka", "cluster-architecture"],
+    tags: ["cka", "cluster-architecture", "must-know", "common-in-exam"],
   },
   {
     front: "What is etcd and why is it critical in Kubernetes?",
     back: "etcd is a distributed, consistent key-value store that holds all cluster state — every object, config, and secret. If etcd is lost without backup, the entire cluster state is lost. It uses the Raft consensus protocol and listens on port 2379 (client) and 2380 (peer).",
-    tags: ["cka", "cluster-architecture"],
+    tags: ["cka", "cluster-architecture", "must-know"],
   },
   {
     front: "How do you back up and restore etcd?",
     back: "Backup: `ETCDCTL_API=3 etcdctl snapshot save /tmp/snapshot.db --endpoints=https://127.0.0.1:2379 --cacert=... --cert=... --key=...`\nRestore: `etcdctl snapshot restore /tmp/snapshot.db --data-dir=/var/lib/etcd-restored` then update the etcd pod manifest to point to the new data-dir and restart kubelet.",
-    tags: ["cka", "cluster-architecture"],
+    tags: ["cka", "cluster-architecture", "common-in-exam", "high-weight"],
   },
   {
     front: "What is the role of the kubelet?",
@@ -52,7 +52,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "How do you upgrade a kubeadm cluster?",
     back: "1) Upgrade kubeadm on the control plane node\n2) `kubeadm upgrade plan` then `kubeadm upgrade apply v1.XX.x`\n3) Drain the node: `kubectl drain <node> --ignore-daemonsets`\n4) Upgrade kubelet & kubectl, restart kubelet\n5) Uncordon: `kubectl uncordon <node>`\n6) Repeat drain → upgrade → uncordon for each worker node.\nAlways upgrade one minor version at a time. Never skip minor versions.",
-    tags: ["cka", "cluster-architecture"],
+    tags: ["cka", "cluster-architecture", "common-in-exam"],
   },
   {
     front: "What is kube-proxy and how does it work?",
@@ -69,7 +69,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What is the difference between a Deployment, ReplicaSet, and Pod?",
     back: "Pod: the smallest deployable unit — one or more containers sharing network/storage.\nReplicaSet: ensures a specified number of identical pod replicas are running at all times.\nDeployment: manages ReplicaSets and provides declarative updates, rollback, and scaling. You almost never create ReplicaSets directly — use Deployments.",
-    tags: ["cka", "workloads"],
+    tags: ["cka", "workloads", "must-know"],
   },
   {
     front: "How do you perform a rolling update and rollback a Deployment?",
@@ -84,12 +84,12 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What are taints and tolerations?",
     back: "Taints are applied to nodes to repel pods: `kubectl taint nodes node1 key=value:NoSchedule`. Tolerations are set on pods to allow scheduling on tainted nodes. Effects: NoSchedule (hard — won't schedule), PreferNoSchedule (soft — avoid if possible), NoExecute (evict existing pods too). Control plane nodes are tainted with `node-role.kubernetes.io/control-plane:NoSchedule` by default.",
-    tags: ["cka", "workloads"],
+    tags: ["cka", "workloads", "common-in-exam", "high-frequency"],
   },
   {
     front: "What is the difference between resource requests and limits?",
     back: "Requests: the guaranteed amount of CPU/memory the container needs — used by the scheduler for placement decisions. Limits: the maximum a container can use — enforced by the kubelet. CPU limits are throttled; memory limits trigger OOMKill. Best practice: always set requests; set limits for memory to prevent OOM, optionally for CPU.",
-    tags: ["cka", "workloads"],
+    tags: ["cka", "workloads", "must-know", "high-frequency"],
   },
   {
     front: "What is a StatefulSet and how does it differ from a Deployment?",
@@ -111,7 +111,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What are the four types of Kubernetes Services?",
     back: "ClusterIP (default): internal-only virtual IP accessible within the cluster.\nNodePort: exposes the service on each node's IP at a static port (30000-32767).\nLoadBalancer: provisions an external load balancer (cloud provider) that routes to NodePort.\nExternalName: maps a service to a DNS CNAME record (no proxying).",
-    tags: ["cka", "networking"],
+    tags: ["cka", "networking", "must-know", "common-in-exam"],
   },
   {
     front: "How does DNS work inside a Kubernetes cluster?",
@@ -126,7 +126,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What is a NetworkPolicy?",
     back: "A NetworkPolicy controls pod-to-pod traffic at the IP/port level. By default, all pods can communicate freely. Once a NetworkPolicy selects a pod, that pod's traffic is restricted to what the policy allows. Rules specify allowed ingress/egress by podSelector, namespaceSelector, or ipBlock. Requires a CNI plugin that supports NetworkPolicy (Calico, Cilium, Weave — not Flannel).",
-    tags: ["cka", "networking"],
+    tags: ["cka", "networking", "common-in-exam", "high-weight"],
   },
   {
     front: "What is a CNI plugin and name common ones?",
@@ -163,7 +163,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What is the difference between a PersistentVolume (PV) and a PersistentVolumeClaim (PVC)?",
     back: "PV: a piece of storage provisioned by an admin or dynamically by a StorageClass — it's the actual storage resource.\nPVC: a request for storage by a user — specifies size, access mode, and optionally a StorageClass. Kubernetes binds a matching PV to the PVC. Pods reference PVCs in their volume mounts.",
-    tags: ["cka", "storage"],
+    tags: ["cka", "storage", "must-know", "common-in-exam"],
   },
   {
     front: "What are the access modes for PersistentVolumes?",
@@ -195,7 +195,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "What is RBAC in Kubernetes?",
     back: "Role-Based Access Control (RBAC) restricts cluster access based on roles. Key objects:\n- Role/ClusterRole: defines permissions (verbs on resources, e.g., get, list, create pods)\n- RoleBinding/ClusterRoleBinding: assigns a role to a user, group, or ServiceAccount\nRole + RoleBinding are namespaced. ClusterRole + ClusterRoleBinding are cluster-wide.",
-    tags: ["cka", "security"],
+    tags: ["cka", "security", "must-know", "high-weight"],
   },
   {
     front: "What is a ServiceAccount and how is it used?",
@@ -227,17 +227,17 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "A pod is in CrashLoopBackOff — how do you diagnose it?",
     back: "1) `kubectl describe pod <name>` — check Events for error messages, OOMKilled, image pull errors\n2) `kubectl logs <pod>` — see application logs from the current crash\n3) `kubectl logs <pod> --previous` — see logs from the last crashed container\n4) Check resource limits — OOMKilled means the container exceeded its memory limit\n5) Check liveness probe — a failing probe causes restarts\n6) Verify the container command/entrypoint is correct",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "must-know", "high-weight", "common-in-exam"],
   },
   {
     front: "A pod is stuck in Pending state — what are the common causes?",
     back: "1) Insufficient resources — no node has enough CPU/memory to satisfy requests (`kubectl describe pod` shows FailedScheduling)\n2) No matching node — nodeSelector, affinity, or taints prevent scheduling\n3) PVC not bound — the required PersistentVolumeClaim can't find a matching PV\n4) ResourceQuota exceeded — namespace quota is full\n5) Too many pods — node has hit its pod limit\nCheck: `kubectl describe pod` → Events section for the specific reason.",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "high-weight", "common-in-exam"],
   },
   {
     front: "How do you debug a node that shows NotReady?",
     back: "1) `kubectl describe node <name>` — check Conditions (MemoryPressure, DiskPressure, PIDPressure, Ready)\n2) SSH to the node and check kubelet: `systemctl status kubelet`, `journalctl -u kubelet -f`\n3) Check container runtime: `systemctl status containerd`\n4) Check disk space: `df -h`\n5) Check certificates haven't expired: `openssl x509 -in /var/lib/kubelet/pki/kubelet-client-current.pem -text -noout`\n6) Check connectivity to the API server",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "high-weight", "high-frequency"],
   },
   {
     front: "A pod shows ImagePullBackOff — what are the causes and fixes?",
@@ -247,7 +247,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "How do readiness and liveness probes work, and what happens when they fail?",
     back: "Liveness probe: checks if the container is alive. Failure → kubelet kills and restarts the container. Use for detecting deadlocks.\nReadiness probe: checks if the container can accept traffic. Failure → pod is removed from Service endpoints (no traffic routed to it), but NOT restarted. Use for slow-starting apps.\nStartup probe: disables liveness/readiness until it succeeds. Use for apps with long initialization.\nProbe types: httpGet, tcpSocket, exec.",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "must-know", "high-frequency"],
   },
   {
     front: "How do you use kubectl logs effectively for troubleshooting?",
@@ -257,7 +257,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "How do you troubleshoot a service that isn't routing traffic?",
     back: "1) Check the service exists and has the correct selector: `kubectl describe svc <name>`\n2) Verify endpoints exist: `kubectl get endpoints <name>` — if empty, the selector doesn't match any running pods\n3) Check pod labels match: `kubectl get pods --show-labels`\n4) Verify pods are Running and Ready\n5) Test from within the cluster: `kubectl run tmp --image=busybox --rm -it -- wget -qO- <service>:<port>`\n6) Check NetworkPolicies blocking traffic",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "common-in-exam", "high-weight"],
   },
   {
     front: "How do you use kubectl to execute commands inside a running container?",
@@ -277,7 +277,7 @@ const CKA_CARDS: CKACard[] = [
   {
     front: "How do you drain and cordon a node for maintenance?",
     back: "`kubectl cordon <node>` — marks the node as unschedulable (no new pods), but existing pods keep running.\n`kubectl drain <node> --ignore-daemonsets --delete-emptydir-data` — evicts all pods (except DaemonSets) and cordons the node. Pods managed by controllers are recreated on other nodes.\n`kubectl uncordon <node>` — marks the node schedulable again.\nAlways drain before maintenance (OS updates, kubelet upgrades).",
-    tags: ["cka", "troubleshooting"],
+    tags: ["cka", "troubleshooting", "common-in-exam"],
   },
   {
     front: "A kubelet fails to start after a cluster upgrade — how do you fix it?",

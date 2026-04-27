@@ -1,4 +1,10 @@
 {
+  "labels": {
+    "common-in-exam": "Common in Exam",
+    "high-frequency": "High Frequency",
+    "high-weight": "High Weight",
+    "must-know": "Must Know"
+  },
   "loading": "Loading cards...",
   "empty": {
     "heading": "No Cards Due",

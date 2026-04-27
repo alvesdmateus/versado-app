@@ -1,4 +1,10 @@
 {
+  "labels": {
+    "common-in-exam": "Häufig in Prüfung",
+    "high-frequency": "Hohe Frequenz",
+    "high-weight": "Hohes Gewicht",
+    "must-know": "Muss man wissen"
+  },
   "loading": "Karten werden geladen...",
   "empty": {
     "heading": "Keine fälligen Karten",

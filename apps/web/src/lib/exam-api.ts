@@ -4,6 +4,7 @@ export interface ExamCard {
   id: string;
   front: string;
   back: string;
+  tags: string[];
 }
 
 export interface ExamSessionResponse {
