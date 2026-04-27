@@ -114,8 +114,10 @@ export function StudySessionPage() {
   const [swipeExit, setSwipeExit] = useState<"left" | "right" | "up" | null>(null);
   const swipeStartX = useRef(0);
   const swipeStartY = useRef(0);
+  const swipeStartTime = useRef(0);
   const isDragging = useRef(false);
   const swipeAxis = useRef<"x" | "y" | null>(null);
+  const [isSnapping, setIsSnapping] = useState(false);
 
   const currentCard = dueCards[currentIndex] ?? null;
   const total = dueCards.length;
@@ -165,6 +167,11 @@ export function StudySessionPage() {
     if (sessionState === "studying") {
       setIsFlipped(true);
       setSessionState("reviewing");
+      haptic("light");
+      playSound("flip");
+    } else if (sessionState === "reviewing") {
+      setIsFlipped(false);
+      setSessionState("studying");
       haptic("light");
       playSound("flip");
     }
@@ -290,6 +297,7 @@ export function StudySessionPage() {
       e.preventDefault();
       swipeStartX.current = e.clientX;
       swipeStartY.current = e.clientY;
+      swipeStartTime.current = Date.now();
       swipeAxis.current = null;
       isDragging.current = true;
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -334,10 +342,14 @@ export function StudySessionPage() {
       const dy = e.clientY - swipeStartY.current;
       const axis = swipeAxis.current;
       swipeAxis.current = null;
-      const SWIPE_THRESHOLD = 100;
-      const SWIPE_UP_THRESHOLD = 70;
+      const elapsed = Math.max(1, Date.now() - swipeStartTime.current);
+      const velocityX = Math.abs(dx) / elapsed; // px/ms
+      const velocityY = Math.abs(dy) / elapsed;
+      const SWIPE_THRESHOLD = 60;
+      const SWIPE_UP_THRESHOLD = 50;
+      const VELOCITY_THRESHOLD = 0.4; // px/ms — a fast flick
 
-      if (axis === "y" && dy < -SWIPE_UP_THRESHOLD) {
+      if (axis === "y" && (dy < -SWIPE_UP_THRESHOLD || (dy < -30 && velocityY > VELOCITY_THRESHOLD))) {
         // Swipe up — master the card
         haptic("heavy");
         playSound("swipeUp");
@@ -348,7 +360,7 @@ export function StudySessionPage() {
           setSwipeOffsetY(0);
           handleMaster();
         }, 300);
-      } else if (axis !== "y" && Math.abs(dx) > SWIPE_THRESHOLD) {
+      } else if (axis !== "y" && (Math.abs(dx) > SWIPE_THRESHOLD || (Math.abs(dx) > 30 && velocityX > VELOCITY_THRESHOLD))) {
         // Swipe left/right
         const direction = dx > 0 ? "right" : "left";
         haptic("heavy");
@@ -361,12 +373,21 @@ export function StudySessionPage() {
           handleReview(direction === "right" ? (4 as ReviewRating) : (2 as ReviewRating));
         }, 300);
       } else {
-        // Snap back
-        setSwipeOffset(0);
-        setSwipeOffsetY(0);
+        // Tap (no significant movement) — flip card back to question
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+          setSwipeOffset(0);
+          setSwipeOffsetY(0);
+          handleFlip();
+        } else {
+          // Smooth snap back
+          setIsSnapping(true);
+          setSwipeOffset(0);
+          setSwipeOffsetY(0);
+          setTimeout(() => setIsSnapping(false), 300);
+        }
       }
     },
-    [handleReview, handleMaster]
+    [handleReview, handleMaster, handleFlip]
   );
 
   const handleClose = useCallback(() => {
@@ -379,7 +400,7 @@ export function StudySessionPage() {
   // Keyboard support
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (sessionState === "studying" && (e.key === " " || e.key === "Enter")) {
+      if ((sessionState === "studying" || sessionState === "reviewing") && (e.key === " " || e.key === "Enter")) {
         e.preventDefault();
         handleFlip();
       } else if (sessionState === "reviewing" && e.key >= "2" && e.key <= "4") {
@@ -625,13 +646,13 @@ export function StudySessionPage() {
               ? {
                   transform: `translateY(${swipeOffsetY}px) scale(${1 + swipeOffsetY / 1000})`,
                   opacity: 1 - Math.abs(swipeOffsetY) / 400,
-                  transition: "none",
+                  transition: isSnapping ? "transform 0.3s ease-out, opacity 0.3s ease-out" : "none",
                 }
-              : !swipeExit && swipeOffset !== 0
+              : !swipeExit && (swipeOffset !== 0 || isSnapping)
                 ? {
                     transform: `translateX(${swipeOffset}px) rotate(${swipeOffset * 0.05}deg)`,
-                    opacity: 1 - Math.abs(swipeOffset) / 600,
-                    transition: "none",
+                    opacity: swipeOffset === 0 ? 1 : 1 - Math.abs(swipeOffset) / 600,
+                    transition: isSnapping ? "transform 0.3s ease-out, opacity 0.3s ease-out" : "none",
                   }
                 : {}),
           }}

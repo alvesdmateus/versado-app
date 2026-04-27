@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.21](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.20...versado-v0.1.21) (2026-04-26)
+
+
+### Features
+
+* add learning tracks with CKA exam mode and paywall ([#80](https://github.com/alvesdmateus/versado-app/issues/80)) ([6ee29b7](https://github.com/alvesdmateus/versado-app/commit/6ee29b7ad368cc510cc38d65f95b5859efd714c9))
+
+## [0.1.20](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.19...versado-v0.1.20) (2026-03-13)
+
+
+### Features
+
+* **web:** improve study session card interactions ([#78](https://github.com/alvesdmateus/versado-app/issues/78)) ([a94ab9f](https://github.com/alvesdmateus/versado-app/commit/a94ab9fcc3ec88932861dca2a4209fc12048a1c5))
+
 ## [0.1.19](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.18...versado-v0.1.19) (2026-03-12)
 
 
