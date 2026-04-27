@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.22](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.21...versado-v0.1.22) (2026-04-27)
+
+
+### Features
+
+* add AWS Solutions Architect Associate learning track ([#82](https://github.com/alvesdmateus/versado-app/issues/82)) ([314be2f](https://github.com/alvesdmateus/versado-app/commit/314be2f7b0857cc9ed45fa05ca2875409f6e38cb))
+
 ## [0.1.21](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.20...versado-v0.1.21) (2026-04-26)
 
 
