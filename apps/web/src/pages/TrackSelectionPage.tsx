@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Shield, Terminal, Layers } from "lucide-react";
+import { Shield, Terminal, Layers, Cloud } from "lucide-react";
 import { type TrackId, TRACKS } from "@versado/core";
 import { useTrack } from "@/hooks/useTrack";
 import { onboardingApi } from "@/lib/onboarding-api";
@@ -17,6 +17,12 @@ const TRACK_CARDS: {
     icon: Shield,
     gradient: "from-blue-600 to-indigo-700",
     iconBg: "bg-blue-500/20",
+  },
+  {
+    id: "aws-saa",
+    icon: Cloud,
+    gradient: "from-orange-500 to-amber-600",
+    iconBg: "bg-orange-500/20",
   },
   {
     id: "devops",

@@ -88,6 +88,15 @@
         "mastered": "Confiant",
         "examReadiness": "Préparation à l'examen"
       }
+    },
+    "aws-saa": {
+      "greeting": "Prépa AWS SAA",
+      "subtitle": "Renforcez votre confiance en architecture cloud",
+      "studyNow": "Pratiquer",
+      "statsRow": {
+        "mastered": "Confiant",
+        "examReadiness": "Préparation à l'examen"
+      }
     }
   },
   "notFound": {

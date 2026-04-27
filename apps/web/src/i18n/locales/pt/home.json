@@ -88,6 +88,15 @@
         "mastered": "Confiante",
         "examReadiness": "Prontidão para o Exame"
       }
+    },
+    "aws-saa": {
+      "greeting": "Preparação AWS SAA",
+      "subtitle": "Continue construindo confiança em arquitetura cloud",
+      "studyNow": "Praticar",
+      "statsRow": {
+        "mastered": "Confiante",
+        "examReadiness": "Prontidão para o Exame"
+      }
     }
   },
   "notFound": {
