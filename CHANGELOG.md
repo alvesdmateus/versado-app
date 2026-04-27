@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.23](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.22...versado-v0.1.23) (2026-04-27)
+
+
+### Features
+
+* add priority label badges to flashcards ([#84](https://github.com/alvesdmateus/versado-app/issues/84)) ([51c5aa8](https://github.com/alvesdmateus/versado-app/commit/51c5aa81cd38f2fa926ac83aa7e4e09352a89c30))
+
 ## [0.1.22](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.21...versado-v0.1.22) (2026-04-27)
 
 
