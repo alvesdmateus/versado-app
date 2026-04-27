@@ -88,6 +88,15 @@
         "mastered": "Confident",
         "examReadiness": "Exam Readiness"
       }
+    },
+    "aws-saa": {
+      "greeting": "AWS SAA Prep",
+      "subtitle": "Keep building cloud architecture confidence",
+      "studyNow": "Practice",
+      "statsRow": {
+        "mastered": "Confident",
+        "examReadiness": "Exam Readiness"
+      }
     }
   },
   "notFound": {

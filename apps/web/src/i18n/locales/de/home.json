@@ -88,6 +88,15 @@
         "mastered": "Sicher",
         "examReadiness": "Prüfungsbereitschaft"
       }
+    },
+    "aws-saa": {
+      "greeting": "AWS SAA-Vorbereitung",
+      "subtitle": "Stärke dein Cloud-Architektur-Vertrauen",
+      "studyNow": "Üben",
+      "statsRow": {
+        "mastered": "Sicher",
+        "examReadiness": "Prüfungsbereitschaft"
+      }
     }
   },
   "notFound": {

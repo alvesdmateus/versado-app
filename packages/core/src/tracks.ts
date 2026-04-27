@@ -1,4 +1,4 @@
-export type TrackId = "cka" | "devops" | "custom";
+export type TrackId = "cka" | "aws-saa" | "devops" | "custom";
 
 export interface TrackExamConfig {
   enabled: boolean;
@@ -33,6 +33,23 @@ export const TRACKS: Record<TrackId, TrackConfig> = {
       questionCount: 25,
       timeLimitMinutes: 120,
       passingScore: 66,
+    },
+    freeCardLimit: 25,
+    freeExamSimulations: 1,
+    hideNavItems: ["discover", "community"],
+  },
+  "aws-saa": {
+    id: "aws-saa",
+    name: "Pass the AWS SAA Exam",
+    shortName: "AWS SAA",
+    description: "AWS Solutions Architect – Associate",
+    icon: "Cloud",
+    tagFilter: ["aws-saa"],
+    examMode: {
+      enabled: true,
+      questionCount: 30,
+      timeLimitMinutes: 65,
+      passingScore: 72,
     },
     freeCardLimit: 25,
     freeExamSimulations: 1,

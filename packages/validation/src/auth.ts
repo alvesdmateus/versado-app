@@ -75,7 +75,7 @@ export const updatePreferencesSchema = z.object({
   nativeLanguage: z.string().max(5).optional(),
   hapticFeedback: z.boolean().optional(),
   soundFeedback: z.boolean().optional(),
-  activeTrackId: z.enum(["cka", "devops", "custom"]).optional(),
+  activeTrackId: z.enum(["cka", "aws-saa", "devops", "custom"]).optional(),
 });
 
 export const forgotPasswordSchema = z.object({
