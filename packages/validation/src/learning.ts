@@ -129,6 +129,11 @@ export const moduleSpecSchema = z
       spacedReviewPrompt: microPrompt(12),
       /** Alternative target used by the spaced prediction check (interleaved variation). */
       reviewTarget: z.record(z.number()),
+      /**
+       * Confirmation for a correct review. Stage 3's onSuccess names the lesson's own target,
+       * so the review (which uses reviewTarget) needs copy that matches its board.
+       */
+      reviewOnSuccess: microPrompt(16),
       reviewIntervalsDays: z.array(z.number().int().positive()).min(1).default([1, 7]),
     }),
     /**

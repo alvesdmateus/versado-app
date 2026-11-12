@@ -116,7 +116,7 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
 
   const prompt = verdict
     ? verdict.correct
-      ? spec.stage3Prediction.adaptiveFeedback.onSuccess
+      ? spec.retentionHooks.reviewOnSuccess
       : diagnose(spec.stage3Prediction.adaptiveFeedback, verdict.kind)
     : spec.retentionHooks.spacedReviewPrompt;
 

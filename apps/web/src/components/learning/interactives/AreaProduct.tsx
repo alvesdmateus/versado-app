@@ -7,7 +7,7 @@ import type { BoardProps, InteractiveDefinition, Values } from "./types";
 const U = 28;
 const COLS = 10;
 const ROWS = 9;
-const OX = 40;
+const OX = 60; // room for the end-anchored "b = n" height label in stage 4
 const W = OX + COLS * U + 20;
 const H = ROWS * U + 64;
 const OY = H - 36;

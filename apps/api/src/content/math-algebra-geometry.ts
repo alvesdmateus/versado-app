@@ -100,6 +100,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Width locked at 3; find the height for 21 tiles.",
         spacedReviewPrompt: "Width is 3. Set the height for 21 tiles.",
+        reviewOnSuccess: "Exactly 21 tiles: 3 columns, 7 rows.",
         reviewTarget: { a: 3, area: 21 },
         reviewIntervalsDays: [1, 7],
       },
@@ -180,6 +181,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Same identity with a = 5 and b = 1.",
         spacedReviewPrompt: "a is 5, b is 1. Predict the total area.",
+        reviewOnSuccess: "Total 36: 25 + 5 + 5 + 1 — every piece counted.",
         reviewTarget: { a: 5, b: 1 },
         reviewIntervalsDays: [1, 7],
       },
@@ -251,6 +253,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the point is uphill: the sign must flip back.",
         spacedReviewPrompt: "Tilt the line through the ringed point.",
+        reviewOnSuccess: "Up 3 over 2 steps: m is 1.5.",
         reviewTarget: { x1: 0, y1: 0, x2: 2, y2: 3 },
         reviewIntervalsDays: [1, 7],
       },
@@ -318,6 +321,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the line has to start below zero.",
         spacedReviewPrompt: "Slide the line onto both ringed points.",
+        reviewOnSuccess: "Same tilt, lowered to start at −2.",
         reviewTarget: { x1: 1, y1: -1, x2: 2, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -422,6 +426,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Points that fall left to right need a negative m.",
         spacedReviewPrompt: "Set the line through both ringed points.",
+        reviewOnSuccess: "Down 4 over 2 steps: m is −2, starting at 4.",
         reviewTarget: { x1: 0, y1: 4, x2: 2, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -490,6 +495,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the point is high and close: a steep, upward bend.",
         spacedReviewPrompt: "Bend the curve through the ringed point.",
+        reviewOnSuccess: "One step out it climbs two steps: a is 2.",
         reviewTarget: { x1: 1, y1: 2 },
         reviewIntervalsDays: [1, 7],
       },
@@ -598,6 +604,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Equal-height points again, but the vertex sits above the floor.",
         spacedReviewPrompt: "Move the curve onto both ringed points.",
+        reviewOnSuccess: "Vertex at (1, 1): the curve just slid there.",
         reviewTarget: { x1: 0, y1: 2, x2: 2, y2: 2, a: 1 },
         reviewIntervalsDays: [1, 7],
       },
@@ -681,6 +688,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the curve must lean uphill and cross below zero.",
         spacedReviewPrompt: "Fit the curve through both ringed points.",
+        reviewOnSuccess: "c = −1 sets the crossing; b = 2 leans it uphill there.",
         reviewTarget: { x1: 0, y1: -1, x2: 1, y2: 2 },
         reviewIntervalsDays: [1, 7],
       },
@@ -778,6 +786,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Crossings further apart need a deeper vertex.",
         spacedReviewPrompt: "Set k so the curve crosses at both rings.",
+        reviewOnSuccess: "One and a half steps each side of the axis: k is −2.25.",
         reviewTarget: { x1: 0.5, y1: 0, x2: 3.5, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -847,6 +856,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "A steeper climbing line meets a higher flat line.",
         spacedReviewPrompt: "Drop a marker where the lines will cross.",
+        reviewOnSuccess: "Both lines reach height 10 at x = 4.",
         reviewTarget: { m: 3, b: -2, c: 10 },
         reviewIntervalsDays: [1, 7],
       },
@@ -924,6 +934,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Mix with the square of a sum: which identity fits?",
         spacedReviewPrompt: "Predict the rectangle's sides for a = 8, b = 3.",
+        reviewOnSuccess: "Same area, new shape: 11 by 5.",
         reviewTarget: { a: 8, b: 3 },
         reviewIntervalsDays: [1, 7],
       },

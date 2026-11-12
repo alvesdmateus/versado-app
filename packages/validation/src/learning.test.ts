@@ -32,6 +32,7 @@ const base: ModuleSpecInput = {
   retentionHooks: {
     interleavedVariation: "Falling line.",
     spacedReviewPrompt: "Set the line.",
+    reviewOnSuccess: "Exactly.",
     reviewTarget: { x1: 0, y1: 4, x2: 2, y2: 0 },
   },
 };
