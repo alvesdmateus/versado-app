@@ -12,6 +12,7 @@ interface RateLimitOptions {
 }
 
 const windows = new Map<string, RateLimitWindow>();
+let ipLimiterSeq = 0;
 
 // --- Account Lockout ---
 
@@ -83,9 +84,12 @@ export function rateLimitMiddleware(
   const maxRequests = options.maxRequests ?? 100;
   const windowMs = options.windowMs ?? 60_000;
   const keyExtractor = options.keyExtractor;
+  // IP-keyed limiters share the `windows` map, so each instance needs its own
+  // namespace; otherwise e.g. API traffic counts against the 3/min register limit.
+  const ipScope = `ip${++ipLimiterSeq}:`;
 
   return async (c: Context, next: Next) => {
-    const key = keyExtractor ? keyExtractor(c) : getIp(c);
+    const key = keyExtractor ? keyExtractor(c) : ipScope + getIp(c);
     const now = Date.now();
     const window = windows.get(key);
 
