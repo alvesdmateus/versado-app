@@ -150,6 +150,16 @@ export function PlaneTicks({
   );
 }
 
+/**
+ * Keeps a label's baseline out of the x-axis tick-label row (drawn at y0 + 15), moving it just
+ * above the axis or just below the row so it never prints on top of the numbers.
+ */
+export function clearOfXTicks(s: PlaneScale, y: number, down: boolean): number {
+  const y0 = s.y(0);
+  if (y <= y0 + 3 || y >= y0 + 30) return y;
+  return down ? y0 + 32 : y0 - 6;
+}
+
 /** Pegs and axes only; pair with <PlaneTicks /> drawn after the marks. */
 export function PlaneGrid({ s }: { s: PlaneScale; yStep?: number }) {
   const xs: number[] = [];

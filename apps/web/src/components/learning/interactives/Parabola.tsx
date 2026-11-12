@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ModuleSpec } from "@versado/core";
 import { bandColor, fmt, signed, INK, MUTE } from "../bands";
-import { PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
+import { clearOfXTicks, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /**
@@ -169,7 +169,12 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
         <g key={`a-${tick("a")}`} className="gb-pulse">
           <line x1={s.x(vertex.x)} y1={s.y(vertex.y)} x2={s.x(vertex.x + 1)} y2={s.y(vertex.y)} stroke={MUTE} strokeWidth={2} strokeDasharray="3 3" />
           <line x1={s.x(vertex.x + 1)} y1={s.y(vertex.y)} x2={s.x(vertex.x + 1)} y2={s.y(vertex.y + p.a!)} stroke={amber} strokeWidth={4} strokeLinecap="round" />
-          <Tag x={s.x(vertex.x + 1) + 8} y={(s.y(vertex.y) + s.y(vertex.y + p.a!)) / 2 + (Math.abs(p.a!) < 0.3 ? -12 : 5)} color={amber} anchor="start">
+          <Tag
+            x={s.x(vertex.x + 1) + 8}
+            y={clearOfXTicks(s, (s.y(vertex.y) + s.y(vertex.y + p.a!)) / 2 + (Math.abs(p.a!) < 0.3 ? -12 : 5), p.a! < 0)}
+            color={amber}
+            anchor="start"
+          >
             {formal ? `a = ${fmt(raw.a ?? 0)}` : signed(raw.a ?? 0)}
           </Tag>
         </g>

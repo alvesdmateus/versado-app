@@ -1,6 +1,6 @@
 import type { ModuleSpec } from "@versado/core";
 import { bandColor, fmt, signed, INK, MUTE } from "../bands";
-import { lineEnds, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
+import { clearOfXTicks, lineEnds, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /**
@@ -106,6 +106,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
   // Labels read the exact values; only the geometry springs. Keep the step label off the x-axis ticks.
   let stepTagY = (s.y(c) + s.y(c + m)) / 2 + 5;
   if (Math.abs(stepTagY - 5 - s.y(0)) < 12) stepTagY += m >= 0 ? -16 : 16;
+  stepTagY = clearOfXTicks(s, stepTagY, m < 0);
   const showStep = !walking && mode !== "c" && !morphing;
   const showStart = !walking && mode !== "m";
   const formal = stage === 4;
