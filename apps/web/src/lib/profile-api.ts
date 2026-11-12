@@ -16,6 +16,7 @@ export interface UserPreferences {
   hapticFeedback: boolean;
   soundFeedback: boolean;
   activeTrackId?: string;
+  activeLearningTrackId?: string;
 }
 
 export const profileApi = {

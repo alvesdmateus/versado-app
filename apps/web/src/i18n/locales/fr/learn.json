@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "label": "Navigation principale",
+    "learn": "Apprendre",
+    "review": "Réviser",
+    "flashcards": "Cartes",
+    "due": "révisions en attente"
+  },
+  "domain": {
+    "mathematics": "Mathématiques",
+    "software": "Développement logiciel",
+    "science": "Sciences"
+  },
+  "stage": {
+    "anchor": "Voir",
+    "explore": "Explorer",
+    "predict": "Prédire",
+    "formalize": "Écrire",
+    "practice": "Pratiquer"
+  },
+  "home": {
+    "progress": "{{done}} sur {{total}} modules",
+    "due_one": "{{count}} révision en attente",
+    "due_other": "{{count}} révisions en attente",
+    "session": "{{minutes}} sur {{total}} minutes aujourd'hui",
+    "changeTrack": "Changer de parcours",
+    "trackDone": "Parcours terminé. Vos révisions reviendront au bon moment.",
+    "empty": {
+      "title": "Pas encore de parcours",
+      "body": "Les parcours arrivent. Vos cartes restent dans l'onglet Cartes."
+    },
+    "error": {
+      "title": "Impossible de charger votre parcours",
+      "body": "Vérifiez votre connexion et réessayez.",
+      "retry": "Réessayer"
+    }
+  },
+  "path": {
+    "start": "Commencer",
+    "continue": "Continuer",
+    "minutes": "{{minutes}} min",
+    "stageOf": "Étape {{stage}} sur 4 · {{minutes}} min",
+    "done": "Terminé",
+    "checkDue": "Révision en attente",
+    "locked": "verrouillé"
+  },
+  "lesson": {
+    "close": "Fermer la leçon",
+    "continue": "Continuer",
+    "replay": "Rejouer",
+    "tryControls": "Bougez d'abord un réglage",
+    "check": "Vérifier ma prédiction",
+    "checkAgain": "Vérifier à nouveau",
+    "finish": "Terminer le module",
+    "retryFinish": "Réessayer",
+    "finishError": "Impossible d'enregistrer ce module. Votre progression est conservée ; réessayez.",
+    "formulaLegend": "Code couleur",
+    "backToTrack": "Retour au parcours",
+    "done": {
+      "title": "Module terminé",
+      "body": "« {{title}} » revient demain sous forme de prédiction rapide."
+    },
+    "error": {
+      "locked": {
+        "title": "Ce module est verrouillé",
+        "body": "Terminez le module précédent pour le débloquer."
+      },
+      "missing": {
+        "title": "Module introuvable",
+        "body": "Il a peut-être été déplacé ou retiré."
+      },
+      "network": {
+        "title": "Impossible de charger ce module",
+        "body": "Vérifiez votre connexion et réessayez."
+      },
+      "unsupported": {
+        "title": "Mise à jour nécessaire",
+        "body": "Ce module nécessite une version plus récente de l'app. Rechargez pour mettre à jour."
+      }
+    },
+    "decrease": "Diminuer {{label}}",
+    "increase": "Augmenter {{label}}"
+  },
+  "review": {
+    "title": "Réviser",
+    "next": "Suivant",
+    "attemptsLeft_one": "{{count}} essai restant",
+    "attemptsLeft_other": "{{count}} essais restants",
+    "error": "Impossible de charger vos révisions.",
+    "toLearn": "Retour à Apprendre",
+    "empty": {
+      "title": "Rien en attente",
+      "body": "Les modules terminés reviennent ici sous forme de courtes prédictions, un jour puis une semaine plus tard."
+    },
+    "finished": {
+      "title": "Révisions terminées",
+      "body": "Les prochaines seront plus espacées."
+    }
+  },
+  "select": {
+    "title": "Que voulez-vous comprendre ?",
+    "body": "Choisissez un parcours. Vous pourrez en changer à tout moment.",
+    "modules_one": "{{count}} module",
+    "modules_other": "{{count}} modules",
+    "error": "Impossible de charger les parcours. Vos cartes restent disponibles.",
+    "more": "Des parcours en développement logiciel et en sciences sont en préparation.",
+    "flashcards": {
+      "title": "Cartes",
+      "body": "Créez et étudiez vos propres paquets."
+    }
+  },
+  "practice": {
+    "start": "S'exercer",
+    "next": "Exercice suivant",
+    "counter": "Exercice {{n}} sur {{total}}",
+    "correct": "Les deux points sont sur votre courbe.",
+    "fade": {
+      "guided": "Observez",
+      "assisted": "Avec aide",
+      "autonomous": "En autonomie"
+    }
+  }
+}

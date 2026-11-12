@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "label": "Navegación principal",
+    "learn": "Aprender",
+    "review": "Repasar",
+    "flashcards": "Tarjetas",
+    "due": "repasos pendientes"
+  },
+  "domain": {
+    "mathematics": "Matemáticas",
+    "software": "Desarrollo de software",
+    "science": "Ciencia"
+  },
+  "stage": {
+    "anchor": "Ver",
+    "explore": "Explorar",
+    "predict": "Predecir",
+    "formalize": "Escribir",
+    "practice": "Practicar"
+  },
+  "home": {
+    "progress": "{{done}} de {{total}} módulos",
+    "due_one": "{{count}} repaso pendiente",
+    "due_other": "{{count}} repasos pendientes",
+    "session": "{{minutes}} de {{total}} minutos hoy",
+    "changeTrack": "Cambiar de ruta",
+    "trackDone": "Ruta completada. Tus repasos seguirán volviendo a su tiempo.",
+    "empty": {
+      "title": "Aún no hay rutas",
+      "body": "Las rutas están en camino. Tus tarjetas siguen en la pestaña Tarjetas."
+    },
+    "error": {
+      "title": "No pudimos cargar tu ruta",
+      "body": "Revisa tu conexión e inténtalo de nuevo.",
+      "retry": "Reintentar"
+    }
+  },
+  "path": {
+    "start": "Empezar",
+    "continue": "Continuar",
+    "minutes": "{{minutes}} min",
+    "stageOf": "Etapa {{stage}} de 4 · {{minutes}} min",
+    "done": "Hecho",
+    "checkDue": "Repaso pendiente",
+    "locked": "bloqueado"
+  },
+  "lesson": {
+    "close": "Cerrar lección",
+    "continue": "Continuar",
+    "replay": "Repetir",
+    "tryControls": "Mueve un control primero",
+    "check": "Comprobar mi predicción",
+    "checkAgain": "Comprobar de nuevo",
+    "finish": "Terminar módulo",
+    "retryFinish": "Reintentar",
+    "finishError": "No pudimos guardar este módulo. Tu progreso se conserva; inténtalo de nuevo.",
+    "formulaLegend": "Clave de colores",
+    "backToTrack": "Volver a la ruta",
+    "done": {
+      "title": "Módulo completado",
+      "body": "\"{{title}}\" vuelve mañana como una predicción rápida."
+    },
+    "error": {
+      "locked": {
+        "title": "Este módulo está bloqueado",
+        "body": "Termina el módulo anterior para desbloquearlo."
+      },
+      "missing": {
+        "title": "Módulo no encontrado",
+        "body": "Puede que se haya movido o retirado."
+      },
+      "network": {
+        "title": "No pudimos cargar este módulo",
+        "body": "Revisa tu conexión e inténtalo de nuevo."
+      },
+      "unsupported": {
+        "title": "Actualización necesaria",
+        "body": "Este módulo necesita una versión más nueva de la app. Recarga para actualizar."
+      }
+    },
+    "decrease": "Reducir {{label}}",
+    "increase": "Aumentar {{label}}"
+  },
+  "review": {
+    "title": "Repasar",
+    "next": "Siguiente",
+    "attemptsLeft_one": "Te queda {{count}} intento",
+    "attemptsLeft_other": "Te quedan {{count}} intentos",
+    "error": "No pudimos cargar tus repasos.",
+    "toLearn": "Volver a Aprender",
+    "empty": {
+      "title": "Nada pendiente",
+      "body": "Los módulos terminados vuelven aquí como predicciones breves, al día siguiente y una semana después."
+    },
+    "finished": {
+      "title": "Repasos terminados",
+      "body": "Los siguientes llegarán más espaciados."
+    }
+  },
+  "select": {
+    "title": "¿Qué quieres entender?",
+    "body": "Elige una ruta. Puedes cambiarla cuando quieras.",
+    "modules_one": "{{count}} módulo",
+    "modules_other": "{{count}} módulos",
+    "error": "No pudimos cargar las rutas. Tus tarjetas siguen disponibles.",
+    "more": "Las rutas de desarrollo de software y de ciencia están en preparación.",
+    "flashcards": {
+      "title": "Tarjetas",
+      "body": "Crea y estudia tus propios mazos."
+    }
+  },
+  "practice": {
+    "start": "Practicar",
+    "next": "Siguiente ejercicio",
+    "counter": "Ejercicio {{n}} de {{total}}",
+    "correct": "Los dos puntos están en tu gráfica.",
+    "fade": {
+      "guided": "Observa",
+      "assisted": "Con ayuda",
+      "autonomous": "Por tu cuenta"
+    }
+  }
+}

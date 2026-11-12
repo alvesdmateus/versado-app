@@ -16,7 +16,8 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@versado/algorithms": "workspace:*"
+    "@versado/algorithms": "workspace:*",
+    "@versado/validation": "workspace:*"
   },
   "devDependencies": {
     "@types/bun": "latest",

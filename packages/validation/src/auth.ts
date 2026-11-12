@@ -76,6 +76,7 @@ export const updatePreferencesSchema = z.object({
   hapticFeedback: z.boolean().optional(),
   soundFeedback: z.boolean().optional(),
   activeTrackId: z.enum(["cka", "aws-saa", "devops", "custom"]).optional(),
+  activeLearningTrackId: z.string().max(80).optional(),
 });
 
 export const forgotPasswordSchema = z.object({

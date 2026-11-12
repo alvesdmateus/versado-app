@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "label": "Main navigation",
+    "learn": "Learn",
+    "review": "Review",
+    "flashcards": "Flashcards",
+    "due": "checks due"
+  },
+  "domain": {
+    "mathematics": "Mathematics",
+    "software": "Software development",
+    "science": "Science"
+  },
+  "stage": {
+    "anchor": "See",
+    "explore": "Explore",
+    "predict": "Predict",
+    "formalize": "Write it",
+    "practice": "Practice"
+  },
+  "home": {
+    "progress": "{{done}} of {{total}} modules",
+    "due_one": "{{count}} check due",
+    "due_other": "{{count}} checks due",
+    "session": "{{minutes}} of {{total}} minutes today",
+    "changeTrack": "Change track",
+    "trackDone": "Track complete. Your checks will keep coming back on schedule.",
+    "empty": {
+      "title": "No tracks yet",
+      "body": "Tracks are on their way. Your flashcards are still in the Flashcards tab."
+    },
+    "error": {
+      "title": "We couldn't load your track",
+      "body": "Check your connection and try again.",
+      "retry": "Try again"
+    }
+  },
+  "path": {
+    "start": "Start",
+    "continue": "Continue",
+    "minutes": "{{minutes}} min",
+    "stageOf": "Stage {{stage}} of 4 · {{minutes}} min",
+    "done": "Done",
+    "checkDue": "Check due",
+    "locked": "locked"
+  },
+  "lesson": {
+    "close": "Close lesson",
+    "continue": "Continue",
+    "replay": "Replay",
+    "tryControls": "Move a control first",
+    "check": "Check my prediction",
+    "checkAgain": "Check again",
+    "finish": "Finish module",
+    "retryFinish": "Try again",
+    "finishError": "We couldn't save this module. Your progress is kept; try again.",
+    "formulaLegend": "Colour key",
+    "backToTrack": "Back to track",
+    "done": {
+      "title": "Module complete",
+      "body": "\"{{title}}\" comes back tomorrow as a quick prediction check."
+    },
+    "error": {
+      "locked": {
+        "title": "This module is locked",
+        "body": "Finish the module before it to unlock this one."
+      },
+      "missing": {
+        "title": "Module not found",
+        "body": "It may have been moved or retired."
+      },
+      "network": {
+        "title": "We couldn't load this module",
+        "body": "Check your connection and try again."
+      },
+      "unsupported": {
+        "title": "Update needed",
+        "body": "This module needs a newer version of the app. Reload to update."
+      }
+    },
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
+  },
+  "review": {
+    "title": "Review",
+    "next": "Next",
+    "attemptsLeft_one": "{{count}} try left",
+    "attemptsLeft_other": "{{count}} tries left",
+    "error": "We couldn't load your checks.",
+    "toLearn": "Back to Learn",
+    "empty": {
+      "title": "Nothing due",
+      "body": "Finished modules come back here as short prediction checks, a day and then a week later."
+    },
+    "finished": {
+      "title": "All checks done",
+      "body": "The next ones are scheduled further apart."
+    }
+  },
+  "select": {
+    "title": "What do you want to understand?",
+    "body": "Pick a track. You can switch any time.",
+    "modules_one": "{{count}} module",
+    "modules_other": "{{count}} modules",
+    "error": "We couldn't load the tracks. Your flashcards are still available.",
+    "more": "Software development and science tracks are in the works.",
+    "flashcards": {
+      "title": "Flashcards",
+      "body": "Make and study your own decks."
+    }
+  },
+  "practice": {
+    "start": "Practice",
+    "next": "Next exercise",
+    "counter": "Exercise {{n}} of {{total}}",
+    "correct": "Both points sit on your graph.",
+    "fade": {
+      "guided": "Watch",
+      "assisted": "With help",
+      "autonomous": "On your own"
+    }
+  }
+}

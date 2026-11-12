@@ -12,6 +12,7 @@ import enHome from "./locales/en/home.json";
 import enCommunity from "./locales/en/community.json";
 import enBilling from "./locales/en/billing.json";
 import enErrors from "./locales/en/errors.json";
+import enLearn from "./locales/en/learn.json";
 import ptCommon from "./locales/pt/common.json";
 import ptAuth from "./locales/pt/auth.json";
 import ptOnboarding from "./locales/pt/onboarding.json";
@@ -22,6 +23,7 @@ import ptHome from "./locales/pt/home.json";
 import ptCommunity from "./locales/pt/community.json";
 import ptBilling from "./locales/pt/billing.json";
 import ptErrors from "./locales/pt/errors.json";
+import ptLearn from "./locales/pt/learn.json";
 import esCommon from "./locales/es/common.json";
 import esAuth from "./locales/es/auth.json";
 import esOnboarding from "./locales/es/onboarding.json";
@@ -32,6 +34,7 @@ import esHome from "./locales/es/home.json";
 import esCommunity from "./locales/es/community.json";
 import esBilling from "./locales/es/billing.json";
 import esErrors from "./locales/es/errors.json";
+import esLearn from "./locales/es/learn.json";
 import frCommon from "./locales/fr/common.json";
 import frAuth from "./locales/fr/auth.json";
 import frOnboarding from "./locales/fr/onboarding.json";
@@ -42,6 +45,7 @@ import frHome from "./locales/fr/home.json";
 import frCommunity from "./locales/fr/community.json";
 import frBilling from "./locales/fr/billing.json";
 import frErrors from "./locales/fr/errors.json";
+import frLearn from "./locales/fr/learn.json";
 import deCommon from "./locales/de/common.json";
 import deAuth from "./locales/de/auth.json";
 import deOnboarding from "./locales/de/onboarding.json";
@@ -52,21 +56,22 @@ import deHome from "./locales/de/home.json";
 import deCommunity from "./locales/de/community.json";
 import deBilling from "./locales/de/billing.json";
 import deErrors from "./locales/de/errors.json";
+import deLearn from "./locales/de/learn.json";
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      en: { common: enCommon, auth: enAuth, onboarding: enOnboarding, profile: enProfile, decks: enDecks, study: enStudy, home: enHome, community: enCommunity, billing: enBilling, errors: enErrors },
-      pt: { common: ptCommon, auth: ptAuth, onboarding: ptOnboarding, profile: ptProfile, decks: ptDecks, study: ptStudy, home: ptHome, community: ptCommunity, billing: ptBilling, errors: ptErrors },
-      es: { common: esCommon, auth: esAuth, onboarding: esOnboarding, profile: esProfile, decks: esDecks, study: esStudy, home: esHome, community: esCommunity, billing: esBilling, errors: esErrors },
-      fr: { common: frCommon, auth: frAuth, onboarding: frOnboarding, profile: frProfile, decks: frDecks, study: frStudy, home: frHome, community: frCommunity, billing: frBilling, errors: frErrors },
-      de: { common: deCommon, auth: deAuth, onboarding: deOnboarding, profile: deProfile, decks: deDecks, study: deStudy, home: deHome, community: deCommunity, billing: deBilling, errors: deErrors },
+      en: { common: enCommon, auth: enAuth, onboarding: enOnboarding, profile: enProfile, decks: enDecks, study: enStudy, home: enHome, community: enCommunity, billing: enBilling, errors: enErrors, learn: enLearn },
+      pt: { common: ptCommon, auth: ptAuth, onboarding: ptOnboarding, profile: ptProfile, decks: ptDecks, study: ptStudy, home: ptHome, community: ptCommunity, billing: ptBilling, errors: ptErrors, learn: ptLearn },
+      es: { common: esCommon, auth: esAuth, onboarding: esOnboarding, profile: esProfile, decks: esDecks, study: esStudy, home: esHome, community: esCommunity, billing: esBilling, errors: esErrors, learn: esLearn },
+      fr: { common: frCommon, auth: frAuth, onboarding: frOnboarding, profile: frProfile, decks: frDecks, study: frStudy, home: frHome, community: frCommunity, billing: frBilling, errors: frErrors, learn: frLearn },
+      de: { common: deCommon, auth: deAuth, onboarding: deOnboarding, profile: deProfile, decks: deDecks, study: deStudy, home: deHome, community: deCommunity, billing: deBilling, errors: deErrors, learn: deLearn },
     },
     fallbackLng: "en",
     defaultNS: "common",
-    ns: ["common", "auth", "onboarding", "profile", "decks", "study", "home", "community", "billing", "errors"],
+    ns: ["common", "auth", "onboarding", "profile", "decks", "study", "home", "community", "billing", "errors", "learn"],
     interpolation: { escapeValue: false },
     detection: {
       order: ["localStorage", "navigator"],

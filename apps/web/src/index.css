@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 
-@theme {
+@theme static {
   /* Primary brand — actions, links, focus states */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
@@ -64,8 +64,25 @@
   --color-neutral-900: #111827;
   --color-neutral-950: #030712;
 
+  /* Geoboard world (skill-track surfaces): frosted board, graphite ink, hairline seams */
+  --color-gb-ground: #eef1f4;
+  --color-gb-panel: #f8fafb;
+  --color-gb-ink: #1b1e23;
+  --color-gb-mute: #56606b;
+  --color-gb-seam: #d3d9e0;
+  --color-gb-peg: #aeb8c3;
+
+  /* Bands: colour lives only on the board and in symbols mapped to it */
+  --color-band-red: #c92a2e;
+  --color-band-amber: #985107;
+  --color-band-emerald: #166b51;
+  --color-band-blue: #3a6ea5;
+  --color-band-violet: #7b5ea7;
+  --color-band-rose: #b83466;
+  --color-band-slate: #5d6773;
+
   /* Typography */
-  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
@@ -81,6 +98,20 @@
 /* ---------- Dark mode variable overrides ---------- */
 .dark {
   color-scheme: dark;
+
+  --color-gb-ground: #14171c;
+  --color-gb-panel: #1b1f25;
+  --color-gb-ink: #e8ecf0;
+  --color-gb-mute: #9aa4b0;
+  --color-gb-seam: #2b313a;
+  --color-gb-peg: #3d444e;
+  --color-band-red: #ff5d5f;
+  --color-band-amber: #f4a259;
+  --color-band-emerald: #45c79c;
+  --color-band-blue: #74a6e6;
+  --color-band-violet: #a98ad9;
+  --color-band-rose: #f0709e;
+  --color-band-slate: #9aa4b0;
 
   /* Neutral — inverted for dark surfaces */
   --color-neutral-0:   #1e293b;
@@ -153,9 +184,141 @@
 /* Base styles */
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-neutral-50);
+  background-color: var(--color-gb-ground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Geoboard world ---------- */
+.gb-surface {
+  background-color: var(--color-gb-ground);
+  color: var(--color-gb-ink);
+  font-variant-numeric: tabular-nums;
+}
+.gb-surface ::selection {
+  background: color-mix(in srgb, var(--color-band-blue) 28%, transparent);
+  color: inherit;
+}
+.gb-surface :focus-visible {
+  outline: 2px solid var(--color-band-blue);
+  outline-offset: 2px;
+}
+.gb-lattice {
+  background-image: radial-gradient(circle, var(--color-gb-peg) 1.6px, transparent 2.1px);
+  background-size: 28px 28px;
+  background-position: 14px 14px;
+}
+.gb-surface {
+  scrollbar-color: var(--color-gb-peg) transparent;
+}
+
+/* Stage-1 anchoring shows pure motion and shape: no numbers, labels or notation */
+.gb-anchoring text {
+  display: none;
+}
+
+/* Range control: a band on a track with a peg as the thumb */
+.gb-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 32px;
+  background: transparent;
+  --band: var(--color-gb-ink);
+  --fill: 50%;
+}
+.gb-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--band) var(--fill), var(--color-gb-seam) var(--fill));
+}
+.gb-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--band) var(--fill), var(--color-gb-seam) var(--fill));
+}
+.gb-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  margin-top: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-gb-panel);
+  border: 3px solid var(--band);
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gb-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-gb-panel);
+  border: 3px solid var(--band);
+}
+.gb-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.gb-range:focus-visible {
+  outline: none;
+}
+.gb-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-band-blue) 45%, transparent);
+}
+
+/* Locked control (assisted completion): the value is resolved, not draggable */
+.gb-range:disabled {
+  cursor: default;
+}
+.gb-range:disabled::-webkit-slider-runnable-track {
+  background: var(--band);
+  opacity: 0.45;
+}
+.gb-range:disabled::-moz-range-track {
+  background: var(--band);
+  opacity: 0.45;
+}
+.gb-range:disabled::-webkit-slider-thumb {
+  background: var(--band);
+  border-color: var(--band);
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+}
+.gb-range:disabled::-moz-range-thumb {
+  background: var(--band);
+  border-color: var(--band);
+  width: 10px;
+  height: 10px;
+}
+
+/* Band snap: shapes settle with a short spring overshoot */
+.gb-snap {
+  transition:
+    x 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    y 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    cx 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    cy 240ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 200ms ease-out;
+}
+@keyframes gb-pulse {
+  0% { stroke-width: var(--sw, 3px); }
+  40% { stroke-width: calc(var(--sw, 3px) + 3px); }
+  100% { stroke-width: var(--sw, 3px); }
+}
+.gb-pulse {
+  animation: gb-pulse 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes gb-dash {
+  to { stroke-dashoffset: -16; }
+}
+.gb-march {
+  animation: gb-dash 900ms linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gb-snap { transition: none; }
+  .gb-pulse, .gb-march { animation: none; }
+  .gb-range::-webkit-slider-thumb { transition: none; }
 }
 
 /* Utility: hide scrollbar for horizontal scroll containers */

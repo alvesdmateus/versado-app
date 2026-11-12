@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "label": "Navegação principal",
+    "learn": "Aprender",
+    "review": "Revisar",
+    "flashcards": "Flashcards",
+    "due": "revisões pendentes"
+  },
+  "domain": {
+    "mathematics": "Matemática",
+    "software": "Desenvolvimento de software",
+    "science": "Ciência"
+  },
+  "stage": {
+    "anchor": "Ver",
+    "explore": "Explorar",
+    "predict": "Prever",
+    "formalize": "Escrever",
+    "practice": "Praticar"
+  },
+  "home": {
+    "progress": "{{done}} de {{total}} módulos",
+    "due_one": "{{count}} revisão pendente",
+    "due_other": "{{count}} revisões pendentes",
+    "session": "{{minutes}} de {{total}} minutos hoje",
+    "changeTrack": "Trocar de trilha",
+    "trackDone": "Trilha concluída. As revisões continuam voltando no tempo certo.",
+    "empty": {
+      "title": "Nenhuma trilha ainda",
+      "body": "As trilhas estão chegando. Seus flashcards continuam na aba Flashcards."
+    },
+    "error": {
+      "title": "Não conseguimos carregar sua trilha",
+      "body": "Verifique sua conexão e tente de novo.",
+      "retry": "Tentar de novo"
+    }
+  },
+  "path": {
+    "start": "Começar",
+    "continue": "Continuar",
+    "minutes": "{{minutes}} min",
+    "stageOf": "Etapa {{stage}} de 4 · {{minutes}} min",
+    "done": "Concluído",
+    "checkDue": "Revisão pendente",
+    "locked": "bloqueado"
+  },
+  "lesson": {
+    "close": "Fechar lição",
+    "continue": "Continuar",
+    "replay": "Repetir",
+    "tryControls": "Mova um controle primeiro",
+    "check": "Conferir minha previsão",
+    "checkAgain": "Conferir de novo",
+    "finish": "Concluir módulo",
+    "retryFinish": "Tentar de novo",
+    "finishError": "Não conseguimos salvar este módulo. Seu progresso está guardado; tente de novo.",
+    "formulaLegend": "Legenda de cores",
+    "backToTrack": "Voltar à trilha",
+    "done": {
+      "title": "Módulo concluído",
+      "body": "\"{{title}}\" volta amanhã como uma previsão rápida."
+    },
+    "error": {
+      "locked": {
+        "title": "Este módulo está bloqueado",
+        "body": "Conclua o módulo anterior para desbloquear este."
+      },
+      "missing": {
+        "title": "Módulo não encontrado",
+        "body": "Ele pode ter sido movido ou removido."
+      },
+      "network": {
+        "title": "Não conseguimos carregar este módulo",
+        "body": "Verifique sua conexão e tente de novo."
+      },
+      "unsupported": {
+        "title": "Atualização necessária",
+        "body": "Este módulo precisa de uma versão mais nova do app. Recarregue para atualizar."
+      }
+    },
+    "decrease": "Diminuir {{label}}",
+    "increase": "Aumentar {{label}}"
+  },
+  "review": {
+    "title": "Revisar",
+    "next": "Próxima",
+    "attemptsLeft_one": "{{count}} tentativa restante",
+    "attemptsLeft_other": "{{count}} tentativas restantes",
+    "error": "Não conseguimos carregar suas revisões.",
+    "toLearn": "Voltar para Aprender",
+    "empty": {
+      "title": "Nada pendente",
+      "body": "Módulos concluídos voltam aqui como previsões rápidas, um dia e depois uma semana depois."
+    },
+    "finished": {
+      "title": "Revisões concluídas",
+      "body": "As próximas ficam mais espaçadas."
+    }
+  },
+  "select": {
+    "title": "O que você quer entender?",
+    "body": "Escolha uma trilha. Você pode trocar quando quiser.",
+    "modules_one": "{{count}} módulo",
+    "modules_other": "{{count}} módulos",
+    "error": "Não conseguimos carregar as trilhas. Seus flashcards continuam disponíveis.",
+    "more": "Trilhas de desenvolvimento de software e de ciência estão a caminho.",
+    "flashcards": {
+      "title": "Flashcards",
+      "body": "Crie e estude seus próprios baralhos."
+    }
+  },
+  "practice": {
+    "start": "Praticar",
+    "next": "Próximo exercício",
+    "counter": "Exercício {{n}} de {{total}}",
+    "correct": "Os dois pontos estão no seu gráfico.",
+    "fade": {
+      "guided": "Observe",
+      "assisted": "Com ajuda",
+      "autonomous": "Sozinho"
+    }
+  }
+}

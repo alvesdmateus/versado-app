@@ -1,119 +1,112 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Shield, Terminal, Layers, Cloud } from "lucide-react";
-import { type TrackId, TRACKS } from "@versado/core";
-import { useTrack } from "@/hooks/useTrack";
-import { onboardingApi } from "@/lib/onboarding-api";
+import { useTranslation } from "react-i18next";
+import type { TrackSummary } from "@versado/core";
+import { learningApi } from "@/lib/learning-api";
 import { profileApi } from "@/lib/profile-api";
+import { useTrack } from "@/hooks/useTrack";
+import { bandColor } from "@/components/learning/bands";
+import { Spinner } from "@/components/learning/ui";
 
-const TRACK_CARDS: {
-  id: TrackId;
-  icon: typeof Shield;
-  gradient: string;
-  iconBg: string;
-}[] = [
-  {
-    id: "cka",
-    icon: Shield,
-    gradient: "from-blue-600 to-indigo-700",
-    iconBg: "bg-blue-500/20",
-  },
-  {
-    id: "aws-saa",
-    icon: Cloud,
-    gradient: "from-orange-500 to-amber-600",
-    iconBg: "bg-orange-500/20",
-  },
-  {
-    id: "devops",
-    icon: Terminal,
-    gradient: "from-emerald-600 to-teal-700",
-    iconBg: "bg-emerald-500/20",
-  },
-  {
-    id: "custom",
-    icon: Layers,
-    gradient: "from-neutral-600 to-neutral-700",
-    iconBg: "bg-neutral-500/20",
-  },
-];
-
+/**
+ * Pick a skill track. Flashcards stay available as the "custom" legacy mode;
+ * the former flashcard tracks (CKA, AWS, DevOps) are folded into it.
+ */
 export function TrackSelectionPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation("learn");
   const { setTrack } = useTrack();
-  const [loading, setLoading] = useState<TrackId | null>(null);
+  const [tracks, setTracks] = useState<TrackSummary[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [busy, setBusy] = useState<string | null>(null);
 
-  const handleSelect = async (trackId: TrackId) => {
-    setLoading(trackId);
+  useEffect(() => {
+    learningApi.listTracks().then(setTracks).catch(() => setFailed(true));
+  }, []);
+
+  const choose = async (trackId: string | "flashcards") => {
+    setBusy(trackId);
     try {
-      await setTrack(trackId);
-
-      const track = TRACKS[trackId];
-      if (track.tagFilter.length > 0) {
-        await onboardingApi
-          .claimStarterDecks(track.tagFilter)
-          .catch(() => {});
-      }
-
-      const prefs = await profileApi.getPreferences();
-      if (prefs.onboardingCompleted) {
-        navigate("/", { replace: true });
+      await setTrack("custom");
+      if (trackId === "flashcards") {
+        await profileApi.updatePreferences({ onboardingCompleted: true });
+        navigate("/flashcards", { replace: true });
       } else {
-        navigate("/onboarding", { replace: true });
+        await profileApi.updatePreferences({ activeLearningTrackId: trackId, onboardingCompleted: true });
+        navigate("/", { replace: true });
       }
     } catch {
-      setLoading(null);
+      setBusy(null);
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-neutral-50 px-5 py-8">
-      <div className="mx-auto w-full max-w-md">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-neutral-900">
-            What do you want to learn?
-          </h1>
-          <p className="mt-2 text-sm text-neutral-500">
-            Pick a learning track to get started. You can change this later.
-          </p>
-        </div>
+    <div className="gb-surface min-h-dvh">
+      <div className="mx-auto flex max-w-md flex-col px-5 py-10">
+        <h1 className="text-[28px] font-extrabold leading-tight tracking-tight">{t("select.title")}</h1>
+        <p className="mt-2 text-gb-mute">{t("select.body")}</p>
 
-        <div className="flex flex-col gap-4">
-          {TRACK_CARDS.map(({ id, icon: Icon, gradient, iconBg }) => {
-            const track = TRACKS[id];
-            const isLoading = loading === id;
-            const isDisabled = loading !== null && !isLoading;
-
-            return (
+        <ul className="mt-8 flex flex-col divide-y divide-gb-seam border-y border-gb-seam">
+          {tracks === null && !failed && (
+            <li className="flex h-28 items-center justify-center">
+              <Spinner />
+            </li>
+          )}
+          {failed && <li className="py-6 text-gb-mute">{t("select.error")}</li>}
+          {tracks?.map((track) => (
+            <li key={track.id}>
               <button
-                key={id}
-                onClick={() => handleSelect(id)}
-                disabled={isDisabled || isLoading}
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-6 text-left text-white shadow-lg transition-all active:scale-[0.98] disabled:opacity-60`}
+                type="button"
+                disabled={busy !== null}
+                onClick={() => choose(track.id)}
+                className="flex w-full items-center gap-4 py-5 text-left disabled:opacity-50"
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${iconBg}`}
-                  >
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="text-lg font-bold">{track.name}</h2>
-                    <p className="mt-1 text-sm text-white/80">
-                      {track.description}
-                    </p>
-                  </div>
-                </div>
-                {isLoading && (
-                  <div className="mt-4 flex justify-center">
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                  </div>
-                )}
+                <TrackGlyph color={bandColor(track.colorToken)} />
+                <span className="flex flex-1 flex-col gap-1">
+                  <span className="text-lg font-extrabold leading-tight">{track.title}</span>
+                  <span className="text-sm text-gb-mute">{track.subtitle}</span>
+                  <span className="text-xs font-semibold text-gb-mute">
+                    {t(`domain.${track.domain}`)} · {t("select.modules", { count: track.moduleCount })}
+                  </span>
+                </span>
+                {busy === track.id && <Spinner />}
               </button>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+          <li>
+            <button
+              type="button"
+              disabled={busy !== null}
+              onClick={() => choose("flashcards")}
+              className="flex w-full items-center gap-4 py-5 text-left disabled:opacity-50"
+            >
+              <TrackGlyph color="var(--color-gb-mute)" dashed />
+              <span className="flex flex-1 flex-col gap-1">
+                <span className="text-lg font-extrabold leading-tight">{t("select.flashcards.title")}</span>
+                <span className="text-sm text-gb-mute">{t("select.flashcards.body")}</span>
+              </span>
+              {busy === "flashcards" && <Spinner />}
+            </button>
+          </li>
+        </ul>
+        <p className="mt-6 text-sm text-gb-mute">{t("select.more")}</p>
       </div>
     </div>
+  );
+}
+
+function TrackGlyph({ color, dashed }: { color: string; dashed?: boolean }) {
+  return (
+    <svg viewBox="0 0 48 48" className="h-12 w-12 shrink-0" aria-hidden>
+      {[8, 24, 40].map((x) => [8, 24, 40].map((y) => <circle key={`${x}${y}`} cx={x} cy={y} r={2} fill="var(--color-gb-peg)" />))}
+      <polyline
+        points="8,40 24,8 40,24 8,40"
+        fill="none"
+        stroke={color}
+        strokeWidth={3.5}
+        strokeLinejoin="round"
+        strokeDasharray={dashed ? "4 4" : undefined}
+      />
+    </svg>
   );
 }

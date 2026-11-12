@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T15:02:01.356Z",
+  "title": "Design System: Versado",
+  "extensions": {
+    "colorMeta": {
+      "gb-ground": {
+        "role": "neutral",
+        "displayName": "Frosted Ground",
+        "canonical": "oklch(95.7% 0.005 247)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#232425",
+          "#3f4041",
+          "#5c5e5f",
+          "#7f8082",
+          "#a3a5a7",
+          "#c8cbcd",
+          "#eceff2"
+        ],
+        "purpose": "Page and board ground; knockout stroke behind board labels. Dark: #14171c."
+      },
+      "gb-panel": {
+        "role": "neutral",
+        "displayName": "Acrylic Panel",
+        "canonical": "oklch(98.4% 0.003 228)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#3f4040",
+          "#5d5e5e",
+          "#7f8081",
+          "#a3a5a5",
+          "#c9cbcb",
+          "#edeff0"
+        ],
+        "purpose": "Tone-raised surfaces: bottom nav, current-module panel, slider thumb. Dark: #1b1f25."
+      },
+      "gb-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "oklch(23.4% 0.011 260)",
+        "tonalRamp": [
+          "#090b0f",
+          "#212429",
+          "#3d4045",
+          "#5b5e62",
+          "#7e8084",
+          "#a3a5a8",
+          "#c9cacd",
+          "#edeef0"
+        ],
+        "purpose": "Text, primary button fill, done pegs and done path band. Dark: #e8ecf0."
+      },
+      "gb-mute": {
+        "role": "neutral",
+        "displayName": "Graphite Mute",
+        "canonical": "oklch(48.4% 0.022 250)",
+        "tonalRamp": [
+          "#070c11",
+          "#1e252c",
+          "#38414a",
+          "#555f6a",
+          "#78818b",
+          "#9da6af",
+          "#c4cbd3",
+          "#e9eff6"
+        ],
+        "purpose": "Secondary text, ticks, guides, inactive nav. Dark: #9aa4b0."
+      },
+      "gb-seam": {
+        "role": "neutral",
+        "displayName": "Hairline Seam",
+        "canonical": "oklch(88.3% 0.012 252)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232426",
+          "#3e4042",
+          "#5b5e61",
+          "#7d8185",
+          "#a0a5ab",
+          "#c5cbd2",
+          "#e9eff6"
+        ],
+        "purpose": "Every 1px border and divider, axes, empty rail, slider track. Dark: #2b313a."
+      },
+      "gb-peg": {
+        "role": "neutral",
+        "displayName": "Peg Grey",
+        "canonical": "oklch(77.8% 0.019 250)",
+        "tonalRamp": [
+          "#090b0e",
+          "#212428",
+          "#3c4045",
+          "#585e65",
+          "#7a8189",
+          "#9da6b0",
+          "#c2ccd6",
+          "#e7f0f9"
+        ],
+        "purpose": "Lattice dots, locked pegs, scrollbar. Dark: #3d444e."
+      },
+      "band-red": {
+        "role": "primary",
+        "displayName": "Signal Red",
+        "canonical": "oklch(54.6% 0.194 25)",
+        "tonalRamp": [
+          "#2b0000",
+          "#530000",
+          "#7f000a",
+          "#ac1921",
+          "#d84643",
+          "#f77870",
+          "#ffa89e",
+          "#ffd3c9"
+        ],
+        "purpose": "Current position and errors; the active nav peg. Dark: #ff5d5f."
+      },
+      "band-blue": {
+        "role": "secondary",
+        "displayName": "Due Blue",
+        "canonical": "oklch(52.8% 0.104 251)",
+        "tonalRamp": [
+          "#000a23",
+          "#022546",
+          "#18416b",
+          "#2f6093",
+          "#5484b8",
+          "#7fa8d7",
+          "#abcef6",
+          "#d4f2ff"
+        ],
+        "purpose": "Content band; due reviews, focus ring, selection. Dark: #74a6e6."
+      },
+      "band-emerald": {
+        "role": "secondary",
+        "displayName": "Correct Emerald",
+        "canonical": "oklch(53.7% 0.101 166)",
+        "tonalRamp": [
+          "#001206",
+          "#002e1c",
+          "#004d36",
+          "#0d6e52",
+          "#3f9274",
+          "#71b59a",
+          "#a0d9c1",
+          "#ccfbe7"
+        ],
+        "purpose": "Content band; correct/target area fill. Dark: #45c79c."
+      },
+      "band-amber": {
+        "role": "tertiary",
+        "displayName": "Band Amber",
+        "canonical": "oklch(59.1% 0.137 57)",
+        "tonalRamp": [
+          "#1f0100",
+          "#411500",
+          "#662e00",
+          "#8e4900",
+          "#bb6817",
+          "#db9156",
+          "#fcbb89",
+          "#ffe2b8"
+        ],
+        "purpose": "Content band assigned by spec. Dark: #f4a259."
+      },
+      "band-violet": {
+        "role": "tertiary",
+        "displayName": "Band Violet",
+        "canonical": "oklch(54.2% 0.114 300)",
+        "tonalRamp": [
+          "#100321",
+          "#2b1843",
+          "#483268",
+          "#684e90",
+          "#8b70b6",
+          "#ae97d6",
+          "#d3bff5",
+          "#f5e5ff"
+        ],
+        "purpose": "Content band assigned by spec. Dark: #a98ad9."
+      },
+      "band-rose": {
+        "role": "tertiary",
+        "displayName": "Band Rose",
+        "canonical": "oklch(53.7% 0.172 1)",
+        "tonalRamp": [
+          "#260008",
+          "#4c0020",
+          "#750b3a",
+          "#a12757",
+          "#c94f79",
+          "#ea7d9e",
+          "#ffabc5",
+          "#ffd5ea"
+        ],
+        "purpose": "Content band assigned by spec. Dark: #f0709e."
+      },
+      "band-slate": {
+        "role": "tertiary",
+        "displayName": "Band Slate",
+        "canonical": "oklch(51.0% 0.023 253)",
+        "tonalRamp": [
+          "#070c11",
+          "#1e252c",
+          "#39414a",
+          "#555f6a",
+          "#78818c",
+          "#9da5b0",
+          "#c4cbd4",
+          "#e9eff6"
+        ],
+        "purpose": "Neutral band for controls that name no coloured quantity. Dark: #9aa4b0."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Track title, completion title, Stage 4 formula."
+      },
+      "headline": {
+        "displayName": "Scene Prompt",
+        "purpose": "The prompt above the board; red on a miss."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Current module, track rows."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Versado wordmark and 56px header titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Explanations, empty and error copy."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Track meta line and quiet links."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Session meter, slider labels (band-coloured), header info."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Stage name, module status under a peg."
+      },
+      "board-tag": {
+        "displayName": "Board Tag",
+        "purpose": "Values written on shapes; 4px ground knockout; scaled by crop factor k."
+      },
+      "board-tick": {
+        "displayName": "Board Tick",
+        "purpose": "Axis numbers in mute, 3px knockout, drawn last."
+      }
+    },
+    "shadows": [
+      {
+        "name": "focus-halo-range",
+        "value": "0 0 0 3px color-mix(in srgb, var(--color-band-blue) 45%, transparent)",
+        "purpose": "Slider thumb focus ring only. The world has no elevation shadows."
+      }
+    ],
+    "motion": [
+      {
+        "name": "snap",
+        "value": "240ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "purpose": "Signature: shapes settle onto pegs with a short overshoot (x, y, width, height, cx, cy); opacity on marks 200ms ease-out."
+      },
+      {
+        "name": "pulse",
+        "value": "320ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "A changed band's stroke swells 3px and returns."
+      },
+      {
+        "name": "march",
+        "value": "900ms linear infinite (dashoffset -16)",
+        "purpose": "Diagnostic dashed outlines only."
+      },
+      {
+        "name": "thumb",
+        "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Slider thumb scales to 1.15 while dragged."
+      },
+      {
+        "name": "press",
+        "value": "150ms, scale(0.985)",
+        "purpose": "Primary button press."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "Snap, pulse, march and thumb transitions removed; anchoring jumps to its final frame."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "learn-home-max",
+        "value": "576px"
+      },
+      {
+        "name": "lesson-max",
+        "value": "448px"
+      },
+      {
+        "name": "nav-max",
+        "value": "448px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action per scene; full width, ink on ground, pinned at the bottom of the lesson.",
+      "html": "<button class=\"ds-btn-primary\">Continue</button>",
+      "css": ".ds-btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;padding:0 20px;border:none;border-radius:5px;background:var(--color-gb-ink,#1b1e23);color:var(--color-gb-ground,#eef1f4);font:700 16px/1 Figtree,ui-sans-serif,system-ui,sans-serif;transition:transform 150ms,opacity 150ms;cursor:pointer}.ds-btn-primary:active{transform:scale(0.985)}.ds-btn-primary:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}.ds-btn-primary:disabled{opacity:.35;cursor:not-allowed}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Seam-bordered companion action, often icon-only (Replay).",
+      "html": "<button class=\"ds-btn-secondary\" aria-label=\"Replay\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\"/><path d=\"M3 3v5h5\"/></svg></button>",
+      "css": ".ds-btn-secondary{display:flex;align-items:center;justify-content:center;height:48px;min-width:48px;padding:0 14px;border:1px solid var(--color-gb-seam,#d3d9e0);border-radius:5px;background:transparent;color:var(--color-gb-ink,#1b1e23);font:600 16px/1 Figtree,ui-sans-serif,system-ui,sans-serif;transition:border-color 150ms;cursor:pointer}.ds-btn-secondary:hover{border-color:var(--color-gb-mute,#56606b)}.ds-btn-secondary:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}"
+    },
+    {
+      "name": "Band Slider",
+      "kind": "input",
+      "refersTo": "button-stepper",
+      "description": "Native range as a band with a peg thumb, flanked by 44px steppers; label in the variable's band colour.",
+      "html": "<div class=\"ds-slider\"><label class=\"ds-slider-l\"><span class=\"ds-slider-name\">Width</span><input type=\"range\" class=\"ds-range\" min=\"1\" max=\"8\" value=\"3\" style=\"--fill:28%\"></label><button class=\"ds-step\" aria-label=\"Decrease\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/></svg></button><span class=\"ds-val\">3</span><button class=\"ds-step\" aria-label=\"Increase\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\"><path d=\"M5 12h14M12 5v14\"/></svg></button></div>",
+      "css": ".ds-slider{display:flex;align-items:center;gap:8px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;color:var(--color-gb-ink,#1b1e23);--band:var(--color-band-blue,#3a6ea5)}.ds-slider-l{display:flex;flex:1;align-items:center;gap:12px;min-width:0}.ds-slider-name{width:80px;flex-shrink:0;font-size:14px;font-weight:600;line-height:1.2;color:var(--band)}.ds-range{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent}.ds-range::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,var(--band) var(--fill),var(--color-gb-seam,#d3d9e0) var(--fill))}.ds-range::-webkit-slider-thumb{-webkit-appearance:none;margin-top:-10px;width:24px;height:24px;border-radius:50%;background:var(--color-gb-panel,#f8fafb);border:3px solid var(--band);transition:transform 160ms cubic-bezier(0.16,1,0.3,1)}.ds-range:active::-webkit-slider-thumb{transform:scale(1.15)}.ds-range:focus-visible{outline:none}.ds-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px color-mix(in srgb,var(--color-band-blue,#3a6ea5) 45%,transparent)}.ds-step{display:flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;border:1px solid var(--color-gb-seam,#d3d9e0);border-radius:5px;background:transparent;color:inherit;cursor:pointer;transition:border-color 150ms}.ds-step:hover{border-color:var(--color-gb-mute,#56606b)}.ds-step:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}.ds-val{width:36px;text-align:center;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Bottom Nav",
+      "kind": "nav",
+      "refersTo": "bottom-nav",
+      "description": "Four tabs on the panel tone; the active tab is marked by a red peg; Review carries a blue due badge.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-i on\" aria-current=\"page\"><i class=\"ds-peg\"></i><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\"><circle cx=\"19\" cy=\"5\" r=\"2\"/><circle cx=\"5\" cy=\"19\" r=\"2\"/><path d=\"M5 17A12 12 0 0 1 17 5\"/></svg>Learn</a><a class=\"ds-nav-i\"><b class=\"ds-badge\">2</b><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m2 9 3-3 3 3\"/><path d=\"M13 18H7a2 2 0 0 1-2-2V6\"/><path d=\"m22 15-3 3-3-3\"/><path d=\"M11 6h6a2 2 0 0 1 2 2v10\"/></svg>Review</a><a class=\"ds-nav-i\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linejoin=\"round\"><path d=\"m12 2 10 5-10 5L2 7z\"/><path d=\"m2 12 10 5 10-5\"/><path d=\"m2 17 10 5 10-5\"/></svg>Flashcards</a><a class=\"ds-nav-i\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"8\" r=\"5\"/><path d=\"M20 21a8 8 0 0 0-16 0\"/></svg>Profile</a></nav>",
+      "css": ".ds-nav{display:flex;height:64px;max-width:448px;background:var(--color-gb-panel,#f8fafb);border-top:1px solid var(--color-gb-seam,#d3d9e0);font-family:Figtree,ui-sans-serif,system-ui,sans-serif}.ds-nav-i{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:600;color:var(--color-gb-mute,#56606b);text-decoration:none;cursor:pointer;transition:color 150ms}.ds-nav-i:hover{color:var(--color-gb-ink,#1b1e23)}.ds-nav-i:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:-2px}.ds-nav-i.on{font-weight:700;color:var(--color-gb-ink,#1b1e23)}.ds-peg{position:absolute;top:6px;width:6px;height:6px;border-radius:50%;background:var(--color-band-red,#c92a2e)}.ds-badge{position:absolute;top:8px;right:calc(50% - 22px);min-width:18px;padding:0 4px;border:2px solid var(--color-gb-panel,#f8fafb);border-radius:9999px;background:var(--color-band-blue,#3a6ea5);color:#fff;font-size:10px;line-height:14px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Stage Rail",
+      "kind": "custom",
+      "refersTo": "stage-rail",
+      "description": "Four hairline segments: done ink, current red, upcoming seam, with the stage name.",
+      "html": "<div class=\"ds-rail\"><ol><li class=\"d\"></li><li class=\"d\"></li><li class=\"c\"></li><li></li></ol><span>Predict</span></div>",
+      "css": ".ds-rail{display:flex;align-items:center;gap:12px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif}.ds-rail ol{display:flex;flex:1;gap:4px;margin:0;padding:0;list-style:none}.ds-rail li{flex:1;height:4px;border-radius:9999px;background:var(--color-gb-seam,#d3d9e0);transition:background-color 200ms}.ds-rail li.d{background:var(--color-gb-ink,#1b1e23)}.ds-rail li.c{background:var(--color-band-red,#c92a2e)}.ds-rail span{font-size:12px;font-weight:600;color:var(--color-gb-mute,#56606b)}"
+    },
+    {
+      "name": "Board Panel",
+      "kind": "card",
+      "refersTo": "board-panel",
+      "description": "Seam-bordered ground panel holding an SVG board on the peg lattice: bands, a dashed red missing piece, knockout tags.",
+      "html": "<div class=\"ds-board\"><svg viewBox=\"0 0 196 140\" role=\"img\" aria-label=\"Board\"><g fill=\"var(--color-gb-peg,#aeb8c3)\"><circle cx=\"14\" cy=\"14\" r=\"1.8\"/><circle cx=\"14\" cy=\"126\" r=\"1.8\"/><circle cx=\"42\" cy=\"14\" r=\"1.8\"/><circle cx=\"42\" cy=\"126\" r=\"1.8\"/><circle cx=\"70\" cy=\"14\" r=\"1.8\"/><circle cx=\"70\" cy=\"126\" r=\"1.8\"/><circle cx=\"98\" cy=\"14\" r=\"1.8\"/><circle cx=\"98\" cy=\"126\" r=\"1.8\"/><circle cx=\"126\" cy=\"14\" r=\"1.8\"/><circle cx=\"126\" cy=\"126\" r=\"1.8\"/><circle cx=\"154\" cy=\"14\" r=\"1.8\"/><circle cx=\"154\" cy=\"126\" r=\"1.8\"/><circle cx=\"182\" cy=\"14\" r=\"1.8\"/><circle cx=\"182\" cy=\"126\" r=\"1.8\"/></g><rect x=\"42\" y=\"42\" width=\"84\" height=\"56\" fill=\"color-mix(in srgb, var(--color-band-emerald,#166b51) 30%, transparent)\" stroke=\"var(--color-gb-ink,#1b1e23)\" stroke-width=\"1.5\"/><line x1=\"42\" y1=\"98\" x2=\"126\" y2=\"98\" stroke=\"var(--color-band-blue,#3a6ea5)\" stroke-width=\"5\" stroke-linecap=\"round\"/><line x1=\"42\" y1=\"98\" x2=\"42\" y2=\"42\" stroke=\"var(--color-band-amber,#985107)\" stroke-width=\"5\" stroke-linecap=\"round\"/><rect x=\"126\" y=\"42\" width=\"28\" height=\"56\" fill=\"none\" stroke=\"var(--color-band-red,#c92a2e)\" stroke-width=\"2\" stroke-dasharray=\"6 4\"/><text x=\"84\" y=\"120\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"var(--color-band-blue,#3a6ea5)\" paint-order=\"stroke\" stroke=\"var(--color-gb-ground,#eef1f4)\" stroke-width=\"4\">3</text><text x=\"140\" y=\"74\" text-anchor=\"middle\" font-size=\"13\" font-weight=\"700\" fill=\"var(--color-band-red,#c92a2e)\" paint-order=\"stroke\" stroke=\"var(--color-gb-ground,#eef1f4)\" stroke-width=\"4\">+2</text></svg></div>",
+      "css": ".ds-board{max-width:340px;padding:8px;border:1px solid var(--color-gb-seam,#d3d9e0);border-radius:6px;background:var(--color-gb-ground,#eef1f4);overflow:hidden;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-board svg{display:block;width:100%;height:auto}"
+    },
+    {
+      "name": "Current Module Panel",
+      "kind": "card",
+      "refersTo": "current-module-panel",
+      "description": "Ink-bordered panel beside the current red peg on the track path.",
+      "html": "<div class=\"ds-cur\"><div><b>The area of a rectangle</b><small>Stage 2 of 4 · 4 min</small></div><button class=\"ds-cur-btn\">Continue</button></div>",
+      "css": ".ds-cur{display:flex;flex-direction:column;gap:12px;max-width:340px;padding:16px;border:1px solid var(--color-gb-ink,#1b1e23);border-radius:6px;background:var(--color-gb-panel,#f8fafb);color:var(--color-gb-ink,#1b1e23);font-family:Figtree,ui-sans-serif,system-ui,sans-serif}.ds-cur b{display:block;font-size:18px;font-weight:800;line-height:1.25;letter-spacing:-0.025em}.ds-cur small{display:block;margin-top:4px;font-size:12px;font-weight:600;color:var(--color-gb-mute,#56606b)}.ds-cur-btn{height:48px;border:none;border-radius:5px;background:var(--color-gb-ink,#1b1e23);color:var(--color-gb-ground,#eef1f4);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:transform 150ms}.ds-cur-btn:active{transform:scale(0.985)}.ds-cur-btn:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Geoboard & Bands",
+    "overview": "Every idea is a coloured elastic band stretched between pegs on a lattice: pulled, snapped, compared. The skill-track surfaces (Learn, Track, Lesson, Review, Track selection, and the app shell's bottom nav) sit on a frosted-acrylic ground, cool near-white in light mode and dark graphite in dark mode, with a faint peg-dot lattice wherever space behaves like a plane. Everything that is not the board is graphite ink on that ground, separated by 1px hairline seams. Colour is reserved for the bands, for the symbols mapped to them, and for the single red peg that marks where you are.\n\nDensity is low and deliberate: one prompt, one board, at most two controls, one action. The board is the content; chrome stays quiet and monochrome so that a band's colour always means something. Motion is physical rather than decorative: shapes settle onto pegs with a short spring overshoot, and a wrong prediction draws the missing piece as a dashed, marching band with the difference written on the shape.\n\nThis world deliberately refuses the category default of white cards on blue, a brand-blue progress path, streak flames, and mascots. The legacy flashcard surfaces (`/flashcards`, Decks, Study, Community, Exams and the rest) still run on the older blue Nunito-era Tailwind scales (`primary-*`, `neutral-*`, `success-*`, `warning-*`, `error-*`, `--shadow-card*`). They are legacy, outside this world, and nothing in this document describes them.",
+    "keyCharacteristics": [
+      "Frosted ground plus 28px peg lattice; graphite ink; 1px seams instead of shadows.",
+      "Colour lives only on the board, in symbols mapped to the board, and in two chrome signals (the active red nav peg, blue for \"due\").",
+      "Figtree throughout, 800 for titles, tabular figures everywhere numbers appear.",
+      "Square-ish corners: 5px controls, 6px panels; pegs and rails fully round.",
+      "Signature motion: 240ms spring snap; instant snap under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The Quarantine Rule",
+        "body": "Colour appears only on the board, in symbols mapped to a band on the board, and in the chrome's two signals (red = you are here or this is wrong; blue = due). Every other chrome element is ink, mute, seam, or ground.",
+        "section": "colors"
+      },
+      {
+        "name": "The Same Band Rule",
+        "body": "A quantity keeps one band colour across all four stages: its slider label, its board stroke, its board tag, and its symbol in the formula. Stage 4 colours symbols exactly like the bands the learner pulled.",
+        "section": "colors"
+      },
+      {
+        "name": "The Never-Only-Colour Rule",
+        "body": "A band colour is always paired with a position or a label on the board (knockout tags, dashed vs solid, peg size), so colour is never the sole cue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every number (values, ticks, minutes, counts) sets in tabular figures; `.gb-surface` turns them on for the whole world.",
+        "section": "typography"
+      },
+      {
+        "name": "The Label-On-The-Shape Rule",
+        "body": "Values sit on or beside the shape they describe, knocked out from what is drawn behind them; no detached legends on screen.",
+        "section": "typography"
+      },
+      {
+        "name": "The Same-Place Action Rule",
+        "body": "One primary action per scene, full width, pinned at the bottom of the lesson screen in the thumb zone.",
+        "section": "layout"
+      },
+      {
+        "name": "The Seam Rule",
+        "body": "Separate with a 1px seam or a tone step, never a drop shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do set every skill-track surface inside `.gb-surface` so ground, ink, tabular figures, blue focus rings and blue selection come with it.",
+      "Do draw anything that behaves like space on the 28px lattice, and make lengths mean something (minutes, units, values).",
+      "Do give each variable one band colour from the spec and reuse it on its slider label, its board stroke, its tag and its formula symbol.",
+      "Do show a wrong prediction as a shape: the missing or correct band dashed and marching in red, with the signed delta written on it, and the prompt turned red.",
+      "Do keep the primary action full width at the bottom of the screen, ink on ground, one per scene.",
+      "Do ship a static, equally informative frame for every motion under reduced motion."
+    ],
+    "donts": [
+      "Don't use band colours for chrome decoration, headings, backgrounds, or brand accents; outside the board only red (current, error) and blue (due, focus) carry colour.",
+      "Don't add drop shadows or elevated cards; use a seam or a tone step.",
+      "Don't introduce a new hue for a state; tint the existing band with `color-mix` instead.",
+      "Don't add streak flames, mascots, or a brand-blue progress path.",
+      "Don't place a legend away from the board; label the shape itself.",
+      "Don't borrow the legacy flashcard tokens (`primary-*`, `neutral-*`, `--shadow-card*`) into skill-track surfaces."
+    ]
+  }
+}
