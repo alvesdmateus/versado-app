@@ -9,6 +9,8 @@ import {
   jsonb,
   pgEnum,
   uniqueIndex,
+  index,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 // Enums
@@ -45,6 +47,7 @@ export const users = pgTable("users", {
       favoriteDeckIds: string[];
       onboardingCompleted?: boolean;
       activeTrackId?: string;
+      activeLearningTrackId?: string;
     }>()
     .notNull()
     .default({
@@ -451,3 +454,67 @@ export const reports = pgTable("reports", {
     .notNull()
     .defaultNow(),
 });
+
+// ── Skill-track learning (see intuitive_interactive_learning.md) ──────────────
+
+export const learningTracks = pgTable("learning_tracks", {
+  id: text("id").primaryKey(),
+  domain: text("domain").notNull(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  colorToken: text("color_token").notNull(),
+  position: integer("position").notNull().default(0),
+  status: text("status").notNull().default("draft"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const learningModules = pgTable(
+  "learning_modules",
+  {
+    id: text("id").primaryKey(),
+    trackId: text("track_id")
+      .notNull()
+      .references(() => learningTracks.id, { onDelete: "cascade" }),
+    position: integer("position").notNull().default(0),
+    title: text("title").notNull(),
+    interactive: text("interactive").notNull(),
+    estimatedMinutes: integer("estimated_minutes").notNull().default(3),
+    prerequisites: jsonb("prerequisites").$type<string[]>().notNull().default([]),
+    status: text("status").notNull().default("draft"),
+    /** Full module spec (YAML template shape), validated by moduleSpecSchema. */
+    spec: jsonb("spec").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("learning_modules_track_idx").on(table.trackId, table.position)]
+);
+
+export const moduleProgress = pgTable(
+  "module_progress",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    moduleId: text("module_id")
+      .notNull()
+      .references(() => learningModules.id, { onDelete: "cascade" }),
+    stage: integer("stage").notNull().default(1),
+    predictionAttempts: integer("prediction_attempts").notNull().default(0),
+    predictionCorrect: integer("prediction_correct").notNull().default(0),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    easeFactor: real("ease_factor").notNull().default(2.5),
+    interval: integer("interval").notNull().default(0),
+    repetitions: integer("repetitions").notNull().default(0),
+    nextReviewAt: timestamp("next_review_at", { withTimezone: true }),
+    lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.moduleId] }),
+    index("module_progress_due_idx").on(table.userId, table.nextReviewAt),
+  ]
+);

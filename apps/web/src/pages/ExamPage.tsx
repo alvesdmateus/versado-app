@@ -121,7 +121,7 @@ export function ExamPage() {
       <div className="flex min-h-screen items-center justify-center bg-neutral-50">
         <GoFluentModal
           isOpen
-          onClose={() => navigate("/")}
+          onClose={() => navigate("/flashcards")}
           trigger="limit"
         />
       </div>
@@ -133,7 +133,7 @@ export function ExamPage() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-neutral-50 px-5">
         <AlertCircle className="h-12 w-12 text-error-500" />
         <p className="text-center text-neutral-700">{error}</p>
-        <Button onClick={() => navigate("/")}>{t("exam.backHome")}</Button>
+        <Button onClick={() => navigate("/flashcards")}>{t("exam.backHome")}</Button>
       </div>
     );
   }
@@ -216,7 +216,7 @@ export function ExamPage() {
             >
               {t("exam.tryAgain")}
             </Button>
-            <Button variant="secondary" onClick={() => navigate("/")}>
+            <Button variant="secondary" onClick={() => navigate("/flashcards")}>
               {t("exam.backHome")}
             </Button>
           </div>
@@ -234,7 +234,7 @@ export function ExamPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 pt-4 pb-2">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/flashcards")}
           className="rounded-lg p-2 text-neutral-500 hover:bg-neutral-100"
         >
           <ArrowLeft className="h-5 w-5" />

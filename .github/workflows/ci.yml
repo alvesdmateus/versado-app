@@ -83,7 +83,9 @@ jobs:
   e2e:
     name: E2E Tests
     needs: [typecheck, unit-tests, api-integration, component-tests]
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which Playwright 1.58 cannot install browser deps for.
+    # Move back to ubuntu-latest once Playwright supports it (or after upgrading @playwright/test).
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:17-alpine

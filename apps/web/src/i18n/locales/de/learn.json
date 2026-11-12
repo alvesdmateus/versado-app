@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "label": "Hauptnavigation",
+    "learn": "Lernen",
+    "review": "Wiederholen",
+    "flashcards": "Karteikarten",
+    "due": "fällige Checks"
+  },
+  "domain": {
+    "mathematics": "Mathematik",
+    "software": "Softwareentwicklung",
+    "science": "Naturwissenschaft"
+  },
+  "stage": {
+    "anchor": "Sehen",
+    "explore": "Erkunden",
+    "predict": "Vorhersagen",
+    "formalize": "Aufschreiben",
+    "practice": "Üben"
+  },
+  "home": {
+    "progress": "{{done}} von {{total}} Modulen",
+    "due_one": "{{count}} Check fällig",
+    "due_other": "{{count}} Checks fällig",
+    "session": "{{minutes}} von {{total}} Minuten heute",
+    "changeTrack": "Lernpfad wechseln",
+    "trackDone": "Lernpfad abgeschlossen. Deine Checks kommen weiter planmäßig zurück.",
+    "empty": {
+      "title": "Noch keine Lernpfade",
+      "body": "Lernpfade sind unterwegs. Deine Karteikarten findest du im Tab Karteikarten."
+    },
+    "error": {
+      "title": "Dein Lernpfad konnte nicht geladen werden",
+      "body": "Prüfe deine Verbindung und versuche es erneut.",
+      "retry": "Erneut versuchen"
+    }
+  },
+  "path": {
+    "start": "Starten",
+    "continue": "Weiter",
+    "minutes": "{{minutes}} Min.",
+    "stageOf": "Schritt {{stage}} von 4 · {{minutes}} Min.",
+    "done": "Erledigt",
+    "checkDue": "Check fällig",
+    "locked": "gesperrt"
+  },
+  "lesson": {
+    "close": "Lektion schließen",
+    "continue": "Weiter",
+    "replay": "Wiederholen",
+    "tryControls": "Bewege zuerst einen Regler",
+    "check": "Vorhersage prüfen",
+    "checkAgain": "Erneut prüfen",
+    "finish": "Modul abschließen",
+    "retryFinish": "Erneut versuchen",
+    "finishError": "Das Modul konnte nicht gespeichert werden. Dein Fortschritt bleibt erhalten; versuche es erneut.",
+    "formulaLegend": "Farbschlüssel",
+    "backToTrack": "Zurück zum Lernpfad",
+    "done": {
+      "title": "Modul abgeschlossen",
+      "body": "„{{title}}“ kommt morgen als kurze Vorhersage zurück."
+    },
+    "error": {
+      "locked": {
+        "title": "Dieses Modul ist gesperrt",
+        "body": "Schließe zuerst das vorherige Modul ab."
+      },
+      "missing": {
+        "title": "Modul nicht gefunden",
+        "body": "Es wurde möglicherweise verschoben oder entfernt."
+      },
+      "network": {
+        "title": "Das Modul konnte nicht geladen werden",
+        "body": "Prüfe deine Verbindung und versuche es erneut."
+      },
+      "unsupported": {
+        "title": "Update erforderlich",
+        "body": "Dieses Modul braucht eine neuere App-Version. Lade neu, um zu aktualisieren."
+      }
+    },
+    "decrease": "{{label}} verringern",
+    "increase": "{{label}} erhöhen"
+  },
+  "review": {
+    "title": "Wiederholen",
+    "next": "Weiter",
+    "attemptsLeft_one": "Noch {{count}} Versuch",
+    "attemptsLeft_other": "Noch {{count}} Versuche",
+    "error": "Deine Checks konnten nicht geladen werden.",
+    "toLearn": "Zurück zu Lernen",
+    "empty": {
+      "title": "Nichts fällig",
+      "body": "Abgeschlossene Module kommen hier als kurze Vorhersagen zurück, nach einem Tag und dann nach einer Woche."
+    },
+    "finished": {
+      "title": "Alle Checks erledigt",
+      "body": "Die nächsten kommen in größeren Abständen."
+    }
+  },
+  "select": {
+    "title": "Was willst du verstehen?",
+    "body": "Wähle einen Lernpfad. Du kannst jederzeit wechseln.",
+    "modules_one": "{{count}} Modul",
+    "modules_other": "{{count}} Module",
+    "error": "Die Lernpfade konnten nicht geladen werden. Deine Karteikarten sind weiter verfügbar.",
+    "more": "Lernpfade zu Softwareentwicklung und Naturwissenschaft sind in Arbeit.",
+    "flashcards": {
+      "title": "Karteikarten",
+      "body": "Erstelle und lerne deine eigenen Stapel."
+    }
+  },
+  "practice": {
+    "start": "Üben",
+    "next": "Nächste Übung",
+    "counter": "Übung {{n}} von {{total}}",
+    "correct": "Beide Punkte liegen auf deinem Graphen.",
+    "fade": {
+      "guided": "Zuschauen",
+      "assisted": "Mit Hilfe",
+      "autonomous": "Selbstständig"
+    }
+  }
+}

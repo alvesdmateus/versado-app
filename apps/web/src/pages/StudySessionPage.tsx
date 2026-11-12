@@ -395,7 +395,7 @@ export function StudySessionPage() {
     if (sessionId) {
       syncAwareApi.endSession(sessionId).catch(console.error);
     }
-    navigate("/");
+    navigate("/flashcards");
   }, [navigate, sessionId]);
 
   // Keyboard support
@@ -449,7 +449,7 @@ export function StudySessionPage() {
           {t("empty.message")}
         </p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/flashcards")}
           className="mt-6 rounded-full bg-primary-500 px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-600 active:scale-95"
         >
           {t("empty.backHome")}
@@ -550,7 +550,7 @@ export function StudySessionPage() {
               {t("complete.viewHistory")}
             </button>
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/flashcards")}
               className="w-full py-2 text-sm text-neutral-500 transition-colors hover:text-neutral-700"
             >
               {t("complete.backHome")}
@@ -783,7 +783,7 @@ export function StudySessionPage() {
           if (sessionId) {
             syncAwareApi.endSession(sessionId).catch(console.error);
           }
-          navigate("/");
+          navigate("/flashcards");
         }}
         trigger="limit"
       />

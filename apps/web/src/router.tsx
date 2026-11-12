@@ -26,6 +26,9 @@ import { DiscoverPage } from "./pages/DiscoverPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 import { ExamPage } from "./pages/ExamPage";
+import { LearnHomePage } from "./pages/LearnHomePage";
+import { LessonPage } from "./pages/LessonPage";
+import { ReviewPage } from "./pages/ReviewPage";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +50,12 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <HomePage /> },
+      // Skill-track learning (core loop)
+      { index: true, element: <LearnHomePage /> },
+      { path: "tracks/:trackId", element: <LearnHomePage /> },
+      { path: "review", element: <ReviewPage /> },
+      // Legacy flashcard system, kept as "Flashcards (custom)"
+      { path: "flashcards", element: <HomePage /> },
       { path: "decks", element: <DecksPage /> },
       { path: "decks/:deckId", element: <DeckDetailPage /> },
       { path: "discover", element: <DiscoverPage /> },
@@ -95,6 +103,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <StudySessionPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/learn/:moduleId",
+    element: (
+      <ProtectedRoute>
+        <LessonPage />
       </ProtectedRoute>
     ),
   },
