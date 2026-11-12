@@ -6,7 +6,7 @@ import type { ModuleStage } from "@versado/core";
 import { learningApi, type WireModule } from "@/lib/learning-api";
 import { ApiError } from "@/lib/api-client";
 import { getInteractive, type Values, type Verdict } from "@/components/learning/interactives";
-import { ControlStack, Formula, useAnchor } from "@/components/learning/controls";
+import { ControlStack, Formula, splitControls, unanswered, useAnchor } from "@/components/learning/controls";
 import { BoardPanel, PrimaryButton, SecondaryButton, Spinner, StageRail } from "@/components/learning/ui";
 import { bandColor } from "@/components/learning/bands";
 
@@ -278,6 +278,9 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           ? t("practice.correct")
           : diagnosis(s3.adaptiveFeedback, verdict.kind)
         : item.prompt;
+    const practiceActive = !guided && !verdict?.correct;
+    const practiceControls = def.predictionControls(spec, item.target);
+    const practiceSplit = splitControls(def, practiceControls);
 
     return (
       <Shell
@@ -308,13 +311,14 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
             anchorT={1}
             changed={changed}
             guide={guided ? guideT : null}
+            input={practiceActive ? { controls: practiceControls, onChange: onControl, locked: item.presetControls } : undefined}
           />
         </BoardPanel>
 
-        {!guided && !verdict?.correct && (
+        {practiceActive && practiceSplit.free.length > 0 && (
           <div className="mt-4">
             <ControlStack
-              controls={def.predictionControls(spec, item.target)}
+              controls={practiceSplit.free}
               values={values}
               onChange={onControl}
               locked={item.presetControls}
@@ -337,7 +341,7 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
               {finishing ? <Spinner /> : last ? t("lesson.finish") : t("practice.next")}
             </PrimaryButton>
           ) : (
-            <PrimaryButton disabled={verdict !== null && !touched} onClick={check}>
+            <PrimaryButton disabled={(verdict !== null && !touched) || unanswered(practiceControls, values)} onClick={check}>
               {verdict ? t("lesson.checkAgain") : t("lesson.check")}
             </PrimaryButton>
           )}
@@ -378,6 +382,8 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
       : stage === 3
         ? def.predictionControls(spec, target)
         : [];
+  const controlsActive = controls.length > 0 && !(stage === 3 && solved && verdict?.correct);
+  const { free } = splitControls(def, controls);
 
   return (
     <Shell onClose={onExit} title={module.title} rail={<StageRail stage={stage} labels={stageLabels} />}>
@@ -398,13 +404,12 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           verdict={stage === 3 ? verdict : null}
           anchorT={anchorT}
           changed={changed}
+          input={controlsActive ? { controls, onChange: onControl } : undefined}
         />
       </BoardPanel>
 
       <div className="mt-4 flex flex-col gap-4">
-        {controls.length > 0 && !(stage === 3 && solved && verdict?.correct) && (
-          <ControlStack controls={controls} values={values} onChange={onControl} />
-        )}
+        {controlsActive && free.length > 0 && <ControlStack controls={free} values={values} onChange={onControl} />}
         {stage === 4 && (
           <Formula expression={spec.stage4Formalization.formalExpression} mapping={spec.stage4Formalization.colorMapping} />
         )}
@@ -431,7 +436,7 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           (verdict?.correct ? (
             <PrimaryButton onClick={() => goTo(4)}>{t("lesson.continue")}</PrimaryButton>
           ) : (
-            <PrimaryButton disabled={verdict !== null && !touched} onClick={check}>
+            <PrimaryButton disabled={(verdict !== null && !touched) || unanswered(controls, values)} onClick={check}>
               {verdict ? t("lesson.checkAgain") : t("lesson.check")}
             </PrimaryButton>
           ))}

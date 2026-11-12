@@ -13,6 +13,7 @@ export function Svg({
   children,
   box,
   anchoring = false,
+  gutter,
 }: {
   width: number;
   height: number;
@@ -22,10 +23,15 @@ export function Svg({
   box?: { x: number; y: number; w: number; h: number };
   /** Stage-1 anchoring: zero numbers or notation on the board (bible §2, Stage 1). */
   anchoring?: boolean;
+  /** Extra room left of / below the board for axis rails, outside the board's own coordinates. */
+  gutter?: { left?: number; bottom?: number };
 }) {
+  const left = gutter?.left ?? 0;
+  const bottom = gutter?.bottom ?? 0;
+  const vb = box ?? { x: 0, y: 0, w: width, h: height };
   return (
     <svg
-      viewBox={box ? `${box.x} ${box.y} ${box.w} ${box.h}` : `0 0 ${width} ${height}`}
+      viewBox={`${vb.x - left} ${vb.y} ${vb.w + left} ${vb.h + bottom}`}
       className={`block h-auto w-full touch-none select-none${anchoring ? " gb-anchoring" : ""}`}
       role="img"
       aria-label={label}
@@ -69,6 +75,9 @@ export function Lattice({
 export interface PlaneScale {
   x: (v: number) => number;
   y: (v: number) => number;
+  /** Inverse of x / y: a board (viewBox) coordinate back to a plane value, for dragging. */
+  fromX: (px: number) => number;
+  fromY: (py: number) => number;
   xMin: number;
   xMax: number;
   yMin: number;
@@ -93,6 +102,8 @@ export function usePlane(opts: {
     return {
       x: (v: number) => pad + (v - xMin) * xUnit,
       y: (v: number) => height - pad - (v - yMin) * yUnit,
+      fromX: (px: number) => xMin + (px - pad) / xUnit,
+      fromY: (py: number) => yMin + (height - pad - py) / yUnit,
       xMin,
       xMax,
       yMin,

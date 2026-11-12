@@ -63,6 +63,16 @@ Principles for the refactor:
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).
 - **Interactives:** `area-product`, `binomial-square`, `slope-intercept` (modes by exposed controls: m | c | m+c),
   `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`. `solve`/`evaluate` receive the spec (mode + `fixed`).
+- **Control pattern (axis rails, app-wide):** a variable that moves something along a board axis is a
+  rail drawn by the board in its own coordinates — horizontal for x, vertical for y — with the thumb
+  level with the element it moves (`interactives/rail.tsx`: `AxisRail`/`Rails`, `svgPoint` for pointer →
+  board coordinates). Bind it in `InteractiveDefinition.axes`; boards reserve a fixed `gutter` so they
+  never resize between stages. Parameters with no axis position (slope, curvature, totals) stay
+  `BandSlider`s under the board. Boards receive every active control in `BoardProps.input` and also
+  offer **in-plane handles** for the same variables (`PlaneHandle` on vertices/intercepts, `DragArea`
+  on lines and curves, via `useBoardInput` which snaps and respects locks); rails stay the keyboard path.
+  A computed result the learner predicts is a **multiple choice** (`ControlDef.choices` → `ChoiceGrid`),
+  not a slider; build wrong options from named misconceptions so feedback stays diagnostic.
 - **Building blocks first:** `stage2Exploration.fixed` holds parameters constant so one idea is explored alone
   (e.g. slope with c = 0, then intercept with m = 1) before modules combine them.
 - **Practice (optional `spec.practice`):** faded worked examples after formalization —

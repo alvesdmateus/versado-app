@@ -173,12 +173,16 @@ export const algebraModules: LearningModuleInput[] = [
       stage3Prediction: {
         icapTarget: "interactive",
         challengePrompt: "a is 3, b is 2. Predict the total area.",
-        userAction: "Enter the total area of the big square, then reveal",
+        userAction:
+          "Pick the total area from four boxes (the truth and three named misconceptions), then reveal",
         target: { a: 3, b: 2 },
         tolerance: 0,
         adaptiveFeedback: {
           onCommonMisconception: "The dashed strips are the pieces your answer left out.",
           onSuccess: "Two squares plus two strips — every piece counted.",
+          byKind: {
+            doubled: "Doubling adds the sides. Squaring fills the square — count every piece inside.",
+          },
         },
       },
       stage4Formalization: {

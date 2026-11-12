@@ -1,5 +1,6 @@
 import { bandColor, bandFill, fmt, signed } from "../bands";
 import { lineEnds, PlaneGrid, PlaneTicks, Svg, Tag, usePlane } from "./board-kit";
+import { DragArea, PlaneHandle, RAIL_CROSS, RAIL_GUTTER, Rails, useBoardInput } from "./rail";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /** Equations are crossings: where m·x + b meets the flat line y = c. */
@@ -11,7 +12,7 @@ function crossing(m: number, b: number, c: number) {
   return (c - b) / m;
 }
 
-function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps) {
+function Board({ stage, values, target, verdict, anchorT, changed, input }: BoardProps) {
   const s = usePlane({ width: W, height: H, pad: 26, xMin: -1, xMax: 6, yMin: -3, yMax: 12 });
   const blue = bandColor("blue");
   const amber = bandColor("amber");
@@ -26,9 +27,16 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
   const marker = values.x ?? 0;
   const rising = lineEnds(s, m, b);
   const pulse = changed?.name === "c" ? changed.tick : 0;
+  const board = useBoardInput(input, values);
 
   return (
-    <Svg anchoring={stage === 1} width={W} height={H} label={`Rising line meets level ${fmt(c)}`}>
+    <Svg
+      anchoring={stage === 1}
+      width={W}
+      height={H}
+      label={`Rising line meets level ${fmt(c)}`}
+      gutter={{ left: RAIL_GUTTER, bottom: RAIL_GUTTER }}
+    >
       <PlaneGrid s={s} yStep={2} />
       {rising && <line {...rising} stroke={blue} strokeWidth={4} strokeLinecap="round" />}
       <line
@@ -93,6 +101,25 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
         </g>
       )}
       <PlaneTicks s={s} yStep={2} />
+      {/* The flat line's height rides a vertical rail; the floor marker rides a horizontal one */}
+      <Rails
+        input={input}
+        values={values}
+        bind={{
+          c: { axis: "y", at: s.y, cross: -RAIL_CROSS, reach: s.x(s.xMin) },
+          x: { axis: "x", at: s.x, cross: H + RAIL_CROSS, reach: s.y(0) },
+        }}
+      />
+
+      {/* Direct manipulation: lift the flat line itself, or slide the marker along the floor */}
+      {board.can("c") && (
+        <DragArea cursor="ns-resize" onDrag={(pt) => board.set("c", s.fromY(pt.y))}>
+          <line x1={s.x(s.xMin)} x2={s.x(s.xMax)} y1={s.y(c)} y2={s.y(c)} stroke="transparent" strokeWidth={26} />
+        </DragArea>
+      )}
+      {board.can("x") && (
+        <PlaneHandle x={s.x(marker)} y={s.y(0)} color={bandColor("slate")} cursor="ew-resize" r={6} onDrag={(pt) => board.set("x", s.fromX(pt.x))} />
+      )}
     </Svg>
   );
 }
@@ -103,6 +130,7 @@ function solve(target: Values): Values {
 
 export const lineIntersection: InteractiveDefinition = {
   Board,
+  axes: { c: "y", x: "x" },
   initialValues(spec, stage, target) {
     if (stage === 3) return { x: 0 };
     if (stage === 4) return solve(target);

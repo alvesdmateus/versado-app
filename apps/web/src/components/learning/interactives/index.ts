@@ -18,4 +18,4 @@ export function getInteractive(key: string): InteractiveDefinition | null {
   return INTERACTIVES[key] ?? null;
 }
 
-export type { InteractiveDefinition, BoardProps, Verdict, Values, ControlDef } from "./types";
+export type { InteractiveDefinition, BoardProps, BoardInput, Axis, Verdict, Values, ControlDef } from "./types";
