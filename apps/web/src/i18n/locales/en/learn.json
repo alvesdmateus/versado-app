@@ -100,6 +100,8 @@
   "select": {
     "title": "What do you want to understand?",
     "body": "Pick a track. You can switch any time.",
+    "chapters_one": "{{count}} chapter",
+    "chapters_other": "{{count}} chapters",
     "modules_one": "{{count}} module",
     "modules_other": "{{count}} modules",
     "error": "We couldn't load the tracks. Your flashcards are still available.",

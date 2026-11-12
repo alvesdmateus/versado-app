@@ -40,7 +40,8 @@ learningRoutes.get("/tracks/:trackId", async (c) => {
   const result = await getLearningService()
     .getTrack(c.get("user").id, trackId)
     .catch(mapError);
-  return c.json(result);
+  const { track, modules, chapters } = result;
+  return c.json({ track, modules, chapters });
 });
 
 learningRoutes.get("/modules/:moduleId", async (c) => {

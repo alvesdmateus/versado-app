@@ -41,16 +41,20 @@ Principles for the refactor:
 
 ## Skill-Track Learning (core loop)
 
-- **Domain (`packages/core/src/learning/`):** `LearningTrack` → ordered `LearningModule`s (spec = the bible's YAML
-  template as data) → per-user `ModuleProgress` (stage 1–4, prediction attempts, SM-2 review state).
+- **Domain (`packages/core/src/learning/`):** Course (`LearningTrack`; track = course in code/API) →
+  ordered `LearningChapter`s → ordered `LearningModule`s (lessons; spec = the bible's YAML template as data)
+  → per-user `ModuleProgress` (stage 1–4, prediction attempts, SM-2 review state).
   `LearningService` holds the rules (unlock by previous/prerequisites, mandatory correct prediction before
   completion, first review +24h then SM-2). Storage is pluggable through `LearningRepositories` ports:
   `createMemoryLearningRepositories()` (tests/dev) and the Drizzle adapter `apps/api/src/repositories/`.
 - **Schemas (`packages/validation/src/learning.ts`):** `moduleSpecSchema` enforces the bible as hard limits
   (≤2 controls, ≤25-word budget, ≤12-word prompts, anchoring ≤10s). Content that breaks it cannot be seeded.
-- **Content:** authored in `apps/api/src/content/*.ts` (English first), validated by `content.test.ts`,
-  upserted with `bun run db:seed-learning` (also runs in `start:prod`). Tables: `learning_tracks`,
-  `learning_modules`, `module_progress` (migration `0011_skill_tracks`).
+- **Content:** authored in `apps/api/src/content/*.ts` (English first): `mathematics.ts` exports the
+  Mathematics course, Algebra chapter and its 11 lessons. Sources nest `{ track, chapters: [{ chapter, modules }] }`;
+  the loader validates parents and returns chapters plus flat ordered modules. Validated by `content.test.ts`,
+  upserted track → chapters → modules with `bun run db:seed-learning` (also in `start:prod`). Tables:
+  `learning_tracks`, `learning_chapters`, `learning_modules`, `module_progress` (`0011_skill_tracks`;
+  `0012_course_chapters` moves existing modules/preferences without changing module ids or progress).
 - **API:** `/api/learn/tracks`, `/tracks/:id`, `/modules/:id`, `POST /modules/:id/progress`,
   `GET /reviews/due`, `POST /modules/:id/review`.
 - **Web:** `/` Learn (track path), `/tracks/:trackId`, `/learn/:moduleId` (full-screen 4-stage lesson),

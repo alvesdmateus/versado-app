@@ -1,5 +1,5 @@
 import type { LearningRepositories } from "./repositories";
-import type { LearningModule, LearningTrack, ModuleProgress } from "./types";
+import type { LearningChapter, LearningModule, LearningTrack, ModuleProgress } from "./types";
 
 /**
  * In-memory adapter for the learning ports. Used by tests and as a reference
@@ -7,10 +7,12 @@ import type { LearningModule, LearningTrack, ModuleProgress } from "./types";
  */
 export function createMemoryLearningRepositories(seed?: {
   tracks?: LearningTrack[];
+  chapters?: LearningChapter[];
   modules?: LearningModule[];
   progress?: ModuleProgress[];
 }): LearningRepositories {
   const tracks = new Map((seed?.tracks ?? []).map((t) => [t.id, t]));
+  const chapters = new Map((seed?.chapters ?? []).map((c) => [c.id, c]));
   const modules = new Map((seed?.modules ?? []).map((m) => [m.id, m]));
   const progress = new Map(
     (seed?.progress ?? []).map((p) => [`${p.userId}:${p.moduleId}`, p])
@@ -28,6 +30,16 @@ export function createMemoryLearningRepositories(seed?: {
       },
       async upsert(track) {
         tracks.set(track.id, track);
+      },
+    },
+    chapters: {
+      async listByTrack(trackId, opts) {
+        return [...chapters.values()]
+          .filter((c) => c.trackId === trackId && (opts?.includeDrafts || c.status === "published"))
+          .sort((a, b) => a.position - b.position);
+      },
+      async upsert(chapter) {
+        chapters.set(chapter.id, chapter);
       },
     },
     modules: {

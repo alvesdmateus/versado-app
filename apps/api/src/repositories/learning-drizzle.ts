@@ -1,5 +1,6 @@
 import { and, asc, eq, inArray, isNotNull, lte } from "drizzle-orm";
 import type {
+  LearningChapter,
   LearningModule,
   LearningRepositories,
   LearningTrack,
@@ -11,9 +12,10 @@ import type {
   ColorToken,
 } from "@versado/core";
 import type { Database } from "../db";
-import { learningModules, learningTracks, moduleProgress } from "../db/schema";
+import { learningChapters, learningModules, learningTracks, moduleProgress } from "../db/schema";
 
 type TrackRow = typeof learningTracks.$inferSelect;
+type ChapterRow = typeof learningChapters.$inferSelect;
 type ModuleRow = typeof learningModules.$inferSelect;
 type ProgressRow = typeof moduleProgress.$inferSelect;
 
@@ -29,9 +31,20 @@ const toTrack = (r: TrackRow): LearningTrack => ({
   status: r.status as ContentStatus,
 });
 
+const toChapter = (r: ChapterRow): LearningChapter => ({
+  id: r.id,
+  trackId: r.trackId,
+  position: r.position,
+  title: r.title,
+  subtitle: r.subtitle,
+  description: r.description,
+  status: r.status as ContentStatus,
+});
+
 const toModule = (r: ModuleRow): LearningModule => ({
   id: r.id,
   trackId: r.trackId,
+  chapterId: r.chapterId,
   position: r.position,
   title: r.title,
   interactive: r.interactive,
@@ -77,6 +90,21 @@ export function createDrizzleLearningRepositories(db: Database): LearningReposit
           .insert(learningTracks)
           .values(values)
           .onConflictDoUpdate({ target: learningTracks.id, set: values });
+      },
+    },
+    chapters: {
+      async listByTrack(trackId, opts) {
+        const where = opts?.includeDrafts
+          ? eq(learningChapters.trackId, trackId)
+          : and(eq(learningChapters.trackId, trackId), eq(learningChapters.status, "published"));
+        const rows = await db.select().from(learningChapters).where(where)
+          .orderBy(asc(learningChapters.position));
+        return rows.map(toChapter);
+      },
+      async upsert(chapter) {
+        const values = { ...chapter, updatedAt: new Date() };
+        await db.insert(learningChapters).values(values)
+          .onConflictDoUpdate({ target: learningChapters.id, set: values });
       },
     },
     modules: {

@@ -1,4 +1,4 @@
-import type { LearningTrack, LearningModule, ModuleProgress } from "./types";
+import type { LearningTrack, LearningChapter, LearningModule, ModuleProgress } from "./types";
 
 /**
  * Storage-agnostic ports for learning content and progress.
@@ -9,6 +9,11 @@ export interface LearningTrackRepository {
   listPublished(): Promise<LearningTrack[]>;
   findById(id: string): Promise<LearningTrack | null>;
   upsert(track: LearningTrack): Promise<void>;
+}
+
+export interface LearningChapterRepository {
+  listByTrack(trackId: string, opts?: { includeDrafts?: boolean }): Promise<LearningChapter[]>;
+  upsert(chapter: LearningChapter): Promise<void>;
 }
 
 export interface LearningModuleRepository {
@@ -26,6 +31,7 @@ export interface ModuleProgressRepository {
 
 export interface LearningRepositories {
   tracks: LearningTrackRepository;
+  chapters: LearningChapterRepository;
   modules: LearningModuleRepository;
   progress: ModuleProgressRepository;
 }
