@@ -24,12 +24,12 @@ describe("learning content", () => {
     }
   });
 
-  it("keeps Algebra (11 lessons) then Vectors & matrices (5 lessons) in Mathematics", () => {
+  it("keeps Algebra (15 lessons) then Vectors & matrices (5 lessons) in Mathematics", () => {
     expect(content).toHaveLength(1);
     expect(content[0]!.track).toMatchObject({ id: "mathematics", title: "Mathematics", domain: "mathematics" });
     expect(content[0]!.chapters.map((c) => c.id)).toEqual(["math-algebra", "math-vectors"]);
     expect(content[0]!.chapters[0]).toMatchObject({ id: "math-algebra", title: "Algebra" });
-    expect(content[0]!.modules.filter((m) => m.chapterId === "math-algebra")).toHaveLength(11);
+    expect(content[0]!.modules.filter((m) => m.chapterId === "math-algebra")).toHaveLength(15);
     expect(content[0]!.modules.filter((m) => m.chapterId === "math-vectors").map((m) => m.id)).toEqual([
       "math-point-01",
       "math-vector-01",
@@ -69,6 +69,29 @@ describe("learning content", () => {
       module.trackId = trackId;
       module.chapterId = chapterId;
     }
+  });
+
+  it("keeps published Algebra lessons in their teaching order while drafts slot between them", () => {
+    const algebra = content[0]!.modules.filter((m) => m.chapterId === "math-algebra");
+    expect(algebra.filter((m) => m.status === "published").map((m) => m.id)).toEqual([
+      "math-area-product-01",
+      "math-binomial-square-01",
+      "math-linear-slope-01",
+      "math-linear-intercept-01",
+      "math-slope-intercept-01",
+      "math-quad-shape-01",
+      "math-quad-vertex-01",
+      "math-quad-general-01",
+      "math-quad-roots-01",
+      "math-equation-intersection-01",
+    ]);
+    expect(algebra.filter((m) => m.status === "draft").map((m) => m.id)).toEqual([
+      "math-factoring-01",
+      "math-linear-inequality-01",
+      "math-quad-complete-square-01",
+      "math-system-parallel-01",
+      "math-difference-of-squares-01",
+    ]);
   });
 
   it("only references prerequisites that exist in the same track", () => {

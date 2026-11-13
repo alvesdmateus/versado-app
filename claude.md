@@ -59,7 +59,9 @@ Principles for the refactor:
 - **API:** `/api/learn/tracks`, `/tracks/:id`, `/modules/:id`, `POST /modules/:id/progress`,
   `GET /reviews/due`, `POST /modules/:id/review`.
 - **Web:** `/` Learn hub (every track grouped by domain under `PegDivider`s; the active track opens into a Continue panel),
-  `/tracks/:trackId` (track path; lessons exit back here), `/learn/:moduleId` (full-screen 4-stage lesson),
+  `/tracks/:trackId` (course: chapters in order, one `PegDivider` each; the current chapter opens into Continue),
+  `/tracks/:trackId/chapters/:chapterId` (the chapter's peg path), `/tracks/:trackId/chapters/:chapterId/lessons/:lessonId`
+  (full-screen 4-stage lesson; exits back to its chapter; build URLs with `lib/learn-routes.ts`; legacy `/learn/:moduleId` redirects),
   `/review` (spaced, interleaved prediction checks), `/select-track`. Interactives live in
   `apps/web/src/components/learning/interactives/` and are keyed by `module.interactive`
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).

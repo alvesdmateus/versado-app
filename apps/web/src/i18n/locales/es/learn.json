@@ -48,6 +48,23 @@
       "title": "No pudimos cargar las rutas"
     }
   },
+  "track": {
+    "chapter": "Capítulo {{n}}",
+    "current": "(capítulo actual)",
+    "locked": "Bloqueado",
+    "seeChapter": "Ver el camino del capítulo",
+    "missing": {
+      "title": "Ruta no encontrada",
+      "body": "Puede que se haya movido o retirado."
+    }
+  },
+  "chapter": {
+    "next": "Siguiente capítulo",
+    "missing": {
+      "title": "Capítulo no encontrado",
+      "body": "Puede que se haya movido o retirado."
+    }
+  },
   "path": {
     "start": "Empezar",
     "continue": "Continuar",
@@ -55,7 +72,13 @@
     "stageOf": "Etapa {{stage}} de 4 · {{minutes}} min",
     "done": "Hecho",
     "checkDue": "Repaso pendiente",
-    "locked": "bloqueado"
+    "locked": "bloqueado",
+    "reviewNow": "Repasar ahora",
+    "practiceAgain": "Practicar de nuevo",
+    "lastCheck": "último repaso {{when}}",
+    "nextCheck": "próximo repaso {{when}}",
+    "opensAfter": "Se abre después de “{{title}}”",
+    "opensLater": "Se abre cuando termines las lecciones anteriores"
   },
   "lesson": {
     "close": "Cerrar lección",

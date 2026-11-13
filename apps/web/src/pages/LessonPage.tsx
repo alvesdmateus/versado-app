@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { RotateCcw, X } from "lucide-react";
 import type { ModuleStage } from "@versado/core";
 import { learningApi, type WireModule } from "@/lib/learning-api";
+import { chapterPath, lessonPath } from "@/lib/learn-routes";
 import { ApiError } from "@/lib/api-client";
 import { getInteractive, type Values, type Verdict } from "@/components/learning/interactives";
 import { ControlStack, Formula, splitControls, unanswered, useAnchor } from "@/components/learning/controls";
@@ -16,7 +17,8 @@ type LoadState =
   | { kind: "ready"; module: WireModule };
 
 export function LessonPage() {
-  const { moduleId = "" } = useParams();
+  const { lessonId, moduleId: legacyId } = useParams();
+  const moduleId = lessonId ?? legacyId ?? "";
   const navigate = useNavigate();
   const { t } = useTranslation("learn");
   const [load, setLoad] = useState<LoadState>({ kind: "loading" });
@@ -26,7 +28,13 @@ export function LessonPage() {
     setLoad({ kind: "loading" });
     learningApi
       .getModule(moduleId)
-      .then((module) => alive && setLoad({ kind: "ready", module }))
+      .then((module) => {
+        if (!alive) return;
+        // Keep one URL per lesson: /learn/:id and mismatched parents resolve to the nested path.
+        const canonical = lessonPath(module);
+        if (window.location.pathname !== canonical) navigate(canonical, { replace: true });
+        setLoad({ kind: "ready", module });
+      })
       .catch((err) => {
         if (!alive) return;
         const reason = err instanceof ApiError && err.status === 403 ? "locked" : err instanceof ApiError && err.status === 404 ? "missing" : "network";
@@ -59,7 +67,7 @@ export function LessonPage() {
     );
   }
 
-  return <LessonPlayer module={load.module} onExit={() => navigate(`/tracks/${load.module.trackId}`)} />;
+  return <LessonPlayer module={load.module} onExit={() => navigate(chapterPath(load.module.trackId, load.module.chapterId))} />;
 }
 
 function Shell({

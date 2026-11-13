@@ -26,7 +26,8 @@ import { DiscoverPage } from "./pages/DiscoverPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 import { ExamPage } from "./pages/ExamPage";
-import { LearnHomePage } from "./pages/LearnHomePage";
+import { TrackPage } from "./pages/TrackPage";
+import { ChapterPage } from "./pages/ChapterPage";
 import { LearnHubPage } from "./pages/LearnHubPage";
 import { LessonPage } from "./pages/LessonPage";
 import { ReviewPage } from "./pages/ReviewPage";
@@ -53,7 +54,8 @@ export const router = createBrowserRouter([
     children: [
       // Skill-track learning (core loop)
       { index: true, element: <LearnHubPage /> },
-      { path: "tracks/:trackId", element: <LearnHomePage /> },
+      { path: "tracks/:trackId", element: <TrackPage /> },
+      { path: "tracks/:trackId/chapters/:chapterId", element: <ChapterPage /> },
       { path: "review", element: <ReviewPage /> },
       // Legacy flashcard system, kept as "Flashcards (custom)"
       { path: "flashcards", element: <HomePage /> },
@@ -108,6 +110,15 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/tracks/:trackId/chapters/:chapterId/lessons/:lessonId",
+    element: (
+      <ProtectedRoute>
+        <LessonPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    // Legacy lesson URL: redirects to the nested one once the module loads.
     path: "/learn/:moduleId",
     element: (
       <ProtectedRoute>

@@ -48,6 +48,23 @@
       "title": "Die Lernpfade konnten nicht geladen werden"
     }
   },
+  "track": {
+    "chapter": "Kapitel {{n}}",
+    "current": "(aktuelles Kapitel)",
+    "locked": "Gesperrt",
+    "seeChapter": "Kapitelpfad ansehen",
+    "missing": {
+      "title": "Lernpfad nicht gefunden",
+      "body": "Er wurde vielleicht verschoben oder entfernt."
+    }
+  },
+  "chapter": {
+    "next": "Nächstes Kapitel",
+    "missing": {
+      "title": "Kapitel nicht gefunden",
+      "body": "Es wurde vielleicht verschoben oder entfernt."
+    }
+  },
   "path": {
     "start": "Starten",
     "continue": "Weiter",
@@ -55,7 +72,13 @@
     "stageOf": "Schritt {{stage}} von 4 · {{minutes}} Min.",
     "done": "Erledigt",
     "checkDue": "Check fällig",
-    "locked": "gesperrt"
+    "locked": "gesperrt",
+    "reviewNow": "Jetzt wiederholen",
+    "practiceAgain": "Noch einmal üben",
+    "lastCheck": "zuletzt geprüft {{when}}",
+    "nextCheck": "nächste Prüfung {{when}}",
+    "opensAfter": "Öffnet nach „{{title}}“",
+    "opensLater": "Öffnet, wenn die Lektionen davor abgeschlossen sind"
   },
   "lesson": {
     "close": "Lektion schließen",
