@@ -917,10 +917,10 @@ export const algebraModules: LearningModuleInput[] = [
     chapterId: "math-algebra",
     position: 10,
     title: "Completing the square",
-    // New board from the binomial-square pieces: x² plus bx split into two strips, corner missing.
+    // Board: x² plus bx split into two strips of b/2, one empty corner (CompleteSquare.tsx).
     interactive: "complete-square",
     estimatedMinutes: 4,
-    status: "draft",
+    status: "published",
     spec: {
       targetSkill:
         "To turn x² + bx into a square, split the strips in half and add the missing corner: a square of side b/2.",

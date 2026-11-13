@@ -1,6 +1,7 @@
 import type { InteractiveDefinition } from "./types";
 import { areaProduct } from "./AreaProduct";
 import { binomialSquare } from "./BinomialSquare";
+import { completeSquare } from "./CompleteSquare";
 import { slopeIntercept } from "./SlopeIntercept";
 import { lineIntersection } from "./LineIntersection";
 import { parabola } from "./Parabola";
@@ -13,6 +14,7 @@ import { matrixTransform } from "./MatrixTransform";
 export const INTERACTIVES: Record<string, InteractiveDefinition> = {
   "area-product": areaProduct,
   "binomial-square": binomialSquare,
+  "complete-square": completeSquare,
   "slope-intercept": slopeIntercept,
   "line-intersection": lineIntersection,
   parabola,

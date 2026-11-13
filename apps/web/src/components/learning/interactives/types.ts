@@ -14,9 +14,23 @@ export interface Verdict {
    * "noRoots" (the curve never reaches the floor), "doubled" (doubled the side instead of squaring it),
    * "swap" (across and up exchanged), "position" (gave the destination's address instead of the move),
    * "partial" (a sum that leaves one move out), "unmoved" (kept a point where it was before a
-   * transformation), "transpose" (read a matrix's rows as its arrows).
+   * transformation), "transpose" (read a matrix's rows as its arrows), "whole" (squared all of b
+   * instead of half), "linear" (took b itself as the corner's area), "half" (b/2 without squaring it).
    */
-  kind?: "sign" | "height" | "axis" | "noRoots" | "doubled" | "swap" | "position" | "partial" | "unmoved" | "transpose";
+  kind?:
+    | "sign"
+    | "height"
+    | "axis"
+    | "noRoots"
+    | "doubled"
+    | "swap"
+    | "position"
+    | "partial"
+    | "unmoved"
+    | "transpose"
+    | "whole"
+    | "linear"
+    | "half";
 }
 
 export interface BoardProps {
