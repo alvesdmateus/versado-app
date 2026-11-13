@@ -1,11 +1,15 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "live.versado.app",
       "sha256_cert_fingerprints": [
-        "8F:EE:90:B7:E5:CB:58:71:F5:2E:63:8D:85:94:3F:46:E9:AC:9F:28:72:21:41:A3:9A:31:A6:62:A1:27:D6:62"
+        "8F:EE:90:B7:E5:CB:58:71:F5:2E:63:8D:85:94:3F:46:E9:AC:9F:28:72:21:41:A3:9A:31:A6:62:A1:27:D6:62",
+        "C3:4B:EE:40:B2:24:37:72:C1:2E:3D:8F:3A:94:6C:24:C5:63:08:C8:AF:12:89:87:B9:E6:D4:00:D9:66:9D:75"
       ]
     }
   }
