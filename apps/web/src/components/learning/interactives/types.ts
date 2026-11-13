@@ -11,9 +11,12 @@ export interface Verdict {
   /**
    * Named misconception the board can diagnose: "sign" (pointing the wrong way),
    * "height" (shape and axis right, vertical offset wrong), "axis" (axis of symmetry wrong),
-   * "noRoots" (the curve never reaches the floor), "doubled" (doubled the side instead of squaring it).
+   * "noRoots" (the curve never reaches the floor), "doubled" (doubled the side instead of squaring it),
+   * "swap" (across and up exchanged), "position" (gave the destination's address instead of the move),
+   * "partial" (a sum that leaves one move out), "unmoved" (kept a point where it was before a
+   * transformation), "transpose" (read a matrix's rows as its arrows).
    */
-  kind?: "sign" | "height" | "axis" | "noRoots" | "doubled";
+  kind?: "sign" | "height" | "axis" | "noRoots" | "doubled" | "swap" | "position" | "partial" | "unmoved" | "transpose";
 }
 
 export interface BoardProps {

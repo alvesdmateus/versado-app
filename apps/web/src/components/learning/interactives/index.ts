@@ -4,6 +4,10 @@ import { binomialSquare } from "./BinomialSquare";
 import { slopeIntercept } from "./SlopeIntercept";
 import { lineIntersection } from "./LineIntersection";
 import { parabola } from "./Parabola";
+import { planePoint } from "./PlanePoint";
+import { vectorMove } from "./VectorMove";
+import { vectorPath } from "./VectorPath";
+import { matrixTransform } from "./MatrixTransform";
 
 /** Client components keyed by `module.interactive` (the content's interactive slug). */
 export const INTERACTIVES: Record<string, InteractiveDefinition> = {
@@ -12,6 +16,10 @@ export const INTERACTIVES: Record<string, InteractiveDefinition> = {
   "slope-intercept": slopeIntercept,
   "line-intersection": lineIntersection,
   parabola,
+  "plane-point": planePoint,
+  "vector-move": vectorMove,
+  "vector-path": vectorPath,
+  "matrix-transform": matrixTransform,
 };
 
 export function getInteractive(key: string): InteractiveDefinition | null {

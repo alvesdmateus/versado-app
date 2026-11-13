@@ -24,12 +24,19 @@ describe("learning content", () => {
     }
   });
 
-  it("keeps all 11 lessons in the Algebra chapter of Mathematics", () => {
+  it("keeps Algebra (11 lessons) then Vectors & matrices (5 lessons) in Mathematics", () => {
     expect(content).toHaveLength(1);
     expect(content[0]!.track).toMatchObject({ id: "mathematics", title: "Mathematics", domain: "mathematics" });
-    expect(content[0]!.chapters).toHaveLength(1);
+    expect(content[0]!.chapters.map((c) => c.id)).toEqual(["math-algebra", "math-vectors"]);
     expect(content[0]!.chapters[0]).toMatchObject({ id: "math-algebra", title: "Algebra" });
-    expect(content[0]!.modules).toHaveLength(11);
+    expect(content[0]!.modules.filter((m) => m.chapterId === "math-algebra")).toHaveLength(11);
+    expect(content[0]!.modules.filter((m) => m.chapterId === "math-vectors").map((m) => m.id)).toEqual([
+      "math-point-01",
+      "math-vector-01",
+      "math-vector-sum-01",
+      "math-matrix-stretch-01",
+      "math-matrix-columns-01",
+    ]);
     for (const { track, chapters, modules } of content) {
       expect(chapters.every((c) => c.trackId === track.id)).toBe(true);
       for (const module of modules) {

@@ -7,12 +7,21 @@ import {
   type LearningTrackContent,
 } from "@versado/validation";
 import { algebraChapter, algebraModules, mathTrack } from "./mathematics";
+import { vectorsChapter, vectorsModules } from "./vectors";
 
 /**
  * Versioned Course (track) → Chapter → Module content, validated against the
  * bible-derived schemas and upserted by `bun run db:seed-learning`.
  */
-const SOURCES = [{ track: mathTrack, chapters: [{ chapter: algebraChapter, modules: algebraModules }] }];
+const SOURCES = [
+  {
+    track: mathTrack,
+    chapters: [
+      { chapter: algebraChapter, modules: algebraModules },
+      { chapter: vectorsChapter, modules: vectorsModules },
+    ],
+  },
+];
 
 export interface LearningContent {
   track: LearningTrackContent;
