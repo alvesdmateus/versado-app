@@ -1,6 +1,7 @@
 import type { ModuleSpec } from "@versado/core";
 import { bandColor, fmt, signed, INK, MUTE } from "../bands";
-import { lineEnds, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
+import { clearOfXTicks, lineEnds, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
+import { DragArea, PlaneHandle, RAIL_CROSS, RAIL_GUTTER, Rails, useBoardInput } from "./rail";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /**
@@ -61,7 +62,7 @@ function SignHint({ s, c, rising, color }: { s: PlaneScale; c: number; rising: b
   );
 }
 
-function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }: BoardProps) {
+function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, input }: BoardProps) {
   const mode = modeOf(spec);
   // Slope alone pivots around the origin, so the plane is centred there (rising and falling room);
   // with an intercept the line mostly lives above the axis.
@@ -106,9 +107,11 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
   // Labels read the exact values; only the geometry springs. Keep the step label off the x-axis ticks.
   let stepTagY = (s.y(c) + s.y(c + m)) / 2 + 5;
   if (Math.abs(stepTagY - 5 - s.y(0)) < 12) stepTagY += m >= 0 ? -16 : 16;
+  stepTagY = clearOfXTicks(s, stepTagY, m < 0);
   const showStep = !walking && mode !== "c" && !morphing;
   const showStart = !walking && mode !== "m";
   const formal = stage === 4;
+  const board = useBoardInput(input, values);
 
   // Guided demonstration: run, then rise, between the two target points.
   const p1 = pts[0];
@@ -121,6 +124,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
       width={W}
       height={H}
       label={`Line y = ${fmt(m)}x ${c < 0 ? "−" : "+"} ${fmt(Math.abs(c))}, ${m > 0 ? "rising" : m < 0 ? "falling" : "flat"}`}
+      gutter={mode === "m" ? undefined : { left: RAIL_GUTTER }}
     >
       <PlaneGrid s={s} />
 
@@ -225,6 +229,34 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
         s={s}
         avoid={[...pts, ...(showStart || mode === "m" ? [{ x: 0, y: c }] : [])]}
       />
+      {/* c is a height: its rail runs up the left, level with the start point on the vertical axis */}
+      <Rails input={input} values={values} bind={{ c: { axis: "y", at: s.y, cross: -RAIL_CROSS, reach: s.x(0) } }} />
+
+      {/* Direct manipulation: grab the line to turn it about its start, or the start to slide it */}
+      {board.can("m") && ends && (
+        <DragArea
+          onDrag={(pt) => {
+            const x = s.fromX(pt.x);
+            if (Math.abs(x) < 0.35) return; // too close to the pivot to read a slope
+            board.set("m", (s.fromY(pt.y) - raw.c) / x);
+          }}
+        >
+          <line {...ends} stroke="transparent" strokeWidth={26} strokeLinecap="round" />
+        </DragArea>
+      )}
+      {board.can("m") && showStep && (
+        <PlaneHandle
+          x={s.x(1)}
+          y={s.y(raw.c + raw.m)}
+          color={amber}
+          cursor="ns-resize"
+          r={6}
+          onDrag={(pt) => board.set("m", s.fromY(pt.y) - raw.c)}
+        />
+      )}
+      {board.can("c") && (
+        <PlaneHandle x={s.x(0)} y={s.y(raw.c)} color={violet} cursor="ns-resize" onDrag={(pt) => board.set("c", s.fromY(pt.y))} />
+      )}
     </Svg>
   );
 }
@@ -237,6 +269,7 @@ function solve(target: Values): Values {
 
 export const slopeIntercept: InteractiveDefinition = {
   Board,
+  axes: { c: "y" },
   initialValues(spec, stage, target) {
     if (stage === 4) return solve(target);
     const controls = spec.stage2Exploration.controls;

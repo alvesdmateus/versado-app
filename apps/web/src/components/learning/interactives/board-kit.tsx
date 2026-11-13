@@ -13,6 +13,7 @@ export function Svg({
   children,
   box,
   anchoring = false,
+  gutter,
 }: {
   width: number;
   height: number;
@@ -22,10 +23,15 @@ export function Svg({
   box?: { x: number; y: number; w: number; h: number };
   /** Stage-1 anchoring: zero numbers or notation on the board (bible §2, Stage 1). */
   anchoring?: boolean;
+  /** Extra room left of / below the board for axis rails, outside the board's own coordinates. */
+  gutter?: { left?: number; bottom?: number };
 }) {
+  const left = gutter?.left ?? 0;
+  const bottom = gutter?.bottom ?? 0;
+  const vb = box ?? { x: 0, y: 0, w: width, h: height };
   return (
     <svg
-      viewBox={box ? `${box.x} ${box.y} ${box.w} ${box.h}` : `0 0 ${width} ${height}`}
+      viewBox={`${vb.x - left} ${vb.y} ${vb.w + left} ${vb.h + bottom}`}
       className={`block h-auto w-full touch-none select-none${anchoring ? " gb-anchoring" : ""}`}
       role="img"
       aria-label={label}
@@ -69,6 +75,9 @@ export function Lattice({
 export interface PlaneScale {
   x: (v: number) => number;
   y: (v: number) => number;
+  /** Inverse of x / y: a board (viewBox) coordinate back to a plane value, for dragging. */
+  fromX: (px: number) => number;
+  fromY: (py: number) => number;
   xMin: number;
   xMax: number;
   yMin: number;
@@ -93,6 +102,8 @@ export function usePlane(opts: {
     return {
       x: (v: number) => pad + (v - xMin) * xUnit,
       y: (v: number) => height - pad - (v - yMin) * yUnit,
+      fromX: (px: number) => xMin + (px - pad) / xUnit,
+      fromY: (py: number) => yMin + (height - pad - py) / yUnit,
       xMin,
       xMax,
       yMin,
@@ -148,6 +159,16 @@ export function PlaneTicks({
       </text>
     </g>
   );
+}
+
+/**
+ * Keeps a label's baseline out of the x-axis tick-label row (drawn at y0 + 15), moving it just
+ * above the axis or just below the row so it never prints on top of the numbers.
+ */
+export function clearOfXTicks(s: PlaneScale, y: number, down: boolean): number {
+  const y0 = s.y(0);
+  if (y <= y0 + 3 || y >= y0 + 30) return y;
+  return down ? y0 + 32 : y0 - 6;
 }
 
 /** Pegs and axes only; pair with <PlaneTicks /> drawn after the marks. */
@@ -227,13 +248,19 @@ export function useSettle(target: number[], enabled = true, ms = 240): number[] 
   const [shown, setShown] = useState(target);
   const from = useRef(target);
   const raf = useRef(0);
+  /** Whether `shown` belongs to a running or finished spring (false after a disabled stretch). */
+  const live = useRef(false);
   const key = target.join("|");
+  const reduced = prefersReducedMotion();
 
   useEffect(() => {
     cancelAnimationFrame(raf.current);
-    if (!enabled || prefersReducedMotion()) {
+    if (!enabled || reduced) {
+      // Nothing to animate: the caller gets `target` directly. Only remember it as the next spring's
+      // origin; setting state here on every animation frame (anchoring, guided demos) would make
+      // React chain effect-driven renders until it warns about update depth.
       from.current = target;
-      setShown(target);
+      live.current = false;
       return;
     }
     const start = performance.now();
@@ -243,14 +270,17 @@ export function useSettle(target: number[], enabled = true, ms = 240): number[] 
       const k = easeOutBack(t);
       const next = target.map((v, i) => (origin[i] ?? v) + (v - (origin[i] ?? v)) * k);
       from.current = next;
+      live.current = true;
       setShown(next);
       if (t < 1) raf.current = requestAnimationFrame(loop);
     };
     raf.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf.current);
-  }, [key, enabled, ms]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [key, enabled, reduced, ms]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return enabled ? shown : target;
+  if (!enabled || reduced) return target;
+  // Until the first spring frame lands, hold the last value shown rather than a stale state.
+  return live.current ? shown : from.current;
 }
 
 /** Clip a line y = m·x + b to the plane's visible box. */
@@ -268,4 +298,68 @@ export function lineEnds(s: PlaneScale, m: number, b: number) {
   pts.sort((p, q) => p.x - q.x);
   if (pts.length < 2) return null;
   return { x1: s.x(pts[0]!.x), y1: s.y(pts[0]!.y), x2: s.x(pts[pts.length - 1]!.x), y2: s.y(pts[pts.length - 1]!.y) };
+}
+
+/**
+ * A straight arrow between two board points: a vector drawn as a move. The head sits on the tip;
+ * a zero-length move collapses to a dot so "no move" still reads as a place.
+ */
+export function Arrow({
+  x1,
+  y1,
+  x2,
+  y2,
+  color,
+  width = 4,
+  head = 13,
+  opacity,
+  dashed = false,
+  className,
+}: {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  color: string;
+  width?: number;
+  head?: number;
+  opacity?: number;
+  dashed?: boolean;
+  className?: string;
+}) {
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  if (len < 1e-6) return <circle cx={x1} cy={y1} r={width + 1.5} fill={color} opacity={opacity} className={className} />;
+  const h = Math.min(head, len * 0.6);
+  const ux = (x2 - x1) / len;
+  const uy = (y2 - y1) / len;
+  // The shaft stops at the head's base so a thick stroke never pokes through the point.
+  const bx = x2 - ux * h * 0.8;
+  const by = y2 - uy * h * 0.8;
+  const angle = Math.atan2(uy, ux);
+  const p = (a: number) => `${x2 - h * Math.cos(a)},${y2 - h * Math.sin(a)}`;
+  return (
+    <g opacity={opacity} className={className}>
+      <line
+        x1={x1}
+        y1={y1}
+        x2={bx}
+        y2={by}
+        stroke={color}
+        strokeWidth={width}
+        strokeLinecap="round"
+        strokeDasharray={dashed ? "6 5" : undefined}
+      />
+      <polygon points={`${x2},${y2} ${p(angle - 0.42)} ${p(angle + 0.42)}`} fill={color} />
+    </g>
+  );
+}
+
+/** Linear interpolation, for anchoring and reveal motion. */
+export function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
+/** Progress of a sub-span [from, to] of a 0→1 timeline, clamped to 0→1. */
+export function span(t: number, from: number, to: number) {
+  return Math.min(1, Math.max(0, (t - from) / (to - from)));
 }

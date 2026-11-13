@@ -1,7 +1,7 @@
-import type { LearningModuleInput, LearningTrackInput } from "@versado/validation";
+import type { LearningChapterInput, LearningModuleInput, LearningTrackInput } from "@versado/validation";
 
 /**
- * Track: Algebra through Geometry.
+ * Course (track): Mathematics. Chapter: Algebra through Geometry.
  * Visual and experimental first — every algebraic idea is anchored in a shape or a
  * coordinate plane the learner manipulates before seeing any notation.
  * Each module follows the YAML template in intuitive_interactive_learning.md §3.
@@ -11,10 +11,10 @@ import type { LearningModuleInput, LearningTrackInput } from "@versado/validatio
  * where b is read as the curve's lean at the crossing (the slope from the linear modules).
  */
 export const mathTrack: LearningTrackInput = {
-  id: "math-algebra-geometry",
+  id: "mathematics",
   domain: "mathematics",
-  title: "Algebra through Geometry",
-  subtitle: "See it, move it, predict it — then write it.",
+  title: "Mathematics",
+  subtitle: "Learn mathematics by seeing, moving and predicting.",
   description:
     "Build intuition for algebra with shapes and the coordinate plane: areas become products, squares reveal identities, and equations become lines that meet.",
   icon: "Shapes",
@@ -23,10 +23,21 @@ export const mathTrack: LearningTrackInput = {
   status: "published",
 };
 
-export const mathModules: LearningModuleInput[] = [
+export const algebraChapter: LearningChapterInput = {
+  id: "math-algebra",
+  trackId: "mathematics",
+  position: 0,
+  title: "Algebra",
+  subtitle: "Algebra through geometry: see it, move it, predict it — then write it.",
+  description: "Build algebraic intuition through shapes and the coordinate plane.",
+  status: "published",
+};
+
+export const algebraModules: LearningModuleInput[] = [
   {
     id: "math-area-product-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 0,
     title: "Multiplying is area",
     interactive: "area-product",
@@ -100,6 +111,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Width locked at 3; find the height for 21 tiles.",
         spacedReviewPrompt: "Width is 3. Set the height for 21 tiles.",
+        reviewOnSuccess: "Exactly 21 tiles: 3 columns, 7 rows.",
         reviewTarget: { a: 3, area: 21 },
         reviewIntervalsDays: [1, 7],
       },
@@ -107,7 +119,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-binomial-square-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 1,
     title: "The square of a sum",
     interactive: "binomial-square",
@@ -160,12 +173,16 @@ export const mathModules: LearningModuleInput[] = [
       stage3Prediction: {
         icapTarget: "interactive",
         challengePrompt: "a is 3, b is 2. Predict the total area.",
-        userAction: "Enter the total area of the big square, then reveal",
+        userAction:
+          "Pick the total area from four boxes (the truth and three named misconceptions), then reveal",
         target: { a: 3, b: 2 },
         tolerance: 0,
         adaptiveFeedback: {
           onCommonMisconception: "The dashed strips are the pieces your answer left out.",
           onSuccess: "Two squares plus two strips — every piece counted.",
+          byKind: {
+            doubled: "Doubling adds the sides. Squaring fills the square — count every piece inside.",
+          },
         },
       },
       stage4Formalization: {
@@ -180,6 +197,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Same identity with a = 5 and b = 1.",
         spacedReviewPrompt: "a is 5, b is 1. Predict the total area.",
+        reviewOnSuccess: "Total 36: 25 + 5 + 5 + 1 — every piece counted.",
         reviewTarget: { a: 5, b: 1 },
         reviewIntervalsDays: [1, 7],
       },
@@ -187,7 +205,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-linear-slope-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 2,
     title: "Steepness and direction",
     interactive: "slope-intercept",
@@ -251,6 +270,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the point is uphill: the sign must flip back.",
         spacedReviewPrompt: "Tilt the line through the ringed point.",
+        reviewOnSuccess: "Up 3 over 2 steps: m is 1.5.",
         reviewTarget: { x1: 0, y1: 0, x2: 2, y2: 3 },
         reviewIntervalsDays: [1, 7],
       },
@@ -258,7 +278,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-linear-intercept-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 3,
     title: "Where the line starts",
     interactive: "slope-intercept",
@@ -318,6 +339,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the line has to start below zero.",
         spacedReviewPrompt: "Slide the line onto both ringed points.",
+        reviewOnSuccess: "Same tilt, lowered to start at −2.",
         reviewTarget: { x1: 1, y1: -1, x2: 2, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -325,7 +347,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-slope-intercept-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 4,
     title: "Putting m and c together",
     interactive: "slope-intercept",
@@ -422,6 +445,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Points that fall left to right need a negative m.",
         spacedReviewPrompt: "Set the line through both ringed points.",
+        reviewOnSuccess: "Down 4 over 2 steps: m is −2, starting at 4.",
         reviewTarget: { x1: 0, y1: 4, x2: 2, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -429,7 +453,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-shape-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 5,
     title: "Opening and direction",
     interactive: "parabola",
@@ -490,6 +515,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the point is high and close: a steep, upward bend.",
         spacedReviewPrompt: "Bend the curve through the ringed point.",
+        reviewOnSuccess: "One step out it climbs two steps: a is 2.",
         reviewTarget: { x1: 1, y1: 2 },
         reviewIntervalsDays: [1, 7],
       },
@@ -497,7 +523,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-vertex-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 6,
     title: "Moving the vertex",
     interactive: "parabola",
@@ -598,6 +625,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Equal-height points again, but the vertex sits above the floor.",
         spacedReviewPrompt: "Move the curve onto both ringed points.",
+        reviewOnSuccess: "Vertex at (1, 1): the curve just slid there.",
         reviewTarget: { x1: 0, y1: 2, x2: 2, y2: 2, a: 1 },
         reviewIntervalsDays: [1, 7],
       },
@@ -605,7 +633,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-general-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 7,
     title: "The general form",
     interactive: "parabola",
@@ -681,6 +710,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Now the curve must lean uphill and cross below zero.",
         spacedReviewPrompt: "Fit the curve through both ringed points.",
+        reviewOnSuccess: "c = −1 sets the crossing; b = 2 leans it uphill there.",
         reviewTarget: { x1: 0, y1: -1, x2: 1, y2: 2 },
         reviewIntervalsDays: [1, 7],
       },
@@ -688,7 +718,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-roots-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 8,
     title: "Where the curve meets the floor",
     interactive: "parabola",
@@ -778,6 +809,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Crossings further apart need a deeper vertex.",
         spacedReviewPrompt: "Set k so the curve crosses at both rings.",
+        reviewOnSuccess: "One and a half steps each side of the axis: k is −2.25.",
         reviewTarget: { x1: 0.5, y1: 0, x2: 3.5, y2: 0 },
         reviewIntervalsDays: [1, 7],
       },
@@ -785,7 +817,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-equation-intersection-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 9,
     title: "Equations are crossings",
     interactive: "line-intersection",
@@ -847,6 +880,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "A steeper climbing line meets a higher flat line.",
         spacedReviewPrompt: "Drop a marker where the lines will cross.",
+        reviewOnSuccess: "Both lines reach height 10 at x = 4.",
         reviewTarget: { m: 3, b: -2, c: 10 },
         reviewIntervalsDays: [1, 7],
       },
@@ -854,7 +888,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-difference-of-squares-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 10,
     title: "Cutting a square out",
     interactive: "difference-of-squares",
@@ -924,6 +959,7 @@ export const mathModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Mix with the square of a sum: which identity fits?",
         spacedReviewPrompt: "Predict the rectangle's sides for a = 8, b = 3.",
+        reviewOnSuccess: "Same area, new shape: 11 by 5.",
         reviewTarget: { a: 8, b: 3 },
         reviewIntervalsDays: [1, 7],
       },

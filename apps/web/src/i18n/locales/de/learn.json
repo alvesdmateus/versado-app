@@ -100,6 +100,8 @@
   "select": {
     "title": "Was willst du verstehen?",
     "body": "Wähle einen Lernpfad. Du kannst jederzeit wechseln.",
+    "chapters_one": "{{count}} Kapitel",
+    "chapters_other": "{{count}} Kapitel",
     "modules_one": "{{count}} Modul",
     "modules_other": "{{count}} Module",
     "error": "Die Lernpfade konnten nicht geladen werden. Deine Karteikarten sind weiter verfügbar.",

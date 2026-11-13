@@ -66,7 +66,7 @@ export function TrackSelectionPage() {
                   <span className="text-lg font-extrabold leading-tight">{track.title}</span>
                   <span className="text-sm text-gb-mute">{track.subtitle}</span>
                   <span className="text-xs font-semibold text-gb-mute">
-                    {t(`domain.${track.domain}`)} · {t("select.modules", { count: track.moduleCount })}
+                    {t("select.chapters", { count: track.chapterCount })} · {t("select.modules", { count: track.moduleCount })}
                   </span>
                 </span>
                 {busy === track.id && <Spinner />}

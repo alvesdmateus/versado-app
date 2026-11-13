@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { loadLearningContent } from "./index";
+import { algebraChapter, algebraModules } from "./mathematics";
 
 describe("learning content", () => {
   const content = loadLearningContent();
@@ -13,6 +14,60 @@ describe("learning content", () => {
     for (const { modules } of content) {
       expect(new Set(modules.map((m) => m.id)).size).toBe(modules.length);
       expect(new Set(modules.map((m) => m.position)).size).toBe(modules.length);
+    }
+  });
+
+  it("uses unique chapter ids and positions per track", () => {
+    for (const { chapters } of content) {
+      expect(new Set(chapters.map((c) => c.id)).size).toBe(chapters.length);
+      expect(new Set(chapters.map((c) => c.position)).size).toBe(chapters.length);
+    }
+  });
+
+  it("keeps Algebra (11 lessons) then Vectors & matrices (5 lessons) in Mathematics", () => {
+    expect(content).toHaveLength(1);
+    expect(content[0]!.track).toMatchObject({ id: "mathematics", title: "Mathematics", domain: "mathematics" });
+    expect(content[0]!.chapters.map((c) => c.id)).toEqual(["math-algebra", "math-vectors"]);
+    expect(content[0]!.chapters[0]).toMatchObject({ id: "math-algebra", title: "Algebra" });
+    expect(content[0]!.modules.filter((m) => m.chapterId === "math-algebra")).toHaveLength(11);
+    expect(content[0]!.modules.filter((m) => m.chapterId === "math-vectors").map((m) => m.id)).toEqual([
+      "math-point-01",
+      "math-vector-01",
+      "math-vector-sum-01",
+      "math-matrix-stretch-01",
+      "math-matrix-columns-01",
+    ]);
+    for (const { track, chapters, modules } of content) {
+      expect(chapters.every((c) => c.trackId === track.id)).toBe(true);
+      for (const module of modules) {
+        expect(module.trackId).toBe(track.id);
+        expect(chapters.some((c) => c.id === module.chapterId && c.trackId === module.trackId)).toBe(true);
+      }
+    }
+  });
+
+  it("rejects a chapter belonging to another course", () => {
+    const original = algebraChapter.trackId;
+    try {
+      algebraChapter.trackId = "another-course";
+      expect(() => loadLearningContent()).toThrow('Chapter "math-algebra" belongs to');
+    } finally {
+      algebraChapter.trackId = original;
+    }
+  });
+
+  it("rejects lessons belonging to another course or chapter", () => {
+    const module = algebraModules[0]!;
+    const { trackId, chapterId } = module;
+    try {
+      module.trackId = "another-course";
+      expect(() => loadLearningContent()).toThrow("must belong to track");
+      module.trackId = trackId;
+      module.chapterId = "another-chapter";
+      expect(() => loadLearningContent()).toThrow("must belong to track");
+    } finally {
+      module.trackId = trackId;
+      module.chapterId = chapterId;
     }
   });
 

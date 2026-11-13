@@ -9,12 +9,13 @@ import {
   resolveModuleStatuses,
   reviewRating,
 } from "./progress";
-import type { LearningModule } from "./types";
+import type { LearningChapter, LearningModule } from "./types";
 
 const spec = {} as LearningModule["spec"];
 const mod = (id: string, position: number, prerequisites: string[] = []): LearningModule => ({
   id,
   trackId: "t",
+  chapterId: "first",
   position,
   title: id,
   interactive: id,
@@ -37,6 +38,19 @@ describe("resolveModuleStatuses", () => {
     const done = completeModule(createModuleProgress("u", "a"));
     const result = resolveModuleStatuses([mod("a", 0), mod("b", 1)], [done]);
     expect(result.map((m) => m.progressStatus)).toEqual(["completed", "available"]);
+  });
+
+  it("uses chapter order before module position when unlocking across chapters", () => {
+    const chapter = (id: string, position: number): LearningChapter => ({
+      id, trackId: "t", position, title: id, subtitle: "", description: "", status: "published",
+    });
+    const chapters = [chapter("second", 1), chapter("first", 0)];
+    const modules = [{ ...mod("b", 0), chapterId: "second" }, mod("a", 9)];
+    expect(resolveModuleStatuses(modules, [], chapters).map((m) => [m.id, m.progressStatus]))
+      .toEqual([["a", "available"], ["b", "locked"]]);
+    const done = completeModule(createModuleProgress("u", "a"));
+    expect(resolveModuleStatuses(modules, [done], chapters).map((m) => m.progressStatus))
+      .toEqual(["completed", "available"]);
   });
 
   it("honours explicit prerequisites", () => {

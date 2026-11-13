@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { moduleSpecSchema, type ModuleSpecInput } from "./learning";
+import { learningChapterSchema, learningModuleSchema, moduleSpecSchema, type ModuleSpecInput } from "./learning";
 
 const base: ModuleSpecInput = {
   targetSkill: "A line is fixed by its climb and its start.",
@@ -32,6 +32,7 @@ const base: ModuleSpecInput = {
   retentionHooks: {
     interleavedVariation: "Falling line.",
     spacedReviewPrompt: "Set the line.",
+    reviewOnSuccess: "Exactly.",
     reviewTarget: { x1: 0, y1: 4, x2: 2, y2: 0 },
   },
 };
@@ -84,5 +85,32 @@ describe("moduleSpecSchema", () => {
     expect(
       moduleSpecSchema.safeParse({ ...base, practice: { items: [item("guided"), item("assisted", ["nope"])] } }).success
     ).toBe(false);
+  });
+});
+
+
+describe("learning hierarchy schemas", () => {
+  const chapter = { id: "math-algebra", trackId: "mathematics", position: 0, title: "Algebra", status: "published" };
+  const module = {
+    id: "math-line", trackId: "mathematics", chapterId: "math-algebra", position: 0,
+    title: "Line", interactive: "line", estimatedMinutes: 3, spec: base,
+  };
+
+  it("defaults chapter subtitle and description", () => {
+    expect(learningChapterSchema.parse(chapter)).toMatchObject({ subtitle: "", description: "" });
+  });
+
+  it("validates chapter slugs, ordering, copy limits and status", () => {
+    for (const invalid of [
+      { id: "Bad Slug" }, { trackId: "Bad Slug" }, { position: -1 }, { position: 0.5 },
+      { title: "" }, { title: "a".repeat(81) }, { subtitle: "a".repeat(161) },
+      { description: "a".repeat(401) }, { status: "retired" }, { status: undefined },
+    ]) expect(learningChapterSchema.safeParse({ ...chapter, ...invalid }).success).toBe(false);
+  });
+
+  it("requires every module to reference a chapter", () => {
+    expect(learningModuleSchema.safeParse(module).success).toBe(true);
+    expect(learningModuleSchema.safeParse({ ...module, chapterId: undefined }).success).toBe(false);
+    expect(learningModuleSchema.safeParse({ ...module, chapterId: "Bad Slug" }).success).toBe(false);
   });
 });

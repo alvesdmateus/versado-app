@@ -19,10 +19,11 @@ const client = postgres(DATABASE_URL, { max: 1 });
 const repos = createDrizzleLearningRepositories(drizzle(client, { schema }));
 
 try {
-  for (const { track, modules } of loadLearningContent()) {
+  for (const { track, chapters, modules } of loadLearningContent()) {
     await repos.tracks.upsert(track);
+    for (const chapter of chapters) await repos.chapters.upsert(chapter);
     for (const module of modules) await repos.modules.upsert(module);
-    console.log(`Seeded track "${track.id}" with ${modules.length} modules`);
+    console.log(`Seeded track "${track.id}" with ${chapters.length} chapters and ${modules.length} modules`);
   }
 } finally {
   await client.end();

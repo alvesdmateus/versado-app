@@ -15,7 +15,11 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
   const b = stage === 3 ? (target.b ?? 1) : stage === 1 ? 3 : (values.b ?? 1);
   const gap = stage === 1 ? Math.sin(Math.PI * Math.min(1, anchorT * 1.25)) * 16 : 0;
   const hidden = stage === 3 && verdict === null;
-  const missedStrips = stage === 3 && verdict !== null && !verdict.correct && (values.total ?? 0) === a * a + b * b;
+  // Which strips the answer left out: a² + b² skips both, a² + ab + b² skips one.
+  const total = values.total;
+  const missed = stage === 3 && verdict !== null && !verdict.correct;
+  const skipped = !missed ? 0 : total === a * a + b * b ? 2 : total === a * a + a * b + b * b ? 1 : 0;
+  const isMissed = (id: string) => (skipped === 2 && (id === "ab1" || id === "ab2")) || (skipped === 1 && id === "ab2");
 
   const blue = bandColor("blue");
   const emerald = bandColor("emerald");
@@ -53,7 +57,7 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
       )}
 
       {pieces.map((p) => {
-        const strip = p.token === "amber";
+        const strip = isMissed(p.id);
         return (
           <g key={p.id}>
             <rect
@@ -63,10 +67,10 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
               y={p.y}
               width={p.w}
               height={p.h}
-              fill={bandFill(p.token, missedStrips && strip ? 45 : 26)}
-              stroke={missedStrips && strip ? red : bandColor(p.token)}
-              strokeWidth={(missedStrips && strip ? 3 : 2) * k}
-              strokeDasharray={missedStrips && strip ? `${7 * k} ${4 * k}` : undefined}
+              fill={bandFill(p.token, strip ? 45 : 26)}
+              stroke={strip ? red : bandColor(p.token)}
+              strokeWidth={(strip ? 3 : 2) * k}
+              strokeDasharray={strip ? `${7 * k} ${4 * k}` : undefined}
               style={{ ["--sw" as string]: "2px" }}
             />
             {Math.min(p.w, p.h) >= 26 && (
@@ -101,7 +105,7 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
       {stage === 3 && (
         <Tag x={OX + (A + B) / 2} y={OY + A + B + 30 * k} color={verdict && !verdict.correct ? red : MUTE} size={14} k={k}>
           {verdict === null
-            ? `your total: ${values.total ?? 0}`
+            ? `your total: ${values.total ?? "?"}`
             : verdict.correct
               ? `${(a + b) ** 2}`
               : `${values.total} → ${(a + b) ** 2}  (${signed(verdict.delta)})`}
@@ -122,21 +126,49 @@ function solve(target: Values): Values {
   return { a, b, total: (a + b) ** 2 };
 }
 
+/**
+ * The four boxes for "predict the total area": the true (a + b)² and three named misconceptions —
+ * a² + b² (both strips forgotten), a² + ab + b² (one strip), 2(a + b) (doubled instead of squared).
+ * Shown in ascending order so position gives nothing away.
+ */
+export function choicesFor(a: number, b: number): number[] {
+  const truth = (a + b) ** 2;
+  const candidates = [a * a + b * b, a * a + a * b + b * b, 2 * (a + b), truth + a * b, truth - 1, truth + 1];
+  const out = [truth];
+  for (const c of candidates) if (c > 0 && !out.includes(c) && out.length < 4) out.push(c);
+  return out.sort((x, y) => x - y);
+}
+
 export const binomialSquare: InteractiveDefinition = {
   Board,
   initialValues(spec, stage, target) {
-    if (stage === 3) return { a: target.a ?? 1, b: target.b ?? 1, total: 10 };
+    // Nothing is picked until the learner commits to a box.
+    if (stage === 3) return { a: target.a ?? 1, b: target.b ?? 1 };
     if (stage === 4) return solve(target);
     const v: Values = {};
     for (const c of spec.stage2Exploration.controls) v[c.variableName] = c.initial;
     return v;
   },
-  predictionControls() {
-    return [{ variableName: "total", label: "Total area", min: 1, max: 100, step: 1, colorToken: "slate" }];
+  predictionControls(_spec, target) {
+    const choices = choicesFor(target.a ?? 1, target.b ?? 1);
+    return [
+      {
+        variableName: "total",
+        label: "Total area",
+        min: choices[0]!,
+        max: choices[choices.length - 1]!,
+        step: 1,
+        colorToken: "slate",
+        choices,
+      },
+    ];
   },
   solve,
   evaluate(values, target) {
+    const a = target.a ?? 1;
+    const b = target.b ?? 1;
     const delta = (values.total ?? 0) - solve(target).total!;
+    if (delta !== 0 && values.total === 2 * (a + b)) return { correct: false, delta, kind: "doubled" as const };
     return { correct: delta === 0, delta };
   },
   formatDelta(v) {

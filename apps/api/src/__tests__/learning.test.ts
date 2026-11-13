@@ -23,6 +23,7 @@ describe("learning routes", () => {
     setLearningRepositories(
       createMemoryLearningRepositories({
         tracks: [math!.track],
+        chapters: math!.chapters,
         modules: math!.modules,
       })
     );
@@ -43,10 +44,22 @@ describe("learning routes", () => {
     expect(tracks).toHaveLength(1);
     expect(tracks[0]).toMatchObject({
       id: math!.track.id,
+      chapterCount: math!.chapters.length,
       moduleCount: published,
       completedCount: 0,
       nextModuleId: firstModule,
     });
+  });
+
+  it("returns chapters grouping the flat course modules", async () => {
+    const res = await authRequest(`/api/learn/tracks/${math!.track.id}`, token);
+    expect(res.status).toBe(200);
+    const { track, chapters, modules } = await res.json();
+    expect(track.chapterCount).toBe(math!.chapters.length);
+    expect(chapters.map((c: { id: string }) => c.id)).toEqual(["math-algebra", "math-vectors"]);
+    expect(chapters[0]).toMatchObject({ id: "math-algebra", completedCount: 0 });
+    expect(chapters.flatMap((c: { modules: unknown[] }) => c.modules)).toEqual(modules);
+    expect(chapters.reduce((n: number, c: { moduleCount: number }) => n + c.moduleCount, 0)).toBe(modules.length);
   });
 
   it("returns 404 for unknown tracks and 400 for malformed ids", async () => {

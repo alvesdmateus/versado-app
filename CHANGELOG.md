@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.25](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.24...versado-v0.1.25) (2026-11-13)
+
+
+### Features
+
+* **api,web:** course chapters, board controls and vectors & matrices chapter ([#91](https://github.com/alvesdmateus/versado-app/issues/91)) ([2681f28](https://github.com/alvesdmateus/versado-app/commit/2681f28f0174bd15a52f2bd18d80a8c7207bab74))
+* **web,api:** skill tracks with linear and quadratic modules ([#88](https://github.com/alvesdmateus/versado-app/issues/88)) ([aa052bc](https://github.com/alvesdmateus/versado-app/commit/aa052bc87f5cbadbbaaf1eb697e402419a05f0f7))
+
+
+### Bug Fixes
+
+* **web,api:** match review feedback to its variation and keep board l… ([#90](https://github.com/alvesdmateus/versado-app/issues/90)) ([be5ed72](https://github.com/alvesdmateus/versado-app/commit/be5ed726e1c2933a693ff9ddd2fc1e9ba2ab678f))
+
 ## [0.1.24](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.23...versado-v0.1.24) (2026-05-05)
 
 

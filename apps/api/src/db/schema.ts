@@ -471,6 +471,25 @@ export const learningTracks = pgTable("learning_tracks", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// A track is a course; chapters group its ordered lessons (modules).
+export const learningChapters = pgTable(
+  "learning_chapters",
+  {
+    id: text("id").primaryKey(),
+    trackId: text("track_id")
+      .notNull()
+      .references(() => learningTracks.id, { onDelete: "cascade" }),
+    position: integer("position").notNull().default(0),
+    title: text("title").notNull(),
+    subtitle: text("subtitle").notNull(),
+    description: text("description").notNull(),
+    status: text("status").notNull().default("draft"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("learning_chapters_track_idx").on(table.trackId, table.position)]
+);
+
 export const learningModules = pgTable(
   "learning_modules",
   {
@@ -480,6 +499,9 @@ export const learningModules = pgTable(
       .references(() => learningTracks.id, { onDelete: "cascade" }),
     position: integer("position").notNull().default(0),
     title: text("title").notNull(),
+    chapterId: text("chapter_id")
+      .notNull()
+      .references(() => learningChapters.id, { onDelete: "cascade" }),
     interactive: text("interactive").notNull(),
     estimatedMinutes: integer("estimated_minutes").notNull().default(3),
     prerequisites: jsonb("prerequisites").$type<string[]>().notNull().default([]),
@@ -489,7 +511,10 @@ export const learningModules = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [index("learning_modules_track_idx").on(table.trackId, table.position)]
+  (table) => [
+    index("learning_modules_track_idx").on(table.trackId, table.position),
+    index("learning_modules_chapter_idx").on(table.chapterId, table.position),
+  ]
 );
 
 export const moduleProgress = pgTable(
