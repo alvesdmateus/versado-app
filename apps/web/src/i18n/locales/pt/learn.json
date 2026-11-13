@@ -35,6 +35,19 @@
       "retry": "Tentar de novo"
     }
   },
+  "hub": {
+    "title": "Aprender",
+    "count_one": "{{count}} trilha",
+    "count_other": "{{count}} trilhas",
+    "soon": "Trilhas a caminho",
+    "openTrack": "Abrir trilha",
+    "seePath": "Ver o caminho completo",
+    "current": "(trilha atual)",
+    "allTracks": "Todas as trilhas",
+    "error": {
+      "title": "Não conseguimos carregar as trilhas"
+    }
+  },
   "path": {
     "start": "Começar",
     "continue": "Continuar",

@@ -250,6 +250,7 @@ A band on a track with a peg for a thumb, built on a native range input. The 4px
 - **Board Panel:** 6px radius, 1px seam border, ground fill, 8px padding, clips its SVG board.
 - **Current-Module Panel:** 6px radius, 1px ink border, panel fill, 16px padding, title + stage/minutes caption + full-width primary button.
 - **Lists:** Track selection uses seam-divided rows between seam top and bottom rules, no cards.
+- **Learn hub (`/`):** tracks grouped by domain under a **Peg Divider** (`PegDivider`: a 1px seam hooked between two 6px peg-grey dots, the 12px 600 mute domain name on the left; no uppercase kicker). Each track is a seam-divided row (track glyph, title, subtitle, progress caption, 4px ink-on-seam rail, chevron). The track in progress opens in place into the current-module panel (1px ink border): next module + minutes, rail, full-width Continue, "See the whole path" link. A domain with no tracks shows a dashed mute glyph and "Tracks on the way".
 
 ### Navigation
 Fixed bottom bar, panel fill, seam top border, 64px tall plus safe area, max 448px of items: Learn, Review, Flashcards, Profile. Lucide outline icons at 22px (stroke 1.9 inactive, 2.4 active), 11px labels. Active is ink and bold, inactive mute; the active item is marked by a 6px red peg above its icon. The Review item carries a blue due-count badge (pill, 2px panel-coloured border, 10px bold tabular).

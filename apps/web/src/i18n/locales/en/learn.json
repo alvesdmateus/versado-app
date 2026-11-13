@@ -35,6 +35,19 @@
       "retry": "Try again"
     }
   },
+  "hub": {
+    "title": "Learn",
+    "count_one": "{{count}} track",
+    "count_other": "{{count}} tracks",
+    "soon": "Tracks on the way",
+    "openTrack": "Open track",
+    "seePath": "See the whole path",
+    "current": "(current track)",
+    "allTracks": "All tracks",
+    "error": {
+      "title": "We couldn't load the tracks"
+    }
+  },
   "path": {
     "start": "Start",
     "continue": "Continue",

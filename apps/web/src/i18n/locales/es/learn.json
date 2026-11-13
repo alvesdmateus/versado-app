@@ -35,6 +35,19 @@
       "retry": "Reintentar"
     }
   },
+  "hub": {
+    "title": "Aprender",
+    "count_one": "{{count}} ruta",
+    "count_other": "{{count}} rutas",
+    "soon": "Rutas en camino",
+    "openTrack": "Abrir ruta",
+    "seePath": "Ver el camino completo",
+    "current": "(ruta actual)",
+    "allTracks": "Todas las rutas",
+    "error": {
+      "title": "No pudimos cargar las rutas"
+    }
+  },
   "path": {
     "start": "Empezar",
     "continue": "Continuar",

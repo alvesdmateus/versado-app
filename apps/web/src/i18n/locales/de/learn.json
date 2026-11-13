@@ -35,6 +35,19 @@
       "retry": "Erneut versuchen"
     }
   },
+  "hub": {
+    "title": "Lernen",
+    "count_one": "{{count}} Lernpfad",
+    "count_other": "{{count}} Lernpfade",
+    "soon": "Lernpfade in Vorbereitung",
+    "openTrack": "Lernpfad öffnen",
+    "seePath": "Ganzen Pfad ansehen",
+    "current": "(aktueller Lernpfad)",
+    "allTracks": "Alle Lernpfade",
+    "error": {
+      "title": "Die Lernpfade konnten nicht geladen werden"
+    }
+  },
   "path": {
     "start": "Starten",
     "continue": "Weiter",

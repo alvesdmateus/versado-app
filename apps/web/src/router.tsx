@@ -27,6 +27,7 @@ import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
 import { ExamPage } from "./pages/ExamPage";
 import { LearnHomePage } from "./pages/LearnHomePage";
+import { LearnHubPage } from "./pages/LearnHubPage";
 import { LessonPage } from "./pages/LessonPage";
 import { ReviewPage } from "./pages/ReviewPage";
 
@@ -51,7 +52,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       // Skill-track learning (core loop)
-      { index: true, element: <LearnHomePage /> },
+      { index: true, element: <LearnHubPage /> },
       { path: "tracks/:trackId", element: <LearnHomePage /> },
       { path: "review", element: <ReviewPage /> },
       // Legacy flashcard system, kept as "Flashcards (custom)"

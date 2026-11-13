@@ -3,11 +3,10 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { TrackSummary } from "@versado/core";
 import { learningApi, type WireChapter, type WireModule } from "@/lib/learning-api";
-import { profileApi } from "@/lib/profile-api";
+import { LearnHeader, minutesToday } from "@/components/learning/session";
+import { ChevronLeft } from "lucide-react";
 import { PegPath } from "@/components/learning/PegPath";
 import { PrimaryButton, Spinner } from "@/components/learning/ui";
-
-const SESSION_MINUTES = 15;
 
 type State =
   | { kind: "loading" }
@@ -15,14 +14,7 @@ type State =
   | { kind: "empty" }
   | { kind: "ready"; track: TrackSummary; modules: WireModule[]; chapters: WireChapter[]; dueIds: Set<string> };
 
-function isToday(iso: string | null | undefined) {
-  if (!iso) return false;
-  const d = new Date(iso);
-  const n = new Date();
-  return d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate();
-}
-
-/** Learn tab: the active track drawn as a band across a peg board. */
+/** One track (course) drawn as a band across a peg board, chapter by chapter. */
 export function LearnHomePage() {
   const { trackId: routeTrackId } = useParams();
   const navigate = useNavigate();
@@ -34,13 +26,9 @@ export function LearnHomePage() {
     let alive = true;
     setState({ kind: "loading" });
     (async () => {
-      const [tracks, prefs, due] = await Promise.all([
-        learningApi.listTracks(),
-        routeTrackId ? Promise.resolve(null) : profileApi.getPreferences().catch(() => null),
-        learningApi.listDueReviews().catch(() => []),
-      ]);
-      const chosen = routeTrackId ?? prefs?.activeLearningTrackId;
-      const summary = tracks.find((tr) => tr.id === chosen) ?? tracks[0];
+      if (!routeTrackId) return alive && setState({ kind: "empty" });
+      const [tracks, due] = await Promise.all([learningApi.listTracks(), learningApi.listDueReviews().catch(() => [])]);
+      const summary = tracks.find((tr) => tr.id === routeTrackId);
       if (!summary) return alive && setState({ kind: "empty" });
       const { track, modules, chapters } = await learningApi.getTrack(summary.id);
       if (alive) setState({ kind: "ready", track, modules, chapters, dueIds: new Set(due.map((d) => d.module.id)) });
@@ -50,24 +38,11 @@ export function LearnHomePage() {
     };
   }, [routeTrackId, reload]);
 
-  const minutesToday = useMemo(() => {
-    if (state.kind !== "ready") return 0;
-    return state.modules.reduce((sum, m) => {
-      const p = m.progress;
-      if (!p) return sum;
-      return sum + (isToday(p.completedAt) ? m.estimatedMinutes : 0) + (isToday(p.lastReviewedAt) ? 1 : 0);
-    }, 0);
-  }, [state]);
+  const minutes = useMemo(() => (state.kind === "ready" ? minutesToday(state.modules) : 0), [state]);
 
   return (
     <div className="gb-surface min-h-full">
-      <header className="mx-auto flex h-14 max-w-xl items-center justify-between border-b border-gb-seam px-5">
-        <span className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight">
-          <img src="/favicon.svg" alt="" className="h-6 w-6" />
-          Versado
-        </span>
-        <SessionMeter minutes={minutesToday} />
-      </header>
+      <LearnHeader minutes={minutes} />
 
       <div className="mx-auto max-w-xl">
       {state.kind === "loading" && (
@@ -93,7 +68,14 @@ export function LearnHomePage() {
 
       {state.kind === "ready" && (
         <>
-          <section className="px-5 pb-4 pt-6">
+          <section className="px-5 pb-4 pt-4">
+            <Link
+              to="/"
+              className="-ml-1 mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden />
+              {t("hub.allTracks")}
+            </Link>
             <h1 className="text-[28px] font-extrabold leading-[1.08] tracking-tight text-balance">{state.track.title}</h1>
             <p className="mt-2 text-sm text-gb-mute">
               {t(`domain.${state.track.domain}`)} · {t("home.progress", { done: state.track.completedCount, total: state.track.moduleCount })}
@@ -124,32 +106,10 @@ export function LearnHomePage() {
             {state.track.completedCount === state.track.moduleCount && (
               <p className="mt-4 text-sm text-gb-mute">{t("home.trackDone")}</p>
             )}
-            <Link
-              to="/select-track"
-              className="mt-5 inline-block text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
-            >
-              {t("home.changeTrack")}
-            </Link>
           </section>
         </>
       )}
       </div>
     </div>
-  );
-}
-
-/** Today's minutes against one short session: sessions are timed to fit. */
-function SessionMeter({ minutes }: { minutes: number }) {
-  const { t } = useTranslation("learn");
-  const pct = Math.min(100, (minutes / SESSION_MINUTES) * 100);
-  return (
-    <span className="flex items-center gap-2 text-[13px] font-semibold tabular-nums" aria-label={t("home.session", { minutes, total: SESSION_MINUTES })}>
-      <span aria-hidden>
-        {minutes} / {SESSION_MINUTES} min
-      </span>
-      <span className="relative block h-1 w-16 overflow-hidden rounded-full bg-gb-seam" aria-hidden>
-        <span className="absolute inset-y-0 left-0 bg-gb-ink" style={{ width: `${pct}%` }} />
-      </span>
-    </span>
   );
 }

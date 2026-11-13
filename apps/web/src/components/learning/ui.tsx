@@ -73,3 +73,42 @@ export function Spinner() {
     />
   );
 }
+
+/**
+ * A seam stretched between two pegs, with its label hooked on the left:
+ * the board's way of dividing a list into groups.
+ */
+export function PegDivider({ label, count, id, className }: { label: string; count?: number; id?: string; className?: string }) {
+  return (
+    <div className={cn("flex items-center gap-2", className)}>
+      <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-gb-peg" />
+      <h2 id={id} className="shrink-0 text-xs font-semibold text-gb-mute">
+        {label}
+      </h2>
+      <span aria-hidden className="h-px flex-1 bg-gb-seam" />
+      {count !== undefined && (
+        <span aria-hidden className="shrink-0 text-xs font-semibold tabular-nums text-gb-mute">
+          {count}
+        </span>
+      )}
+      <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-gb-peg" />
+    </div>
+  );
+}
+
+/** A track's mark: one band hooked across a 3×3 peg square. Dashed = not here yet. */
+export function TrackGlyph({ color, dashed, className }: { color: string; dashed?: boolean; className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={cn("h-12 w-12 shrink-0", className)} aria-hidden>
+      {[8, 24, 40].map((x) => [8, 24, 40].map((y) => <circle key={`${x}-${y}`} cx={x} cy={y} r={2} fill="var(--color-gb-peg)" />))}
+      <polyline
+        points="8,40 24,8 40,24 8,40"
+        fill="none"
+        stroke={color}
+        strokeWidth={3.5}
+        strokeLinejoin="round"
+        strokeDasharray={dashed ? "4 4" : undefined}
+      />
+    </svg>
+  );
+}
