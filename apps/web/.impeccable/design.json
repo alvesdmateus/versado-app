@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-12T15:02:01.356Z",
+  "generatedAt": "2026-11-13T18:58:30.000Z",
   "title": "Design System: Versado",
   "extensions": {
     "colorMeta": {
@@ -365,6 +365,22 @@
       "description": "Ink-bordered panel beside the current red peg on the track path.",
       "html": "<div class=\"ds-cur\"><div><b>The area of a rectangle</b><small>Stage 2 of 4 · 4 min</small></div><button class=\"ds-cur-btn\">Continue</button></div>",
       "css": ".ds-cur{display:flex;flex-direction:column;gap:12px;max-width:340px;padding:16px;border:1px solid var(--color-gb-ink,#1b1e23);border-radius:6px;background:var(--color-gb-panel,#f8fafb);color:var(--color-gb-ink,#1b1e23);font-family:Figtree,ui-sans-serif,system-ui,sans-serif}.ds-cur b{display:block;font-size:18px;font-weight:800;line-height:1.25;letter-spacing:-0.025em}.ds-cur small{display:block;margin-top:4px;font-size:12px;font-weight:600;color:var(--color-gb-mute,#56606b)}.ds-cur-btn{height:48px;border:none;border-radius:5px;background:var(--color-gb-ink,#1b1e23);color:var(--color-gb-ground,#eef1f4);font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:transform 150ms}.ds-cur-btn:active{transform:scale(0.985)}.ds-cur-btn:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}"
+    },
+    {
+      "name": "Peg Divider",
+      "kind": "custom",
+      "refersTo": "peg-divider",
+      "description": "Groups a list (tracks by domain on the Learn hub): a 1px seam hooked between two peg dots, the group name on the left. No uppercase kicker.",
+      "html": "<div class=\"ds-pegdiv\"><span class=\"ds-pegdiv-peg\"></span><span class=\"ds-pegdiv-label\">Mathematics</span><span class=\"ds-pegdiv-seam\"></span><span class=\"ds-pegdiv-peg\"></span></div>",
+      "css": ".ds-pegdiv{display:flex;align-items:center;gap:8px;max-width:360px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif}.ds-pegdiv-peg{width:6px;height:6px;flex-shrink:0;border-radius:9999px;background:var(--color-gb-peg,#aeb8c3)}.ds-pegdiv-label{flex-shrink:0;font-size:12px;font-weight:600;color:var(--color-gb-mute,#56606b)}.ds-pegdiv-seam{flex:1;height:1px;background:var(--color-gb-seam,#d3d9e0)}"
+    },
+    {
+      "name": "Track Row",
+      "kind": "custom",
+      "refersTo": "track-row",
+      "description": "A track on the Learn hub: band glyph on a 3×3 peg square, title, subtitle, progress caption and a 4px ink-on-seam rail; seam-divided, no card. The track in progress opens into the Current Module Panel instead.",
+      "html": "<a class=\"ds-trow\" href=\"#\"><svg viewBox=\"0 0 48 48\" width=\"40\" height=\"40\" aria-hidden=\"true\"><g fill=\"#aeb8c3\"><circle cx=\"8\" cy=\"8\" r=\"2\"/><circle cx=\"24\" cy=\"8\" r=\"2\"/><circle cx=\"40\" cy=\"8\" r=\"2\"/><circle cx=\"8\" cy=\"24\" r=\"2\"/><circle cx=\"24\" cy=\"24\" r=\"2\"/><circle cx=\"40\" cy=\"24\" r=\"2\"/><circle cx=\"8\" cy=\"40\" r=\"2\"/><circle cx=\"24\" cy=\"40\" r=\"2\"/><circle cx=\"40\" cy=\"40\" r=\"2\"/></g><polyline points=\"8,40 24,8 40,24 8,40\" fill=\"none\" stroke=\"#3a6ea5\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/></svg><span class=\"ds-trow-body\"><b>Mathematics</b><span class=\"ds-trow-sub\">Learn mathematics by seeing, moving and predicting</span><small>5 of 15 modules</small><span class=\"ds-trow-rail\"><span style=\"width:33%\"></span></span></span><svg class=\"ds-trow-chev\" viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></a>",
+      "css": ".ds-trow{display:flex;align-items:center;gap:16px;max-width:360px;padding:16px 0;border-top:1px solid var(--color-gb-seam,#d3d9e0);border-bottom:1px solid var(--color-gb-seam,#d3d9e0);color:var(--color-gb-ink,#1b1e23);text-decoration:none;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;font-variant-numeric:tabular-nums}.ds-trow svg{flex-shrink:0}.ds-trow-body{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}.ds-trow b{font-size:16px;font-weight:800;line-height:1.25}.ds-trow-sub{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;color:var(--color-gb-mute,#56606b)}.ds-trow small{font-size:12px;font-weight:600;color:var(--color-gb-mute,#56606b)}.ds-trow-rail{position:relative;display:block;height:4px;margin-top:4px;overflow:hidden;border-radius:9999px;background:var(--color-gb-seam,#d3d9e0)}.ds-trow-rail span{position:absolute;inset:0 auto 0 0;border-radius:9999px;background:var(--color-gb-ink,#1b1e23)}.ds-trow-chev{color:var(--color-gb-mute,#56606b);transition:color 150ms}.ds-trow:hover b{text-decoration:underline;text-underline-offset:4px}.ds-trow:hover .ds-trow-chev{color:var(--color-gb-ink,#1b1e23)}.ds-trow:focus-visible{outline:2px solid var(--color-band-blue,#3a6ea5);outline-offset:2px}"
     }
   ],
   "narrative": {

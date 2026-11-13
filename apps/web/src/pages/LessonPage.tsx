@@ -59,7 +59,7 @@ export function LessonPage() {
     );
   }
 
-  return <LessonPlayer module={load.module} onExit={() => navigate("/")} />;
+  return <LessonPlayer module={load.module} onExit={() => navigate(`/tracks/${load.module.trackId}`)} />;
 }
 
 function Shell({

@@ -58,7 +58,8 @@ Principles for the refactor:
   `0012_course_chapters` moves existing modules/preferences without changing module ids or progress).
 - **API:** `/api/learn/tracks`, `/tracks/:id`, `/modules/:id`, `POST /modules/:id/progress`,
   `GET /reviews/due`, `POST /modules/:id/review`.
-- **Web:** `/` Learn (track path), `/tracks/:trackId`, `/learn/:moduleId` (full-screen 4-stage lesson),
+- **Web:** `/` Learn hub (every track grouped by domain under `PegDivider`s; the active track opens into a Continue panel),
+  `/tracks/:trackId` (track path; lessons exit back here), `/learn/:moduleId` (full-screen 4-stage lesson),
   `/review` (spaced, interleaved prediction checks), `/select-track`. Interactives live in
   `apps/web/src/components/learning/interactives/` and are keyed by `module.interactive`
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).

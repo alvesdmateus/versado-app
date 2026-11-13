@@ -6,7 +6,7 @@ import { learningApi } from "@/lib/learning-api";
 import { profileApi } from "@/lib/profile-api";
 import { useTrack } from "@/hooks/useTrack";
 import { bandColor } from "@/components/learning/bands";
-import { Spinner } from "@/components/learning/ui";
+import { Spinner, TrackGlyph } from "@/components/learning/ui";
 
 /**
  * Pick a skill track. Flashcards stay available as the "custom" legacy mode;
@@ -92,21 +92,5 @@ export function TrackSelectionPage() {
         <p className="mt-6 text-sm text-gb-mute">{t("select.more")}</p>
       </div>
     </div>
-  );
-}
-
-function TrackGlyph({ color, dashed }: { color: string; dashed?: boolean }) {
-  return (
-    <svg viewBox="0 0 48 48" className="h-12 w-12 shrink-0" aria-hidden>
-      {[8, 24, 40].map((x) => [8, 24, 40].map((y) => <circle key={`${x}${y}`} cx={x} cy={y} r={2} fill="var(--color-gb-peg)" />))}
-      <polyline
-        points="8,40 24,8 40,24 8,40"
-        fill="none"
-        stroke={color}
-        strokeWidth={3.5}
-        strokeLinejoin="round"
-        strokeDasharray={dashed ? "4 4" : undefined}
-      />
-    </svg>
   );
 }

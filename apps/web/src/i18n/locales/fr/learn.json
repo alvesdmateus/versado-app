@@ -35,6 +35,19 @@
       "retry": "Réessayer"
     }
   },
+  "hub": {
+    "title": "Apprendre",
+    "count_one": "{{count}} parcours",
+    "count_other": "{{count}} parcours",
+    "soon": "Parcours en préparation",
+    "openTrack": "Ouvrir le parcours",
+    "seePath": "Voir tout le chemin",
+    "current": "(parcours actuel)",
+    "allTracks": "Tous les parcours",
+    "error": {
+      "title": "Impossible de charger les parcours"
+    }
+  },
   "path": {
     "start": "Commencer",
     "continue": "Continuer",
