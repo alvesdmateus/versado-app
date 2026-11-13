@@ -24,7 +24,13 @@ import { env } from "../env";
 export const authRoutes = new Hono();
 
 // Stricter rate limiting for auth endpoints
-authRoutes.use("*", rateLimitMiddleware(5, 60_000));
+// Session endpoints (/me, /refresh, /logout) run on every page load, so they get a
+// general limit; the strict brute-force limit only guards credential/token guesses.
+authRoutes.use("*", rateLimitMiddleware(30, 60_000));
+const credentialLimit = rateLimitMiddleware(5, 60_000);
+authRoutes.use("/login", credentialLimit);
+authRoutes.use("/reset-password", credentialLimit);
+authRoutes.use("/verify-email", credentialLimit);
 
 function setRefreshCookie(c: any, refreshToken: string) {
   const isProd = env.NODE_ENV === "production";

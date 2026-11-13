@@ -1,6 +1,8 @@
 import type { AuthResponse, RefreshResponse, PublicProfile } from "@versado/auth";
 import { apiClient } from "./api-client";
 
+let inFlightRefresh: Promise<RefreshResponse> | null = null;
+
 export const authApi = {
   login(email: string, password: string) {
     return apiClient<AuthResponse>("/auth/login", {
@@ -16,10 +18,16 @@ export const authApi = {
     });
   },
 
+  // Refresh tokens rotate on every use, so concurrent calls (StrictMode double
+  // effects, timer + refreshUser) must share one request; a second request would
+  // present the already-rotated token, get 401 and log the user out.
   refresh() {
-    return apiClient<RefreshResponse>("/auth/refresh", {
+    inFlightRefresh ??= apiClient<RefreshResponse>("/auth/refresh", {
       method: "POST",
+    }).finally(() => {
+      inFlightRefresh = null;
     });
+    return inFlightRefresh;
   },
 
   logout() {

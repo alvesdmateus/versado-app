@@ -69,4 +69,41 @@ describe("Rate Limit Burst Resilience", () => {
     expect(successCount).toBe(100);
     expect(rateLimitedCount).toBe(5);
   });
+
+  test("IP limiters keep separate counters (API traffic does not throttle auth)", async () => {
+    const { token } = await createTestUser();
+    const app = createApp();
+    const ip = `shared-${crypto.randomUUID()}`;
+
+    for (let i = 0; i < 6; i++) {
+      const res = await app.request("/api/decks", {
+        headers: { Authorization: `Bearer ${token}`, "x-forwarded-for": ip },
+      });
+      expect(res.status).toBe(200);
+    }
+
+    const register = await app.request("/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
+      body: JSON.stringify({
+        email: `fresh-${crypto.randomUUID()}@example.com`,
+        password: "Password123!",
+        displayName: "Fresh",
+      }),
+    });
+    expect(register.status).not.toBe(429);
+  });
+
+  test("session endpoints are not held to the 5/min credential limit", async () => {
+    const { token } = await createTestUser();
+    const app = createApp();
+    const ip = `session-${crypto.randomUUID()}`;
+
+    for (let i = 0; i < 10; i++) {
+      const res = await app.request("/auth/me", {
+        headers: { Authorization: `Bearer ${token}`, "x-forwarded-for": ip },
+      });
+      expect(res.status).toBe(200);
+    }
+  });
 });
