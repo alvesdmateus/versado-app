@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.27](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.26...versado-v0.1.27) (2026-11-13)
+
+
+### Features
+
+* **web:** learn hub listing every track by domain ([#96](https://github.com/alvesdmateus/versado-app/issues/96)) ([a3d03ba](https://github.com/alvesdmateus/versado-app/commit/a3d03bac12a521aaec17a8014b733e352e267aab))
+
+
+### Miscellaneous
+
+* **web:** add play app signing fingerprint to asset links ([#94](https://github.com/alvesdmateus/versado-app/issues/94)) ([b691d72](https://github.com/alvesdmateus/versado-app/commit/b691d72e410d64afd43f41b0548ae4e66e20ca92))
+
 ## [0.1.26](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.25...versado-v0.1.26) (2026-11-13)
 
 
