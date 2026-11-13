@@ -100,6 +100,8 @@
   "select": {
     "title": "¿Qué quieres entender?",
     "body": "Elige una ruta. Puedes cambiarla cuando quieras.",
+    "chapters_one": "{{count}} capítulo",
+    "chapters_other": "{{count}} capítulos",
     "modules_one": "{{count}} módulo",
     "modules_other": "{{count}} módulos",
     "error": "No pudimos cargar las rutas. Tus tarjetas siguen disponibles.",

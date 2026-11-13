@@ -1,5 +1,7 @@
 import type { LearningRepositories } from "./repositories";
 import type {
+  ChapterWithModules,
+  LearningChapter,
   LearningModule,
   LearningTrack,
   ModuleProgress,
@@ -41,12 +43,12 @@ export class LearningService {
 
     return Promise.all(
       tracks.map(async (track) => {
-        const modules = await this.repos.modules.listByTrack(track.id);
+        const { chapters, modules } = await this.publishedContent(track.id);
         const progress = await this.repos.progress.listForUser(
           userId,
           modules.map((m) => m.id)
         );
-        return this.summarize(track, resolveModuleStatuses(modules, progress), dueIds);
+        return this.summarize(track, resolveModuleStatuses(modules, progress, chapters), dueIds, chapters.length);
       })
     );
   }
@@ -55,21 +57,30 @@ export class LearningService {
     userId: string,
     trackId: string,
     now = new Date()
-  ): Promise<{ track: TrackSummary; modules: ModuleWithStatus[] }> {
+  ): Promise<{ track: TrackSummary; modules: ModuleWithStatus[]; chapters: ChapterWithModules[] }> {
     const track = await this.repos.tracks.findById(trackId);
     if (!track || track.status !== "published") {
       throw new LearningError("not_found", "Track not found");
     }
-    const modules = await this.repos.modules.listByTrack(trackId);
+    const { chapters, modules } = await this.publishedContent(trackId);
     const progress = await this.repos.progress.listForUser(
       userId,
       modules.map((m) => m.id)
     );
-    const withStatus = resolveModuleStatuses(modules, progress);
+    const withStatus = resolveModuleStatuses(modules, progress, chapters);
     const due = await this.repos.progress.listDue(userId, now);
     return {
-      track: this.summarize(track, withStatus, new Set(due.map((p) => p.moduleId))),
+      track: this.summarize(track, withStatus, new Set(due.map((p) => p.moduleId)), chapters.length),
       modules: withStatus,
+      chapters: chapters.map((chapter) => {
+        const chapterModules = withStatus.filter((m) => m.chapterId === chapter.id);
+        return {
+          ...chapter,
+          modules: chapterModules,
+          completedCount: chapterModules.filter((m) => m.progressStatus === "completed").length,
+          moduleCount: chapterModules.length,
+        };
+      }),
     };
   }
 
@@ -115,9 +126,16 @@ export class LearningService {
   async listDueReviews(userId: string, now = new Date()): Promise<DueReview[]> {
     const due = await this.repos.progress.listDue(userId, now);
     const reviews: DueReview[] = [];
+    const chaptersByTrack = new Map<string, LearningChapter[]>();
     for (const progress of due) {
       const module = await this.repos.modules.findById(progress.moduleId);
-      if (module && module.status === "published") reviews.push({ module, progress });
+      if (!module || module.status !== "published") continue;
+      let chapters = chaptersByTrack.get(module.trackId);
+      if (!chapters) {
+        chapters = await this.repos.chapters.listByTrack(module.trackId);
+        chaptersByTrack.set(module.trackId, chapters);
+      }
+      if (chapters.some((c) => c.id === module.chapterId)) reviews.push({ module, progress });
     }
     return reviews;
   }
@@ -137,16 +155,30 @@ export class LearningService {
     return next;
   }
 
+  private async publishedContent(trackId: string) {
+    const [chapters, modules] = await Promise.all([
+      this.repos.chapters.listByTrack(trackId),
+      this.repos.modules.listByTrack(trackId),
+    ]);
+    const chapterIds = new Set(chapters.map((c) => c.id));
+    return {
+      chapters: chapters.sort((a, b) => a.position - b.position),
+      modules: modules.filter((m) => chapterIds.has(m.chapterId)),
+    };
+  }
+
   private summarize(
     track: LearningTrack,
     modules: ModuleWithStatus[],
-    dueIds: Set<string>
+    dueIds: Set<string>,
+    chapterCount: number
   ): TrackSummary {
     const next = modules.find(
       (m) => m.progressStatus === "in_progress" || m.progressStatus === "available"
     );
     return {
       ...track,
+      chapterCount,
       moduleCount: modules.length,
       completedCount: modules.filter((m) => m.progressStatus === "completed").length,
       nextModuleId: next?.id ?? null,

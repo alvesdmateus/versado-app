@@ -11,9 +11,12 @@ export interface Verdict {
   /**
    * Named misconception the board can diagnose: "sign" (pointing the wrong way),
    * "height" (shape and axis right, vertical offset wrong), "axis" (axis of symmetry wrong),
-   * "noRoots" (the curve never reaches the floor).
+   * "noRoots" (the curve never reaches the floor), "doubled" (doubled the side instead of squaring it),
+   * "swap" (across and up exchanged), "position" (gave the destination's address instead of the move),
+   * "partial" (a sum that leaves one move out), "unmoved" (kept a point where it was before a
+   * transformation), "transpose" (read a matrix's rows as its arrows).
    */
-  kind?: "sign" | "height" | "axis" | "noRoots";
+  kind?: "sign" | "height" | "axis" | "noRoots" | "doubled" | "swap" | "position" | "partial" | "unmoved" | "transpose";
 }
 
 export interface BoardProps {
@@ -30,6 +33,21 @@ export interface BoardProps {
   changed: { name: string; tick: number } | null;
   /** 0 → 1 progress of a guided demonstration (practice), or null/undefined otherwise. */
   guide?: number | null;
+  /**
+   * Every control the learner may move right now (absent otherwise). The board draws rails for the
+   * ones bound in `axes` and in-plane handles (vertices, lines, curves) for any of them; see `rail.tsx`.
+   */
+  input?: BoardInput;
+}
+
+/** A board axis a control can be bound to: x runs horizontally, y vertically. */
+export type Axis = "x" | "y";
+
+export interface BoardInput {
+  controls: ControlDef[];
+  onChange: (name: string, value: number) => void;
+  /** Controls preset by the system (assisted completion): shown at their value, not movable. */
+  locked?: string[];
 }
 
 export interface ControlDef {
@@ -39,10 +57,21 @@ export interface ControlDef {
   max: number;
   step: number;
   colorToken: ColorToken;
+  /**
+   * A discrete answer picked from options (multiple choice) instead of a continuous slider. Use it when
+   * the learner predicts a result rather than tuning a quantity; build the wrong options from named
+   * misconceptions so the board can still diagnose them.
+   */
+  choices?: number[];
 }
 
 export interface InteractiveDefinition {
   Board: ComponentType<BoardProps>;
+  /**
+   * Variables that live on a board axis. The board draws them as rails along that axis (horizontal
+   * for x, vertical for y); every other control stays a band slider under the board.
+   */
+  axes?: Readonly<Record<string, Axis>>;
   /** Values the board starts from at a given stage. */
   initialValues(spec: ModuleSpec, stage: ModuleStage, target: Values): Values;
   /** Controls unlocked at the Stage-3 prediction gate (max 2). */

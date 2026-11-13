@@ -2,6 +2,7 @@ import { useId } from "react";
 import type { ModuleSpec } from "@versado/core";
 import { bandColor, fmt, signed, INK, MUTE } from "../bands";
 import { clearOfXTicks, PlaneGrid, PlaneTicks, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
+import { DragArea, PlaneHandle, RAIL_CROSS, RAIL_GUTTER, Rails, useBoardInput } from "./rail";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /**
@@ -107,17 +108,36 @@ function anchorParams(mode: Mode, t: number, fixed: Values, roots = false): Valu
   return { a: fixed.a ?? 1, b: 3 * Math.sin(2 * Math.PI * t), c: fixed.c ?? 1 }; // lean swings, the crossing stays
 }
 
-function CurvePath({ s, f, color, clipId }: { s: PlaneScale; f: (x: number) => number; color: string; clipId: string }) {
+/**
+ * Room for the rails this module's controls need, fixed for the whole lesson so the board never
+ * resizes between stages: h needs the bottom, k and c the left.
+ */
+function railGutter(spec: ModuleSpec): { left?: number; bottom?: number } | undefined {
+  const names = spec.stage2Exploration.controls.map((c) => c.variableName);
+  const left = names.includes("k") || names.includes("c");
+  const bottom = names.includes("h");
+  if (!left && !bottom) return undefined;
+  return { left: left ? RAIL_GUTTER : 0, bottom: bottom ? RAIL_GUTTER : 0 };
+}
+
+/** The curve as an SVG path over the window (clamped just past its edges). */
+function curveD(s: PlaneScale, f: (x: number) => number): string {
   const step = (s.xMax - s.xMin) / 160;
   let d = "";
   for (let x = s.xMin; x <= s.xMax + 1e-9; x += step) {
     const y = Math.max(s.yMin - 2, Math.min(s.yMax + 2, f(x)));
     d += `${d ? "L" : "M"}${s.x(x).toFixed(1)},${s.y(y).toFixed(1)}`;
   }
-  return <path d={d} fill="none" stroke={color} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" clipPath={`url(#${clipId})`} />;
+  return d;
 }
 
-function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }: BoardProps) {
+function CurvePath({ s, f, color, clipId }: { s: PlaneScale; f: (x: number) => number; color: string; clipId: string }) {
+  return (
+    <path d={curveD(s, f)} fill="none" stroke={color} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" clipPath={`url(#${clipId})`} />
+  );
+}
+
+function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, input }: BoardProps) {
   const mode = modeOf(spec);
   const fixed = fixedOf(spec);
   const windowKey: WindowKey = isRootsView(spec) ? "roots" : mode;
@@ -141,6 +161,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
   const f = curve(mode, p);
   const formal = stage === 4;
   const morphing = guide != null && guide < 1;
+  const board = useBoardInput(input, values);
   const tick = (name: string) => (changed?.name === name ? changed.tick : 0);
   // b reads on its own touching line, left of the crossing (targets sit to the right), off the tick row.
   let bTagY = mode === "bc" ? Math.min(s.y(s.yMin) - 6, Math.max(s.y(s.yMax) + 14, s.y((p.c ?? 0) - 0.5 * (p.b ?? 0)) + 5)) : 0;
@@ -156,7 +177,13 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
   const showLevel = guide != null && guide > 0.45 && vertex;
 
   return (
-    <Svg anchoring={stage === 1} width={W} height={H} label={`Parabola, ${(p.a ?? 0) > 0 ? "opening up" : (p.a ?? 0) < 0 ? "opening down" : "flat"}`}>
+    <Svg
+      anchoring={stage === 1}
+      width={W}
+      height={H}
+      label={`Parabola, ${(p.a ?? 0) > 0 ? "opening up" : (p.a ?? 0) < 0 ? "opening down" : "flat"}`}
+      gutter={railGutter(spec)}
+    >
       <defs>
         <clipPath id={clipId}>
           <rect x={s.x(s.xMin)} y={s.y(s.yMax)} width={s.x(s.xMax) - s.x(s.xMin)} height={s.y(s.yMin) - s.y(s.yMax)} />
@@ -327,6 +354,59 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide }
           ...(mode === "bc" ? [{ x: 0, y: p.c! }, { x: -0.5, y: p.c! - 0.5 * p.b! }] : []),
         ]}
       />
+      {/* Positions ride rails: h along the bottom (under the vertex), k and c up the left (level with them) */}
+      <Rails
+        input={input}
+        values={raw}
+        bind={{
+          h: { axis: "x", at: s.x, cross: H + RAIL_CROSS, reach: s.y(p.k ?? 0) },
+          k: { axis: "y", at: s.y, cross: -RAIL_CROSS, reach: s.x(p.h ?? 0) },
+          c: { axis: "y", at: s.y, cross: -RAIL_CROSS, reach: s.x(0) },
+        }}
+      />
+
+      {/* Direct manipulation: bend the curve itself, or carry its vertex / crossing point */}
+      {(board.can("a") || board.can("b")) && (
+        <DragArea
+          onDrag={(pt) => {
+            const x = s.fromX(pt.x);
+            const y = s.fromY(pt.y);
+            if (mode === "a") {
+              const dx = x - (raw.h ?? 0);
+              if (Math.abs(dx) >= 0.35) board.set("a", (y - (raw.k ?? 0)) / (dx * dx));
+            } else if (mode === "bc" && Math.abs(x) >= 0.35) {
+              board.set("b", (y - (raw.a ?? 1) * x * x - (raw.c ?? 0)) / x);
+            }
+          }}
+        >
+          <path d={curveD(s, curve(mode, raw))} fill="none" stroke="transparent" strokeWidth={26} clipPath={`url(#${clipId})`} />
+        </DragArea>
+      )}
+      {board.can("a") && mode === "a" && (
+        <PlaneHandle
+          x={s.x((raw.h ?? 0) + 1)}
+          y={s.y((raw.k ?? 0) + (raw.a ?? 0))}
+          color={amber}
+          cursor="ns-resize"
+          r={6}
+          onDrag={(pt) => board.set("a", s.fromY(pt.y) - (raw.k ?? 0))}
+        />
+      )}
+      {(board.can("h") || board.can("k")) && (
+        <PlaneHandle
+          x={s.x(raw.h ?? 0)}
+          y={s.y(raw.k ?? 0)}
+          color={violet}
+          cursor={board.can("h") && board.can("k") ? "move" : board.can("k") ? "ns-resize" : "ew-resize"}
+          onDrag={(pt) => {
+            board.set("h", s.fromX(pt.x));
+            board.set("k", s.fromY(pt.y));
+          }}
+        />
+      )}
+      {board.can("c") && mode === "bc" && (
+        <PlaneHandle x={s.x(0)} y={s.y(raw.c ?? 0)} color={violet} cursor="ns-resize" onDrag={(pt) => board.set("c", s.fromY(pt.y))} />
+      )}
     </Svg>
   );
 }
@@ -339,6 +419,7 @@ const DEFAULT_SPEC = { stage2Exploration: { controls: [], fixed: {} } } as unkno
 
 export const parabola: InteractiveDefinition = {
   Board,
+  axes: { h: "x", k: "y", c: "y" },
   initialValues(spec, stage, target) {
     const mode = modeOf(spec);
     const fixed = fixedOf(spec);

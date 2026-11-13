@@ -1,7 +1,7 @@
-import type { LearningModuleInput, LearningTrackInput } from "@versado/validation";
+import type { LearningChapterInput, LearningModuleInput, LearningTrackInput } from "@versado/validation";
 
 /**
- * Track: Algebra through Geometry.
+ * Course (track): Mathematics. Chapter: Algebra through Geometry.
  * Visual and experimental first — every algebraic idea is anchored in a shape or a
  * coordinate plane the learner manipulates before seeing any notation.
  * Each module follows the YAML template in intuitive_interactive_learning.md §3.
@@ -11,10 +11,10 @@ import type { LearningModuleInput, LearningTrackInput } from "@versado/validatio
  * where b is read as the curve's lean at the crossing (the slope from the linear modules).
  */
 export const mathTrack: LearningTrackInput = {
-  id: "math-algebra-geometry",
+  id: "mathematics",
   domain: "mathematics",
-  title: "Algebra through Geometry",
-  subtitle: "See it, move it, predict it — then write it.",
+  title: "Mathematics",
+  subtitle: "Learn mathematics by seeing, moving and predicting.",
   description:
     "Build intuition for algebra with shapes and the coordinate plane: areas become products, squares reveal identities, and equations become lines that meet.",
   icon: "Shapes",
@@ -23,10 +23,21 @@ export const mathTrack: LearningTrackInput = {
   status: "published",
 };
 
-export const mathModules: LearningModuleInput[] = [
+export const algebraChapter: LearningChapterInput = {
+  id: "math-algebra",
+  trackId: "mathematics",
+  position: 0,
+  title: "Algebra",
+  subtitle: "Algebra through geometry: see it, move it, predict it — then write it.",
+  description: "Build algebraic intuition through shapes and the coordinate plane.",
+  status: "published",
+};
+
+export const algebraModules: LearningModuleInput[] = [
   {
     id: "math-area-product-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 0,
     title: "Multiplying is area",
     interactive: "area-product",
@@ -108,7 +119,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-binomial-square-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 1,
     title: "The square of a sum",
     interactive: "binomial-square",
@@ -161,12 +173,16 @@ export const mathModules: LearningModuleInput[] = [
       stage3Prediction: {
         icapTarget: "interactive",
         challengePrompt: "a is 3, b is 2. Predict the total area.",
-        userAction: "Enter the total area of the big square, then reveal",
+        userAction:
+          "Pick the total area from four boxes (the truth and three named misconceptions), then reveal",
         target: { a: 3, b: 2 },
         tolerance: 0,
         adaptiveFeedback: {
           onCommonMisconception: "The dashed strips are the pieces your answer left out.",
           onSuccess: "Two squares plus two strips — every piece counted.",
+          byKind: {
+            doubled: "Doubling adds the sides. Squaring fills the square — count every piece inside.",
+          },
         },
       },
       stage4Formalization: {
@@ -189,7 +205,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-linear-slope-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 2,
     title: "Steepness and direction",
     interactive: "slope-intercept",
@@ -261,7 +278,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-linear-intercept-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 3,
     title: "Where the line starts",
     interactive: "slope-intercept",
@@ -329,7 +347,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-slope-intercept-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 4,
     title: "Putting m and c together",
     interactive: "slope-intercept",
@@ -434,7 +453,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-shape-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 5,
     title: "Opening and direction",
     interactive: "parabola",
@@ -503,7 +523,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-vertex-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 6,
     title: "Moving the vertex",
     interactive: "parabola",
@@ -612,7 +633,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-general-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 7,
     title: "The general form",
     interactive: "parabola",
@@ -696,7 +718,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-quad-roots-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 8,
     title: "Where the curve meets the floor",
     interactive: "parabola",
@@ -794,7 +817,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-equation-intersection-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 9,
     title: "Equations are crossings",
     interactive: "line-intersection",
@@ -864,7 +888,8 @@ export const mathModules: LearningModuleInput[] = [
   },
   {
     id: "math-difference-of-squares-01",
-    trackId: "math-algebra-geometry",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
     position: 10,
     title: "Cutting a square out",
     interactive: "difference-of-squares",

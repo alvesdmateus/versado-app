@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { TrackSummary } from "@versado/core";
-import { learningApi, type WireModule } from "@/lib/learning-api";
+import { learningApi, type WireChapter, type WireModule } from "@/lib/learning-api";
 import { profileApi } from "@/lib/profile-api";
 import { PegPath } from "@/components/learning/PegPath";
 import { PrimaryButton, Spinner } from "@/components/learning/ui";
@@ -13,7 +13,7 @@ type State =
   | { kind: "loading" }
   | { kind: "error" }
   | { kind: "empty" }
-  | { kind: "ready"; track: TrackSummary; modules: WireModule[]; dueIds: Set<string> };
+  | { kind: "ready"; track: TrackSummary; modules: WireModule[]; chapters: WireChapter[]; dueIds: Set<string> };
 
 function isToday(iso: string | null | undefined) {
   if (!iso) return false;
@@ -42,8 +42,8 @@ export function LearnHomePage() {
       const chosen = routeTrackId ?? prefs?.activeLearningTrackId;
       const summary = tracks.find((tr) => tr.id === chosen) ?? tracks[0];
       if (!summary) return alive && setState({ kind: "empty" });
-      const { track, modules } = await learningApi.getTrack(summary.id);
-      if (alive) setState({ kind: "ready", track, modules, dueIds: new Set(due.map((d) => d.module.id)) });
+      const { track, modules, chapters } = await learningApi.getTrack(summary.id);
+      if (alive) setState({ kind: "ready", track, modules, chapters, dueIds: new Set(due.map((d) => d.module.id)) });
     })().catch(() => alive && setState({ kind: "error" }));
     return () => {
       alive = false;
@@ -108,8 +108,18 @@ export function LearnHomePage() {
             </p>
           </section>
           <section className="px-5 pb-28">
-            <div className="rounded-[6px] border border-gb-seam">
-              <PegPath modules={state.modules} dueIds={state.dueIds} onContinue={(id) => navigate(`/learn/${id}`)} />
+            <div className="space-y-8">
+              {state.chapters.map((chapter) => (
+                <section key={chapter.id} aria-labelledby={`chapter-${chapter.id}`}>
+                  <h2 id={`chapter-${chapter.id}`} className="text-lg font-extrabold leading-tight text-gb-ink">
+                    {chapter.title}
+                  </h2>
+                  {chapter.subtitle && <p className="mt-2 text-sm text-gb-mute">{chapter.subtitle}</p>}
+                  <div className="mt-4 rounded-[6px] border border-gb-seam">
+                    <PegPath modules={chapter.modules} dueIds={state.dueIds} onContinue={(id) => navigate(`/learn/${id}`)} />
+                  </div>
+                </section>
+              ))}
             </div>
             {state.track.completedCount === state.track.moduleCount && (
               <p className="mt-4 text-sm text-gb-mute">{t("home.trackDone")}</p>

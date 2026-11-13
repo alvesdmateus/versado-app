@@ -189,6 +189,7 @@ export const moduleSpecSchema = z
 export const learningModuleSchema = z.object({
   id: slugSchema,
   trackId: slugSchema,
+  chapterId: slugSchema,
   position: z.number().int().min(0),
   title: z.string().min(1).max(80),
   /** Key of the client-side interactive component that renders this module. */
@@ -197,6 +198,16 @@ export const learningModuleSchema = z.object({
   prerequisites: z.array(slugSchema).default([]),
   status: contentStatusSchema.default("draft"),
   spec: moduleSpecSchema,
+});
+
+export const learningChapterSchema = z.object({
+  id: slugSchema,
+  trackId: slugSchema,
+  position: z.number().int().min(0),
+  title: z.string().min(1).max(80),
+  subtitle: z.string().max(160).default(""),
+  description: z.string().max(400).default(""),
+  status: contentStatusSchema,
 });
 
 export const learningTrackSchema = z.object({
@@ -237,6 +248,8 @@ export type ModuleSpec = z.infer<typeof moduleSpecSchema>;
 export type ModuleSpecInput = z.input<typeof moduleSpecSchema>;
 export type LearningModuleInput = z.input<typeof learningModuleSchema>;
 export type LearningModuleContent = z.infer<typeof learningModuleSchema>;
+export type LearningChapterInput = z.input<typeof learningChapterSchema>;
+export type LearningChapterContent = z.infer<typeof learningChapterSchema>;
 export type LearningTrackInput = z.input<typeof learningTrackSchema>;
 export type LearningTrackContent = z.infer<typeof learningTrackSchema>;
 export type UpdateModuleProgressInput = z.infer<typeof updateModuleProgressSchema>;

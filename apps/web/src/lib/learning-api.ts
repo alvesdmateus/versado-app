@@ -1,4 +1,5 @@
 import type {
+  ChapterWithModules,
   LearningModule,
   ModuleProgress,
   ModuleStage,
@@ -15,6 +16,8 @@ type Wire<T> = {
 export type WireProgress = Wire<ModuleProgress>;
 export type WireModule = Omit<ModuleWithStatus, "progress"> & { progress: WireProgress | null };
 
+export type WireChapter = Omit<ChapterWithModules, "modules"> & { modules: WireModule[] };
+
 export interface DueReview {
   module: LearningModule;
   progress: WireProgress;
@@ -26,7 +29,7 @@ export const learningApi = {
   },
 
   getTrack(trackId: string) {
-    return apiClient<{ track: TrackSummary; modules: WireModule[] }>(
+    return apiClient<{ track: TrackSummary; modules: WireModule[]; chapters: WireChapter[] }>(
       `/api/learn/tracks/${encodeURIComponent(trackId)}`
     );
   },

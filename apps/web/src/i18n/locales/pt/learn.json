@@ -100,6 +100,8 @@
   "select": {
     "title": "O que você quer entender?",
     "body": "Escolha uma trilha. Você pode trocar quando quiser.",
+    "chapters_one": "{{count}} capítulo",
+    "chapters_other": "{{count}} capítulos",
     "modules_one": "{{count}} módulo",
     "modules_other": "{{count}} módulos",
     "error": "Não conseguimos carregar as trilhas. Seus flashcards continuam disponíveis.",

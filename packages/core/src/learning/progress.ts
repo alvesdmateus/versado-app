@@ -1,5 +1,6 @@
 import { calculateSM2, getDefaultSM2State, type ReviewRating } from "@versado/algorithms";
 import type {
+  LearningChapter,
   LearningModule,
   ModuleProgress,
   ModuleProgressStatus,
@@ -30,9 +31,14 @@ export function createModuleProgress(userId: string, moduleId: string): ModulePr
  */
 export function resolveModuleStatuses(
   modules: LearningModule[],
-  progress: ModuleProgress[]
+  progress: ModuleProgress[],
+  chapters?: LearningChapter[]
 ): ModuleWithStatus[] {
-  const ordered = [...modules].sort((a, b) => a.position - b.position);
+  const chapterPositions = new Map(chapters?.map((c) => [c.id, c.position]));
+  const ordered = [...modules].sort((a, b) =>
+    (chapterPositions.get(a.chapterId) ?? 0) - (chapterPositions.get(b.chapterId) ?? 0) ||
+    a.position - b.position
+  );
   const byModule = new Map(progress.map((p) => [p.moduleId, p]));
   const completed = new Set(progress.filter((p) => p.completedAt).map((p) => p.moduleId));
 

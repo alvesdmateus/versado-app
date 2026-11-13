@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { learningApi, type DueReview } from "@/lib/learning-api";
 import { getInteractive, type Values, type Verdict } from "@/components/learning/interactives";
-import { ControlStack } from "@/components/learning/controls";
+import { ControlStack, splitControls, unanswered } from "@/components/learning/controls";
 import { BoardPanel, PrimaryButton, Spinner } from "@/components/learning/ui";
 import { bandColor } from "@/components/learning/bands";
 
@@ -114,6 +114,15 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
     onDone();
   };
 
+  const onControl = (name: string, v: number) => {
+    setValues((p) => ({ ...p, [name]: v }));
+    setVerdict(null);
+    setTouched(true);
+    setChanged((c) => ({ name, tick: (c?.tick ?? 0) + 1 }));
+  };
+  const reviewControls = def.predictionControls(spec, target);
+  const { free } = splitControls(def, reviewControls);
+
   const prompt = verdict
     ? verdict.correct
       ? spec.retentionHooks.reviewOnSuccess
@@ -130,27 +139,25 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
         {prompt}
       </h2>
       <BoardPanel>
-        <Board spec={spec} stage={3} values={values} target={target} verdict={verdict} anchorT={1} changed={changed} />
-      </BoardPanel>
-      {!finished && (
-        <ControlStack
-          controls={def.predictionControls(spec, target)}
+        <Board
+          spec={spec}
+          stage={3}
           values={values}
-          onChange={(name, v) => {
-            setValues((p) => ({ ...p, [name]: v }));
-            setVerdict(null);
-            setTouched(true);
-            setChanged((c) => ({ name, tick: (c?.tick ?? 0) + 1 }));
-          }}
+          target={target}
+          verdict={verdict}
+          anchorT={1}
+          changed={changed}
+          input={!finished ? { controls: reviewControls, onChange: onControl } : undefined}
         />
-      )}
+      </BoardPanel>
+      {!finished && free.length > 0 && <ControlStack controls={free} values={values} onChange={onControl} />}
       <div className="mt-2">
         {finished ? (
           <PrimaryButton onClick={next} disabled={saving}>
             {saving ? <Spinner /> : t("review.next")}
           </PrimaryButton>
         ) : (
-          <PrimaryButton onClick={check} disabled={verdict !== null && !touched}>
+          <PrimaryButton onClick={check} disabled={(verdict !== null && !touched) || unanswered(reviewControls, values)}>
             {verdict ? t("lesson.checkAgain") : t("lesson.check")}
           </PrimaryButton>
         )}

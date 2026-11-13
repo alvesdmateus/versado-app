@@ -1,5 +1,6 @@
 import { bandColor, bandFill, clamp, INK, MUTE, signed } from "../bands";
 import { Lattice, Svg, Tag } from "./board-kit";
+import { PlaneHandle, RAIL_CROSS, RAIL_GUTTER, Rails, useBoardInput } from "./rail";
 import type { BoardProps, InteractiveDefinition, Values } from "./types";
 
 /** Multiplying is area: an a × b rectangle tiled by unit squares on a peg lattice. */
@@ -12,7 +13,7 @@ const W = OX + COLS * U + 20;
 const H = ROWS * U + 64;
 const OY = H - 36;
 
-function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps) {
+function Board({ stage, values, target, verdict, anchorT, changed, input }: BoardProps) {
   let a: number;
   let b: number;
   if (stage === 1) {
@@ -30,13 +31,20 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
   if (showTiles) for (let i = 0; i < a; i++) for (let j = 0; j < b; j++) tiles.push({ x: i, y: j });
 
   const pulse = (name: string) => (changed?.name === name ? `${name}-${changed.tick}` : name);
+  const board = useBoardInput(input, values);
   const blue = bandColor("blue");
   const amber = bandColor("amber");
   const emerald = bandColor("emerald");
   const red = bandColor("red");
 
   return (
-    <Svg anchoring={stage === 1} width={W} height={H} label={`Rectangle ${a} wide and ${b} tall`}>
+    <Svg
+      anchoring={stage === 1}
+      width={W}
+      height={H}
+      label={`Rectangle ${a} wide and ${b} tall`}
+      gutter={{ left: RAIL_GUTTER, bottom: RAIL_GUTTER }}
+    >
       <Lattice cols={COLS} rows={ROWS} unit={U} ox={OX} oy={OY - ROWS * U} />
 
       {tiles.map((t) => (
@@ -129,6 +137,35 @@ function Board({ stage, values, target, verdict, anchorT, changed }: BoardProps)
           {`goal ${target.area} tiles`}
         </Tag>
       )}
+
+      {/* Width slides along the bottom, height along the left: each rail beside the band it stretches */}
+      <Rails
+        input={input}
+        values={values}
+        bind={{
+          a: { axis: "x", at: (v) => OX + v * U, cross: H + RAIL_CROSS, reach: OY },
+          b: { axis: "y", at: (v) => OY - v * U, cross: -RAIL_CROSS, reach: OX },
+        }}
+      />
+
+      {/* Direct manipulation on the plane: grab a vertex of the rectangle itself */}
+      {board.can("b") && (
+        <PlaneHandle x={OX} y={OY - b * U} color={amber} cursor="ns-resize" onDrag={(p) => board.set("b", (OY - p.y) / U)} />
+      )}
+      {board.can("a") && (
+        <PlaneHandle x={OX + a * U} y={OY} color={blue} cursor="ew-resize" onDrag={(p) => board.set("a", (p.x - OX) / U)} />
+      )}
+      {board.can("a") && board.can("b") && (
+        <PlaneHandle
+          x={OX + a * U}
+          y={OY - b * U}
+          color={INK}
+          onDrag={(p) => {
+            board.set("a", (p.x - OX) / U);
+            board.set("b", (OY - p.y) / U);
+          }}
+        />
+      )}
     </Svg>
   );
 }
@@ -142,6 +179,7 @@ function solve(target: Values): Values {
 
 export const areaProduct: InteractiveDefinition = {
   Board,
+  axes: { a: "x", b: "y" },
   initialValues(spec, stage, target): Values {
     if (stage === 3) return { a: target.a ?? 1, b: 1 };
     if (stage === 4) return solve(target);

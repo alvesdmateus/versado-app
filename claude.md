@@ -41,16 +41,21 @@ Principles for the refactor:
 
 ## Skill-Track Learning (core loop)
 
-- **Domain (`packages/core/src/learning/`):** `LearningTrack` → ordered `LearningModule`s (spec = the bible's YAML
-  template as data) → per-user `ModuleProgress` (stage 1–4, prediction attempts, SM-2 review state).
+- **Domain (`packages/core/src/learning/`):** Course (`LearningTrack`; track = course in code/API) →
+  ordered `LearningChapter`s → ordered `LearningModule`s (lessons; spec = the bible's YAML template as data)
+  → per-user `ModuleProgress` (stage 1–4, prediction attempts, SM-2 review state).
   `LearningService` holds the rules (unlock by previous/prerequisites, mandatory correct prediction before
   completion, first review +24h then SM-2). Storage is pluggable through `LearningRepositories` ports:
   `createMemoryLearningRepositories()` (tests/dev) and the Drizzle adapter `apps/api/src/repositories/`.
 - **Schemas (`packages/validation/src/learning.ts`):** `moduleSpecSchema` enforces the bible as hard limits
   (≤2 controls, ≤25-word budget, ≤12-word prompts, anchoring ≤10s). Content that breaks it cannot be seeded.
-- **Content:** authored in `apps/api/src/content/*.ts` (English first), validated by `content.test.ts`,
-  upserted with `bun run db:seed-learning` (also runs in `start:prod`). Tables: `learning_tracks`,
-  `learning_modules`, `module_progress` (migration `0011_skill_tracks`).
+- **Content:** authored in `apps/api/src/content/*.ts` (English first): `mathematics.ts` exports the
+  Mathematics course, Algebra chapter and its 11 lessons; `vectors.ts` the Vectors & matrices chapter
+  (point → vector → vector sum → matrix stretch → matrix columns; opens after the first lesson). Sources nest `{ track, chapters: [{ chapter, modules }] }`;
+  the loader validates parents and returns chapters plus flat ordered modules. Validated by `content.test.ts`,
+  upserted track → chapters → modules with `bun run db:seed-learning` (also in `start:prod`). Tables:
+  `learning_tracks`, `learning_chapters`, `learning_modules`, `module_progress` (`0011_skill_tracks`;
+  `0012_course_chapters` moves existing modules/preferences without changing module ids or progress).
 - **API:** `/api/learn/tracks`, `/tracks/:id`, `/modules/:id`, `POST /modules/:id/progress`,
   `GET /reviews/due`, `POST /modules/:id/review`.
 - **Web:** `/` Learn (track path), `/tracks/:trackId`, `/learn/:moduleId` (full-screen 4-stage lesson),
@@ -58,7 +63,21 @@ Principles for the refactor:
   `apps/web/src/components/learning/interactives/` and are keyed by `module.interactive`
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).
 - **Interactives:** `area-product`, `binomial-square`, `slope-intercept` (modes by exposed controls: m | c | m+c),
-  `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`. `solve`/`evaluate` receive the spec (mode + `fixed`).
+  `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`, `plane-point` (x, y address),
+  `vector-move` (dx, dy from a start; names "position" = gave the destination's address),
+  `vector-path` (two moves tip to tail + shortcut; "partial"), `matrix-transform` (stretch: a+d on an F flag |
+  columns: lean the up arrow, predict a point's image with a marker; "swap", "unmoved", "transpose").
+  `solve`/`evaluate` receive the spec (mode + `fixed`). Shared `Arrow` lives in `board-kit.tsx`.
+- **Control pattern (axis rails, app-wide):** a variable that moves something along a board axis is a
+  rail drawn by the board in its own coordinates — horizontal for x, vertical for y — with the thumb
+  level with the element it moves (`interactives/rail.tsx`: `AxisRail`/`Rails`, `svgPoint` for pointer →
+  board coordinates). Bind it in `InteractiveDefinition.axes`; boards reserve a fixed `gutter` so they
+  never resize between stages. Parameters with no axis position (slope, curvature, totals) stay
+  `BandSlider`s under the board. Boards receive every active control in `BoardProps.input` and also
+  offer **in-plane handles** for the same variables (`PlaneHandle` on vertices/intercepts, `DragArea`
+  on lines and curves, via `useBoardInput` which snaps and respects locks); rails stay the keyboard path.
+  A computed result the learner predicts is a **multiple choice** (`ControlDef.choices` → `ChoiceGrid`),
+  not a slider; build wrong options from named misconceptions so feedback stays diagnostic.
 - **Building blocks first:** `stage2Exploration.fixed` holds parameters constant so one idea is explored alone
   (e.g. slope with c = 0, then intercept with m = 1) before modules combine them.
 - **Practice (optional `spec.practice`):** faded worked examples after formalization —

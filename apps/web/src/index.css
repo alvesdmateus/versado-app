@@ -290,6 +290,51 @@ body {
   height: 10px;
 }
 
+/* Axis rail (rail.tsx): an SVG slider drawn along a board axis */
+.gb-rail {
+  cursor: grab;
+  outline: none;
+  touch-action: none;
+}
+.gb-rail[data-active] {
+  cursor: grabbing;
+}
+.gb-rail[data-locked] {
+  cursor: default;
+}
+.gb-rail-thumb {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gb-rail[data-active] .gb-rail-thumb {
+  transform: scale(1.15);
+}
+.gb-rail-ring {
+  opacity: 0;
+}
+/* The ring on the thumb is the focus indicator; the surface-wide outline would box the whole rail */
+.gb-surface .gb-rail:focus-visible {
+  outline: none;
+}
+.gb-rail:focus-visible .gb-rail-ring {
+  opacity: 0.45;
+}
+
+/* Plane handles (rail.tsx): grips on vertices, intercepts and lines the learner drags in place */
+.gb-handle {
+  touch-action: none;
+}
+.gb-handle-grip {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gb-handle:hover .gb-handle-grip,
+.gb-handle[data-active] .gb-handle-grip {
+  transform: scale(1.25);
+}
+
 /* Band snap: shapes settle with a short spring overshoot */
 .gb-snap {
   transition:
@@ -319,6 +364,8 @@ body {
   .gb-snap { transition: none; }
   .gb-pulse, .gb-march { animation: none; }
   .gb-range::-webkit-slider-thumb { transition: none; }
+  .gb-rail-thumb { transition: none; }
+  .gb-handle-grip { transition: none; }
 }
 
 /* Utility: hide scrollbar for horizontal scroll containers */

@@ -3,7 +3,24 @@ import { useTranslation } from "react-i18next";
 import { Minus, Plus } from "lucide-react";
 import type { ColorMappingEntry } from "./formula-types";
 import { bandColor, fmt } from "./bands";
-import type { ControlDef, Values } from "./interactives";
+import type { ControlDef, InteractiveDefinition, Values } from "./interactives";
+
+/**
+ * Controls bound to a board axis become rails drawn by the board itself; the rest stay band sliders
+ * under it. See `interactives/rail.tsx`.
+ */
+/** A multiple-choice control with nothing picked yet: the prediction cannot be committed. */
+export function unanswered(controls: ControlDef[], values: Values): boolean {
+  return controls.some((c) => c.choices && values[c.variableName] === undefined);
+}
+
+export function splitControls(def: InteractiveDefinition, controls: ControlDef[]) {
+  const axes = def.axes ?? {};
+  return {
+    bound: controls.filter((c) => axes[c.variableName]),
+    free: controls.filter((c) => !axes[c.variableName]),
+  };
+}
 
 export function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState(
@@ -112,7 +129,16 @@ export function ControlStack({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      {controls.map((c) => (
+      {controls.map((c) =>
+        c.choices ? (
+          <ChoiceGrid
+            key={c.variableName}
+            control={c}
+            value={values[c.variableName]}
+            onChange={(v) => onChange(c.variableName, v)}
+            disabled={disabled || locked.includes(c.variableName)}
+          />
+        ) : (
         <BandSlider
           key={c.variableName}
           control={c}
@@ -120,7 +146,67 @@ export function ControlStack({
           onChange={(v) => onChange(c.variableName, v)}
           disabled={disabled || locked.includes(c.variableName)}
         />
-      ))}
+        )
+      )}
+    </div>
+  );
+}
+
+/**
+ * Multiple choice: a predicted result picked from a few boxes. Sliders are for tuning a quantity;
+ * a computed answer is committed by choosing. Wrong options come from named misconceptions.
+ */
+export function ChoiceGrid({
+  control,
+  value,
+  onChange,
+  disabled,
+}: {
+  control: ControlDef;
+  value: number | undefined;
+  onChange: (v: number) => void;
+  disabled?: boolean;
+}) {
+  const color = bandColor(control.colorToken);
+  const options = control.choices ?? [];
+  const move = (dir: 1 | -1) => {
+    const i = value === undefined ? -1 : options.indexOf(value);
+    const next = options[(i + dir + options.length) % options.length];
+    if (next !== undefined) onChange(next);
+  };
+  return (
+    <div
+      role="radiogroup"
+      aria-label={control.label}
+      className="grid grid-cols-2 gap-2"
+      onKeyDown={(e) => {
+        if (disabled) return;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") (e.preventDefault(), move(1));
+        if (e.key === "ArrowLeft" || e.key === "ArrowUp") (e.preventDefault(), move(-1));
+      }}
+    >
+      {options.map((opt, i) => {
+        const checked = opt === value;
+        return (
+          <button
+            key={opt}
+            type="button"
+            role="radio"
+            aria-checked={checked}
+            tabIndex={checked || (value === undefined && i === 0) ? 0 : -1}
+            disabled={disabled}
+            onClick={() => onChange(opt)}
+            className="flex h-16 items-center justify-center rounded-[6px] border-2 text-2xl font-extrabold tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none"
+            style={{
+              borderColor: checked ? color : "var(--color-gb-seam)",
+              backgroundColor: checked ? `color-mix(in srgb, ${color} 12%, var(--color-gb-panel))` : "var(--color-gb-panel)",
+              color: checked ? color : "var(--color-gb-ink)",
+            }}
+          >
+            {fmt(opt)}
+          </button>
+        );
+      })}
     </div>
   );
 }
