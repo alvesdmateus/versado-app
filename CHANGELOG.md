@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.26](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.25...versado-v0.1.26) (2026-11-13)
+
+
+### Bug Fixes
+
+* **api,web:** stop rate limits and refresh races from logging users out ([#92](https://github.com/alvesdmateus/versado-app/issues/92)) ([ae5a44c](https://github.com/alvesdmateus/versado-app/commit/ae5a44cb9d7f07f38bd7a383dd827eebd07ebc90))
+
 ## [0.1.25](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.24...versado-v0.1.25) (2026-11-13)
 
 
