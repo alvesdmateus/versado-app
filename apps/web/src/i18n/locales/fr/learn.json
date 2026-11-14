@@ -158,7 +158,7 @@
     "start": "S'exercer",
     "next": "Exercice suivant",
     "counter": "Exercice {{n}} sur {{total}}",
-    "correct": "Les deux points sont sur votre courbe.",
+    "correct": "Votre réponse tombe là où le tableau l'indique.",
     "fade": {
       "guided": "Observez",
       "assisted": "Avec aide",
