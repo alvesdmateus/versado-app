@@ -158,7 +158,7 @@
     "start": "Üben",
     "next": "Nächste Übung",
     "counter": "Übung {{n}} von {{total}}",
-    "correct": "Beide Punkte liegen auf deinem Graphen.",
+    "correct": "Deine Antwort landet genau dort, wo das Brett es zeigt.",
     "fade": {
       "guided": "Zuschauen",
       "assisted": "Mit Hilfe",

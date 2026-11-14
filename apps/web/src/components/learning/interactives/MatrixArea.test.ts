@@ -130,12 +130,13 @@ describe("matrixArea reveal and practice", () => {
     expect(after).toContain("gb-march");
   });
 
-  it("hides the folded tile, grid and landings until commitment, including assisted practice", () => {
+  it("hides the folded tile and landings until commitment (the plain plane stays), including assisted practice", () => {
     for (const target of [{ angle: 45 }, { angle: 45, answer: 0 }] as Values[]) {
       const before = render(collapse, { target, values: { angle: 45 } });
       expect(before).not.toContain('data-matrix-area="tile"');
       expect(before).not.toContain('data-matrix-area="landings"');
-      expect(before).not.toContain('fill="var(--color-gb-peg)"');
+      // The plain lattice gives nothing away, so the learner keeps their bearings.
+      expect(before).toContain('fill="var(--color-gb-peg)"');
       const after = render(collapse, { target, values: { angle: "answer" in target ? 45 : 50, answer: 1 }, verdict: { correct: false, delta: 5, kind: "thin" } });
       expect(after).toContain('data-matrix-area="tile"');
       expect(after).toContain('data-matrix-area="landings"');

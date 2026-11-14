@@ -162,7 +162,7 @@ describe("matrixEigenvector", () => {
     expect(after).toContain("data-probe-output");
     expect(after).toContain('stroke-dasharray="6 4"');
     expect(after).toContain("gb-march");
-    expect(after).toContain("18.43°");
+    expect(after).toContain("18°");
   });
 
   it("keeps Stage 1 silent, the viewport fixed, and the guided demonstration visible", () => {
