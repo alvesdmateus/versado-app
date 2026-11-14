@@ -420,6 +420,8 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           max: c.max,
           step: c.step,
           colorToken: c.colorToken,
+          // A toggle is two named states, picked like a choice (never a 0..1 slider).
+          ...(c.controlType === "toggle" && c.stateLabels ? { choices: [c.min, c.max], optionLabels: c.stateLabels } : {}),
         }))
       : stage === 3
         ? def.predictionControls(spec, target)
