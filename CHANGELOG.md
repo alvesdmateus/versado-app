@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.28](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.27...versado-v0.1.28) (2026-11-14)
+
+
+### Features
+
+* **api:** draft math chapters 2-5 lesson specs ([#100](https://github.com/alvesdmateus/versado-app/issues/100)) ([4b6bf22](https://github.com/alvesdmateus/versado-app/commit/4b6bf2255cce695d9ca587e01e3908da5b34005c))
+* **web,api:** when lines never meet lesson ([#101](https://github.com/alvesdmateus/versado-app/issues/101)) ([414f766](https://github.com/alvesdmateus/versado-app/commit/414f7661f558b9545b19090836f3f909934c2227))
+* **web:** chapter pages and expandable lesson cards ([#97](https://github.com/alvesdmateus/versado-app/issues/97)) ([a5524a5](https://github.com/alvesdmateus/versado-app/commit/a5524a5ea18ed1d767cc73f008bb09c7bfa9c3f3))
+
 ## [0.1.27](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.26...versado-v0.1.27) (2026-11-13)
 
 
