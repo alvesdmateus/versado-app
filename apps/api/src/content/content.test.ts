@@ -24,10 +24,16 @@ describe("learning content", () => {
     }
   });
 
-  it("keeps Algebra (15 lessons) then Vectors & matrices (5 lessons) in Mathematics", () => {
+  it("keeps Algebra, Vectors & matrices, then the draft Trig, Growth and Calculus chapters in Mathematics", () => {
     expect(content).toHaveLength(1);
     expect(content[0]!.track).toMatchObject({ id: "mathematics", title: "Mathematics", domain: "mathematics" });
-    expect(content[0]!.chapters.map((c) => c.id)).toEqual(["math-algebra", "math-vectors"]);
+    expect(content[0]!.chapters.map((c) => c.id)).toEqual([
+      "math-algebra",
+      "math-vectors",
+      "math-trig",
+      "math-growth",
+      "math-calculus",
+    ]);
     expect(content[0]!.chapters[0]).toMatchObject({ id: "math-algebra", title: "Algebra" });
     expect(content[0]!.modules.filter((m) => m.chapterId === "math-algebra")).toHaveLength(15);
     expect(content[0]!.modules.filter((m) => m.chapterId === "math-vectors").map((m) => m.id)).toEqual([
@@ -36,7 +42,23 @@ describe("learning content", () => {
       "math-vector-sum-01",
       "math-matrix-stretch-01",
       "math-matrix-columns-01",
+      "math-matrix-rotation-01",
+      "math-transform-order-01",
+      "math-determinant-01",
+      "math-singular-01",
+      "math-inverse-01",
+      "math-linear-system-01",
+      "math-eigenvector-01",
     ]);
+    for (const chapterId of ["math-trig", "math-growth", "math-calculus"]) {
+      const lessons = content[0]!.modules.filter((m) => m.chapterId === chapterId);
+      expect(lessons).toHaveLength(5);
+      expect(lessons.every((m) => m.status === "draft")).toBe(true);
+      expect(content[0]!.chapters.find((c) => c.id === chapterId)!.status).toBe("draft");
+    }
+    expect(
+      content[0]!.modules.filter((m) => m.chapterId === "math-vectors" && m.position >= 20).every((m) => m.status === "draft"),
+    ).toBe(true);
     for (const { track, chapters, modules } of content) {
       expect(chapters.every((c) => c.trackId === track.id)).toBe(true);
       for (const module of modules) {
