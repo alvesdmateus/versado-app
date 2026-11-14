@@ -36,7 +36,17 @@ export interface Verdict {
     | "alwaysOne"
     | "endless"
     | "sameLine"
-    | "crosses";
+    | "crosses"
+    | "destination"
+    | "sideways"
+    | "clockwise"
+    | "negate"
+    | "same"
+    | "subtract"
+    | "reversed"
+    | "unsigned"
+    | "thin"
+    | "perpendicular";
 }
 
 export interface BoardProps {
