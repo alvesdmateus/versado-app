@@ -117,7 +117,11 @@
     "decrease": "{{label}} verringern",
     "increase": "{{label}} erhöhen",
     "choice": {
-      "endless": "Unendlich oft"
+      "endless": "Unendlich oft",
+      "matrix-area": {
+        "overlapping": "Überlappend",
+        "separate": "Getrennt"
+      }
     }
   },
   "review": {

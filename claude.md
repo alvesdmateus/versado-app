@@ -72,6 +72,10 @@ Principles for the refactor:
   `vector-move` (dx, dy from a start; names "position" = gave the destination's address),
   `vector-path` (two moves tip to tail + shortcut; "partial"), `matrix-transform` (stretch: a+d on an F flag |
   columns: lean the up arrow, predict a point's image with a marker; "swap", "unmoved", "transpose").
+  Chapter 2 extension boards (lessons still draft; contracts in the `vectors.ts` header): `matrix-turn` (quarter turns;
+  "clockwise", "swap"), `matrix-order` (stretch/turn order; "reversed"), `matrix-area` (diagonal a·d signed area | collapse angle;
+  "unsigned", "thin", "perpendicular"), `matrix-inverse` (rewind + undo stretches; "negate", "same", "subtract"),
+  `matrix-system` (input x so Ax hits the pin; "destination"), `matrix-eigenvector` (probe angle; "sideways").
   `solve`/`evaluate` receive the spec (mode + `fixed`). Shared `Arrow` lives in `board-kit.tsx`.
 - **Control pattern (axis rails, app-wide):** a variable that moves something along a board axis is a
   rail drawn by the board in its own coordinates — horizontal for x, vertical for y — with the thumb
