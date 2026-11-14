@@ -36,7 +36,17 @@ export interface Verdict {
     | "alwaysOne"
     | "endless"
     | "sameLine"
-    | "crosses";
+    | "crosses"
+    | "destination"
+    | "sideways"
+    | "clockwise"
+    | "negate"
+    | "same"
+    | "subtract"
+    | "reversed"
+    | "unsigned"
+    | "thin"
+    | "perpendicular";
 }
 
 export interface BoardProps {
@@ -85,6 +95,8 @@ export interface ControlDef {
   choices?: number[];
   /** Text for choices that are not plain numbers, as `learn` i18n keys by choice value (e.g. "endless"). */
   choiceLabels?: Readonly<Record<number, string>>;
+  /** Literal option text from the lesson content (a toggle's two states), aligned with `choices`. */
+  optionLabels?: readonly string[];
 }
 
 export interface InteractiveDefinition {

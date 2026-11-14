@@ -130,7 +130,20 @@ export function ControlStack({
   return (
     <div className="flex flex-col gap-1">
       {controls.map((c) =>
-        c.choices ? (
+        c.choices && c.optionLabels ? (
+          // A toggle: its name stays visible above the two states, like a slider's label.
+          <div key={c.variableName} className="flex flex-col gap-2">
+            <span className="text-sm font-semibold leading-tight" style={{ color: bandColor(c.colorToken) }}>
+              {c.label}
+            </span>
+            <ChoiceGrid
+              control={c}
+              value={values[c.variableName]}
+              onChange={(v) => onChange(c.variableName, v)}
+              disabled={disabled || locked.includes(c.variableName)}
+            />
+          </div>
+        ) : c.choices ? (
           <ChoiceGrid
             key={c.variableName}
             control={c}
@@ -170,7 +183,9 @@ export function ChoiceGrid({
   const { t } = useTranslation("learn");
   const color = bandColor(control.colorToken);
   const options = control.choices ?? [];
-  const text = (opt: number) => (control.choiceLabels?.[opt] ? t(control.choiceLabels[opt]!) : fmt(opt));
+  const text = (opt: number) =>
+    control.optionLabels?.[options.indexOf(opt)] ?? (control.choiceLabels?.[opt] ? t(control.choiceLabels[opt]!) : fmt(opt));
+  const worded = (opt: number) => control.optionLabels !== undefined || control.choiceLabels?.[opt] !== undefined;
   const move = (dir: 1 | -1) => {
     const i = value === undefined ? -1 : options.indexOf(value);
     const next = options[(i + dir + options.length) % options.length];
@@ -198,11 +213,11 @@ export function ChoiceGrid({
             tabIndex={checked || (value === undefined && i === 0) ? 0 : -1}
             disabled={disabled}
             onClick={() => onChange(opt)}
-            className={`flex min-h-16 items-center justify-center rounded-[6px] border-2 px-1 text-center font-extrabold leading-tight tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none ${control.choiceLabels?.[opt] ? "text-base" : "text-2xl"}`}
+            className={`flex items-center justify-center rounded-[6px] border-2 px-1 text-center font-extrabold leading-tight tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none ${worded(opt) ? "text-base" : "text-2xl"} ${control.optionLabels ? "min-h-12" : "min-h-16"}`}
             style={{
               borderColor: checked ? color : "var(--color-gb-seam)",
               backgroundColor: checked ? `color-mix(in srgb, ${color} 12%, var(--color-gb-panel))` : "var(--color-gb-panel)",
-              color: checked ? color : "var(--color-gb-ink)",
+              color: "var(--color-gb-ink)",
             }}
           >
             {text(opt)}
