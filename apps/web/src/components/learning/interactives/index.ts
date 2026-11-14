@@ -16,6 +16,15 @@ import { matrixTurn } from "./MatrixTurn";
 import { matrixInverse } from "./MatrixInverse";
 import { matrixOrder } from "./MatrixOrder";
 import { matrixArea } from "./MatrixArea";
+import { circleTrig } from "./CircleTrig";
+import { circleWave } from "./CircleWave";
+import { growthRace } from "./GrowthRace";
+import { exponentRibbon } from "./ExponentRibbon";
+import { compoundGrowth } from "./CompoundGrowth";
+import { doublingMachine } from "./DoublingMachine";
+import { logRuler } from "./LogRuler";
+import { calculusSlope } from "./CalculusSlope";
+import { calculusArea } from "./CalculusArea";
 
 /** Client components keyed by `module.interactive` (the content's interactive slug). */
 export const INTERACTIVES: Record<string, InteractiveDefinition> = {
@@ -36,6 +45,15 @@ export const INTERACTIVES: Record<string, InteractiveDefinition> = {
   "matrix-inverse": matrixInverse,
   "matrix-order": matrixOrder,
   "matrix-area": matrixArea,
+  "circle-trig": circleTrig,
+  "circle-wave": circleWave,
+  "growth-race": growthRace,
+  "exponent-ribbon": exponentRibbon,
+  "compound-growth": compoundGrowth,
+  "doubling-machine": doublingMachine,
+  "log-ruler": logRuler,
+  "calculus-slope": calculusSlope,
+  "calculus-area": calculusArea,
 };
 
 export function getInteractive(key: string): InteractiveDefinition | null {

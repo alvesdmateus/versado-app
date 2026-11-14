@@ -76,6 +76,10 @@ Principles for the refactor:
   "clockwise", "swap"), `matrix-order` (stretch/turn order; "reversed"), `matrix-area` (diagonal a·d signed area | collapse angle;
   "unsigned", "thin", "perpendicular"), `matrix-inverse` (rewind + undo stretches; "negate", "same", "subtract"),
   `matrix-system` (input x so Ax hits the pin; "destination"), `matrix-eigenvector` (probe angle; "sideways").
+  Chapters 3–5 boards (lessons still draft; contracts in each content file's header): `circle-trig` (radians | sin/cos
+  shadows | tangent wall | identity squares), `circle-wave` (amplitude rail + spin speed), `growth-race`, `exponent-ribbon`,
+  `compound-growth` (e as a ceiling), `doubling-machine` (log as step count), `log-ruler`, `calculus-slope` (secant →
+  tangent | derivative trail | extrema), `calculus-area` (Riemann strips | accumulation rate).
   `solve`/`evaluate` receive the spec (mode + `fixed`). Shared `Arrow` lives in `board-kit.tsx`.
 - **Control pattern (axis rails, app-wide):** a variable that moves something along a board axis is a
   rail drawn by the board in its own coordinates — horizontal for x, vertical for y — with the thumb
