@@ -107,14 +107,54 @@ function Shell({
   );
 }
 
+type Feedback = { onCommonMisconception: string; onSignError?: string; byKind?: Record<string, string> };
+
 /** The most specific diagnostic copy for a miss: per-kind, then sign, then the generic misconception. */
-function diagnosis(
-  fb: { onCommonMisconception: string; onSignError?: string; byKind?: Record<string, string> },
-  kind?: string
-): string {
+function diagnosis(fb: Feedback, kind?: string): string {
   if (kind && fb.byKind?.[kind]) return fb.byKind[kind]!;
   if (kind === "sign" && fb.onSignError) return fb.onSignError;
   return fb.onCommonMisconception;
+}
+
+/** Every diagnosis a miss can show, for reserving the prompt's height. */
+function allDiagnoses(fb: Feedback): string[] {
+  return [fb.onCommonMisconception, ...(fb.onSignError ? [fb.onSignError] : []), ...Object.values(fb.byKind ?? {})];
+}
+
+const PROMPT_TYPE = "col-start-1 row-start-1 text-[22px] font-bold leading-snug tracking-tight text-balance";
+
+/**
+ * The scene prompt above the board. `reserve` lists every text the scene can swap in (challenge,
+ * diagnoses, success); they sit invisibly in the same grid cell, so the prompt holds the height of the
+ * longest and a verdict never pushes the board down while the learner reads the evidence on it.
+ */
+function ScenePrompt({ text, reserve = [], miss }: { text: string; reserve?: string[]; miss: boolean }) {
+  return (
+    <div className="mt-3 grid min-h-[3.5rem]">
+      {[...new Set(reserve)].map((r) => (
+        <p key={r} aria-hidden className={`invisible ${PROMPT_TYPE}`}>
+          {r}
+        </p>
+      ))}
+      <h1 className={PROMPT_TYPE} aria-live="polite" style={miss ? { color: bandColor("red") } : undefined}>
+        {text}
+      </h1>
+    </div>
+  );
+}
+
+/** Pinned action footer: one primary action in the same thumb spot, with any error set above it. */
+function ActionFooter({ children, error }: { children: React.ReactNode; error?: string }) {
+  return (
+    <footer className="mt-auto flex flex-col gap-2 pt-6">
+      {error && (
+        <p className="text-sm font-semibold" role="alert" style={{ color: bandColor("red") }}>
+          {error}
+        </p>
+      )}
+      <div className="flex gap-3">{children}</div>
+    </footer>
+  );
 }
 
 function lerpValues(from: Values, to: Values, t: number): Values {
@@ -301,13 +341,11 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           />
         }
       >
-        <h1
-          className="mt-3 min-h-[3.5rem] text-[22px] font-bold leading-snug tracking-tight text-balance"
-          aria-live="polite"
-          style={missed ? { color: bandColor("red") } : undefined}
-        >
-          {prompt}
-        </h1>
+        <ScenePrompt
+          text={prompt}
+          reserve={guided ? [] : [item.prompt, t("practice.correct"), ...allDiagnoses(s3.adaptiveFeedback)]}
+          miss={missed}
+        />
 
         <BoardPanel className="mt-3">
           <Board
@@ -334,31 +372,27 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
           </div>
         )}
 
-        <footer className="mt-auto flex gap-3 pt-6">
+        {/* One primary button in one slot across states, so it keeps keyboard focus as its label changes */}
+        <ActionFooter error={finishError ? t("lesson.finishError") : undefined}>
+          {guided && (
+            <SecondaryButton onClick={() => setReplay((r) => r + 1)} aria-label={t("lesson.replay")} className="w-12 px-0">
+              <RotateCcw className="h-5 w-5" />
+            </SecondaryButton>
+          )}
           {guided ? (
-            <>
-              <SecondaryButton onClick={() => setReplay((r) => r + 1)} aria-label={t("lesson.replay")} className="w-12 px-0">
-                <RotateCcw className="h-5 w-5" />
-              </SecondaryButton>
-              <PrimaryButton disabled={guideT < 1} onClick={nextPractice}>
-                {t("lesson.continue")}
-              </PrimaryButton>
-            </>
+            <PrimaryButton disabled={guideT < 1} onClick={nextPractice}>
+              {t("lesson.continue")}
+            </PrimaryButton>
           ) : verdict?.correct ? (
             <PrimaryButton onClick={nextPractice} disabled={finishing}>
-              {finishing ? <Spinner /> : last ? t("lesson.finish") : t("practice.next")}
+              {finishing ? <Spinner /> : !last ? t("practice.next") : finishError ? t("lesson.retryFinish") : t("lesson.finish")}
             </PrimaryButton>
           ) : (
             <PrimaryButton disabled={(verdict !== null && !touched) || unanswered(practiceControls, values)} onClick={check}>
               {verdict ? t("lesson.checkAgain") : t("lesson.check")}
             </PrimaryButton>
           )}
-        </footer>
-        {finishError && (
-          <p className="mt-2 text-sm font-semibold" role="alert" style={{ color: bandColor("red") }}>
-            {t("lesson.finishError")}
-          </p>
-        )}
+        </ActionFooter>
       </Shell>
     );
   }
@@ -393,15 +427,34 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
   const controlsActive = controls.length > 0 && !(stage === 3 && solved && verdict?.correct);
   const { free } = splitControls(def, controls);
 
+  const action: { label: React.ReactNode; onClick: () => void; disabled?: boolean } =
+    stage === 1
+      ? { label: t("lesson.continue"), onClick: () => goTo(2), disabled: anchorT < 1 }
+      : stage === 2
+        ? { label: touched ? t("lesson.continue") : t("lesson.tryControls"), onClick: () => goTo(3), disabled: !touched }
+        : stage === 3
+          ? verdict?.correct
+            ? { label: t("lesson.continue"), onClick: () => goTo(4) }
+            : {
+                label: verdict ? t("lesson.checkAgain") : t("lesson.check"),
+                onClick: check,
+                disabled: (verdict !== null && !touched) || unanswered(controls, values),
+              }
+          : practiceItems.length > 0
+            ? { label: t("practice.start"), onClick: () => startPractice(0) }
+            : {
+                label: finishing ? <Spinner /> : finishError ? t("lesson.retryFinish") : t("lesson.finish"),
+                onClick: () => void finish(),
+                disabled: finishing,
+              };
+
   return (
     <Shell onClose={onExit} title={module.title} rail={<StageRail stage={stage} labels={stageLabels} />}>
-      <h1
-        className="mt-3 min-h-[3.5rem] text-[22px] font-bold leading-snug tracking-tight text-balance"
-        aria-live="polite"
-        style={stage === 3 && missed ? { color: bandColor("red") } : undefined}
-      >
-        {prompt}
-      </h1>
+      <ScenePrompt
+        text={prompt}
+        reserve={stage === 3 ? [s3.challengePrompt, s3.adaptiveFeedback.onSuccess, ...allDiagnoses(s3.adaptiveFeedback)] : []}
+        miss={stage === 3 && missed}
+      />
 
       <BoardPanel className="mt-3">
         <Board
@@ -423,45 +476,18 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
         )}
       </div>
 
-      {/* The action stays pinned to the bottom of the screen (thumb zone), same place on every stage */}
-      <footer className="mt-auto flex gap-3 pt-6">
+      {/* The action stays pinned to the bottom of the screen (thumb zone), same place on every stage.
+          One primary button in one slot, so keyboard focus survives the stage change. */}
+      <ActionFooter error={finishError ? t("lesson.finishError") : undefined}>
         {stage === 1 && (
-          <>
-            <SecondaryButton onClick={() => setReplay((r) => r + 1)} aria-label={t("lesson.replay")} className="w-12 px-0">
-              <RotateCcw className="h-5 w-5" />
-            </SecondaryButton>
-            <PrimaryButton disabled={anchorT < 1} onClick={() => goTo(2)}>
-              {t("lesson.continue")}
-            </PrimaryButton>
-          </>
+          <SecondaryButton onClick={() => setReplay((r) => r + 1)} aria-label={t("lesson.replay")} className="w-12 px-0">
+            <RotateCcw className="h-5 w-5" />
+          </SecondaryButton>
         )}
-        {stage === 2 && (
-          <PrimaryButton disabled={!touched} onClick={() => goTo(3)}>
-            {touched ? t("lesson.continue") : t("lesson.tryControls")}
-          </PrimaryButton>
-        )}
-        {stage === 3 &&
-          (verdict?.correct ? (
-            <PrimaryButton onClick={() => goTo(4)}>{t("lesson.continue")}</PrimaryButton>
-          ) : (
-            <PrimaryButton disabled={(verdict !== null && !touched) || unanswered(controls, values)} onClick={check}>
-              {verdict ? t("lesson.checkAgain") : t("lesson.check")}
-            </PrimaryButton>
-          ))}
-        {stage === 4 &&
-          (practiceItems.length > 0 ? (
-            <PrimaryButton onClick={() => startPractice(0)}>{t("practice.start")}</PrimaryButton>
-          ) : (
-            <PrimaryButton onClick={finish} disabled={finishing}>
-              {finishing ? <Spinner /> : finishError ? t("lesson.retryFinish") : t("lesson.finish")}
-            </PrimaryButton>
-          ))}
-      </footer>
-      {finishError && (
-        <p className="mt-2 text-sm font-semibold" role="alert" style={{ color: bandColor("red") }}>
-          {t("lesson.finishError")}
-        </p>
-      )}
+        <PrimaryButton disabled={action.disabled} onClick={action.onClick}>
+          {action.label}
+        </PrimaryButton>
+      </ActionFooter>
     </Shell>
   );
 }

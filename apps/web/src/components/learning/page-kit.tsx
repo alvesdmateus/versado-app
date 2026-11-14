@@ -9,7 +9,7 @@ export function BackLink({ to, children }: { to: string; children: ReactNode }) 
   return (
     <Link
       to={to}
-      className="-ml-1 mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
+      className="-ml-1 mb-1 inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
     >
       <ChevronLeft className="h-4 w-4" aria-hidden />
       {children}
@@ -55,7 +55,7 @@ export function MetaLine({ parts, due }: { parts: string[]; due: number }) {
       {due > 0 && (
         <>
           {" · "}
-          <Link to="/review" className="font-semibold text-band-blue underline-offset-4 hover:underline">
+          <Link to="/review" className="whitespace-nowrap font-semibold text-band-blue underline-offset-4 hover:underline">
             {t("home.due", { count: due })}
           </Link>
         </>

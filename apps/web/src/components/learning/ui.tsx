@@ -137,3 +137,16 @@ export function DuePill({ children, className }: { children: ReactNode; classNam
     </span>
   );
 }
+
+/**
+ * Progress under a track or chapter title: "N of M modules" (or a state such as Locked / Done), plus due
+ * checks as the blue pill. Shared by every card and panel so the rail is never the only progress cue.
+ */
+export function ProgressCaption({ label, due = 0, dueLabel, className }: { label: string; due?: number; dueLabel?: string; className?: string }) {
+  return (
+    <span className={cn("flex items-center gap-2 text-xs font-semibold tabular-nums text-gb-mute", className)}>
+      <span>{label}</span>
+      {due > 0 && dueLabel && <DuePill>{dueLabel}</DuePill>}
+    </span>
+  );
+}
