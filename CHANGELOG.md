@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.29](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.28...versado-v0.1.29) (2026-11-14)
+
+
+### Features
+
+* **web,api:** chapters 3-5 boards ([#107](https://github.com/alvesdmateus/versado-app/issues/107)) ([10fdf1c](https://github.com/alvesdmateus/versado-app/commit/10fdf1c2fea87f97ea8f2992addf80888c2bf0c5))
+* **web:** chapter 2 boards for vectors and matrices ([#103](https://github.com/alvesdmateus/versado-app/issues/103)) ([8266b07](https://github.com/alvesdmateus/versado-app/commit/8266b077037f4c5d2ea93047bb7ae205e4f0cc78))
+
 ## [0.1.28](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.27...versado-v0.1.28) (2026-11-14)
 
 
