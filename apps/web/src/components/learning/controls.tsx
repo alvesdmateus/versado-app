@@ -86,21 +86,21 @@ export function BandSlider({
   return (
     <div className="flex items-center gap-2">
       <label className="flex min-w-0 flex-1 items-center gap-3">
-      <span className="w-20 shrink-0 text-sm font-semibold leading-tight" style={{ color }}>
-        {control.label}
-      </span>
-      <input
-        type="range"
-        className="gb-range"
-        min={control.min}
-        max={control.max}
-        step={control.step}
-        value={value}
-        disabled={disabled}
-        onChange={(e) => onChange(Number(e.target.value))}
-        style={{ ["--band" as string]: color, ["--fill" as string]: `${fill}%` }}
-        aria-valuetext={fmt(value)}
-      />
+        <span className="w-20 shrink-0 text-sm font-semibold leading-tight" style={{ color }}>
+          {control.label}
+        </span>
+        <input
+          type="range"
+          className="gb-range"
+          min={control.min}
+          max={control.max}
+          step={control.step}
+          value={value}
+          disabled={disabled}
+          onChange={(e) => onChange(Number(e.target.value))}
+          style={{ ["--band" as string]: color, ["--fill" as string]: `${fill}%` }}
+          aria-valuetext={fmt(value)}
+        />
       </label>
       <button type="button" className={stepBtn} onClick={() => nudge(-1)} disabled={disabled || value <= control.min} aria-label={t("lesson.decrease", { label: control.label })}>
         <Minus className="h-4 w-4" strokeWidth={2.5} />
@@ -139,13 +139,13 @@ export function ControlStack({
             disabled={disabled || locked.includes(c.variableName)}
           />
         ) : (
-        <BandSlider
-          key={c.variableName}
-          control={c}
-          value={values[c.variableName] ?? c.min}
-          onChange={(v) => onChange(c.variableName, v)}
-          disabled={disabled || locked.includes(c.variableName)}
-        />
+          <BandSlider
+            key={c.variableName}
+            control={c}
+            value={values[c.variableName] ?? c.min}
+            onChange={(v) => onChange(c.variableName, v)}
+            disabled={disabled || locked.includes(c.variableName)}
+          />
         )
       )}
     </div>
@@ -167,8 +167,10 @@ export function ChoiceGrid({
   onChange: (v: number) => void;
   disabled?: boolean;
 }) {
+  const { t } = useTranslation("learn");
   const color = bandColor(control.colorToken);
   const options = control.choices ?? [];
+  const text = (opt: number) => (control.choiceLabels?.[opt] ? t(control.choiceLabels[opt]!) : fmt(opt));
   const move = (dir: 1 | -1) => {
     const i = value === undefined ? -1 : options.indexOf(value);
     const next = options[(i + dir + options.length) % options.length];
@@ -178,7 +180,7 @@ export function ChoiceGrid({
     <div
       role="radiogroup"
       aria-label={control.label}
-      className="grid grid-cols-2 gap-2"
+      className={options.length === 3 ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2"}
       onKeyDown={(e) => {
         if (disabled) return;
         if (e.key === "ArrowRight" || e.key === "ArrowDown") (e.preventDefault(), move(1));
@@ -196,14 +198,14 @@ export function ChoiceGrid({
             tabIndex={checked || (value === undefined && i === 0) ? 0 : -1}
             disabled={disabled}
             onClick={() => onChange(opt)}
-            className="flex h-16 items-center justify-center rounded-[6px] border-2 text-2xl font-extrabold tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none"
+            className={`flex min-h-16 items-center justify-center rounded-[6px] border-2 px-1 text-center font-extrabold leading-tight tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none ${control.choiceLabels?.[opt] ? "text-base" : "text-2xl"}`}
             style={{
               borderColor: checked ? color : "var(--color-gb-seam)",
               backgroundColor: checked ? `color-mix(in srgb, ${color} 12%, var(--color-gb-panel))` : "var(--color-gb-panel)",
               color: checked ? color : "var(--color-gb-ink)",
             }}
           >
-            {fmt(opt)}
+            {text(opt)}
           </button>
         );
       })}

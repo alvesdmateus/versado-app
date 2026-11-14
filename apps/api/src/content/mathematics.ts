@@ -1168,10 +1168,10 @@ export const algebraModules: LearningModuleInput[] = [
     chapterId: "math-algebra",
     position: 13,
     title: "When lines never meet",
-    // New board from the line-intersection pieces: the second line has its own slope and height.
+    // `line-pair`: the second line has its own steepness and start height.
     interactive: "line-pair",
     estimatedMinutes: 4,
-    status: "draft",
+    status: "published",
     spec: {
       targetSkill:
         "Two lines meet once, never (same steepness, different start) or everywhere (the same line): one, no or endless solutions.",
@@ -1222,7 +1222,7 @@ export const algebraModules: LearningModuleInput[] = [
       stage3Prediction: {
         icapTarget: "interactive",
         challengePrompt: "How many times will these two lines cross?",
-        userAction: "Pick 0, 1 or endless before the lines are drawn, then reveal",
+        userAction: "From where each line starts and heads, pick 0, 1 or endless, then reveal the lines",
         // Same steepness, different start: no crossing.
         target: { m: 2, b: 1, m2: 2, b2: 4 },
         tolerance: 0,
@@ -1232,6 +1232,8 @@ export const algebraModules: LearningModuleInput[] = [
           byKind: {
             alwaysOne: "Lines with equal steepness keep the same gap forever; not every pair crosses.",
             endless: "Same steepness but different starts: two parallel lines, not one line.",
+            sameLine: "Same steepness and same start: the lines lie on top of each other.",
+            crosses: "Different steepness: the lines close in and cross exactly once.",
           },
         },
       },

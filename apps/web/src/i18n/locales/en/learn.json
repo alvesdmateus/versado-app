@@ -115,7 +115,10 @@
       }
     },
     "decrease": "Decrease {{label}}",
-    "increase": "Increase {{label}}"
+    "increase": "Increase {{label}}",
+    "choice": {
+      "endless": "Endless"
+    }
   },
   "review": {
     "title": "Review",

@@ -115,7 +115,10 @@
       }
     },
     "decrease": "{{label}} verringern",
-    "increase": "{{label}} erhöhen"
+    "increase": "{{label}} erhöhen",
+    "choice": {
+      "endless": "Unendlich oft"
+    }
   },
   "review": {
     "title": "Wiederholen",

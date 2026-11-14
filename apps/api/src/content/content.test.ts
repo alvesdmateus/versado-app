@@ -85,11 +85,11 @@ describe("learning content", () => {
       "math-quad-complete-square-01",
       "math-quad-roots-01",
       "math-equation-intersection-01",
+      "math-system-parallel-01",
     ]);
     expect(algebra.filter((m) => m.status === "draft").map((m) => m.id)).toEqual([
       "math-factoring-01",
       "math-linear-inequality-01",
-      "math-system-parallel-01",
       "math-difference-of-squares-01",
     ]);
   });

@@ -67,7 +67,8 @@ Principles for the refactor:
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).
 - **Interactives:** `area-product`, `binomial-square`, `complete-square` (x² + the whole strip b in the prediction;
   it splits and wraps on reveal; named misses "whole", "linear", "half"), `slope-intercept` (modes by exposed controls: m | c | m+c),
-  `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`, `plane-point` (x, y address),
+  `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`, `line-pair` (fixed line + moving m2/b2; predict 0 / 1 / endless crossings from the stubs;
+  "alwaysOne", "endless", "sameLine", "crosses"; `ControlDef.choiceLabels` for word answers), `plane-point` (x, y address),
   `vector-move` (dx, dy from a start; names "position" = gave the destination's address),
   `vector-path` (two moves tip to tail + shortcut; "partial"), `matrix-transform` (stretch: a+d on an F flag |
   columns: lean the up arrow, predict a point's image with a marker; "swap", "unmoved", "transpose").
