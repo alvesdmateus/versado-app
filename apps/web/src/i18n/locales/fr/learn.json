@@ -117,7 +117,11 @@
     "decrease": "Diminuer {{label}}",
     "increase": "Augmenter {{label}}",
     "choice": {
-      "endless": "À l’infini"
+      "endless": "À l’infini",
+      "matrix-area": {
+        "overlapping": "Superposés",
+        "separate": "Séparés"
+      }
     }
   },
   "review": {
