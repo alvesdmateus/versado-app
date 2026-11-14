@@ -121,6 +121,19 @@
       "matrix-area": {
         "overlapping": "Overlapping",
         "separate": "Separate"
+      },
+      "calculus-slope": {
+        "rising": "Rising line",
+        "bowl": "Bowl",
+        "vShape": "V shape",
+        "falling": "Falling line",
+        "constantThree": "Level at 3",
+        "originalLine": "Original line",
+        "constantOne": "Level at 1",
+        "constantZero": "Level at 0",
+        "downhill": "Falling",
+        "uphill": "Rising",
+        "level": "Stays flat"
       }
     }
   },

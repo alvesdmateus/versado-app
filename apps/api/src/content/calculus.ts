@@ -340,7 +340,7 @@ export const calculusModules: LearningModuleInput[] = [
         },
       },
       stage4Formalization: {
-        formalExpression: "f′(x) = 0 → peak or valley",
+        formalExpression: "f′(x) = 0 + sign change → peak or valley",
         caption: "A smooth turning point has zero slope; check both sides to identify the turn.",
         colorMapping: [
           { symbol: "f′(x) = 0", matchesVisual: "Level glow on the horizontal board", colorToken: "emerald" },

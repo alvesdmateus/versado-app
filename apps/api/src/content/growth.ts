@@ -335,8 +335,8 @@ export const growthModules: LearningModuleInput[] = [
       retentionHooks: {
         interleavedVariation: "Compare one 100% jump (height 2) with continuous compounding (near 2.718); then double the starting bar while keeping the rate fixed.",
         spacedReviewPrompt: "Mark continuous growth's height, starting at 2 with a 100% rate.",
-        reviewTarget: { height_y: 5.436 },
-        reviewOnSuccess: "Doubling the starting bar doubles the limiting height to about 5.436.",
+        reviewTarget: { height_y: 5.437 },
+        reviewOnSuccess: "Doubling the starting bar doubles the limiting height to about 5.437.",
         reviewIntervalsDays: [7, 14],
       },
       practice: {

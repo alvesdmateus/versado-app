@@ -121,6 +121,19 @@
       "matrix-area": {
         "overlapping": "Sobrepostos",
         "separate": "Separados"
+      },
+      "calculus-slope": {
+        "rising": "Reta crescente",
+        "bowl": "Parábola",
+        "vShape": "Forma em V",
+        "falling": "Reta decrescente",
+        "constantThree": "Constante em 3",
+        "originalLine": "Reta original",
+        "constantOne": "Constante em 1",
+        "constantZero": "Constante em 0",
+        "downhill": "Descendo",
+        "uphill": "Subindo",
+        "level": "Permanece plano"
       }
     }
   },
