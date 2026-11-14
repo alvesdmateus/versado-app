@@ -158,7 +158,7 @@
     "start": "Practicar",
     "next": "Siguiente ejercicio",
     "counter": "Ejercicio {{n}} de {{total}}",
-    "correct": "Los dos puntos están en tu gráfica.",
+    "correct": "Tu respuesta cae donde lo muestra el tablero.",
     "fade": {
       "guided": "Observa",
       "assisted": "Con ayuda",

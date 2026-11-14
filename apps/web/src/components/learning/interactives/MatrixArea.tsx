@@ -126,7 +126,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
       <defs>
         <clipPath id={clip}><rect x={s.x(s.xMin)} y={s.y(s.yMax)} width={s.x(s.xMax) - s.x(s.xMin)} height={s.y(s.yMin) - s.y(s.yMax)} /></clipPath>
       </defs>
-      {(!collapse || !hidden) && <PlaneGrid s={s} />}
+      {/* The plain plane never gives the answer away; only the warped grid stays hidden before a verdict. */}
+      <PlaneGrid s={s} />
       <g clipPath={`url(#${clip})`}>
         {/* A silent before-state also explains the final reduced-motion frame. */}
         {anchoring && (
@@ -199,7 +200,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         </Tag>
       )}
 
-      {!anchoring && (!collapse || !hidden) && <PlaneTicks s={s} avoid={[u, v, centre, ...(collapse ? [sourceU, sourceV, imageU, imageV, { x: u.x + v.x, y: u.y + v.y + 0.4 }, { x: u.x + v.x, y: u.y + v.y - 0.5 }] : formal ? [{ x: 0, y: -1 }] : [])]} />}
+      {!anchoring && <PlaneTicks s={s} avoid={[u, v, centre, ...(collapse ? [sourceU, sourceV, imageU, imageV, { x: u.x + v.x, y: u.y + v.y + 0.4 }, { x: u.x + v.x, y: u.y + v.y - 0.5 }] : formal ? [{ x: 0, y: -1 }] : [])]} />}
       {!anchoring && <Rails input={input} values={values} bind={{
         a: { axis: "x", at: s.x, cross: H + RAIL_CROSS, reach: s.y(0) },
         d: { axis: "y", at: s.y, cross: -RAIL_CROSS, reach: s.x(0) },

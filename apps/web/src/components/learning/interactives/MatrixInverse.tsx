@@ -9,7 +9,8 @@ import type { BoardProps, InteractiveDefinition, Values } from "./types";
 const W = 340;
 const H = 340;
 const GUTTER = { left: RAIL_GUTTER, bottom: RAIL_GUTTER };
-const UNDO_OFFSET = -1.5;
+/** The undo arrows run on their own tracks, hugging the axes just below and left of the forward arrows. */
+const UNDO_OFFSET = -0.6;
 type Diagonal = { a: number; d: number };
 const VERTICES = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 1 }];
 const SOURCES = [{ x: 1, y: 1 }, { x: 1, y: 2 }, { x: 1, y: 3 }];
@@ -145,7 +146,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         <>
           <Tag x={s.x(forward.a)} y={s.y(0) + 26} color={blue} size={12}>{formal ? `A: ${fmt(forward.a)}` : fmt(forward.a)}</Tag>
           <Tag x={s.x(0) + 10} y={s.y(singular ? 0 : forward.d) - 12} color={blue} anchor="start" size={12}>{formal ? `A: ${fmt(forward.d)}` : fmt(singular ? 0 : forward.d)}</Tag>
-          <Tag x={s.x(0) - 8} y={s.y(1) - 10} color={slate} anchor="end">{formal ? "I" : "1 × 1"}</Tag>
+          <Tag x={s.x(1) + 6} y={s.y(1) - 6} color={slate} anchor="start">{formal ? "I" : "1 × 1"}</Tag>
         </>
       )}
       {undoVisible && (

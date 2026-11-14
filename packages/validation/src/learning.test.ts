@@ -56,6 +56,13 @@ describe("moduleSpecSchema", () => {
     expect(r.success).toBe(false);
   });
 
+  it("requires a toggle to name its two states", () => {
+    const toggle = { controlType: "toggle" as const, variableName: "order", label: "Order", min: 0, max: 1, initial: 0, colorToken: "slate" as const, visualSignaling: "flip" };
+    const withControls = (c: object) => ({ ...base, stage2Exploration: { ...base.stage2Exploration, controls: [c] } });
+    expect(moduleSpecSchema.safeParse(withControls(toggle)).success).toBe(false);
+    expect(moduleSpecSchema.safeParse(withControls({ ...toggle, stateLabels: ["Stretch first", "Turn first"] })).success).toBe(true);
+  });
+
   it("rejects prompts over the 12-word budget", () => {
     const r = moduleSpecSchema.safeParse({
       ...base,

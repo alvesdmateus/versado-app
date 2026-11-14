@@ -158,7 +158,7 @@
     "start": "Practice",
     "next": "Next exercise",
     "counter": "Exercise {{n}} of {{total}}",
-    "correct": "Both points sit on your graph.",
+    "correct": "Your answer lands where the board does.",
     "fade": {
       "guided": "Watch",
       "assisted": "With help",

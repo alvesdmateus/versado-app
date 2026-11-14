@@ -119,6 +119,30 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   const tag = (p: Point, text: string, color: string, below = false) => (
     <Tag x={Math.max(38, Math.min(W - 38, s.x(p.x)))} y={Math.max(18, Math.min(H - 12, s.y(p.y) + (below ? 22 : -13)))} color={color} size={12}>{text}</Tag>
   );
+  // A tag pushed outward along its arrow, so tags on nearby tips (probe, landing) never stack.
+  const radial = (p: Point, text: string, color: string, extra = 14) => {
+    const dx = s.x(p.x) - s.x(0);
+    const dy = s.y(p.y) - s.y(0);
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    const anchor = ux > 0.35 ? "start" : ux < -0.35 ? "end" : "middle";
+    const x = Math.max(8, Math.min(W - 8, s.x(p.x) + ux * extra));
+    const y = Math.max(18, Math.min(H - 8, s.y(p.y) + uy * extra + 4));
+    return <Tag x={x} y={y} color={color} size={12} anchor={anchor}>{text}</Tag>;
+  };
+  // Beside the gap between where the landing is and where it would stay on track, away from the probe.
+  const sideTag = (a: Point, b: Point, text: string, color: string) => {
+    const mx = (s.x(a.x) + s.x(b.x)) / 2;
+    const my = (s.y(a.y) + s.y(b.y)) / 2;
+    const gx = s.x(b.x) - s.x(a.x);
+    const gy = s.y(b.y) - s.y(a.y);
+    const len = Math.hypot(gx, gy) || 1;
+    let nx = -gy / len;
+    let ny = gx / len;
+    if (nx * (mx - s.x(0)) + ny * (my - s.y(0)) < 0) [nx, ny] = [-nx, -ny];
+    return <Tag x={mx + nx * 14} y={my + ny * 14 + 4} color={color} size={12} anchor={nx > 0.35 ? "start" : nx < -0.35 ? "end" : "middle"}>{text}</Tag>;
+  };
   // Rotate the true image by a quarter turn: the distractor has exactly the same length.
   const sideways = { x: -actual.y, y: actual.x };
   const picked = values.answer === 1 ? sideways : actual;
@@ -162,8 +186,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         {!hidden && <g data-probe-output>
           <Arrow {...line({ x: 0, y: 0 }, output)} color={emerald} width={3} />
           {!aligned && <line {...line(output, projected)} stroke={missed ? red : rose} strokeWidth={2.5} strokeDasharray={missed ? "6 4" : "3 3"} className={missed ? "gb-march" : undefined} />}
-          {labels && tag(output, `${formal && aligned ? "λ = " : "× "}${aligned ? signed(evidence.factor) : fmt(Math.hypot(evidence.output.x, evidence.output.y))}`, emerald, true)}
-          {labels && !aligned && tag({ x: (actual.x + projected.x) / 2, y: (actual.y + projected.y) / 2 }, `${fmt(evidence.error)}°`, missed ? red : rose)}
+          {labels && radial(output, `${formal && aligned ? "λ = " : "× "}${aligned ? signed(evidence.factor) : fmt(Math.hypot(evidence.output.x, evidence.output.y))}`, emerald)}
+          {labels && !aligned && sideTag(actual, projected, `${Math.round(evidence.error)}°`, missed ? red : rose)}
         </g>}
         {missed && assisted && values.answer === 1 && <g>
           <line {...line(picked, actual)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
@@ -173,7 +197,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
           <line {...track(angle)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
           {tag({ x: -v.x * 1.7, y: -v.y * 1.7 }, `≠ ${fmt(target.excludeAngle)}°`, red)}
         </g>}
-        {labels && tag(v, formal ? "v" : `${fmt(angle)}°`, amber)}
+        {labels && radial(v, formal ? "v" : `${fmt(angle)}°`, amber, Math.hypot(output.x - v.x, output.y - v.y) < 0.6 ? -18 : 14)}
         {formal && <Tag x={W - 32} y={48} color={bandColor("blue")} anchor="end">A</Tag>}
       </g>
       {stage !== 1 && board.can("probeAngle") && <PlaneHandle x={s.x(v.x)} y={s.y(v.y)} color={amber} onDrag={(pt) => {

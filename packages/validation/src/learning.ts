@@ -49,6 +49,11 @@ const controlSchema = z.object({
   initial: z.number(),
   colorToken: colorTokenSchema,
   visualSignaling: z.string().min(1).max(200),
+  /** A toggle's two states, named in words (min, then max): shown as two options, never a 0..1 slider. */
+  stateLabels: z.tuple([z.string().min(1).max(24), z.string().min(1).max(24)]).optional(),
+}).refine((c) => c.controlType !== "toggle" || (c.stateLabels !== undefined && c.min !== c.max), {
+  message: "A toggle needs stateLabels for its two states",
+  path: ["stateLabels"],
 });
 
 export const fadeSchema = z.enum(["guided", "assisted", "autonomous"]);
