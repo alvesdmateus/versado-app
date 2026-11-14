@@ -7,7 +7,7 @@ import { chapterPath, lessonPath } from "@/lib/learn-routes";
 import { useTrackData } from "@/hooks/useTrackData";
 import { LearnHeader, minutesToday } from "@/components/learning/session";
 import { BackLink, ErrorBlock, LoadingBlock, MetaLine, MissingBlock } from "@/components/learning/page-kit";
-import { DuePill, PegDivider, PrimaryButton, ProgressRail } from "@/components/learning/ui";
+import { PegDivider, PrimaryButton, ProgressCaption, ProgressRail } from "@/components/learning/ui";
 
 /** A course: its chapters in order, each under its own divider; the current one opens into Continue. */
 export function TrackPage() {
@@ -46,7 +46,7 @@ export function TrackPage() {
                     <PegDivider id={`chapter-${chapter.id}`} label={t("track.chapter", { n: i + 1 })} />
                     {current ? (
                       <div className="pt-3">
-                        <ChapterContinue chapter={chapter} nextId={state.track.nextModuleId} />
+                        <ChapterContinue chapter={chapter} nextId={state.track.nextModuleId} due={due} />
                       </div>
                     ) : (
                       <ChapterRow chapter={chapter} due={due} />
@@ -54,7 +54,7 @@ export function TrackPage() {
                   </section>
                 );
               })}
-              {state.track.completedCount === state.track.moduleCount && <p className="text-sm text-gb-mute">{t("home.trackDone")}</p>}
+              {state.track.moduleCount > 0 && state.track.completedCount >= state.track.moduleCount && <p className="text-sm text-gb-mute">{t("home.trackDone")}</p>}
             </div>
           </>
         )}
@@ -64,7 +64,7 @@ export function TrackPage() {
 }
 
 /** The chapter you are in: the next lesson and one action to carry on. */
-function ChapterContinue({ chapter, nextId }: { chapter: WireChapter; nextId: string | null }) {
+function ChapterContinue({ chapter, nextId, due }: { chapter: WireChapter; nextId: string | null; due: number }) {
   const { t } = useTranslation("learn");
   const navigate = useNavigate();
   const next = chapter.modules.find((m) => m.id === nextId);
@@ -79,7 +79,9 @@ function ChapterContinue({ chapter, nextId }: { chapter: WireChapter; nextId: st
           {next.title} · {t("path.minutes", { minutes: next.estimatedMinutes })}
         </p>
       )}
-      <ProgressRail done={chapter.completedCount} total={chapter.moduleCount} className="mt-4" />
+      {/* Same caption as the other chapter cards, so the rail is never the only cue (and screen readers get it) */}
+      <ProgressCaption label={t("home.progress", { done: chapter.completedCount, total: chapter.moduleCount })} due={due} dueLabel={t("home.due", { count: due })} className="mt-4" />
+      <ProgressRail done={chapter.completedCount} total={chapter.moduleCount} className="mt-2" />
       {next && (
         <PrimaryButton className="mt-4" onClick={() => navigate(lessonPath(next))}>
           {next.progressStatus === "in_progress" ? t("path.continue") : t("path.start")}
@@ -87,7 +89,7 @@ function ChapterContinue({ chapter, nextId }: { chapter: WireChapter; nextId: st
       )}
       <Link
         to={chapterPath(chapter.trackId, chapter.id)}
-        className="mt-3 block text-center text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
+        className="mt-1 flex min-h-11 items-center justify-center text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
       >
         {t("track.seeChapter")}
       </Link>
@@ -102,23 +104,22 @@ function ChapterRow({ chapter, due }: { chapter: WireChapter; due: number }) {
 
   const body = (
     <span className="flex min-w-0 flex-1 flex-col gap-1">
-      <span className={`text-base font-extrabold leading-tight ${locked ? "text-gb-mute" : "group-hover:underline group-hover:underline-offset-4"}`}>
+      <h3 className={`text-base font-extrabold leading-tight ${locked ? "text-gb-mute" : "group-hover:underline group-hover:underline-offset-4"}`}>
         {chapter.title}
-      </span>
+      </h3>
       {chapter.subtitle && <span className="text-sm text-gb-mute">{chapter.subtitle}</span>}
-      <span className="flex items-center gap-3 text-xs font-semibold tabular-nums text-gb-mute">
-        <span>
-          {locked ? t("track.locked") : done ? t("path.done") : t("home.progress", { done: chapter.completedCount, total: chapter.moduleCount })}
-        </span>
-        {due > 0 && <DuePill>{t("home.due", { count: due })}</DuePill>}
-      </span>
+      <ProgressCaption
+        label={locked ? t("track.locked") : done ? t("path.done") : t("home.progress", { done: chapter.completedCount, total: chapter.moduleCount })}
+        due={due}
+        dueLabel={t("home.due", { count: due })}
+      />
       {!locked && <ProgressRail done={chapter.completedCount} total={chapter.moduleCount} className="mt-1" />}
     </span>
   );
 
   if (locked) {
     return (
-      <div className="mt-3 flex items-center gap-4 rounded-[6px] border border-gb-seam px-4 py-4" aria-disabled>
+      <div className="mt-3 flex items-center gap-4 rounded-[6px] border border-gb-seam px-4 py-4">
         {body}
       </div>
     );
@@ -133,3 +134,4 @@ function ChapterRow({ chapter, due }: { chapter: WireChapter; due: number }) {
     </Link>
   );
 }
+

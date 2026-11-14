@@ -7,7 +7,7 @@ import { learningApi, type WireModule } from "@/lib/learning-api";
 import { profileApi } from "@/lib/profile-api";
 import { bandColor } from "@/components/learning/bands";
 import { LearnHeader, minutesToday } from "@/components/learning/session";
-import { PegDivider, PrimaryButton, ProgressRail as Progress, Spinner, TrackGlyph } from "@/components/learning/ui";
+import { PegDivider, PrimaryButton, ProgressCaption, ProgressRail as Progress, Spinner, TrackGlyph } from "@/components/learning/ui";
 import { lessonPath, trackPath } from "@/lib/learn-routes";
 
 /** Domains in the order the product introduces them; empty ones show as "on the way". */
@@ -167,7 +167,7 @@ function ContinuePanel({ track, modules, onContinue }: { track: TrackSummary; mo
   const next = modules.find((m) => m.id === track.nextModuleId);
   const done = track.completedCount >= track.moduleCount;
   return (
-    <div className="rounded-[6px] border border-gb-ink bg-gb-panel p-4">
+    <div className="rounded-[6px] border border-gb-ink bg-gb-panel px-4 pb-1 pt-4">
       <div className="flex items-start gap-3">
         <TrackGlyph color={bandColor(track.colorToken)} className="h-10 w-10" />
         <div className="min-w-0 flex-1">
@@ -180,13 +180,15 @@ function ContinuePanel({ track, modules, onContinue }: { track: TrackSummary; mo
           </p>
         </div>
       </div>
-      <Progress done={track.completedCount} total={track.moduleCount} className="mt-4" />
+      {/* Same progress caption as a track row, so the rail is never the only cue (and screen readers get it) */}
+      <TrackProgress track={track} className="mt-4" />
+      <Progress done={track.completedCount} total={track.moduleCount} className="mt-2" />
       <PrimaryButton className="mt-4" onClick={onContinue}>
         {done ? t("hub.openTrack") : track.completedCount === 0 ? t("path.start") : t("path.continue")}
       </PrimaryButton>
       <Link
         to={trackPath(track.id)}
-        className="mt-3 block text-center text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
+        className="mt-1 flex min-h-11 items-center justify-center text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
       >
         {t("hub.seePath")}
       </Link>
@@ -195,20 +197,29 @@ function ContinuePanel({ track, modules, onContinue }: { track: TrackSummary; mo
 }
 
 function TrackRow({ track, onOpen }: { track: TrackSummary; onOpen: () => void }) {
-  const { t } = useTranslation("learn");
   return (
     <Link to={trackPath(track.id)} onClick={onOpen} className="group flex items-center gap-4 py-4">
       <TrackGlyph color={bandColor(track.colorToken)} className="h-10 w-10" />
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-base font-extrabold leading-tight group-hover:underline group-hover:underline-offset-4">{track.title}</span>
+        <h3 className="text-base font-extrabold leading-tight group-hover:underline group-hover:underline-offset-4">{track.title}</h3>
         <span className="truncate text-sm text-gb-mute">{track.subtitle}</span>
-        <span className="flex items-center gap-3 text-xs font-semibold tabular-nums text-gb-mute">
-          <span>{t("home.progress", { done: track.completedCount, total: track.moduleCount })}</span>
-          {track.dueReviewCount > 0 && <span className="text-band-blue">{t("home.due", { count: track.dueReviewCount })}</span>}
-        </span>
+        <TrackProgress track={track} />
         <Progress done={track.completedCount} total={track.moduleCount} className="mt-1" />
       </span>
       <ChevronRight className="h-5 w-5 shrink-0 text-gb-mute transition-colors group-hover:text-gb-ink" aria-hidden />
     </Link>
+  );
+}
+
+
+function TrackProgress({ track, className }: { track: TrackSummary; className?: string }) {
+  const { t } = useTranslation("learn");
+  return (
+    <ProgressCaption
+      label={t("home.progress", { done: track.completedCount, total: track.moduleCount })}
+      due={track.dueReviewCount}
+      dueLabel={t("home.due", { count: track.dueReviewCount })}
+      className={className}
+    />
   );
 }
