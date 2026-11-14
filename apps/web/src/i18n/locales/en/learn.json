@@ -48,6 +48,23 @@
       "title": "We couldn't load the tracks"
     }
   },
+  "track": {
+    "chapter": "Chapter {{n}}",
+    "current": "(current chapter)",
+    "locked": "Locked",
+    "seeChapter": "See the chapter path",
+    "missing": {
+      "title": "Track not found",
+      "body": "It may have been moved or retired."
+    }
+  },
+  "chapter": {
+    "next": "Next chapter",
+    "missing": {
+      "title": "Chapter not found",
+      "body": "It may have been moved or retired."
+    }
+  },
   "path": {
     "start": "Start",
     "continue": "Continue",
@@ -55,7 +72,13 @@
     "stageOf": "Stage {{stage}} of 4 · {{minutes}} min",
     "done": "Done",
     "checkDue": "Check due",
-    "locked": "locked"
+    "locked": "locked",
+    "reviewNow": "Review now",
+    "practiceAgain": "Practice again",
+    "lastCheck": "last check {{when}}",
+    "nextCheck": "next check {{when}}",
+    "opensAfter": "Opens after “{{title}}”",
+    "opensLater": "Opens when the lessons before it are done"
   },
   "lesson": {
     "close": "Close lesson",

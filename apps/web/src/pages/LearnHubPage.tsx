@@ -7,7 +7,8 @@ import { learningApi, type WireModule } from "@/lib/learning-api";
 import { profileApi } from "@/lib/profile-api";
 import { bandColor } from "@/components/learning/bands";
 import { LearnHeader, minutesToday } from "@/components/learning/session";
-import { PegDivider, PrimaryButton, Spinner, TrackGlyph } from "@/components/learning/ui";
+import { PegDivider, PrimaryButton, ProgressRail as Progress, Spinner, TrackGlyph } from "@/components/learning/ui";
+import { lessonPath, trackPath } from "@/lib/learn-routes";
 
 /** Domains in the order the product introduces them; empty ones show as "on the way". */
 const DOMAINS: LearningDomain[] = ["mathematics", "software", "science"];
@@ -76,7 +77,8 @@ export function LearnHubPage() {
             onOpen={openTrack}
             onContinue={(track) => {
               openTrack(track.id);
-              navigate(track.nextModuleId ? `/learn/${track.nextModuleId}` : `/tracks/${track.id}`);
+              const next = state.data.modules.get(track.id)?.find((m) => m.id === track.nextModuleId);
+              navigate(next ? lessonPath(next) : trackPath(track.id));
             }}
           />
         )}
@@ -183,7 +185,7 @@ function ContinuePanel({ track, modules, onContinue }: { track: TrackSummary; mo
         {done ? t("hub.openTrack") : track.completedCount === 0 ? t("path.start") : t("path.continue")}
       </PrimaryButton>
       <Link
-        to={`/tracks/${track.id}`}
+        to={trackPath(track.id)}
         className="mt-3 block text-center text-sm font-semibold text-gb-mute underline-offset-4 hover:text-gb-ink hover:underline"
       >
         {t("hub.seePath")}
@@ -195,7 +197,7 @@ function ContinuePanel({ track, modules, onContinue }: { track: TrackSummary; mo
 function TrackRow({ track, onOpen }: { track: TrackSummary; onOpen: () => void }) {
   const { t } = useTranslation("learn");
   return (
-    <Link to={`/tracks/${track.id}`} onClick={onOpen} className="group flex items-center gap-4 py-4">
+    <Link to={trackPath(track.id)} onClick={onOpen} className="group flex items-center gap-4 py-4">
       <TrackGlyph color={bandColor(track.colorToken)} className="h-10 w-10" />
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-base font-extrabold leading-tight group-hover:underline group-hover:underline-offset-4">{track.title}</span>
@@ -208,15 +210,5 @@ function TrackRow({ track, onOpen }: { track: TrackSummary; onOpen: () => void }
       </span>
       <ChevronRight className="h-5 w-5 shrink-0 text-gb-mute transition-colors group-hover:text-gb-ink" aria-hidden />
     </Link>
-  );
-}
-
-/** Modules done, as an ink band on a seam rail. */
-function Progress({ done, total, className }: { done: number; total: number; className?: string }) {
-  const pct = total > 0 ? Math.min(100, (done / total) * 100) : 0;
-  return (
-    <span aria-hidden className={`relative block h-1 w-full overflow-hidden rounded-full bg-gb-seam ${className ?? ""}`}>
-      <span className="absolute inset-y-0 left-0 rounded-full bg-gb-ink" style={{ width: `${pct}%` }} />
-    </span>
   );
 }

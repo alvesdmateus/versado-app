@@ -59,11 +59,14 @@ Principles for the refactor:
 - **API:** `/api/learn/tracks`, `/tracks/:id`, `/modules/:id`, `POST /modules/:id/progress`,
   `GET /reviews/due`, `POST /modules/:id/review`.
 - **Web:** `/` Learn hub (every track grouped by domain under `PegDivider`s; the active track opens into a Continue panel),
-  `/tracks/:trackId` (track path; lessons exit back here), `/learn/:moduleId` (full-screen 4-stage lesson),
+  `/tracks/:trackId` (course: chapters in order, one `PegDivider` each; the current chapter opens into Continue),
+  `/tracks/:trackId/chapters/:chapterId` (the chapter's peg path), `/tracks/:trackId/chapters/:chapterId/lessons/:lessonId`
+  (full-screen 4-stage lesson; exits back to its chapter; build URLs with `lib/learn-routes.ts`; legacy `/learn/:moduleId` redirects),
   `/review` (spaced, interleaved prediction checks), `/select-track`. Interactives live in
   `apps/web/src/components/learning/interactives/` and are keyed by `module.interactive`
   (`InteractiveDefinition`: Board, initialValues, predictionControls, solve, evaluate, formatDelta).
-- **Interactives:** `area-product`, `binomial-square`, `slope-intercept` (modes by exposed controls: m | c | m+c),
+- **Interactives:** `area-product`, `binomial-square`, `complete-square` (x² + the whole strip b in the prediction;
+  it splits and wraps on reveal; named misses "whole", "linear", "half"), `slope-intercept` (modes by exposed controls: m | c | m+c),
   `parabola` (a | h+k | b+c | k-only roots view), `line-intersection`, `plane-point` (x, y address),
   `vector-move` (dx, dy from a start; names "position" = gave the destination's address),
   `vector-path` (two moves tip to tail + shortcut; "partial"), `matrix-transform` (stretch: a+d on an F flag |

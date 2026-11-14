@@ -48,6 +48,23 @@
       "title": "Impossible de charger les parcours"
     }
   },
+  "track": {
+    "chapter": "Chapitre {{n}}",
+    "current": "(chapitre en cours)",
+    "locked": "Verrouillé",
+    "seeChapter": "Voir le chemin du chapitre",
+    "missing": {
+      "title": "Parcours introuvable",
+      "body": "Il a peut-être été déplacé ou retiré."
+    }
+  },
+  "chapter": {
+    "next": "Chapitre suivant",
+    "missing": {
+      "title": "Chapitre introuvable",
+      "body": "Il a peut-être été déplacé ou retiré."
+    }
+  },
   "path": {
     "start": "Commencer",
     "continue": "Continuer",
@@ -55,7 +72,13 @@
     "stageOf": "Étape {{stage}} sur 4 · {{minutes}} min",
     "done": "Terminé",
     "checkDue": "Révision en attente",
-    "locked": "verrouillé"
+    "locked": "verrouillé",
+    "reviewNow": "Réviser maintenant",
+    "practiceAgain": "S'entraîner à nouveau",
+    "lastCheck": "dernière révision {{when}}",
+    "nextCheck": "prochaine révision {{when}}",
+    "opensAfter": "S'ouvre après « {{title}} »",
+    "opensLater": "S'ouvre quand les leçons précédentes sont terminées"
   },
   "lesson": {
     "close": "Fermer la leçon",

@@ -48,6 +48,23 @@
       "title": "Não conseguimos carregar as trilhas"
     }
   },
+  "track": {
+    "chapter": "Capítulo {{n}}",
+    "current": "(capítulo atual)",
+    "locked": "Bloqueado",
+    "seeChapter": "Ver o caminho do capítulo",
+    "missing": {
+      "title": "Trilha não encontrada",
+      "body": "Ela pode ter sido movida ou retirada."
+    }
+  },
+  "chapter": {
+    "next": "Próximo capítulo",
+    "missing": {
+      "title": "Capítulo não encontrado",
+      "body": "Ele pode ter sido movido ou retirado."
+    }
+  },
   "path": {
     "start": "Começar",
     "continue": "Continuar",
@@ -55,7 +72,13 @@
     "stageOf": "Etapa {{stage}} de 4 · {{minutes}} min",
     "done": "Concluído",
     "checkDue": "Revisão pendente",
-    "locked": "bloqueado"
+    "locked": "bloqueado",
+    "reviewNow": "Revisar agora",
+    "practiceAgain": "Praticar de novo",
+    "lastCheck": "última revisão {{when}}",
+    "nextCheck": "próxima revisão {{when}}",
+    "opensAfter": "Abre depois de “{{title}}”",
+    "opensLater": "Abre quando as lições anteriores estiverem concluídas"
   },
   "lesson": {
     "close": "Fechar lição",

@@ -204,10 +204,116 @@ export const algebraModules: LearningModuleInput[] = [
     },
   },
   {
-    id: "math-linear-slope-01",
+    id: "math-factoring-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
     position: 2,
+    title: "Factoring is un-multiplying",
+    // New board: algebra tiles (big square, strips, small tiles), built on the area-product board.
+    interactive: "algebra-tiles",
+    estimatedMinutes: 4,
+    status: "draft",
+    spec: {
+      targetSkill:
+        "Factoring finds the two sides of the rectangle a set of tiles already makes: strips add the extras, small tiles multiply them.",
+      cognitiveLoadBudget: { maxSimultaneousVariables: 2, onScreenWordLimit: 25 },
+      stage1Anchoring: {
+        visualMetaphor:
+          "One big square, a few long strips and some small tiles lie scattered on the pegs, then slide together into a single rectangle whose two edges light up.",
+        caption: "Loose pieces, one rectangle.",
+        durationSeconds: 8,
+        pretrainingElements: [
+          { label: "Big square", colorToken: "blue" },
+          { label: "Long strip", colorToken: "amber" },
+          { label: "Small tile", colorToken: "emerald" },
+        ],
+      },
+      stage2Exploration: {
+        prompt: "Stretch each side. Count the strips and small tiles.",
+        controls: [
+          {
+            controlType: "slider",
+            variableName: "p",
+            label: "Right side extra",
+            min: 1,
+            max: 5,
+            step: 1,
+            initial: 2,
+            colorToken: "rose",
+            visualSignaling: "A column of strips and small tiles grows on the right edge",
+          },
+          {
+            controlType: "slider",
+            variableName: "q",
+            label: "Bottom side extra",
+            min: 1,
+            max: 5,
+            step: 1,
+            initial: 3,
+            colorToken: "violet",
+            visualSignaling: "A row of strips and small tiles grows on the bottom edge",
+          },
+        ],
+        spatialContiguityRules: [
+          "Each side's extra is written on the edge it lengthens",
+          "The strip count and the small-tile count sit inside their own groups",
+        ],
+      },
+      stage3Prediction: {
+        icapTarget: "constructive",
+        challengePrompt: "Build one rectangle from these tiles.",
+        userAction:
+          "Given 1 big square, 5 strips and 6 small tiles, set both side extras so every tile fits, then reveal",
+        // The board lays out the tiles of (x + p)(x + q); p and q in either order are correct.
+        target: { p: 2, q: 3 },
+        tolerance: 0,
+        adaptiveFeedback: {
+          onCommonMisconception: "Dashed tiles show what your rectangle is missing; red ones are extra.",
+          onSuccess: "Five strips, six small tiles: extras 2 and 3 fit exactly.",
+          byKind: {
+            swapped: "Your sides make 6 strips and 5 tiles: strips add the extras, tiles multiply them.",
+            stripsOnly: "The strips fit, but the corner needs a different number of small tiles.",
+            tilesOnly: "The small tiles fit, but the strips no longer cover both sides.",
+          },
+        },
+      },
+      stage4Formalization: {
+        formalExpression: "x² + 5x + 6 = (x + 2)(x + 3)",
+        caption: "Factoring reads off the sides of the rectangle the tiles make.",
+        colorMapping: [
+          { symbol: "x²", matchesVisual: "Big square", colorToken: "blue" },
+          { symbol: "5x", matchesVisual: "Five long strips", colorToken: "amber" },
+          { symbol: "6", matchesVisual: "Six small tiles", colorToken: "emerald" },
+          { symbol: "+ 2", matchesVisual: "Right side extra", colorToken: "rose" },
+          { symbol: "+ 3", matchesVisual: "Bottom side extra", colorToken: "violet" },
+        ],
+      },
+      retentionHooks: {
+        interleavedVariation: "Mix with the square of a sum: some tile sets make a square, most make a rectangle.",
+        spacedReviewPrompt: "Build one rectangle: 7 strips, 12 small tiles.",
+        reviewOnSuccess: "Extras 3 and 4: they add to 7 strips and multiply to 12 tiles.",
+        reviewTarget: { p: 3, q: 4 },
+        reviewIntervalsDays: [1, 7],
+      },
+      practice: {
+        items: [
+          { prompt: "Watch the tiles find their sides.", fade: "guided", target: { p: 1, q: 3 }, presetControls: [] },
+          { prompt: "One side is set. Find the other.", fade: "assisted", target: { p: 2, q: 4 }, presetControls: ["p"] },
+          {
+            prompt: "Build the rectangle from 7 strips and 10 tiles.",
+            fade: "autonomous",
+            target: { p: 2, q: 5 },
+            presetControls: [],
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "math-linear-slope-01",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
+    position: 3,
     title: "Steepness and direction",
     interactive: "slope-intercept",
     estimatedMinutes: 3,
@@ -280,7 +386,7 @@ export const algebraModules: LearningModuleInput[] = [
     id: "math-linear-intercept-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 3,
+    position: 4,
     title: "Where the line starts",
     interactive: "slope-intercept",
     estimatedMinutes: 3,
@@ -349,7 +455,7 @@ export const algebraModules: LearningModuleInput[] = [
     id: "math-slope-intercept-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 4,
+    position: 5,
     title: "Putting m and c together",
     interactive: "slope-intercept",
     estimatedMinutes: 5,
@@ -452,10 +558,99 @@ export const algebraModules: LearningModuleInput[] = [
     },
   },
   {
+    id: "math-linear-inequality-01",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
+    position: 6,
+    title: "Inequalities are regions",
+    // New board: a fixed line on the plane, a draggable test point and a shaded side.
+    interactive: "line-region",
+    estimatedMinutes: 4,
+    status: "draft",
+    spec: {
+      targetSkill:
+        "An inequality is a whole side of a line: every point there is higher (or lower) than the line at its own x.",
+      cognitiveLoadBudget: { maxSimultaneousVariables: 2, onScreenWordLimit: 25 },
+      stage1Anchoring: {
+        visualMetaphor:
+          "A line is laid across a field of pegs; as it tilts, the pegs above it glow and the pegs below stay plain.",
+        caption: "A line splits the plane into two sides.",
+        durationSeconds: 8,
+        pretrainingElements: [
+          { label: "The line", colorToken: "blue" },
+          { label: "Pegs above", colorToken: "emerald" },
+        ],
+      },
+      stage2Exploration: {
+        prompt: "Drag the point. Watch when it rises above the line.",
+        controls: [
+          {
+            controlType: "drag_handle",
+            variableName: "px",
+            label: "Point x",
+            min: -4,
+            max: 4,
+            step: 1,
+            initial: -2,
+            colorToken: "slate",
+            visualSignaling: "A vertical gap from the point to the line follows the point",
+          },
+          {
+            controlType: "drag_handle",
+            variableName: "py",
+            label: "Point height",
+            min: -4,
+            max: 6,
+            step: 1,
+            initial: 3,
+            colorToken: "violet",
+            visualSignaling: "The gap turns emerald above the line and stays mute below it",
+          },
+        ],
+        // Building block: a gentle rising line first; the prediction uses a falling one.
+        fixed: { m: 1, c: 1 },
+        spatialContiguityRules: [
+          "The point's height and the line's height at the same x sit at the two ends of the gap",
+        ],
+      },
+      stage3Prediction: {
+        icapTarget: "interactive",
+        challengePrompt: "Shade the side where points sit lower than the line.",
+        userAction: "Pick the side (above or below the falling line) to shade, then reveal test points",
+        // side: 1 = above, -1 = below. The line falls (m < 0), so "lower" is not "to the left".
+        target: { m: -2, c: 3, side: -1 },
+        tolerance: 0,
+        adaptiveFeedback: {
+          onCommonMisconception: "Each dashed gap shows a point on your side that rises above the line.",
+          onSuccess: "Every point below the line is lower than it at its own x.",
+          byKind: {
+            leftRight: "Lower means below the line at the same x, not to its left.",
+          },
+        },
+      },
+      stage4Formalization: {
+        formalExpression: "y < −2x + 3",
+        caption: "An inequality is a whole region, bounded by its line.",
+        colorMapping: [
+          { symbol: "y", matchesVisual: "The point's height", colorToken: "violet" },
+          { symbol: "−2x + 3", matchesVisual: "The line's height at the same x", colorToken: "blue" },
+          { symbol: "<", matchesVisual: "The shaded side below the line", colorToken: "emerald" },
+        ],
+      },
+      retentionHooks: {
+        interleavedVariation: "A rising line with the upper side asked for, mixed with where-the-line-starts checks.",
+        spacedReviewPrompt: "Shade the side where points sit higher than the line.",
+        reviewOnSuccess: "Above the line: every point there is higher than it.",
+        reviewTarget: { m: 1, c: -1, side: 1 },
+        reviewIntervalsDays: [1, 7],
+      },
+    },
+  },
+  {
     id: "math-quad-shape-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 5,
+    position: 7,
     title: "Opening and direction",
     interactive: "parabola",
     estimatedMinutes: 3,
@@ -525,7 +720,7 @@ export const algebraModules: LearningModuleInput[] = [
     id: "math-quad-vertex-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 6,
+    position: 8,
     title: "Moving the vertex",
     interactive: "parabola",
     estimatedMinutes: 5,
@@ -635,7 +830,7 @@ export const algebraModules: LearningModuleInput[] = [
     id: "math-quad-general-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 7,
+    position: 9,
     title: "The general form",
     interactive: "parabola",
     estimatedMinutes: 4,
@@ -717,10 +912,91 @@ export const algebraModules: LearningModuleInput[] = [
     },
   },
   {
+    id: "math-quad-complete-square-01",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
+    position: 10,
+    title: "Completing the square",
+    // Board: x² plus bx split into two strips of b/2, one empty corner (CompleteSquare.tsx).
+    interactive: "complete-square",
+    estimatedMinutes: 4,
+    status: "published",
+    spec: {
+      targetSkill:
+        "To turn x² + bx into a square, split the strips in half and add the missing corner: a square of side b/2.",
+      cognitiveLoadBudget: { maxSimultaneousVariables: 2, onScreenWordLimit: 25 },
+      stage1Anchoring: {
+        visualMetaphor:
+          "A square and a long strip sit side by side; the strip splits in two, the halves wrap around two edges of the square, and one small corner is left empty.",
+        caption: "Split the strip, wrap it, find the gap.",
+        durationSeconds: 9,
+        pretrainingElements: [
+          { label: "Square", colorToken: "blue" },
+          { label: "Strip halves", colorToken: "amber" },
+          { label: "Missing corner", colorToken: "emerald" },
+        ],
+      },
+      stage2Exploration: {
+        prompt: "Widen the strip. Watch the missing corner grow.",
+        controls: [
+          {
+            controlType: "slider",
+            variableName: "b",
+            label: "Strip width b",
+            min: 2,
+            max: 10,
+            step: 2,
+            initial: 4,
+            colorToken: "amber",
+            visualSignaling: "Both strip halves and the empty corner resize together",
+          },
+        ],
+        spatialContiguityRules: [
+          "Each strip half shows its width b/2 on its own edge",
+          "The empty corner shows its side on two of its edges",
+        ],
+      },
+      stage3Prediction: {
+        icapTarget: "interactive",
+        challengePrompt: "Which tile completes the square?",
+        userAction: "Pick the corner tile's area from four boxes (the truth, b, b² and b/2), then drop it in",
+        // Correct corner: (b/2)² = 9. Wrong boxes come from the named misconceptions below.
+        target: { b: 6 },
+        tolerance: 0,
+        adaptiveFeedback: {
+          onCommonMisconception: "The dashed outline shows the corner your tile should fill.",
+          onSuccess: "Half of 6 is 3; a 3 by 3 tile closes the square.",
+          byKind: {
+            whole: "That tile is the whole strip wide; the gap is half of it on each side.",
+            linear: "That is the strip's width, not an area. The gap is a square: square its side.",
+            half: "Half the strip is the corner's side. The corner needs that side squared.",
+          },
+        },
+      },
+      stage4Formalization: {
+        formalExpression: "x² + 6x + 9 = (x + 3)²",
+        caption: "Halve b and square it: that corner makes the shape a square.",
+        colorMapping: [
+          { symbol: "x²", matchesVisual: "Square", colorToken: "blue" },
+          { symbol: "6x", matchesVisual: "Two strip halves of 3x", colorToken: "amber" },
+          { symbol: "9", matchesVisual: "Missing corner, 3 by 3", colorToken: "emerald" },
+          { symbol: "(x + 3)²", matchesVisual: "The completed square", colorToken: "slate" },
+        ],
+      },
+      retentionHooks: {
+        interleavedVariation: "Mix with the square of a sum and the vertex form: the completed square names the vertex.",
+        spacedReviewPrompt: "b is 10. Which tile completes the square?",
+        reviewOnSuccess: "Half of 10 is 5; a 5 by 5 tile, area 25, closes it.",
+        reviewTarget: { b: 10 },
+        reviewIntervalsDays: [1, 7],
+      },
+    },
+  },
+  {
     id: "math-quad-roots-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 8,
+    position: 11,
     title: "Where the curve meets the floor",
     interactive: "parabola",
     estimatedMinutes: 4,
@@ -819,7 +1095,7 @@ export const algebraModules: LearningModuleInput[] = [
     id: "math-equation-intersection-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 9,
+    position: 12,
     title: "Equations are crossings",
     interactive: "line-intersection",
     estimatedMinutes: 4,
@@ -887,10 +1163,101 @@ export const algebraModules: LearningModuleInput[] = [
     },
   },
   {
+    id: "math-system-parallel-01",
+    trackId: "mathematics",
+    chapterId: "math-algebra",
+    position: 13,
+    title: "When lines never meet",
+    // New board from the line-intersection pieces: the second line has its own slope and height.
+    interactive: "line-pair",
+    estimatedMinutes: 4,
+    status: "draft",
+    spec: {
+      targetSkill:
+        "Two lines meet once, never (same steepness, different start) or everywhere (the same line): one, no or endless solutions.",
+      cognitiveLoadBudget: { maxSimultaneousVariables: 2, onScreenWordLimit: 25 },
+      stage1Anchoring: {
+        visualMetaphor:
+          "Two rails run side by side across the board without ever touching; then one tilts slightly and they cross at a single peg.",
+        caption: "Same direction never meets. A tilt makes them cross.",
+        durationSeconds: 8,
+        pretrainingElements: [
+          { label: "Fixed line", colorToken: "blue" },
+          { label: "Moving line", colorToken: "amber" },
+        ],
+      },
+      stage2Exploration: {
+        prompt: "Tilt and lift the moving line. Count the crossings.",
+        controls: [
+          {
+            controlType: "slider",
+            variableName: "m2",
+            label: "Steepness",
+            min: -3,
+            max: 3,
+            step: 1,
+            initial: 1,
+            colorToken: "amber",
+            visualSignaling: "The moving line turns; its crossing slides away or disappears",
+          },
+          {
+            controlType: "drag_handle",
+            variableName: "b2",
+            label: "Start height",
+            min: -2,
+            max: 6,
+            step: 1,
+            initial: 4,
+            colorToken: "rose",
+            visualSignaling: "The moving line lifts; with equal steepness the constant gap is labelled",
+          },
+        ],
+        // The fixed line is y = 2x + 1, the same climbing line as in "Equations are crossings".
+        fixed: { m: 2, b: 1 },
+        spatialContiguityRules: [
+          "The crossing count sits beside the crossing, or on the gap when there is none",
+          "When the lines coincide, the whole shared line pulses",
+        ],
+      },
+      stage3Prediction: {
+        icapTarget: "interactive",
+        challengePrompt: "How many times will these two lines cross?",
+        userAction: "Pick 0, 1 or endless before the lines are drawn, then reveal",
+        // Same steepness, different start: no crossing.
+        target: { m: 2, b: 1, m2: 2, b2: 4 },
+        tolerance: 0,
+        adaptiveFeedback: {
+          onCommonMisconception: "The gap between the lines is labelled at three spots: it never shrinks.",
+          onSuccess: "Equal steepness, different starts: the gap stays 3, so they never meet.",
+          byKind: {
+            alwaysOne: "Lines with equal steepness keep the same gap forever; not every pair crosses.",
+            endless: "Same steepness but different starts: two parallel lines, not one line.",
+          },
+        },
+      },
+      stage4Formalization: {
+        formalExpression: "2x + 1 = 2x + 4  →  1 = 4: no solution",
+        caption: "Same slope, different start: no solution. Same line: every x works.",
+        colorMapping: [
+          { symbol: "2x + 1", matchesVisual: "Fixed line", colorToken: "blue" },
+          { symbol: "2x + 4", matchesVisual: "Moving line", colorToken: "amber" },
+          { symbol: "1 = 4", matchesVisual: "The constant gap between them", colorToken: "rose" },
+        ],
+      },
+      retentionHooks: {
+        interleavedVariation: "Mix with equations-are-crossings: sometimes one crossing, sometimes none or endless.",
+        spacedReviewPrompt: "How many times will these two lines cross?",
+        reviewOnSuccess: "Same steepness and same start: one line, every point shared.",
+        reviewTarget: { m: -1, b: 2, m2: -1, b2: 2 },
+        reviewIntervalsDays: [1, 7],
+      },
+    },
+  },
+  {
     id: "math-difference-of-squares-01",
     trackId: "mathematics",
     chapterId: "math-algebra",
-    position: 10,
+    position: 14,
     title: "Cutting a square out",
     interactive: "difference-of-squares",
     estimatedMinutes: 4,

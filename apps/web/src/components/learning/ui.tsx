@@ -112,3 +112,28 @@ export function TrackGlyph({ color, dashed, className }: { color: string; dashed
     </svg>
   );
 }
+
+/** Modules done, as an ink band on a seam rail. */
+export function ProgressRail({ done, total, className }: { done: number; total: number; className?: string }) {
+  const pct = total > 0 ? Math.min(100, (done / total) * 100) : 0;
+  return (
+    <span aria-hidden className={cn("relative block h-1 w-full overflow-hidden rounded-full bg-gb-seam", className)}>
+      <span className="absolute inset-y-0 left-0 rounded-full bg-gb-ink" style={{ width: `${pct}%` }} />
+    </span>
+  );
+}
+
+/** "Due" as a pill: blue tinted from the band, matching the dashed ring on the peg and the due links. */
+export function DuePill({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums text-band-blue",
+        "bg-[color-mix(in_srgb,var(--color-band-blue)_14%,transparent)]",
+        className
+      )}
+    >
+      {children}
+    </span>
+  );
+}
