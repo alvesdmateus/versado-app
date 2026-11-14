@@ -8,6 +8,9 @@ import {
 } from "@versado/validation";
 import { algebraChapter, algebraModules, mathTrack } from "./mathematics";
 import { vectorsChapter, vectorsModules } from "./vectors";
+import { trigChapter, trigModules } from "./trigonometry";
+import { growthChapter, growthModules } from "./growth";
+import { calculusChapter, calculusModules } from "./calculus";
 
 /**
  * Versioned Course (track) → Chapter → Module content, validated against the
@@ -19,6 +22,9 @@ const SOURCES = [
     chapters: [
       { chapter: algebraChapter, modules: algebraModules },
       { chapter: vectorsChapter, modules: vectorsModules },
+      { chapter: trigChapter, modules: trigModules },
+      { chapter: growthChapter, modules: growthModules },
+      { chapter: calculusChapter, modules: calculusModules },
     ],
   },
 ];

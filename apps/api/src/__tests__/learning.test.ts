@@ -44,7 +44,7 @@ describe("learning routes", () => {
     expect(tracks).toHaveLength(1);
     expect(tracks[0]).toMatchObject({
       id: math!.track.id,
-      chapterCount: math!.chapters.length,
+      chapterCount: math!.chapters.filter((c) => c.status === "published").length,
       moduleCount: published,
       completedCount: 0,
       nextModuleId: firstModule,
@@ -55,7 +55,7 @@ describe("learning routes", () => {
     const res = await authRequest(`/api/learn/tracks/${math!.track.id}`, token);
     expect(res.status).toBe(200);
     const { track, chapters, modules } = await res.json();
-    expect(track.chapterCount).toBe(math!.chapters.length);
+    expect(track.chapterCount).toBe(math!.chapters.filter((c) => c.status === "published").length);
     expect(chapters.map((c: { id: string }) => c.id)).toEqual(["math-algebra", "math-vectors"]);
     expect(chapters[0]).toMatchObject({ id: "math-algebra", completedCount: 0 });
     expect(chapters.flatMap((c: { modules: unknown[] }) => c.modules)).toEqual(modules);
