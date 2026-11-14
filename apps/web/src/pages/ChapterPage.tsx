@@ -50,7 +50,7 @@ export function ChapterPage() {
               {chapter.subtitle && <p className="mt-3 text-sm text-gb-mute">{chapter.subtitle}</p>}
             </section>
             <section className="px-5 pb-28">
-              <div className="rounded-[6px] border border-gb-seam">
+              <div className="overflow-hidden rounded-[6px] border border-gb-seam">
                 <PegPath
                   modules={chapter.modules}
                   dueIds={state.dueIds}

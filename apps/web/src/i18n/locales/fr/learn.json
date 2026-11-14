@@ -115,7 +115,10 @@
       }
     },
     "decrease": "Diminuer {{label}}",
-    "increase": "Augmenter {{label}}"
+    "increase": "Augmenter {{label}}",
+    "choice": {
+      "endless": "À l’infini"
+    }
   },
   "review": {
     "title": "Réviser",

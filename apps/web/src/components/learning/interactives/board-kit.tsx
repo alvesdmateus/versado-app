@@ -300,6 +300,17 @@ export function lineEnds(s: PlaneScale, m: number, b: number) {
   return { x1: s.x(pts[0]!.x), y1: s.y(pts[0]!.y), x2: s.x(pts[pts.length - 1]!.x), y2: s.y(pts[pts.length - 1]!.y) };
 }
 
+/** Arrowhead at the right end of the line: the direction of travel, up or down. */
+export function DirectionArrow({ s, m, c, color }: { s: PlaneScale; m: number; c: number; color: string }) {
+  const ends = lineEnds(s, m, c);
+  if (!ends) return null;
+  const angle = Math.atan2(ends.y2 - ends.y1, ends.x2 - ends.x1);
+  const len = 13;
+  const spread = 0.45;
+  const p = (a: number) => `${ends.x2 - len * Math.cos(a)},${ends.y2 - len * Math.sin(a)}`;
+  return <polygon points={`${ends.x2},${ends.y2} ${p(angle - spread)} ${p(angle + spread)}`} fill={color} />;
+}
+
 /**
  * A straight arrow between two board points: a vector drawn as a move. The head sits on the tip;
  * a zero-length move collapses to a dot so "no move" still reads as a place.

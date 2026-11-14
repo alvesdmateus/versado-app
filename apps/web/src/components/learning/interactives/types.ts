@@ -15,7 +15,9 @@ export interface Verdict {
    * "swap" (across and up exchanged), "position" (gave the destination's address instead of the move),
    * "partial" (a sum that leaves one move out), "unmoved" (kept a point where it was before a
    * transformation), "transpose" (read a matrix's rows as its arrows), "whole" (squared all of b
-   * instead of half), "linear" (took b itself as the corner's area), "half" (b/2 without squaring it).
+   * instead of half), "linear" (took b itself as the corner's area), "half" (b/2 without squaring it),
+   * "alwaysOne" (expected a crossing from parallel lines), "endless" (took parallel lines for one line),
+   * "sameLine" (missed that two lines coincide), "crosses" (missed that different steepness always crosses).
    */
   kind?:
     | "sign"
@@ -30,7 +32,11 @@ export interface Verdict {
     | "transpose"
     | "whole"
     | "linear"
-    | "half";
+    | "half"
+    | "alwaysOne"
+    | "endless"
+    | "sameLine"
+    | "crosses";
 }
 
 export interface BoardProps {
@@ -77,6 +83,8 @@ export interface ControlDef {
    * misconceptions so the board can still diagnose them.
    */
   choices?: number[];
+  /** Text for choices that are not plain numbers, as `learn` i18n keys by choice value (e.g. "endless"). */
+  choiceLabels?: Readonly<Record<number, string>>;
 }
 
 export interface InteractiveDefinition {

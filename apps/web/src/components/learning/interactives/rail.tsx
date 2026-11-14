@@ -108,10 +108,15 @@ export function AxisRail({
     if (v !== value) onChange?.(v);
   };
 
-  // The name sits past the low end of a horizontal rail and above the top of a vertical one.
+  // The name sits past the low end of a horizontal rail and above the top of a vertical one. A name
+  // too wide to centre on a left-gutter rail starts at the gutter's edge, so the viewBox never clips it.
+  const halfWidth = control.label.length * 3.4;
+  const clipsLeft = axis === "y" && cross < 0 && cross - halfWidth < -RAIL_GUTTER + 2;
   const labelPos =
     axis === "y"
-      ? { x: cross, y: Math.min(p0, p1) - 20, anchor: "middle" as const }
+      ? clipsLeft
+        ? { x: -RAIL_GUTTER + 2, y: Math.min(p0, p1) - 20, anchor: "start" as const }
+        : { x: cross, y: Math.min(p0, p1) - 20, anchor: "middle" as const }
       : { x: Math.min(p0, p1) - 16, y: cross + 4, anchor: "end" as const };
 
   return (

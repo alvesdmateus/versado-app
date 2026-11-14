@@ -14,8 +14,11 @@ import { DuePill, PrimaryButton, SecondaryButton } from "./ui";
  * Only the current lesson is in full colour, and only one card is open at a time.
  */
 
-/** Peg centre from the top of a row: level with the card's title line. */
-const PEG_Y = 28;
+/**
+ * Peg centre from the top of a row: level with the card's first title line
+ * (1px border + 16px padding + half of the 24px line box). Titles that wrap grow downward.
+ */
+const PEG_Y = 29;
 
 type Segment = "done" | "current" | "ahead" | null;
 
@@ -43,7 +46,8 @@ export function PegPath({
   };
 
   return (
-    <ol className="gb-lattice relative w-full px-3 py-4">
+    // pl-2 puts the peg column (centre of the 40px rail) at x = 28, on the lattice.
+    <ol className="gb-lattice relative w-full py-4 pl-2 pr-3">
       {modules.map((m, i) => (
         <li key={m.id} className="relative grid grid-cols-[40px_minmax(0,1fr)] gap-x-2 pb-3 last:pb-0">
           <Rail above={segment(i - 1)} below={segment(i)} module={m} current={i === currentIndex} due={dueIds.has(m.id)} />
@@ -154,30 +158,37 @@ function LessonCard({
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={panelId}
-        className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left"
+        aria-current={current ? "step" : undefined}
+        // The title owns the full width and its status sits on the line below, so a narrow screen never
+        // squeezes the title into three lines; the chevron stays on the first title line (level with the peg).
+        className="flex w-full items-start gap-3 px-4 py-4 text-left"
       >
-        <span
-          className={cn(
-            "min-w-0 flex-1 leading-tight",
-            current ? "text-lg font-extrabold tracking-tight" : "text-base font-bold",
-            locked ? "text-gb-mute" : "text-gb-ink"
-          )}
-        >
-          {m.title}
-          {locked && <span className="sr-only"> ({t("path.locked")})</span>}
+        <span className="flex min-w-0 flex-1 flex-col items-start gap-1">
+          <span
+            className={cn(
+              "leading-6",
+              current ? "text-lg font-extrabold tracking-tight" : "text-base font-bold",
+              locked ? "text-gb-mute" : "text-gb-ink"
+            )}
+          >
+            {m.title}
+            {locked && <span className="sr-only"> ({t("path.locked")})</span>}
+          </span>
+          {due ? (
+            <DuePill>{t("path.checkDue")}</DuePill>
+          ) : completed ? (
+            <span className="text-xs font-semibold text-gb-mute">{t("path.done")}</span>
+          ) : null}
         </span>
-        {due ? (
-          <DuePill>{t("path.checkDue")}</DuePill>
-        ) : completed ? (
-          <span className="shrink-0 text-xs font-semibold text-gb-mute">{t("path.done")}</span>
-        ) : null}
-        <ChevronDown
-          className={cn(
-            "h-5 w-5 shrink-0 text-gb-mute transition-transform duration-200 ease-out motion-reduce:transition-none",
-            open && "rotate-180"
-          )}
-          aria-hidden
-        />
+        <span className="flex h-6 shrink-0 items-center">
+          <ChevronDown
+            className={cn(
+              "h-5 w-5 text-gb-mute transition-transform duration-200 ease-out motion-reduce:transition-none",
+              open && "rotate-180"
+            )}
+            aria-hidden
+          />
+        </span>
       </button>
 
       {/* Disclosure: the row height eases open from 0fr to 1fr; reduced motion snaps. */}

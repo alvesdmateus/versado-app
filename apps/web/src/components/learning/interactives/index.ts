@@ -4,6 +4,7 @@ import { binomialSquare } from "./BinomialSquare";
 import { completeSquare } from "./CompleteSquare";
 import { slopeIntercept } from "./SlopeIntercept";
 import { lineIntersection } from "./LineIntersection";
+import { linePair } from "./LinePair";
 import { parabola } from "./Parabola";
 import { planePoint } from "./PlanePoint";
 import { vectorMove } from "./VectorMove";
@@ -17,6 +18,7 @@ export const INTERACTIVES: Record<string, InteractiveDefinition> = {
   "complete-square": completeSquare,
   "slope-intercept": slopeIntercept,
   "line-intersection": lineIntersection,
+  "line-pair": linePair,
   parabola,
   "plane-point": planePoint,
   "vector-move": vectorMove,

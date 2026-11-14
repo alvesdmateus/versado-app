@@ -115,7 +115,10 @@
       }
     },
     "decrease": "Diminuir {{label}}",
-    "increase": "Aumentar {{label}}"
+    "increase": "Aumentar {{label}}",
+    "choice": {
+      "endless": "Infinitas"
+    }
   },
   "review": {
     "title": "Revisar",
