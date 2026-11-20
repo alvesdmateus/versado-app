@@ -1,7 +1,7 @@
 import { useId } from "react";
 import type { ModuleSpec } from "@versado/core";
 import { bandColor, bandFill, clamp, fmt, GROUND, SEAM, signed } from "../bands";
-import { ControlStack } from "../controls";
+import { ChoiceGrid, ControlStack } from "../controls";
 import { Arrow, DirectionArrow, lerp, lineEnds, PlaneGrid, PlaneTicks, span, Svg, Tag, usePlane, useSettle, type PlaneScale } from "./board-kit";
 import { PlaneHandle, RAIL_CROSS, RAIL_GUTTER, Rails, useBoardInput } from "./rail";
 import type { BoardInput, BoardProps, ControlDef, InteractiveDefinition, Values, Verdict } from "./types";
@@ -95,6 +95,31 @@ function predictionControls(spec: ModuleSpec, target: Values): ControlDef[] {
   ];
 }
 
+/**
+ * The strip under the lower panel, in board units, where the graph-shape options sit. The board
+ * reserves it for rails, which this prediction never shows, so the options cost no page height.
+ */
+const PICK = { x: 24, y: LOWER + PANEL_H - 22, w: W - 48, h: 76 };
+const PREVIEW = { w: 64, h: 56, pad: 5, reach: 1.6 };
+
+/**
+ * Small trails for the graph-shape options. One vertical scale per option set keeps heights
+ * comparable (a constant 3 sits above a constant 1), so the pictures carry the answer, not the words.
+ */
+function previewTrails(options: number[]) {
+  const xs = Array.from({ length: 33 }, (_, j) => (j - 16) / 10);
+  const all = options.flatMap((a) => xs.map((x) => slopeGraph(a, x)));
+  const hi = Math.max(0, ...all);
+  const lo = Math.min(0, ...all);
+  const sx = (PREVIEW.w / 2 - PREVIEW.pad) / PREVIEW.reach;
+  const sy = (PREVIEW.h - 2 * PREVIEW.pad) / (hi - lo);
+  const y = (v: number) => PREVIEW.pad + (hi - v) * sy;
+  return {
+    axisY: y(0),
+    path: (a: number) => xs.map((x, j) => `${j ? "L" : "M"}${PREVIEW.w / 2 + x * sx},${y(slopeGraph(a, x))}`).join(" "),
+  };
+}
+
 /** Sample in data coordinates; SVG clipping handles both curve and diagnostic overshoots. */
 function curve(s: PlaneScale, f: (x: number) => number, from = s.xMin, to = s.xMax, n = 100) {
   return Array.from({ length: n + 1 }, (_, i) => {
@@ -144,8 +169,14 @@ function Board({ spec, stage, values, target, verdict, anchorT, guide, input, ch
   // Coordinate notation fits at the rail's low end; the full lesson name remains its group label.
   const railInput = activeInput && { ...activeInput, controls: activeInput.controls.map((c) => c.variableName === "probe_x" || c.variableName === "surfer_x" ? { ...c, label: "x" } : c) };
   const board = useBoardInput(activeInput, values);
-  const free = activeInput?.controls.filter((c) => c.variableName !== "probe_x" && c.variableName !== "surfer_x") ?? [];
+  // The graph-shape answer is picked on the lower panel itself, not in a grid under the board.
+  const onBoardAnswer = mode === 2 && stage === 3;
+  const free = activeInput?.controls.filter((c) => c.variableName !== "probe_x" && c.variableName !== "surfer_x" && !(onBoardAnswer && c.variableName === "answer")) ?? [];
   const candidate = mode === 2 ? values.answer : undefined;
+  const options = straight ? [5, 6, 7, 8] : [1, 2, 3, 4];
+  const answerInput = activeInput?.controls.find((c) => c.variableName === "answer");
+  const answerControl = answerInput ?? predictionControls(spec, target).find((c) => c.variableName === "answer")!;
+  const trails = previewTrails(options);
   const solution = solve(target, spec);
   const showTop = mode !== 3 || !hidden;
   const topPoint = mode === 1 ? anchor : probe;
@@ -155,6 +186,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, guide, input, ch
   const label = anchoring ? spec.stage1Anchoring.caption : stage === 2 ? spec.stage2Exploration.prompt : formal ? spec.stage4Formalization.caption : spec.stage3Prediction.challengePrompt;
 
   return <>
+    <div className="relative">
     <Svg width={W} height={H} anchoring={anchoring} gutter={{ bottom: RAIL_GUTTER }} label={label}>
       <defs>
         <clipPath id={topClip}><rect x={24} y={24} width={W - 48} height={PANEL_H - 48} /></clipPath>
@@ -248,15 +280,6 @@ function Board({ spec, stage, values, target, verdict, anchorT, guide, input, ch
         {tags && wrong && mode === 2 && candidate !== undefined && <Tag x={low.x(-1) + 10} y={low.y((slopeGraph(candidate, -1) + df(-1)) / 2)} anchor="start" color={red}>{`Δ ${signed(slopeGraph(candidate, -1) - df(-1))}`}</Tag>}
         {tags && wrong && mode === 3 && <Tag x={low.x((probe + solution.surfer_x!) / 2)} y={low.y(0) + 22} color={red}>{`Δx ${signed(probe - solution.surfer_x!)}`}</Tag>}
         {!anchoring && <PlaneTicks s={low} yStep={2} avoid={[{ x: topPoint, y: df(topPoint) }]} />}
-        {mode === 2 && hidden && candidate === undefined && <g data-slope="candidates">
-          {(straight ? [5, 6, 7, 8] : [1, 2, 3, 4]).map((answer, i) => <g key={answer} transform={`translate(${28 + (i % 2) * 151} ${12 + Math.floor(i / 2) * 78})`}>
-            <rect width={132} height={70} rx={5} fill={GROUND} stroke={SEAM} />
-            <line x1={12} x2={120} y1={48} y2={48} stroke={SEAM} />
-            <line x1={66} x2={66} y1={8} y2={62} stroke={SEAM} />
-            <path d={Array.from({ length: 33 }, (_, j) => { const x = (j - 16) / 10; return `${j ? "L" : "M"}${66 + x * 30},${48 - slopeGraph(answer, x) * 7}`; }).join(" ")} fill="none" stroke={slate} strokeWidth={3} />
-            <Tag x={15} y={20} color={slate} size={12}>{answer}</Tag>
-          </g>)}
-        </g>}
       </g>
       {mode !== 1 && showTop && <line x1={top.x(probe)} x2={top.x(probe)} y1={PANEL_H - 24} y2={LOWER + 24} stroke={mode === 3 ? amber : blue} strokeDasharray="3 3" opacity={0.4} />}
 
@@ -286,6 +309,26 @@ function Board({ spec, stage, values, target, verdict, anchorT, guide, input, ch
       {(board.can("probe_x") || board.can("surfer_x")) && <PlaneHandle x={top.x(probe)} y={hidden && mode === 3 ? top.y(0) : top.y(f(probe))} color={mode === 3 ? amber : blue} cursor="ew-resize" onDrag={(pt) => board.set(mode === 3 ? "surfer_x" : "probe_x", top.fromX(pt.x))} />}
       {stage === 3 && !hidden && mode === 3 && target.answer !== undefined && <Arrow x1={top.x(probe)} y1={top.y(f(probe))} x2={top.x(probe + 0.45)} y2={top.y(f(probe + 0.45))} color={wrong ? red : emerald} width={3} className={wrong ? "gb-march" : undefined} dashed={wrong} />}
     </Svg>
+    {/* Stays through a miss, so the learner can pick again while the evidence is on the board. */}
+    {onBoardAnswer && <div data-slope="candidates" className="absolute" style={{
+      left: `${(PICK.x / W) * 100}%`, top: `${(PICK.y / (H + RAIL_GUTTER)) * 100}%`,
+      width: `${(PICK.w / W) * 100}%`, height: `${(PICK.h / (H + RAIL_GUTTER)) * 100}%`,
+    }}>
+      <ChoiceGrid
+        control={{ ...answerControl, choices: options }}
+        value={candidate}
+        onChange={(v) => activeInput?.onChange("answer", v)}
+        disabled={!answerInput || activeInput?.locked?.includes("answer")}
+        columns={options.length}
+        className="h-full"
+        preview={(answer, checked) => <svg viewBox={`0 0 ${PREVIEW.w} ${PREVIEW.h}`} className="block h-full w-full" aria-hidden>
+          <line x1={PREVIEW.pad} x2={PREVIEW.w - PREVIEW.pad} y1={trails.axisY} y2={trails.axisY} stroke={SEAM} />
+          <line x1={PREVIEW.w / 2} x2={PREVIEW.w / 2} y1={0} y2={PREVIEW.h} stroke={SEAM} />
+          <path {...(checked ? { "data-slope": "candidate" } : {})} d={trails.path(answer)} fill="none" stroke={checked ? emerald : slate} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>}
+      />
+    </div>}
+    </div>
     {free.length > 0 && <div className="mt-4" data-slope-controls="sequential"><ControlStack controls={free} values={values} onChange={activeInput!.onChange} locked={activeInput?.locked} /></div>}
   </>;
 }
