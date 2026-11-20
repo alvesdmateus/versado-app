@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Minus, Plus } from "lucide-react";
 import type { ColorMappingEntry } from "./formula-types";
@@ -174,11 +174,20 @@ export function ChoiceGrid({
   value,
   onChange,
   disabled,
+  preview,
+  columns,
+  className,
 }: {
   control: ControlDef;
   value: number | undefined;
   onChange: (v: number) => void;
   disabled?: boolean;
+  /** Draws each option as a picture; its words stay as the accessible name only. */
+  preview?: (opt: number, checked: boolean) => ReactNode;
+  /** Options per row, overriding the default 2 (or 3 for three options). */
+  columns?: number;
+  /** Extra grid classes, e.g. to fill a fixed strip on a board. */
+  className?: string;
 }) {
   const { t } = useTranslation("learn");
   const color = bandColor(control.colorToken);
@@ -195,7 +204,8 @@ export function ChoiceGrid({
     <div
       role="radiogroup"
       aria-label={control.label}
-      className={options.length === 3 ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2"}
+      className={`${options.length === 3 ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2"}${className ? ` ${className}` : ""}`}
+      style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}
       onKeyDown={(e) => {
         if (disabled) return;
         if (e.key === "ArrowRight" || e.key === "ArrowDown") (e.preventDefault(), move(1));
@@ -213,14 +223,23 @@ export function ChoiceGrid({
             tabIndex={checked || (value === undefined && i === 0) ? 0 : -1}
             disabled={disabled}
             onClick={() => onChange(opt)}
-            className={`flex items-center justify-center rounded-[6px] border-2 px-1 text-center font-extrabold leading-tight tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none ${worded(opt) ? "text-base" : "text-2xl"} ${control.optionLabels ? "min-h-12" : "min-h-16"}`}
+            className={`flex items-center justify-center rounded-[6px] border-2 px-1 text-center font-extrabold leading-tight tabular-nums transition-[border-color,background-color,transform] duration-150 active:scale-[0.97] disabled:opacity-40 motion-reduce:transition-none ${
+              preview ? "min-h-0 p-1" : `${worded(opt) ? "text-base" : "text-2xl"} ${control.optionLabels ? "min-h-12" : "min-h-16"}`
+            }`}
             style={{
               borderColor: checked ? color : "var(--color-gb-seam)",
               backgroundColor: checked ? `color-mix(in srgb, ${color} 12%, var(--color-gb-panel))` : "var(--color-gb-panel)",
               color: "var(--color-gb-ink)",
             }}
           >
-            {text(opt)}
+            {preview ? (
+              <>
+                {preview(opt, checked)}
+                <span className="sr-only">{text(opt)}</span>
+              </>
+            ) : (
+              text(opt)
+            )}
           </button>
         );
       })}

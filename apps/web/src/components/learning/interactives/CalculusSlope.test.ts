@@ -211,6 +211,10 @@ describe("calculusSlope", () => {
       expect(revealed).toContain('data-slope="trace"');
       expect(revealed).toContain('data-slope="miss"');
       expect(revealed).toContain("gb-march");
+      // The options stay on the board through a miss so the learner can pick again.
+      expect(revealed).toContain('data-slope="candidates"');
+      // The squat lower panel drops its -2 label instead of printing it on the x-label row.
+      expect(waiting.match(/>-2<\/text>/g)?.length).toBe(2);
     }
   });
 

@@ -138,8 +138,10 @@ export function PlaneTicks({
   const xs: number[] = [];
   for (let v = Math.ceil(s.xMin); v <= s.xMax; v++) if (v !== 0 && !near(s.x(v) + 9, s.y(0) + 11)) xs.push(v);
   const ys: number[] = [];
+  // On a squat plane a y label just below the axis lands on the x-label row (baseline y0 + 15).
+  const onXRow = (v: number) => Math.abs(s.y(v) - 5 - (s.y(0) + 15)) < 12;
   for (let v = Math.ceil(s.yMin); v <= s.yMax; v++)
-    if (v !== 0 && v % yStep === 0 && !near(s.x(0) - 11, s.y(v) - 9)) ys.push(v);
+    if (v !== 0 && v % yStep === 0 && !onXRow(v) && !near(s.x(0) - 11, s.y(v) - 9)) ys.push(v);
   const x0 = s.x(0);
   const y0 = s.y(0);
   return (
