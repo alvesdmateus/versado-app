@@ -96,7 +96,8 @@ describe("matrixOrder", () => {
     expect(revealed.match(/data-result-flag/g)).toHaveLength(2);
     expect(revealed).toContain("data-diagnostic-gap");
     expect(revealed).toContain('stroke-dasharray="6 4" class="gb-march"');
-    expect(revealed).toContain("Δ 2.24");
+    // Both ends of the gap carry their addresses; no length tag sits between them.
+    expect(revealed).not.toContain("Δ 2.24");
     expect(revealed).toContain("(-1, 4)");
   });
 
