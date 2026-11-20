@@ -113,7 +113,8 @@ describe("matrixArea collapse mode", () => {
     expect(start).toEqual({ angle: 45 });
     expect(start.answer).toBeUndefined();
     expect(matrixArea.evaluate(start, target, 1, collapse).correct).toBe(false);
-    expect(matrixArea.evaluate({ ...start, answer: 1 }, target, 1, collapse).kind).toBe("thin");
+    // The arrow is already locked here, so the miss names the choice, not a gap to close.
+    expect(matrixArea.evaluate({ ...start, answer: 1 }, target, 1, collapse).kind).toBe("separate");
     expect(matrixArea.evaluate({ ...start, answer: 0 }, target, 1, collapse)).toEqual({ correct: true, delta: 0 });
   });
 });

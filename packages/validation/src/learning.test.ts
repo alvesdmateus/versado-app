@@ -93,6 +93,11 @@ describe("moduleSpecSchema", () => {
       moduleSpecSchema.safeParse({ ...base, practice: { items: [item("guided"), item("assisted", ["nope"])] } }).success
     ).toBe(false);
   });
+
+  it("lets an assisted item preset one part of its own answer", () => {
+    // x1 is not an exploration control, but it is a key of the item's target.
+    expect(moduleSpecSchema.safeParse({ ...base, practice: { items: [item("guided"), item("assisted", ["x1"])] } }).success).toBe(true);
+  });
 });
 
 

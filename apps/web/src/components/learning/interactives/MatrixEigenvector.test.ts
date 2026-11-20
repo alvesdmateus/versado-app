@@ -3,7 +3,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ModuleSpec } from "@versado/core";
 import type { LearningModuleInput } from "@versado/validation";
-import { lineAngle, matrixEigenvector, probeImage } from "./MatrixEigenvector";
+import { landingLetters, lineAngle, matrixEigenvector, probeImage } from "./MatrixEigenvector";
 import { INTERACTIVES } from "./index";
 import type { BoardProps, Values } from "./types";
 
@@ -116,7 +116,17 @@ describe("matrixEigenvector", () => {
     expect(controls).toEqual([{ variableName: "probeAngle", label: spec.stage2Exploration.controls[0]!.label, min: 0, max: 355, step: 5, colorToken: "amber" }]);
     const assistedControls = matrixEigenvector.predictionControls(spec, assisted);
     expect(assistedControls.map((c) => c.variableName)).toEqual(["probeAngle", "answer"]);
-    expect(assistedControls[1]!.choices).toEqual([0, 1]);
+    // At 45 degrees the sideways distractor sits left of the true image, so it reads first as A.
+    expect(assistedControls[1]!.choices).toEqual([1, 0]);
+    expect(assistedControls[1]!.choiceLabels).toEqual({
+      0: "lesson.choice.matrix-eigenvector.b", 1: "lesson.choice.matrix-eigenvector.a",
+    });
+  });
+
+  it("letters the landings by position, so the letter never encodes the answer id", () => {
+    const firsts = new Set([0, 45, 90, 135, 180, 225, 270, 315].map((probeAngle) => landingLetters({ probeAngle, answer: 0 }, spec)[0]));
+    expect(firsts).toEqual(new Set(["a", "b"]));
+    expect(render({ target: assisted, values: { probeAngle: 45 } })).not.toMatch(/>[01]<\/text>/);
   });
 
   it("covers the real lesson, review and every practice target with reachable solutions", () => {
@@ -146,9 +156,13 @@ describe("matrixEigenvector", () => {
           expect(matrixEigenvector.predictionControls(spec, item.target).some((c) => !(item.presetControls ?? []).includes(c.variableName))).toBe(true);
         }
       }
-      for (const kind of Object.keys(spec.stage3Prediction.adaptiveFeedback.byKind ?? {})) {
-        expect(String(matrixEigenvector.evaluate({ probeAngle: 0 }, spec.stage3Prediction.target, spec.stage3Prediction.tolerance, spec).kind)).toBe(kind);
-      }
+      // Every named miss in the content is one the board can produce.
+      const reachable = new Set([
+        matrixEigenvector.evaluate({ probeAngle: 0 }, spec.stage3Prediction.target, spec.stage3Prediction.tolerance, spec).kind,
+        ...(spec.practice?.items ?? []).filter((item) => item.target.excludeAngle !== undefined).map((item) =>
+          matrixEigenvector.evaluate({ probeAngle: item.target.excludeAngle! + 180 }, item.target, spec.stage3Prediction.tolerance, spec).kind),
+      ]);
+      for (const kind of Object.keys(spec.stage3Prediction.adaptiveFeedback.byKind ?? {})) expect(reachable).toContain(kind as never);
     }
   });
 

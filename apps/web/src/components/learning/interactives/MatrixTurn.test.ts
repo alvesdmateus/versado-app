@@ -117,16 +117,17 @@ describe("matrixTurn", () => {
     }
   });
 
-  it("keeps assisted turn fixed while both response controls remain editable", () => {
+  it("solves the assisted landing's across part, leaving only the up rail editable", () => {
     const item = spec.practice!.items.find((item) => item.fade === "assisted")!;
+    // A preset must be something the prediction shows; the frozen turn never is.
+    const shownControls = matrixTurn.predictionControls(spec, item.target).map((control) => control.variableName);
+    expect(item.presetControls.every((name) => shownControls.includes(name))).toBe(true);
     const solved = matrixTurn.solve(item.target, spec);
-    expect(solved.turn).toBe(item.target.turn);
-    expect(matrixTurn.predictionControls(spec, item.target).every((control) => !item.presetControls?.includes(control.variableName))).toBe(true);
-    const shown = render({ target: item.target, values: { turn: solved.turn!, x: 0, y: 0 }, input: {
+    const shown = render({ target: item.target, values: { turn: solved.turn!, x: solved.x!, y: 0 }, input: {
       controls: matrixTurn.predictionControls(spec, item.target), locked: item.presetControls, onChange() {},
     } });
     expect((shown.match(/role="slider"/g) ?? []).length).toBe(2);
-    expect(shown).not.toContain('aria-disabled="true"');
+    expect((shown.match(/aria-disabled="true"/g) ?? []).length).toBe(1);
   });
 
   it("solves every real lesson, review and practice target within the marker bounds", () => {

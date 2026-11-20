@@ -124,18 +124,26 @@ describe("matrixOrder", () => {
     expect(end).not.toContain("data-diagnostic-gap");
   });
 
-  it("keeps assisted order preset and both response rails editable", () => {
+  it("solves the assisted landing's across part, leaving only the up rail editable", () => {
     const assisted = spec.practice!.items.find((item) => item.fade === "assisted")!;
+    expect(assisted.presetControls).toEqual(["x"]);
     const values = matrixOrder.initialValues(spec, 3, assisted.target);
     const solved = matrixOrder.solve(assisted.target, spec);
     for (const name of assisted.presetControls) values[name] = solved[name]!;
-    expect(values).toEqual({ order: 1, x: 0, y: 0 });
+    expect(values).toEqual({ order: 1, x: -4, y: 0 });
     const svg = render({ target: assisted.target, values, input: {
       controls: matrixOrder.predictionControls(spec, assisted.target), onChange() {}, locked: assisted.presetControls,
     } });
     expect(svg.match(/role="slider"/g)).toHaveLength(2);
-    expect(svg).not.toContain('aria-disabled="true"');
-    expect(svg).toContain("gb-handle-grip");
+    expect(svg.match(/aria-disabled="true"/g)).toHaveLength(1);
+  });
+
+  it("never repeats a landing across the guided boards and the later practice items", () => {
+    const [guided, ...later] = spec.practice!.items;
+    // The guided item shows both orders, so both of its landings are already on screen.
+    const shown = [0, 1].map((order) => matrixOrder.solve({ ...guided!.target, order }, spec));
+    const answers = [...shown, ...later.map((item) => matrixOrder.solve(item.target, spec))].map((v) => `${v.x},${v.y}`);
+    expect(new Set(answers).size).toBe(answers.length);
   });
 
   it("covers the real lesson, review and every practice target within the marker bounds", () => {

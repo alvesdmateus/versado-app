@@ -173,7 +173,9 @@ export const moduleSpecSchema = z
     const controlNames = new Set(spec.stage2Exploration.controls.map((c) => c.variableName));
     items.forEach((item, i) => {
       for (const name of item.presetControls) {
-        if (!controlNames.has(name)) {
+        // A preset is an exploration control or one part of the item's own answer (e.g. the x of a
+        // marked landing), so an assisted item can solve half of a two-part prediction.
+        if (!controlNames.has(name) && !(name in item.target)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: `presetControls references unknown control "${name}"`,

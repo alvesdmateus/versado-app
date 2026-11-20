@@ -47,6 +47,10 @@ export interface Verdict {
     | "unsigned"
     | "thin"
     | "perpendicular"
+    /** Picked separate landings although the arrows already share a line (collapse choice). */
+    | "separate"
+    /** Found the line an earlier task already used, where a different one was asked for. */
+    | "sameTrack"
     | "shortArc"
     | "degrees"
     | "diameter"

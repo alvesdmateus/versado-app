@@ -134,6 +134,10 @@
         "downhill": "Bajando",
         "uphill": "Subiendo",
         "level": "Sigue plano"
+      },
+      "matrix-eigenvector": {
+        "a": "A",
+        "b": "B"
       }
     }
   },
