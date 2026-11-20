@@ -159,6 +159,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   const sideways = { x: -actual.y, y: actual.x };
   const picked = values.answer === 1 ? sideways : actual;
   const letters = landingLetters(context, spec);
+  const sameTrackMiss = missed && target.excludeAngle !== undefined && lineAngle(angle, target.excludeAngle) <= spec.stage3Prediction.tolerance + 1e-9;
   const pulse = changed ? `${changed.name}-${changed.tick}` : "still";
 
   return (
@@ -184,7 +185,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         </g>}
         {stage >= 3 && target.excludeAngle !== undefined && <g>
           <line {...track(target.excludeAngle)} stroke={slate} strokeWidth={2} strokeDasharray="3 3" opacity={0.6} />
-          {tag({ x: unit(target.excludeAngle).x * 2.8, y: unit(target.excludeAngle).y * 2.8 }, `≠ ${fmt(target.excludeAngle)}°`, slate)}
+          {/* The red miss below repeats this label; one is enough. */}
+          {!sameTrackMiss && tag({ x: unit(target.excludeAngle).x * 2.8, y: unit(target.excludeAngle).y * 2.8 }, `≠ ${fmt(target.excludeAngle)}°`, slate)}
         </g>}
         {!hidden && aligned && <line {...track(angle)} stroke={amber} strokeWidth={10} opacity={0.12} />}
         <line {...track(angle)} stroke={amber} strokeWidth={2} opacity={0.55} />
@@ -206,7 +208,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
           <line {...line(picked, actual)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
           {tag({ x: (picked.x + actual.x) / 2, y: (picked.y + actual.y) / 2 }, "90°", red)}
         </g>}
-        {missed && target.excludeAngle !== undefined && lineAngle(angle, target.excludeAngle) <= spec.stage3Prediction.tolerance + 1e-9 && <g>
+        {sameTrackMiss && target.excludeAngle !== undefined && <g>
           <line {...track(angle)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
           {tag({ x: -v.x * 1.7, y: -v.y * 1.7 }, `≠ ${fmt(target.excludeAngle)}°`, red)}
         </g>}

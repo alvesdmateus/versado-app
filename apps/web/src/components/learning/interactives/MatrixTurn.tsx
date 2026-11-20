@@ -119,7 +119,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         {missed && (
           <g data-turn-miss="">
             <line x1={s.x(marker.x)} y1={s.y(marker.y)} x2={s.x(landing.x)} y2={s.y(landing.y)} stroke={red} strokeWidth={2.5} strokeDasharray="6 4" className="gb-march" />
-            <Tag x={s.x((marker.x + landing.x) / 2) + 10} y={s.y((marker.y + landing.y) / 2) - 10} color={red} size={12}>{`Δ ${fmt(verdict.delta)}`}</Tag>
+            {/* On the learner's marker, away from the landing: the gap's midpoint can fall on a turned arrow's tip label. */}
+            <Tag x={s.x(marker.x) + (marker.x >= landing.x ? 14 : -14)} y={s.y(marker.y) + 26} color={red} size={12} anchor={marker.x >= landing.x ? "start" : "end"}>{`Δ ${fmt(verdict.delta)}`}</Tag>
           </g>
         )}
       </g>
@@ -129,7 +130,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
           {hidden ? tag(p, rose, coordinates(p)) : tag(landing, rose, formal ? spec.stage4Formalization.colorMapping[2]?.symbol ?? "(−y, x)" : coordinates(exactLanding))}
           {!hidden && tag(iTip, blue, formal ? spec.stage4Formalization.colorMapping[0]?.symbol ?? coordinates(exactI) : coordinates(exactI))}
           {!hidden && tag(jTip, amber, formal ? spec.stage4Formalization.colorMapping[1]?.symbol ?? coordinates(exactJ) : coordinates(exactJ))}
-          <Tag x={s.x(0.8)} y={s.y(-0.8)} color={turnColor} anchor="start" size={12}>{`${fmt(requestedTurn)} × 90°`}</Tag>
+          {/* Below the x-axis number row (baseline y0 + 15), still beside the turn arc. */}
+          <Tag x={s.x(0.8)} y={s.y(0) + 34} color={turnColor} anchor="start" size={12}>{`${fmt(requestedTurn)} × 90°`}</Tag>
         </g>
       )}
       {predicting && (

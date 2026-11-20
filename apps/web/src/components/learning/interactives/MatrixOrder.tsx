@@ -152,15 +152,17 @@ function Floor({ s, c, order, stage, t, hidden, selected, missed, marker, verdic
         <circle cx={s.x(source.x)} cy={s.y(source.y)} r={4} fill={rose} opacity={hidden ? 1 : 0.5} />
         {missed && selected && settled && verdict && (
           <g>
+            {/* The gap itself is the evidence; both of its ends already carry their addresses. A length
+                tag at its midpoint landed between three coordinate labels. */}
             <line data-diagnostic-gap x1={s.x(marker.x)} y1={s.y(marker.y)} x2={s.x(final.x)} y2={s.y(final.y)} stroke={red} strokeWidth={2.5} strokeDasharray="6 4" className="gb-march" />
-            <Tag x={s.x((marker.x + final.x) / 2) + 10} y={s.y((marker.y + final.y) / 2) - 10} color={red} anchor="start" size={12}>{`Δ ${fmt(verdict.delta)}`}</Tag>
           </g>
         )}
       </g>
       {stage !== 1 && (
         <>
           <Tag x={s.x(source.x) + 10} y={s.y(source.y) + 18} color={rose} anchor="start" size={12}>{formal ? "v" : `(${fmt(c.px)}, ${fmt(c.py)})`}</Tag>
-          {!hidden && settled && <Tag x={s.x(final.x) + 10} y={s.y(final.y) - 10} color={rose} anchor="start" size={12}>{`(${fmt(final.x)}, ${fmt(final.y)})`}</Tag>}
+          {/* A landing near the top edge takes its address below, clear of the move badges. */}
+          {!hidden && settled && <Tag x={s.x(final.x) + 10} y={s.y(final.y) - 10 - 12 < badgeY + 14 ? s.y(final.y) + 20 : s.y(final.y) - 10} color={rose} anchor="start" size={12}>{`(${fmt(final.x)}, ${fmt(final.y)})`}</Tag>}
           {!hidden && formal && <>
             <Tag x={s.x(midway.x) + 12} y={s.y(midway.y) + 20} color={colors[0]} anchor="start" size={12}>{order === 0 ? "S" : "R"}</Tag>
             <Tag x={s.x(final.x) - 12} y={s.y(final.y) + 20} color={colors[1]} anchor="end" size={12}>{order === 0 ? "R" : "S"}</Tag>
