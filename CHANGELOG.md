@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.30](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.29...versado-v0.1.30) (2026-11-21)
+
+
+### Bug Fixes
+
+* **web,api,validation:** chapter 2 practice feedback and fades ([#110](https://github.com/alvesdmateus/versado-app/issues/110)) ([6c3c4a6](https://github.com/alvesdmateus/versado-app/commit/6c3c4a6af925bc859224e6e2abecdea3dd78c7ce))
+* **web:** fit derivative prediction on phone screens ([#108](https://github.com/alvesdmateus/versado-app/issues/108)) ([66176d5](https://github.com/alvesdmateus/versado-app/commit/66176d5ada7f5956a7f4278b9cc24c432bc85d1e))
+
 ## [0.1.29](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.28...versado-v0.1.29) (2026-11-14)
 
 
