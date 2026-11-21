@@ -7,7 +7,7 @@ import type { ControlDef, BoardProps, InteractiveDefinition, Values, Verdict } f
 
 /** A nonzero probe selects a line, not a direction: Av = λv includes negative and zero λ.
  * Task matrix entries override fixed context; the representative target angle never becomes input.
- * Assisted tasks freeze that representative and ask which numbered landing is the image.
+ * Assisted tasks freeze that representative and ask which lettered landing is the image.
  */
 const W = 340;
 const H = 340;
@@ -55,6 +55,18 @@ export function probeImage(angle: number, target: Values, spec?: ModuleSpec) {
 function solve(target: Values): Values {
   const probeAngle = normalize(target.probeAngle ?? 45);
   return target.answer === undefined ? { probeAngle } : { probeAngle, answer: 0 };
+}
+
+/**
+ * Assisted landings are lettered by on-screen position, left first. Answer id 0 is always the true
+ * image, so showing ids (or lettering by id) would give the answer away.
+ */
+export function landingLetters(target: Values, spec?: ModuleSpec): Record<0 | 1, "a" | "b"> {
+  const p = unit(target.probeAngle ?? 45);
+  const actual = apply(matrixOf(target, spec), { x: p.x * PROBE, y: p.y * PROBE });
+  // The distractor is the true image turned a quarter: same length, off the track.
+  const actualFirst = actual.x < -actual.y || (actual.x === -actual.y && actual.y > actual.x);
+  return actualFirst ? { 0: "a", 1: "b" } : { 0: "b", 1: "a" };
 }
 
 function angleControl(spec: ModuleSpec): ControlDef {
@@ -146,6 +158,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   // Rotate the true image by a quarter turn: the distractor has exactly the same length.
   const sideways = { x: -actual.y, y: actual.x };
   const picked = values.answer === 1 ? sideways : actual;
+  const letters = landingLetters(context, spec);
+  const sameTrackMiss = missed && target.excludeAngle !== undefined && lineAngle(angle, target.excludeAngle) <= spec.stage3Prediction.tolerance + 1e-9;
   const pulse = changed ? `${changed.name}-${changed.tick}` : "still";
 
   return (
@@ -171,7 +185,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         </g>}
         {stage >= 3 && target.excludeAngle !== undefined && <g>
           <line {...track(target.excludeAngle)} stroke={slate} strokeWidth={2} strokeDasharray="3 3" opacity={0.6} />
-          {tag({ x: unit(target.excludeAngle).x * 2.8, y: unit(target.excludeAngle).y * 2.8 }, `≠ ${fmt(target.excludeAngle)}°`, slate)}
+          {/* The red miss below repeats this label; one is enough. */}
+          {!sameTrackMiss && tag({ x: unit(target.excludeAngle).x * 2.8, y: unit(target.excludeAngle).y * 2.8 }, `≠ ${fmt(target.excludeAngle)}°`, slate)}
         </g>}
         {!hidden && aligned && <line {...track(angle)} stroke={amber} strokeWidth={10} opacity={0.12} />}
         <line {...track(angle)} stroke={amber} strokeWidth={2} opacity={0.55} />
@@ -181,7 +196,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         <circle cx={tip(v).x} cy={tip(v).y} r={5} stroke={amber} strokeWidth={2} fill="var(--color-gb-ground)" />
         {assisted && [actual, sideways].map((p, i) => <g key={i} data-landing={i}>
           <circle cx={tip(p).x} cy={tip(p).y} r={10} fill="var(--color-gb-ground)" stroke={values.answer === i ? amber : slate} strokeWidth={values.answer === i ? 3 : 2} />
-          {tag(p, String(i), slate)}
+          {tag(p, letters[i as 0 | 1].toUpperCase(), slate)}
         </g>)}
         {!hidden && <g data-probe-output>
           <Arrow {...line({ x: 0, y: 0 }, output)} color={emerald} width={3} />
@@ -193,7 +208,7 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
           <line {...line(picked, actual)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
           {tag({ x: (picked.x + actual.x) / 2, y: (picked.y + actual.y) / 2 }, "90°", red)}
         </g>}
-        {missed && target.excludeAngle !== undefined && lineAngle(angle, target.excludeAngle) <= spec.stage3Prediction.tolerance + 1e-9 && <g>
+        {sameTrackMiss && target.excludeAngle !== undefined && <g>
           <line {...track(angle)} stroke={red} strokeWidth={3} strokeDasharray="6 4" className="gb-march" />
           {tag({ x: -v.x * 1.7, y: -v.y * 1.7 }, `≠ ${fmt(target.excludeAngle)}°`, red)}
         </g>}
@@ -219,8 +234,13 @@ export const matrixEigenvector: InteractiveDefinition = {
   },
   predictionControls(spec, target) {
     const angle = angleControl(spec);
-    return target.answer === undefined ? [angle] : [angle, {
-      variableName: "answer", label: "?", min: 0, max: 1, step: 1, colorToken: "slate", choices: [0, 1],
+    if (target.answer === undefined) return [angle];
+    const letters = landingLetters(target, spec);
+    return [angle, {
+      variableName: "answer", label: "?", min: 0, max: 1, step: 1, colorToken: "slate",
+      // Buttons read A, B in the same order as the lettered landings on the board.
+      choices: letters[0] === "a" ? [0, 1] : [1, 0],
+      choiceLabels: { 0: `lesson.choice.matrix-eigenvector.${letters[0]}`, 1: `lesson.choice.matrix-eigenvector.${letters[1]}` },
     }];
   },
   solve,
@@ -234,7 +254,7 @@ export const matrixEigenvector: InteractiveDefinition = {
     const { error } = probeImage(angle, target, spec);
     if (!Number.isFinite(error)) return { correct: false, delta: 90 };
     if (target.excludeAngle !== undefined && lineAngle(angle, target.excludeAngle) <= tolerance + 1e-9) {
-      return { correct: false, delta: lineAngle(angle, target.probeAngle ?? 45) };
+      return { correct: false, delta: lineAngle(angle, target.probeAngle ?? 45), kind: "sameTrack" };
     }
     if (error <= tolerance + 1e-9) return { correct: true, delta: 0 };
     return { correct: false, delta: error, kind: "sideways" };

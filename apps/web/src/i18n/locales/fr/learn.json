@@ -134,6 +134,10 @@
         "downhill": "Descend",
         "uphill": "Monte",
         "level": "Reste plat"
+      },
+      "matrix-eigenvector": {
+        "a": "A",
+        "b": "B"
       }
     }
   },

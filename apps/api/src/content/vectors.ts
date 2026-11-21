@@ -17,7 +17,10 @@ import type { LearningChapterInput, LearningModuleInput } from "@versado/validat
  * that task. Never merge expected answer coordinates into the learner's input.
  * All rails also have in-plane handles. Choices use stable answer ids even when
  * shuffled: 0 = actual result, 1 = the named misconception described below.
- * Assisted tasks lock presetControls but leave the prediction response editable.
+ * Assisted tasks lock presetControls at their solved values; a preset may be an
+ * exploration control or one part of a two-part answer (e.g. a landing's x), so
+ * the learner finishes the rest. Presetting a frozen setup (turn, order, rewind)
+ * adds no help, because the prediction never exposes it.
  *
  * matrix-turn: a grid, both basis arrows and an F flag rotate together.
  * Modes: explore turn; predict/review a marked point's landing; faded practice.
@@ -48,8 +51,8 @@ import type { LearningChapterInput, LearningModuleInput } from "@versado/validat
  * only the second arrow. evaluate reads angle modulo 180 relative to firstAngle;
  * review/task firstAngle can replace fixed firstAngle. Reveal coincident source
  * dots to show lost information. Assisted collapse locks angle and asks a result
- * choice: answer 0 = overlapping landings, 1 = separate landings (thin).
- * Named kinds: unsigned (diagonal); thin, perpendicular (collapse).
+ * choice: answer 0 = overlapping landings, 1 = separate landings (separate).
+ * Named kinds: unsigned (diagonal); thin, perpendicular, separate (collapse).
  *
  * matrix-inverse: a fixed diagonal forward warp, its trails and an undo frame.
  * Modes: rewind exploration; singular demonstration; undo prediction/review.
@@ -81,8 +84,11 @@ import type { LearningChapterInput, LearningModuleInput } from "@versado/validat
  * angular tolerance. excludeAngle in review excludes the previously found line
  * modulo 180; task a/b/c/d override A. Keep the output hidden until commitment.
  * Assisted practice locks probeAngle and asks a landing choice: answer 0 = A*v,
- * 1 = an equal-length sideways landing (sideways). Negative factors stay valid.
- * Named kind sideways; do not reject a flip as a direction error.
+ * 1 = an equal-length sideways landing (sideways). The two landings are lettered
+ * A/B by on-screen position (left first), never by answer id, so the letter
+ * cannot give the answer away. Negative factors stay valid.
+ * Named kinds sideways, sameTrack (the excluded line again); do not reject a
+ * flip as a direction error.
  */
 export const vectorsChapter: LearningChapterInput = {
   id: "math-vectors",
@@ -662,10 +668,10 @@ export const vectorsModules: LearningModuleInput[] = [
         items: [
           { prompt: "Watch the arrows carry the dot around.", fade: "guided", target: { turn: 1, x: -1, y: 2 } },
           {
-            prompt: "The turn is set. Finish the dot's landing.",
+            prompt: "Across is set. Mark how far up the dot lands.",
             fade: "assisted",
             target: { turn: 1, px: 1, py: 2, x: -2, y: 1 },
-            presetControls: ["turn"],
+            presetControls: ["x"],
           },
           { prompt: "Mark the landing before turning the floor.", fade: "autonomous", target: { turn: 1, px: -2, py: 1, x: -1, y: -2 } },
         ],
@@ -728,7 +734,7 @@ export const vectorsModules: LearningModuleInput[] = [
           onCommonMisconception: "The two-step trail ends away from your marker; the rose gap joins them.",
           onSuccess: "The widened flag turns; its marked dot lands at (−1, 4).",
           byKind: {
-            reversed: "Your marker matches turn-then-stretch. Follow the badges from the first step.",
+            reversed: "Your marker matches the other order. Follow the badges from the first step.",
           },
         },
       },
@@ -751,13 +757,14 @@ export const vectorsModules: LearningModuleInput[] = [
       practice: {
         items: [
           { prompt: "Watch the dot follow both steps in order.", fade: "guided", target: { order: 0, x: -1, y: 4 } },
+          // New dots, so neither item repeats a landing the guided boards or the other item showed.
           {
-            prompt: "Order set. Complete the dot's landing after both steps.",
+            prompt: "Across is set. Mark how far up the dot lands.",
             fade: "assisted",
-            target: { order: 1, x: -2, y: 2 },
-            presetControls: ["order"],
+            target: { order: 1, px: 1, py: 2, x: -4, y: 1 },
+            presetControls: ["x"],
           },
-          { prompt: "Follow the shown order. Mark the final landing.", fade: "autonomous", target: { order: 0, px: 1, py: 2, x: -2, y: 2 } },
+          { prompt: "Follow the shown order. Mark the final landing.", fade: "autonomous", target: { order: 0, px: -1, py: 1, x: -1, y: -2 } },
         ],
       },
     },
@@ -829,7 +836,7 @@ export const vectorsModules: LearningModuleInput[] = [
           onSuccess: "Your stretches multiply to 3; many different rectangles can cover this much area.",
           onSignError: "The size fits, but the tile is flipped. Check the signs of both arrows.",
           byKind: {
-            unsigned: "The violet tile has reversed orientation. Its area magnitude hides that negative sign.",
+            unsigned: "Right size, wrong sign. Flipping one arrow turns the tile over and flips the sign.",
           },
         },
       },
@@ -921,6 +928,7 @@ export const vectorsModules: LearningModuleInput[] = [
           onSuccess: "Both arrows share a line. Separate source dots now overlap on it.",
           byKind: {
             thin: "A narrow tile still has area. Close the remaining gap between the arrows' tracks.",
+            separate: "Both arrows lie on one line, so the dotted paths end at one shared landing.",
             perpendicular: "The arrows cross at a corner. Flattening needs them on the same line.",
           },
         },
@@ -1049,10 +1057,10 @@ export const vectorsModules: LearningModuleInput[] = [
         items: [
           { prompt: "Watch the undo stretches restore both edges.", fade: "guided", target: { a: 0.5, d: 2 } },
           {
-            prompt: "Forward view set. Fit the undo tile to its frame.",
+            prompt: "Across undo is set. Fit the up edge to its frame.",
             fade: "assisted",
-            target: { rewind: 1, forwardA: 2, forwardD: 2, a: 0.5, d: 0.5 },
-            presetControls: ["rewind"],
+            target: { forwardA: 2, forwardD: 4, a: 0.5, d: 0.25 },
+            presetControls: ["a"],
           },
           { prompt: "Set both undo stretches before revealing the restored tile.", fade: "autonomous", target: { forwardA: 0.5, forwardD: 3, a: 2, d: 1 / 3 } },
         ],
@@ -1216,6 +1224,7 @@ export const vectorsModules: LearningModuleInput[] = [
           onSuccess: "The output stays on the probe's original line; only its length changes.",
           byKind: {
             sideways: "A matching length is not enough. The output must stay on the original line.",
+            sameTrack: "This is the track you already found. Look for a different line that holds.",
           },
         },
       },

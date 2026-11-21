@@ -139,21 +139,20 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   const discrepancy = clipDiscrepancy(s, image, pin);
   const showTags = !anchoring && (!guided || guide >= 1);
   const pulse = changed?.name === "x" || changed?.name === "y" ? changed.tick : 0;
-  const tag = (at: Point, text: string, color: string, below = false, side: "middle" | "start" | "end" = "middle", lift = 0) => {
+  type Side = "middle" | "start" | "end";
+  /** Where a tag lands, with its rough box, so two tags can be checked against each other. */
+  const place = (at: Point, text: string, below = false, side: Side = "middle", lift = 0) => {
     const width = text.length * 6.5;
     const offset = side === "start" ? 12 : side === "end" ? -12 : 0;
     const left = side === "end" ? width : side === "middle" ? width / 2 : 0;
     const right = side === "start" ? width : side === "middle" ? width / 2 : 0;
-    return (
-      <Tag
-        x={clamp(s.x(at.x) + offset, left + 8, SIZE - right - 8)}
-        y={clamp(clearOfXTicks(s, s.y(at.y) + (below ? 25 : -15) + lift, below), 16, formal ? 225 : SIZE - 4)}
-        color={color} size={12} anchor={side}
-      >
-        {text}
-      </Tag>
-    );
+    const x = clamp(s.x(at.x) + offset, left + 8, SIZE - right - 8);
+    const y = clamp(clearOfXTicks(s, s.y(at.y) + (below ? 25 : -15) + lift, below), 16, formal ? 225 : SIZE - 4);
+    return { x, y, side, text, x0: x - left, x1: x + right };
   };
+  const overlaps = (a: ReturnType<typeof place>, b: ReturnType<typeof place>) =>
+    a.x0 < b.x1 + 4 && b.x0 < a.x1 + 4 && Math.abs(a.y - b.y) < 14;
+  const draw = (p: ReturnType<typeof place>, color: string) => <Tag x={p.x} y={p.y} color={color} size={12} anchor={p.side}>{p.text}</Tag>;
   const pair = (q: Point) => `(${fmt(q.x)}, ${fmt(q.y)})`;
 
   return (
@@ -183,18 +182,28 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         <line x1={s.x(end.x) - 5} x2={s.x(end.x) + 5} y1={s.y(end.y)} y2={s.y(end.y)} stroke={rose} strokeWidth={2} />
         <line x1={s.x(end.x)} x2={s.x(end.x)} y1={s.y(end.y) - 5} y2={s.y(end.y) + 5} stroke={rose} strokeWidth={2} />
       </g>
-      {showTags && <>
-        {tag(raw, `${formal ? "x = " : ""}${pair(raw)}`, blue, true, Math.hypot(raw.x - tip.x, raw.y - tip.y) < 2.5 && !hidden ? "end" : "middle")}
-        {tag(end, `${formal ? "b = " : ""}${pair(pin)}`, rose)}
-        {!hidden && tag(tip, `${formal ? "Ax = " : ""}${pair(exact)}`, amber, true, Math.hypot(raw.x - tip.x, raw.y - tip.y) < 2.5 ? "start" : "middle")}
-        {formal && <Tag x={s.x(-4)} y={s.y(2.6)} color={slate} size={11} anchor="start">{`A = [${fmt(m.a)} ${fmt(m.b)}; ${fmt(m.c)} ${fmt(m.d)}]`}</Tag>}
-      </>}
+      {showTags && (() => {
+        const close = Math.hypot(raw.x - tip.x, raw.y - tip.y) < 2.5;
+        const input = place(raw, `${formal ? "x = " : ""}${pair(raw)}`, true, close && !hidden ? "end" : "middle");
+        const pinText = `${formal ? "b = " : ""}${pair(pin)}`;
+        // The pin's address goes below it when, above, it would print into the input's address.
+        const above = place(end, pinText);
+        const target = overlaps(above, input) ? place(end, pinText, true) : above;
+        // Once the shadow sits on the pin, the pin already names that address.
+        const onPin = gap <= EPS && !formal;
+        return <>
+          {draw(input, blue)}
+          {draw(target, rose)}
+          {!hidden && !onPin && draw(place(tip, `${formal ? "Ax = " : ""}${pair(exact)}`, true, close ? "start" : "middle"), amber)}
+        </>;
+      })()}
+      {showTags && formal && <Tag x={s.x(-4)} y={s.y(2.6)} color={slate} size={11} anchor="start">{`A = [${fmt(m.a)} ${fmt(m.b)}; ${fmt(m.c)} ${fmt(m.d)}]`}</Tag>}
       {!hidden && outside && <line x1={s.x(tip.x) - 5} x2={s.x(tip.x) + 5} y1={s.y(tip.y) - 5} y2={s.y(tip.y) + 5} stroke={missed ? red : amber} strokeWidth={3} />}
       {!hidden && outside && gap > EPS && discrepancy && <line x1={s.x(discrepancy.from.x) - 5} x2={s.x(discrepancy.from.x) + 5} y1={s.y(discrepancy.from.y) - 5} y2={s.y(discrepancy.from.y) + 5} stroke={missed ? red : rose} strokeWidth={3} />}
       {missed && gap > EPS && discrepancy && (() => {
         const mid = { x: (discrepancy.from.x + discrepancy.to.x) / 2, y: (discrepancy.from.y + discrepancy.to.y) / 2 };
         const below = mid.y < pin.y - EPS;
-        return tag(mid, `Δ (${signed(delta.x)}, ${signed(delta.y)})`, red, below, "middle", below ? 0 : -21);
+        return draw(place(mid, `Δ (${signed(delta.x)}, ${signed(delta.y)})`, below, "middle", below ? 0 : -21), red);
       })()}
       {!anchoring && <PlaneTicks s={s} avoid={[raw, pin, ...(!hidden ? [tip] : [])]} />}
       {formal && <SingularComparison />}

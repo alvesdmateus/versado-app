@@ -63,7 +63,9 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   const formal = stage === 4;
   const hidden = stage === 3 && verdict === null && guide == null;
   const missed = stage === 3 && verdict !== null && !verdict.correct;
-  const morphing = guide != null && guide < 1;
+  // Diagonal guide: the up edge first reaches the target area, then both edges trade length at a
+  // constant area, so the readouts return once that area is reached. Collapse waits for the end.
+  const morphing = guide != null && guide < (collapse ? 1 : 0.4);
   const board = useBoardInput(anchoring ? undefined : input, values);
   const task = stage >= 3 ? target : {};
   const { firstAngle, firstLength, secondLength } = context(spec, task);
@@ -108,6 +110,15 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
   const arcStart = vector(firstAngle, 0.65);
   const arcEnd = vector(firstAngle + turn, 0.65);
   const radius = s.xUnit * 0.65;
+  /** A tag 16px off an arrow's tip, perpendicular to it: side 1 is anticlockwise, -1 clockwise. */
+  const beside = (degrees: number, tip: Point, side: number) => {
+    const n = vector(degrees + side * 90, 1);
+    return {
+      x: s.x(tip.x) + n.x * 16,
+      y: s.y(tip.y) - n.y * 16 + 4,
+      anchor: (n.x > 0.35 ? "start" : n.x < -0.35 ? "end" : "middle") as "start" | "end" | "middle",
+    };
+  };
   const arc = `M ${s.x(arcStart.x)} ${s.y(arcStart.y)} A ${radius} ${radius} 0 0 ${turn > 0 ? 0 : 1} ${s.x(arcEnd.x)} ${s.y(arcEnd.y)}`;
 
   // Keep the discrepancy attached to the learner's width. Cap an off-board correction.
@@ -180,15 +191,32 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
       )}
       {!anchoring && !morphing && (
         <g>
-          <Tag x={s.x(u.x) + (collapse ? -12 : 0)} y={s.y(u.y) + (collapse ? -14 : 34)} color={blue} anchor={collapse ? "end" : "middle"}>
-            {collapse ? formal ? "A" : `${fmt(firstAngle)}°` : `${formal ? "a = " : ""}${fmt(a)}`}
-          </Tag>
-          <Tag x={s.x(v.x) + 12} y={s.y(v.y) + (collapse ? 22 : -10)} color={amber} anchor="start">
-            {collapse ? `${fmt(angle)}°` : `${formal ? "d = " : ""}${fmt(d)}`}
-          </Tag>
-          {visibleTile && (
-            <Tag x={s.x(collapse ? u.x + v.x : centre.x) - (!collapse && flat && a === 0 ? 16 : 0)} y={s.y(collapse ? u.y + v.y : centre.y) + (collapse ? -12 : flat && a !== 0 ? 25 : 5)} color={formal ? collapse ? slate : bandColor("violet") : tileColor} size={16}>
-              {hidden ? `? → ${fmt(target.area ?? 0)}` : formal ? `det(A) = ${fmt(area)}` : fmt(area)}
+          {collapse ? (
+            <>
+              {/* Each angle sits beside its own tip, on the side facing away from the other arrow, so the
+                  pair never prints over itself, aligned or not. */}
+              <Tag {...beside(firstAngle, u, -Math.sign(turn || 1))} color={blue}>{formal ? "A" : `${fmt(firstAngle)}°`}</Tag>
+              <Tag {...beside(angle, v, Math.sign(turn || 1))} color={amber}>{`${fmt(angle)}°`}</Tag>
+            </>
+          ) : (
+            <>
+              <Tag x={s.x(u.x)} y={s.y(u.y) + 34} color={blue} anchor="middle">{`${formal ? "a = " : ""}${fmt(a)}`}</Tag>
+              <Tag x={s.x(v.x) + 12} y={s.y(v.y) - 10} color={amber} anchor="start">{`${formal ? "d = " : ""}${fmt(d)}`}</Tag>
+            </>
+          )}
+          {/* The goal sits beyond the tile's free corner: on a small start tile, centred text hides under both handles. */}
+          {visibleTile && hidden && !collapse && (
+            <Tag x={s.x(Math.max(a, 0)) + 8} y={s.y(Math.max(d, 0)) - 28} color={tileColor} size={16} anchor="start">
+              {`? → ${fmt(target.area ?? 0)}`}
+            </Tag>
+          )}
+          {/* The long formal readout sits beside the tile: centred on a narrow tile it crossed the y-axis numbers. */}
+          {visibleTile && !hidden && !collapse && formal && (
+            <Tag x={s.x(Math.max(a, 0)) + 8} y={s.y(centre.y) + 5} color={bandColor("violet")} size={16} anchor="start">{`det(A) = ${fmt(area)}`}</Tag>
+          )}
+          {visibleTile && !hidden && !(formal && !collapse) && (
+            <Tag x={s.x(collapse ? u.x + v.x : centre.x) - (!collapse && flat && a === 0 ? 16 : 0)} y={s.y(collapse ? u.y + v.y : centre.y) + (collapse ? -12 : flat && a !== 0 ? 25 : 5)} color={formal ? slate : tileColor} size={16}>
+              {formal ? `det(A) = ${fmt(area)}` : fmt(area)}
             </Tag>
           )}
           {formal && !collapse && <Tag x={s.x(0) - 12} y={s.y(0) + 32} color={slate} anchor="end">b·c = 0</Tag>}
@@ -241,7 +269,7 @@ export const matrixArea: InteractiveDefinition = {
     if (modeOf(spec, target) === "collapse") {
       if ("answer" in target) {
         if (values.answer === 0) return { correct: true, delta: 0 };
-        return { correct: false, delta: (values.answer ?? -1), kind: "thin" };
+        return { correct: false, delta: (values.answer ?? -1), kind: "separate" };
       }
       if (!Number.isFinite(values.angle)) return { correct: false, delta: 180, kind: "thin" };
       const delta = alignmentDelta(values.angle!, context(spec, target).firstAngle);

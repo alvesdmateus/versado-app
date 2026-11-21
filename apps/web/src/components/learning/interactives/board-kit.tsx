@@ -136,7 +136,10 @@ export function PlaneTicks({
 }) {
   const near = (px: number, py: number) => avoid.some((a) => Math.hypot(s.x(a.x) - px, s.y(a.y) - py) < 16);
   const xs: number[] = [];
-  for (let v = Math.ceil(s.xMin); v <= s.xMax; v++) if (v !== 0 && !near(s.x(v) + 9, s.y(0) + 11)) xs.push(v);
+  // On a tight plane the "-1" label (left-aligned after its peg) runs into the origin "0" (right-aligned
+  // before the axis) and the pair reads as "-10". Rough 11px tabular widths are enough to tell.
+  const intoOrigin = (v: number) => v < 0 && s.x(v) + 5 + String(v).length * 6.5 > s.x(0) - 7 - 6.5 - 2;
+  for (let v = Math.ceil(s.xMin); v <= s.xMax; v++) if (v !== 0 && !intoOrigin(v) && !near(s.x(v) + 9, s.y(0) + 11)) xs.push(v);
   const ys: number[] = [];
   // On a squat plane a y label just below the axis lands on the x-label row (baseline y0 + 15).
   const onXRow = (v: number) => Math.abs(s.y(v) - 5 - (s.y(0) + 15)) < 12;

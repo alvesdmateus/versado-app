@@ -146,7 +146,8 @@ function Board({ spec, stage, values, target, verdict, anchorT, changed, guide, 
         <>
           <Tag x={s.x(forward.a)} y={s.y(0) + 26} color={blue} size={12}>{formal ? `A: ${fmt(forward.a)}` : fmt(forward.a)}</Tag>
           <Tag x={s.x(0) + 10} y={s.y(singular ? 0 : forward.d) - 12} color={blue} anchor="start" size={12}>{formal ? `A: ${fmt(forward.d)}` : fmt(singular ? 0 : forward.d)}</Tag>
-          <Tag x={s.x(1) + 6} y={s.y(1) - 6} color={slate} anchor="start">{formal ? "I" : "1 × 1"}</Tag>
+          {/* On a miss the Δ tags occupy the frame's corner; the dashed frame itself stays. */}
+          {!missed && <Tag x={s.x(1) + 6} y={s.y(1) - 6} color={slate} anchor="start">{formal ? "I" : "1 × 1"}</Tag>}
         </>
       )}
       {undoVisible && (
