@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.31](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.30...versado-v0.1.31) (2026-11-23)
+
+
+### Features
+
+* **web:** animated lattice backdrop on auth pages ([#112](https://github.com/alvesdmateus/versado-app/issues/112)) ([4b30f40](https://github.com/alvesdmateus/versado-app/commit/4b30f401c9379d7e3e430ddc997fa17bdaa4f25e))
+* **web:** rising bell in front and a gaussian well behind on the auth backdrop ([#114](https://github.com/alvesdmateus/versado-app/issues/114)) ([bd3177c](https://github.com/alvesdmateus/versado-app/commit/bd3177c9705c5cc91845b2616dd3c8aa02c9c89e))
+
 ## [0.1.30](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.29...versado-v0.1.30) (2026-11-21)
 
 
