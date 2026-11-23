@@ -21,8 +21,7 @@ import {
 /**
  * Auth backdrop: the Geoboard peg lattice laid out as a floor in perspective.
  * The floor scrolls toward the viewer and flows through gaussian bells in the
- * distance (drawn as hairline curve slices); square plane frames drift and turn
- * above it. Pegs wobble where the pointer passes, and the wobble travels with
+ * distance (drawn as hairline curve slices). Pegs wobble where the pointer passes, and the wobble travels with
  * the pegs that were touched.
  *
  * Light mode: band-blue pegs. Dark mode: white pegs.
@@ -56,25 +55,6 @@ const BELLS: Bell[] = [
 ];
 const BELL_SLICES = 7; // per direction
 const BELL_SEGMENTS = 40;
-
-interface Frame {
-  x: number;
-  y: number;
-  u: number; // position along the floor, travels with the scroll
-  size: number;
-  tilt: number;
-  spin: number;
-  phase: number;
-}
-
-const FRAMES: Frame[] = [
-  { x: -7.5, y: 4.2, u: -4, size: 2.2, tilt: 0.9, spin: 0.12, phase: 0.4 },
-  { x: 8.5, y: 5.4, u: -17, size: 3, tilt: 0.5, spin: -0.09, phase: 1.7 },
-  { x: -14, y: 7.5, u: -30, size: 3.8, tilt: 1.2, spin: 0.07, phase: 3.0 },
-  { x: 15, y: 4.2, u: -42, size: 3.2, tilt: 0.7, spin: -0.11, phase: 4.4 },
-];
-// Each frame: 4 edges + 2 inner lines each way = 8 segments.
-const FRAME_SEGMENTS = 8;
 
 const dotVertex = /* glsl */ `
   uniform float uTime;
@@ -202,11 +182,6 @@ function bellAt(b: Bell, t: number, spread: number) {
   };
 }
 
-function wrapZ(u: number, scroll: number) {
-  const m = (u - Z_FAR + scroll) % DEPTH;
-  return Z_FAR + (m < 0 ? m + DEPTH : m);
-}
-
 export default function LatticeBackdrop({ isDark }: { isDark: boolean }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const themeRef = useRef<(isDark: boolean) => void>(() => {});
@@ -277,10 +252,8 @@ export default function LatticeBackdrop({ isDark }: { isDark: boolean }) {
     dots.frustumCulled = false;
     scene.add(dots);
 
-    // ---- Hairlines: bell slices + plane frames ----
-    const bellVerts = BELLS.length * BELL_SLICES * 2 * BELL_SEGMENTS * 2;
-    const frameVerts = FRAMES.length * FRAME_SEGMENTS * 2;
-    const lineCount = bellVerts + frameVerts;
+    // ---- Hairlines: bell slices ----
+    const lineCount = BELLS.length * BELL_SLICES * 2 * BELL_SEGMENTS * 2;
     const linePositions = new Float32Array(lineCount * 3);
     const lineAlphas = new Float32Array(lineCount);
     const lineGeometry = new BufferGeometry();
@@ -354,43 +327,8 @@ export default function LatticeBackdrop({ isDark }: { isDark: boolean }) {
       }
     };
 
-    const writeFrames = (t: number, scroll: number) => {
-      for (const f of FRAMES) {
-        const z = wrapZ(f.u, scroll);
-        const h = f.size / 2;
-        const yaw = f.phase + t * f.spin;
-        const pitch = f.tilt + 0.25 * Math.sin(t * 0.2 + f.phase);
-        const cy = Math.cos(yaw), sy = Math.sin(yaw);
-        const cp = Math.cos(pitch), sp = Math.sin(pitch);
-        const bob = 0.3 * Math.sin(t * 0.35 + f.phase);
-        const map = (lx: number, lz: number): [number, number, number] => {
-          // Tilt the square about x, then turn it about y.
-          const ty = -lz * sp;
-          const tz = lz * cp;
-          return [f.x * spread + lx * cy + tz * sy, f.y + bob + ty, z - lx * sy + tz * cy];
-        };
-        const seg = (a: [number, number], b: [number, number], alpha: number) => {
-          const p = map(a[0], a[1]);
-          const q = map(b[0], b[1]);
-          pushVertex(p[0], p[1], p[2], alpha);
-          pushVertex(q[0], q[1], q[2], alpha);
-        };
-        // Outline
-        seg([-h, -h], [h, -h], 0.8);
-        seg([h, -h], [h, h], 0.8);
-        seg([h, h], [-h, h], 0.8);
-        seg([-h, h], [-h, -h], 0.8);
-        // Inner lattice thirds
-        const third = f.size / 6;
-        seg([-third, -h], [-third, h], 0.35);
-        seg([third, -h], [third, h], 0.35);
-        seg([-h, -third], [h, -third], 0.35);
-        seg([-h, third], [h, third], 0.35);
-      }
-    };
-
     // ---- Sizing ----
-    // Portrait screens are mostly card: pull the bells and frames toward the
+    // Portrait screens are mostly card: pull the bells toward the
     // middle and tilt down so the horizon and bell tops sit above the card.
     let spread = 1;
     let dpr = 1;
@@ -501,7 +439,6 @@ export default function LatticeBackdrop({ isDark }: { isDark: boolean }) {
 
       cursor = 0;
       writeBells(time);
-      writeFrames(time, scroll);
       linePosAttr.needsUpdate = true;
       lineAlphaAttr.needsUpdate = true;
 
