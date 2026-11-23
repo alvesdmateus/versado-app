@@ -74,10 +74,8 @@ export function ErrorNotification({
           className="mx-auto mb-4 inline-flex"
           style={
             {
-              "--color-primary-100": "var(--color-error-100)",
-              "--color-primary-200": "var(--color-error-200)",
-              "--color-primary-300": "var(--color-error-300)",
-              "--color-primary-500": "var(--color-error-500)",
+              // A fixed red: the dark-theme error tokens are too pale under the white mark.
+              "--logo-tile": "#dc2626",
             } as React.CSSProperties
           }
         >

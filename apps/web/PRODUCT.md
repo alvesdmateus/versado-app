@@ -38,7 +38,7 @@ Every module follows the 4-stage blueprint in `intuitive_interactive_learning.md
 
 ## Brand Commitments
 
-- Name **Versado** and the logo (`apps/web/public/favicon.svg`) are fixed.
+- Name **Versado** and the logo are fixed. The logo is the square-root V block mark (`apps/web/brand/`, usage in its README), adopted in November 2026 in place of the serif V.
 - Everything else in the visual identity (typeface, palette, components) may be redesigned for the new purpose.
 
 ## Evidence on Hand

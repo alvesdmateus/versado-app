@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1010 256">
+  <title>Versado</title>
+  <rect width="256" height="256" rx="56" fill="#2d6be6"/>
+  <polygon points="84.1,145.9 118.8,206.0 106.8,194.0 72.1,133.9" fill="#fff" fill-opacity="0.5"/>
+  <polygon points="154.5,68.0 121.3,162.4 109.3,150.4 142.5,56.0" fill="#fff" fill-opacity="0.5"/>
+  <polygon points="205.0,68.0 154.5,68.0 142.5,56.0 193.0,56.0" fill="#fff" fill-opacity="0.8"/>
+  <polygon points="63.0,130.4 75.0,151.1 63.0,139.1 51.0,118.4" fill="#fff" fill-opacity="0.5"/>
+  <polygon points="92.9,113.1 63.0,130.4 51.0,118.4 80.9,101.1" fill="#fff" fill-opacity="0.8"/>
+  <polygon points="75.0,151.1 84.1,145.9 118.8,206.0 131.4,206.0 171.5,92.0 205.0,92.0 205.0,68.0 154.5,68.0 121.3,162.4 92.9,113.1 63.0,130.4" fill="#fff"/>
+  <text x="312" y="184" font-family="Figtree, ui-sans-serif, system-ui, sans-serif" font-weight="800" font-size="168" letter-spacing="-4" fill="#ffffff">Versado</text>
+</svg>
