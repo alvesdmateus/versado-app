@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -73,23 +73,44 @@ export function ProfilePage() {
     }).catch((err) => showErrorNotification(err));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Optimistic settings: each change bumps a per-setting counter, and a failed save only
+  // rolls back if no newer change was made since. Otherwise a slow failure would restore an
+  // old value on screen while the server keeps the newer one.
+  const saveSeq = useRef<Record<string, number>>({});
+  const beginSave = (key: string) => (saveSeq.current[key] = (saveSeq.current[key] ?? 0) + 1);
+  const isLatestSave = (key: string, seq: number) => saveSeq.current[key] === seq;
+
   async function handleThemePreferenceChange(pref: ThemePreference) {
+    const seq = beginSave("theme");
     const prev = themePreference;
     setThemePreference(pref);
     setPreferences((p) => (p ? { ...p, themePreference: pref } : p));
     try {
       await profileApi.updatePreferences({ themePreference: pref });
     } catch {
+      if (!isLatestSave("theme", seq)) return;
       setThemePreference(prev);
       setPreferences((p) => (p ? { ...p, themePreference: prev } : p));
     }
   }
 
+  async function handleToggle(key: "hapticFeedback" | "soundFeedback", value: boolean) {
+    const seq = beginSave(key);
+    setPreferences((prev) => (prev ? { ...prev, [key]: value } : prev));
+    try {
+      await profileApi.updatePreferences({ [key]: value });
+    } catch {
+      if (isLatestSave(key, seq)) setPreferences((prev) => (prev ? { ...prev, [key]: !value } : prev));
+    }
+  }
+
   async function handlePushToggle(value: boolean) {
+    const seq = beginSave("pushAlerts");
     setPreferences((prev) => (prev ? { ...prev, pushAlerts: value } : prev));
     try {
       if (value) {
         const success = await subscribeToPush();
+        if (!isLatestSave("pushAlerts", seq)) return; // switched again while the prompt was open
         if (!success) {
           setPreferences((prev) =>
             prev ? { ...prev, pushAlerts: false } : prev
@@ -102,6 +123,7 @@ export function ProfilePage() {
       }
       await profileApi.updatePreferences({ pushAlerts: value });
     } catch {
+      if (!isLatestSave("pushAlerts", seq)) return;
       setPreferences((prev) =>
         prev ? { ...prev, pushAlerts: !value } : prev
       );
@@ -213,6 +235,7 @@ export function ProfilePage() {
           rightElement={
             <ToggleSwitch
               checked={preferences?.pushAlerts ?? true}
+              label={t("settings.pushAlerts")}
               onChange={(v) => handlePushToggle(v)}
             />
           }
@@ -223,14 +246,8 @@ export function ProfilePage() {
           rightElement={
             <ToggleSwitch
               checked={preferences?.hapticFeedback ?? true}
-              onChange={async (v) => {
-                setPreferences((prev) => (prev ? { ...prev, hapticFeedback: v } : prev));
-                try {
-                  await profileApi.updatePreferences({ hapticFeedback: v });
-                } catch {
-                  setPreferences((prev) => (prev ? { ...prev, hapticFeedback: !v } : prev));
-                }
-              }}
+              label={t("settings.hapticFeedback")}
+              onChange={(v) => void handleToggle("hapticFeedback", v)}
             />
           }
         />
@@ -240,14 +257,8 @@ export function ProfilePage() {
           rightElement={
             <ToggleSwitch
               checked={preferences?.soundFeedback ?? true}
-              onChange={async (v) => {
-                setPreferences((prev) => (prev ? { ...prev, soundFeedback: v } : prev));
-                try {
-                  await profileApi.updatePreferences({ soundFeedback: v });
-                } catch {
-                  setPreferences((prev) => (prev ? { ...prev, soundFeedback: !v } : prev));
-                }
-              }}
+              label={t("settings.soundFeedback")}
+              onChange={(v) => void handleToggle("soundFeedback", v)}
             />
           }
         />
@@ -281,7 +292,7 @@ export function ProfilePage() {
 
       {/* Footer */}
       <div className="mt-8 mb-2 flex flex-col items-center gap-1 px-5">
-        <p className="text-xs text-neutral-400">Versado v2.0.0</p>
+        <p className="text-xs text-neutral-400">Versado v{__APP_VERSION__}</p>
         <div className="flex gap-3">
           <Link to="/terms" className="text-xs text-neutral-400 hover:text-neutral-600">{t("footer.terms")}</Link>
           <Link to="/privacy" className="text-xs text-neutral-400 hover:text-neutral-600">{t("footer.privacy")}</Link>

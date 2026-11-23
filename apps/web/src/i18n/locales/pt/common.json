@@ -48,5 +48,9 @@
     "reportReview": "Denunciar avaliação",
     "reportUser": "Denunciar usuário",
     "blockUser": "Bloquear usuário"
+  },
+  "social": {
+    "follow": "Seguir",
+    "following": "Seguindo"
   }
 }
