@@ -21,7 +21,8 @@ import {
 /**
  * Auth backdrop: the Geoboard peg lattice laid out as a floor in perspective.
  * The floor scrolls toward the viewer and flows through gaussian bells in the
- * distance (drawn as hairline curve slices). Pegs wobble where the pointer passes, and the wobble travels with
+ * distance (drawn as hairline curve slices), one of them a well sunk into the
+ * floor. Pegs wobble where the pointer passes, and the wobble travels with
  * the pegs that were touched.
  *
  * Light mode: band-blue pegs. Dark mode: white pegs.
@@ -47,11 +48,14 @@ interface Bell {
   phase: number;
 }
 
-// Bells stand still in the world; the floor flows through them.
+// Bells stand still in the world; the floor flows through them. A negative
+// amplitude is a descending bell: a well sunk into the floor. On the right a
+// small rising bell in front sits against a deep well behind, for comparison.
 const BELLS: Bell[] = [
   { x: -10.5, z: -15, sigma: 2.5, amp: 4.4, phase: 0 },
-  { x: 11, z: -20, sigma: 3.1, amp: 5.6, phase: 2.1 },
+  { x: 11, z: -20, sigma: 2.8, amp: -3.5, phase: 2.1 },
   { x: 0, z: -36, sigma: 5.2, amp: 9, phase: 4.2 },
+  { x: 4, z: 0, sigma: 1.1, amp: 1, phase: 1.1 },
 ];
 const BELL_SLICES = 7; // per direction
 const BELL_SEGMENTS = 40;
@@ -64,7 +68,7 @@ const dotVertex = /* glsl */ `
   uniform float uSize;
   uniform float uScale;
   uniform float uMinSize;
-  uniform vec4 uBells[3];
+  uniform vec4 uBells[${BELLS.length}];
   uniform vec4 uImpulses[${MAX_IMPULSES}];
   uniform vec4 uHover;
   attribute vec2 aGrid;
@@ -78,7 +82,7 @@ const dotVertex = /* glsl */ `
     float z = wrapZ(aGrid.y);
     float y = 0.0;
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < ${BELLS.length}; i++) {
       vec4 b = uBells[i];
       vec2 d = vec2(x - b.x, z - b.y);
       y += b.w * exp(-dot(d, d) / (2.0 * b.z * b.z));
