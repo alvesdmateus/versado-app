@@ -26,6 +26,17 @@ export interface ModuleProgressRepository {
   listForUser(userId: string, moduleIds?: string[]): Promise<ModuleProgress[]>;
   find(userId: string, moduleId: string): Promise<ModuleProgress | null>;
   save(progress: ModuleProgress): Promise<void>;
+  /**
+   * Atomic read-modify-write of one user's progress on one module. `change` receives the
+   * stored row (or a fresh one when none exists) and returns the row to store; concurrent
+   * calls for the same pair must run one after another, never from the same snapshot.
+   * If `change` throws, nothing is written.
+   */
+  update(
+    userId: string,
+    moduleId: string,
+    change: (current: ModuleProgress, existed: boolean) => ModuleProgress
+  ): Promise<ModuleProgress>;
   listDue(userId: string, now: Date): Promise<ModuleProgress[]>;
 }
 

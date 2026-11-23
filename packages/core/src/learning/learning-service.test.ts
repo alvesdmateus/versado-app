@@ -137,4 +137,68 @@ describe("LearningService", () => {
   it("rejects reviews for modules that are not completed", async () => {
     await expect(service.submitReview("u", "a", { correct: true, attempts: 1 })).rejects.toThrow();
   });
+
+  it("keeps the stage at 3 until a correct prediction is stored", async () => {
+    // A lost prediction request followed by a stage-4 request must not strand the learner past the gate.
+    const p = await service.updateProgress("u", "a", { stage: 4 });
+    expect(p.stage).toBe(3);
+    const wrong = await service.updateProgress("u", "a", { stage: 4, predictionAttempt: { correct: false } });
+    expect(wrong.stage).toBe(3);
+    const right = await service.updateProgress("u", "a", { stage: 4, predictionAttempt: { correct: true } });
+    expect(right.stage).toBe(4);
+  });
+
+  it("lets a learner stuck at stage 4 without a prediction predict again and finish", async () => {
+    const repos = createMemoryLearningRepositories({ tracks: [track], chapters: [chapter], modules: [mod("a", 0)] });
+    service = new LearningService(repos);
+    // Row written by the old code: stage 4, no correct prediction.
+    await repos.progress.save({
+      userId: "u", moduleId: "a", stage: 4, predictionAttempts: 0, predictionCorrect: 0,
+      completedAt: null, easeFactor: 2.5, interval: 0, repetitions: 0, nextReviewAt: null, lastReviewedAt: null,
+    });
+    await service.updateProgress("u", "a", { stage: 3, predictionAttempt: { correct: true } });
+    const done = await service.updateProgress("u", "a", { stage: 4, completed: true });
+    expect(done.completedAt).not.toBeNull();
+  });
+
+  it("applies concurrent progress updates one after another, without losing either", async () => {
+    const start = new Date("2026-03-01T09:00:00Z");
+    await service.updateProgress("u", "a", { stage: 3, predictionAttempt: { correct: true } }, start);
+    // A completion and a stale stage update racing (two tabs): completion must survive.
+    const [done] = await Promise.all([
+      service.updateProgress("u", "a", { stage: 4, completed: true }, start),
+      service.updateProgress("u", "a", { stage: 3 }, start),
+      service.updateProgress("u", "a", { stage: 3, predictionAttempt: { correct: false } }, start),
+    ]);
+    expect(done.completedAt).toEqual(start);
+    const { modules } = await service.getTrack("u", "math", start);
+    const a = modules.find((m) => m.id === "a")!;
+    expect(a.progressStatus).toBe("completed");
+    expect(a.progress).toMatchObject({ stage: 4, predictionAttempts: 2, predictionCorrect: 1 });
+    expect(a.progress!.completedAt).toEqual(start);
+  });
+
+  it("counts a due review once, even when it is submitted twice", async () => {
+    const start = new Date("2026-03-01T09:00:00Z");
+    await service.updateProgress("u", "a", { stage: 3, predictionAttempt: { correct: true } }, start);
+    await service.updateProgress("u", "a", { stage: 4, completed: true }, start);
+    const later = new Date("2026-03-02T09:00:00Z");
+    const results = await Promise.allSettled([
+      service.submitReview("u", "a", { correct: true, attempts: 1 }, later),
+      service.submitReview("u", "a", { correct: true, attempts: 1 }, later),
+    ]);
+    expect(results.map((r) => r.status)).toEqual(["fulfilled", "rejected"]);
+    expect((results[1] as PromiseRejectedResult).reason).toMatchObject({ kind: "conflict" });
+    const stored = (await service.getTrack("u", "math", later)).modules[0]!.progress!;
+    expect(stored.repetitions).toBe(1);
+  });
+
+  it("rejects a review that is not due yet", async () => {
+    const start = new Date("2026-03-01T09:00:00Z");
+    await service.updateProgress("u", "a", { stage: 3, predictionAttempt: { correct: true } }, start);
+    await service.updateProgress("u", "a", { stage: 4, completed: true }, start);
+    await expect(
+      service.submitReview("u", "a", { correct: true, attempts: 1 }, new Date("2026-03-01T12:00:00Z"))
+    ).rejects.toMatchObject({ kind: "conflict" });
+  });
 });
