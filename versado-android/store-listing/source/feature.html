@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;800&display=block">
+<style>
+  :root { --blue: #2d6be6; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1024px; height: 500px; overflow: hidden; background: var(--blue); }
+  body { position: relative; font-family: "Figtree", sans-serif; color: #fff; }
+  canvas { position: absolute; inset: 0; }
+  .lockup { position: absolute; left: 88px; top: 50%; transform: translateY(-50%); display: grid; gap: 22px; }
+  .row { display: flex; align-items: center; gap: 30px; }
+  .row svg { width: 150px; height: 150px; flex: none; }
+  .name { font-weight: 800; font-size: 104px; letter-spacing: -0.03em; line-height: 1; }
+  .tag { font-weight: 500; font-size: 34px; line-height: 1.3; color: rgba(255,255,255,0.82); max-width: 560px; text-wrap: balance; }
+</style>
+</head>
+<body>
+<canvas id="dots" width="1024" height="500"></canvas>
+<div class="lockup">
+  <div class="row">
+    <svg viewBox="0 0 256 256" aria-hidden="true">
+      <polygon points="69.5,151.9 115.7,232.0 99.7,216.0 53.5,135.9" fill="#fff" fill-opacity="0.5"/>
+      <polygon points="163.3,48.0 119.1,173.8 103.1,157.8 147.3,32.0" fill="#fff" fill-opacity="0.5"/>
+      <polygon points="230.6,48.0 163.3,48.0 147.3,32.0 214.6,32.0" fill="#fff" fill-opacity="0.8"/>
+      <polygon points="41.4,131.1 57.3,158.9 41.3,142.9 25.4,115.1" fill="#fff" fill-opacity="0.5"/>
+      <polygon points="81.2,108.1 41.4,131.1 25.4,115.1 65.2,92.1" fill="#fff" fill-opacity="0.8"/>
+      <polygon points="57.3,158.9 69.5,151.9 115.7,232.0 132.6,232.0 186.0,80.0 230.6,80.0 230.6,48.0 163.3,48.0 119.1,173.8 81.2,108.1 41.4,131.1" fill="#fff"/>
+    </svg>
+    <span class="name">Versado</span>
+  </div>
+  <p class="tag" id="tag"></p>
+</div>
+<script>
+  const TAG = {
+    en: "Interactive lessons built on how memory works.",
+    pt: "Lições interativas feitas para a memória.",
+  };
+  const lang = new URLSearchParams(location.search).get("lang") || "en";
+  document.getElementById("tag").textContent = TAG[lang];
+
+  // Peg lattice on the right, sagging into a gaussian well, fading out behind the lockup.
+  const c = document.getElementById("dots").getContext("2d");
+  const step = 32;
+  for (let y = step / 2; y < 500; y += step) {
+    for (let x = step / 2; x < 1024; x += step) {
+      const dx = (x - 830) / 120, dy = (y - 250) / 150;
+      const well = Math.exp(-(dx * dx + dy * dy));
+      const yy = y + well * 46;
+      const t = Math.min(1, Math.max(0, (x - 520) / 360));
+      const a = 0.06 + 0.34 * t;
+      c.fillStyle = `rgba(255,255,255,${a})`;
+      c.beginPath(); c.arc(x, yy, 2.6 + well * 1.6, 0, Math.PI * 2); c.fill();
+    }
+  }
+  window.__ready = document.fonts.ready;
+</script>
+</body>
+</html>
