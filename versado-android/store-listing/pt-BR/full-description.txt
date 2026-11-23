@@ -1,26 +1,40 @@
-O Versado transforma o aprendizado em algo que você faz com as próprias mãos. Em vez de ler um paredão de texto, você mexe na ideia, prevê o que vai acontecer e vê exatamente onde seu raciocínio acertou ou errou.
+Versado — do latim "versatus", que significa alguém profundamente habilidoso, praticado e conhecedor. É exatamente isso que este aplicativo ajuda você a construir: compreensão real, e não memorização mecânica.
 
-COMO FUNCIONA UMA LIÇÃO
-• Ver – cada conceito começa como uma imagem, sem jargão nem fórmulas.
-• Explorar – arraste um ou dois controles e veja o quadro reagir na hora.
-• Prever – dê sua resposta antes da revelação. Um erro mostra a diferença exata, não só um "incorreto".
-• Escrever – só então a fórmula aparece, com as cores das partes que você acabou de mover.
+O Versado é um aplicativo de aprendizado intuitivo e interativo fundamentado em ciência cognitiva. Em vez de muros de texto e leitura passiva, você aprende por meio de simulações visuais manipuláveis, desafios de previsão ativa e feedback visual imediato — construindo intuição real antes mesmo de encarar fórmulas ou jargões técnicos.
 
-REVISÕES NA HORA CERTA
-As lições que você conclui voltam como checagens rápidas, espaçadas para reaparecer quando você está prestes a esquecer e misturadas para você aprender qual ideia serve para cada problema.
+COMO FUNCIONA O APRENDIZADO INTUITIVO
+A maioria das ferramentas pede que você leia ou decore antes de realmente entender o conceito. O Versado inverte esse processo aplicando princípios da Teoria da Carga Cognitiva, Aprendizagem Multimídia e Engajamento Ativo (ICAP):
+1. Enxergue o conceito em movimento — intuição visual e espacial pura, sem ruído.
+2. Manipule variáveis diretamente — explore causa e efeito em tempo real.
+3. Preveja antes de verificar — teste sua intuição em desafios rápidos de recuperação ativa.
+4. Conecte às regras formais — veja fórmulas e termos técnicos ligados por cores ao visual que você acabou de dominar.
 
-O QUE VOCÊ JÁ PODE APRENDER
-• Matemática: álgebra (áreas, retas e inclinação, parábolas, completar quadrados, sistemas de equações) e as primeiras lições de vetores e matrizes. Novos capítulos estão sendo escritos.
-• Trilhas de desenvolvimento de software e de ciências estão a caminho.
+RECURSOS PRINCIPAIS
+- Simulações visuais interativas — ajuste parâmetros e veja o resultado na hora
+- Lições guiadas pela intuição — entenda o "porquê" antes de decorar regras
+- Desafios de previsão ativa — retenção duradoura por meio da prática construtiva
+- Revisão espaçada e intercalada — reforce conceitos no momento certo para consolidar o domínio
+- Sem muros de texto — telas limpas e sem distrações para reduzir a sobrecarga mental
+- Feedback visual diagnóstico — enxergue onde sua previsão desviou do alvo, sem mensagens genéricas
+- Acompanhe seu progresso e mantenha uma rotina consistente de aprendizado
+- Estudo offline — aprenda em qualquer lugar, mesmo sem internet
+- Sincronização na nuvem entre seus dispositivos
 
-Feito para sessões curtas: uma meta diária de 15 minutos, direto no celular.
+FEITO PARA MENTES CURIOSAS E ESTUDANTES
+- Matemática e Álgebra — visualize equações, produtos notáveis e provas geométricas
+- Vetores, Matrizes e Álgebra Linear — veja transformações espaciais em ação
+- Ciências e Tecnologia — explore sistemas abstratos de forma prática e interativa
+- Lógica e Programação — domine modelos mentais essenciais passo a passo
+- Estudantes e Autodidatas — transforme assuntos difíceis em intuição clara e duradoura
 
-SEUS FLASHCARDS CONTINUAM AQUI
-Prefere flashcards? Crie seus próprios baralhos e estude com repetição espaçada.
+POR QUE VERSADO?
+Ler passivamente cria apenas a ilusão de aprendizado. O domínio verdadeiro nasce quando você interage com as ideias, testa previsões e enxerga como cada peça se encaixa.
 
-POR QUE "VERSADO"?
-Versado é quem conhece um assunto a fundo. A palavra vem do latim "versari", ocupar-se de algo, que por sua vez vem de "versare", virar e revirar. É essa a ideia do app: você conhece uma ideia de verdade quando a vira e revira com as próprias mãos.
+A palavra "versado" vem do latim "versare" — girar, examinar e praticar sob todos os ângulos. Essa é a nossa filosofia: quando você consegue manipular e visualizar uma ideia por completo, a compreensão profunda acontece naturalmente.
 
-O app está em português, inglês, espanhol, francês e alemão. Por enquanto, as lições estão em inglês.
+ENXERGUE. TESTE. TORNE-SE VERSADO.
+Pare de decorar fórmulas no escuro. Comece a construir conhecimento intuitivo e duradouro — do jeito que o seu cérebro foi feito para aprender.
 
-Dúvidas ou sugestões? Escreva para [e-mail de suporte].
+Baixe o Versado e domine o que importa para você.
+
+Dúvidas ou sugestões? Entre em contato conosco

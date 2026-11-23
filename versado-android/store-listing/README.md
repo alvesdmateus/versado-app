@@ -10,9 +10,8 @@ Graphics for the Versado listing on Google Play, one folder per listing language
 | `*/short-description.txt` | Main store listing → App details → Short description | ≤ 80 characters |
 | `*/full-description.txt` | Main store listing → App details → Full description | ≤ 4,000 characters |
 
-Before publishing, replace `[support email]` / `[e-mail de suporte]` in the full descriptions with the real
-support address. The descriptions only claim what the app does today; update “What you can learn today”
-as chapters and tracks are published, and drop the “lessons are in English” line once they are translated.
+The text files here are the canonical listing copy: edit them in this folder, then paste them into the
+Play Console, so the repo and the store never drift apart.
 
 Folders: `en-US/` (English) and `pt-BR/` (Portuguese, Brazil). In the Play Console, switch the listing
 language under **Main store listing → Manage translations** and upload each folder to its language.

@@ -1,26 +1,40 @@
-Versado turns learning into something you do with your hands. Instead of reading a wall of text, you move the idea yourself, predict what happens, and see exactly where your thinking went right or wrong.
+Versado — from the Latin "versatus", meaning someone deeply skilled, practiced, and knowledgeable. That's what this app helps you build: genuine understanding, not passive memorization.
 
-HOW A LESSON WORKS
-• See – every concept starts as a picture, with no jargon or formulas.
-• Explore – drag one or two controls and watch the board respond instantly.
-• Predict – commit to an answer before the reveal. A wrong guess shows you the exact gap, not just "incorrect".
-• Write it – only then does the formula appear, colour-matched to the parts you just moved.
+Versado is an intuitive, interactive learning app grounded in cognitive science. Instead of walls of text and rote memorization, you learn through hands-on visual simulations, active prediction loops, and immediate visual feedback — building real intuition before ever facing formal formulas or technical jargon.
 
-REVIEWS THAT ARRIVE ON TIME
-Lessons you finish come back as quick prediction checks, spaced out so they return just as you're about to forget, and mixed so you learn which idea fits which problem.
+HOW INTUITIVE LEARNING WORKS
+Most study tools ask you to passively read or flip cards before you truly understand the concept. Versado reverses the process using principles from Cognitive Load Theory, Multimedia Learning, and the ICAP Engagement Framework:
+1. See the concept in motion — pure visual and spatial intuition with zero clutter.
+2. Manipulate variables directly — explore cause and effect in real time.
+3. Predict before you verify — test your intuition through active retrieval challenges.
+4. Connect to formal rules — see equations and terminology color-matched to the visuals you just mastered.
 
-WHAT YOU CAN LEARN TODAY
-• Mathematics: algebra (areas, lines and slope, parabolas, completing the square, systems of equations) and the first lessons on vectors and matrices. More chapters are being written.
-• Software development and science tracks are on the way.
+KEY FEATURES
+- Interactive visual simulations — manipulate parameters and see instant results
+- Intuition-first lessons — understand the "why" before memorizing rules
+- Active prediction challenges — build lasting retention through hands-on retrieval
+- Spaced & interleaved practice — revisit concepts at smart intervals to lock in mastery
+- Zero walls of text — clean, distraction-free screens designed to reduce cognitive overload
+- Diagnostic visual feedback — see why an answer missed the mark instead of generic alerts
+- Track your progress and build consistent daily learning habits
+- Offline study — learn anywhere without an internet connection
+- Cloud sync across all your devices
 
-Built for short sessions: a 15-minute daily goal, right on your phone.
+BUILT FOR CURIOUS MINDS & LEARNERS
+- Mathematics & Algebra — visualize equations, functions, and geometric proofs
+- Vectors, Matrices & Linear Algebra — see transformations in action
+- Science & Engineering — explore physical and abstract systems interactively
+- Programming & Logic — grasp core mental models step by step
+- Students & Self-Learners — turn tough subjects into clear, lasting intuition
 
-YOUR FLASHCARDS ARE STILL HERE
-Prefer flashcards? Create your own decks and study them with spaced repetition.
+WHY VERSADO?
+Passive reading creates the illusion of competence. True mastery comes from interacting with ideas, testing predictions, and seeing how components fit together.
 
-WHY "VERSADO"?
-In Portuguese and Spanish, "versado" means well-versed: someone who knows a subject inside out. It comes from the Latin "versari", to be engaged with something, which comes from "versare", to turn over and over. That is the idea behind the app: you really know an idea once you have turned it over yourself.
+The word "versado" comes from the Latin "versare" — to turn over, examine, and practice from every angle. That is our core philosophy: when you can manipulate and visualize an idea from every angle, deep understanding follows naturally.
 
-The app is available in English, Portuguese, Spanish, French and German. Lessons are in English for now.
+SEE IT. TEST IT. BECOME VERSADO.
+Stop memorizing blind formulas. Start building intuitive, lasting knowledge — the way your brain was designed to learn.
 
-Questions or feedback? Write to us at [support email].
+Download Versado and master what matters to you.
+
+Questions or feedback? Contact us
