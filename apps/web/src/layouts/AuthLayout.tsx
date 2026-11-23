@@ -13,7 +13,9 @@ export function AuthLayout() {
       <Suspense fallback={null}>
         <LatticeBackdrop isDark={isDark} />
       </Suspense>
-      <div className="relative w-full max-w-md rounded-2xl bg-neutral-0 p-8 shadow-card-lg">
+      {/* Translucent so the lattice reads through on phones, where the card covers
+          most of the screen; a slight blur keeps the form text clear of the dots. */}
+      <div className="relative w-full max-w-md rounded-2xl bg-neutral-0/60 p-8 shadow-card-lg backdrop-blur-[2px]">
         <Outlet />
       </div>
     </div>

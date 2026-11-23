@@ -223,7 +223,7 @@ export function RegisterPage() {
         {isGoogleLoading ? t("register.redirecting") : t("register.signUpGoogle")}
       </SocialButton>
 
-      <div className="self-stretch -mx-8 -mb-8 mt-8 rounded-b-2xl border-t border-neutral-200 bg-neutral-50 px-8 py-5 text-center">
+      <div className="self-stretch -mx-8 -mb-8 mt-8 rounded-b-2xl border-t border-neutral-200 bg-neutral-50/40 px-8 py-5 text-center">
         <p className="text-sm text-neutral-500">
           {t("register.alreadyHaveAccount")}{" "}
           <Link
