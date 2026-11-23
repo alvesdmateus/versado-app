@@ -7,6 +7,12 @@ Graphics for the Versado listing on Google Play, one folder per listing language
 | `*/feature-graphic.png` | Main store listing → Graphics → Feature graphic | 1024 × 500, 24-bit PNG, no alpha |
 | `*/phone-1.png` … `phone-4.png` | Main store listing → Graphics → Phone screenshots (in this order) | 1080 × 1920 (9:16), 24-bit PNG |
 | `../store_icon.png` | Main store listing → Graphics → App icon | 512 × 512 PNG, full square |
+| `*/short-description.txt` | Main store listing → App details → Short description | ≤ 80 characters |
+| `*/full-description.txt` | Main store listing → App details → Full description | ≤ 4,000 characters |
+
+Before publishing, replace `[support email]` / `[e-mail de suporte]` in the full descriptions with the real
+support address. The descriptions only claim what the app does today; update “What you can learn today”
+as chapters and tracks are published, and drop the “lessons are in English” line once they are translated.
 
 Folders: `en-US/` (English) and `pt-BR/` (Portuguese, Brazil). In the Play Console, switch the listing
 language under **Main store listing → Manage translations** and upload each folder to its language.
