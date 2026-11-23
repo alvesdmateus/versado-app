@@ -14,7 +14,7 @@
   "enableNotifications": true,
   "startUrl": "/",
   "iconUrl": "https://versado.live/pwa-512x512.png",
-  "maskableIconUrl": "https://versado.live/pwa-512x512.png",
+  "maskableIconUrl": "https://versado.live/pwa-maskable-512x512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "C:\\Users\\mateus\\Documents\\Repos\\versado-app\\versado-android\\versado.keystore",

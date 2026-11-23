@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Logo } from "@versado/ui";
 import type { WireModule } from "@/lib/learning-api";
 
 export const SESSION_MINUTES = 15;
@@ -40,7 +41,7 @@ export function LearnHeader({ minutes }: { minutes: number }) {
   return (
     <header className="mx-auto flex h-14 max-w-xl items-center justify-between border-b border-gb-seam px-5">
       <span className="flex items-center gap-2 text-[19px] font-extrabold tracking-tight">
-        <img src="/favicon.svg" alt="" className="h-6 w-6" />
+        <Logo size="xs" />
         Versado
       </span>
       <SessionMeter minutes={minutes} />
