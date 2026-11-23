@@ -16,10 +16,16 @@ lessons.
 | `versado-mark-reversed.svg` | Mark for dark or photographic backgrounds: white front, translucent white depth. |
 | `versado-mark-black.svg`, `versado-mark-white.svg` | One-colour mark (front face only) for single-colour printing, embossing, embroidery and stamps. |
 | `versado-lockup.svg`, `versado-lockup-reversed.svg` | Icon + “Versado” wordmark, horizontal. |
+| `versado-notification.svg` | Android notification icon: the small cut in white on transparent (Android tints it; colour is ignored). |
 
 Generated icons in `public/`: `favicon.svg`, `pwa-192x192.png`, `pwa-512x512.png`,
 `pwa-maskable-512x512.png`, `apple-touch-icon-180x180.png`. The React `Logo` in `@versado/ui` draws the
 same geometry inline (`size="xs"` switches to the small cut).
+
+Android (`versado-android/`, rendered from these masters): `mipmap-*/ic_launcher.png` (`versado-icon.svg`,
+48–192 px), `mipmap-*/ic_maskable.png` (`versado-icon-square.svg`, 82–328 px), `drawable-*/splash.png`
+(`versado-icon.svg`, 300–1200 px), `drawable-*/ic_notification_icon.png` (`versado-notification.svg`,
+24–96 px) and `store_icon.png` (`versado-icon-square.svg`, 512 px, for the Play Store listing).
 
 ## Colour
 
