@@ -6,6 +6,7 @@ import type { ModuleStage } from "@versado/core";
 import { learningApi, type WireModule } from "@/lib/learning-api";
 import { chapterPath, lessonPath } from "@/lib/learn-routes";
 import { ApiError } from "@/lib/api-client";
+import { withRetry } from "@/lib/retry";
 import { getInteractive, type Values, type Verdict } from "@/components/learning/interactives";
 import { ControlStack, Formula, splitControls, unanswered, useAnchor } from "@/components/learning/controls";
 import { BoardPanel, PrimaryButton, SecondaryButton, Spinner, StageRail } from "@/components/learning/ui";
@@ -176,7 +177,10 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
   const target = spec.stage3Prediction.target;
   const practiceItems = spec.practice?.items ?? [];
 
-  const resumeStage: ModuleStage = module.progress && !module.progress.completedAt ? module.progress.stage : 1;
+  // Resume where the learner left off, but never past the prediction gate without a stored
+  // correct prediction (rows saved before the server enforced this can say stage 4).
+  const saved = module.progress && !module.progress.completedAt ? module.progress : null;
+  const resumeStage: ModuleStage = !saved ? 1 : saved.predictionCorrect > 0 ? saved.stage : (Math.min(saved.stage, 3) as ModuleStage);
   const [stage, setStage] = useState<ModuleStage>(resumeStage);
   const [values, setValues] = useState<Values>(() => def?.initialValues(spec, resumeStage, target) ?? {});
   const [verdict, setVerdict] = useState<Verdict | null>(null);
@@ -186,6 +190,8 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
   const [replay, setReplay] = useState(0);
   const [finishing, setFinishing] = useState(false);
   const [finishError, setFinishError] = useState(false);
+  /** The server had no correct prediction on record when finishing: predict again. */
+  const [predictionLost, setPredictionLost] = useState(false);
   const [done, setDone] = useState(false);
   /** Index of the current practice item, or null while still in the 4-stage lesson. */
   const [practice, setPractice] = useState<number | null>(null);
@@ -200,11 +206,13 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
     return practiceItems.length > 0 ? [...base, t("stage.practice")] : base;
   }, [t, practiceItems.length]);
 
+  // Progress updates go out one at a time, in order, and ride out short outages. If one is
+  // still lost, the server keeps the stage at the prediction gate and `finish` recovers.
   const track = useCallback(
     (input: Parameters<typeof learningApi.updateProgress>[1]) => {
       pending.current = pending.current
         .catch(() => {})
-        .then(() => learningApi.updateProgress(module.id, input))
+        .then(() => withRetry(() => learningApi.updateProgress(module.id, input)))
         .catch(() => {});
       return pending.current;
     },
@@ -252,6 +260,7 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
     const result = def.evaluate(values, goal, spec.stage3Prediction.tolerance, spec);
     setVerdict(result);
     setTouched(false);
+    setPredictionLost(false);
     if (!item) {
       if (result.correct) setSolved(true);
       track({ stage: 3, predictionAttempt: { correct: result.correct } });
@@ -263,10 +272,19 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
     setFinishError(false);
     try {
       await pending.current;
-      await learningApi.updateProgress(module.id, { stage: 4, completed: true });
+      await withRetry(() => learningApi.updateProgress(module.id, { stage: 4, completed: true }));
       setDone(true);
-    } catch {
-      setFinishError(true);
+    } catch (err) {
+      if (err instanceof ApiError && err.code === "LEARNING_INVALID") {
+        // The correct prediction never reached the server: go back to the gate rather than
+        // leaving a Finish button that can never succeed.
+        setPractice(null);
+        setSolved(false);
+        goTo(3);
+        setPredictionLost(true);
+      } else {
+        setFinishError(true);
+      }
     } finally {
       setFinishing(false);
     }
@@ -480,7 +498,9 @@ function LessonPlayer({ module, onExit }: { module: WireModule; onExit: () => vo
 
       {/* The action stays pinned to the bottom of the screen (thumb zone), same place on every stage.
           One primary button in one slot, so keyboard focus survives the stage change. */}
-      <ActionFooter error={finishError ? t("lesson.finishError") : undefined}>
+      <ActionFooter
+        error={predictionLost ? t("lesson.predictionLost") : finishError ? t("lesson.finishError") : undefined}
+      >
         {stage === 1 && (
           <SecondaryButton onClick={() => setReplay((r) => r + 1)} aria-label={t("lesson.replay")} className="w-12 px-0">
             <RotateCcw className="h-5 w-5" />

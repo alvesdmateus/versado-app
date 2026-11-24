@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach, spyOn } from "bun:test";
-import { apiClient, ApiError, setAccessToken, getAccessToken } from "./api-client";
+import { apiClient, ApiError, setAccessToken, getAccessToken, setUnauthorizedHandler } from "./api-client";
 
 describe("api-client", () => {
   let fetchSpy: ReturnType<typeof spyOn>;
@@ -88,5 +88,63 @@ describe("api-client", () => {
     expect(getAccessToken()).toBe("token123");
     setAccessToken(null);
     expect(getAccessToken()).toBeNull();
+  });
+
+  describe("expired access token", () => {
+    const unauthorized = () => new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
+    const authHeader = (call: unknown[]) => ((call[1] as RequestInit).headers as Record<string, string>)["Authorization"];
+
+    afterEach(() => setUnauthorizedHandler(null));
+
+    test("renews the session once and retries with the new token", async () => {
+      setAccessToken("old");
+      let renewals = 0;
+      setUnauthorizedHandler(async () => {
+        renewals++;
+        setAccessToken("new");
+        return "new";
+      });
+      fetchSpy = spyOn(globalThis, "fetch").mockResolvedValueOnce(unauthorized()).mockResolvedValueOnce(ok({ data: 1 }));
+
+      const result = await apiClient<{ data: number }>("/api/learn/tracks");
+      expect(result.data).toBe(1);
+      expect(renewals).toBe(1);
+      expect(authHeader(fetchSpy.mock.calls[0]!)).toBe("Bearer old");
+      expect(authHeader(fetchSpy.mock.calls[1]!)).toBe("Bearer new");
+    });
+
+    test("does not loop when the retried request is rejected again", async () => {
+      let renewals = 0;
+      setUnauthorizedHandler(async () => {
+        renewals++;
+        return "new";
+      });
+      fetchSpy = spyOn(globalThis, "fetch").mockResolvedValueOnce(unauthorized()).mockResolvedValueOnce(unauthorized());
+
+      await expect(apiClient("/api/learn/tracks")).rejects.toMatchObject({ status: 401 });
+      expect(renewals).toBe(1);
+      expect(fetchSpy).toHaveBeenCalledTimes(2);
+    });
+
+    test("surfaces the 401 when the session cannot be renewed", async () => {
+      setUnauthorizedHandler(async () => null);
+      fetchSpy = spyOn(globalThis, "fetch").mockResolvedValueOnce(unauthorized());
+
+      await expect(apiClient("/api/learn/tracks")).rejects.toMatchObject({ status: 401 });
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test("never renews for auth endpoints, where 401 is the real answer", async () => {
+      let renewals = 0;
+      setUnauthorizedHandler(async () => {
+        renewals++;
+        return "new";
+      });
+      fetchSpy = spyOn(globalThis, "fetch").mockResolvedValueOnce(unauthorized());
+
+      await expect(apiClient("/auth/refresh", { method: "POST" })).rejects.toMatchObject({ status: 401 });
+      expect(renewals).toBe(0);
+    });
   });
 });

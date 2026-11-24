@@ -139,7 +139,8 @@
         "a": "A",
         "b": "B"
       }
-    }
+    },
+    "predictionLost": "Tu predicción no se guardó. Compruébala otra vez para terminar."
   },
   "review": {
     "title": "Repasar",
@@ -155,7 +156,8 @@
     "finished": {
       "title": "Repasos terminados",
       "body": "Los siguientes llegarán más espaciados."
-    }
+    },
+    "saveError": "No pudimos guardar esta revisión. Tu respuesta se conserva; inténtalo de nuevo."
   },
   "select": {
     "title": "¿Qué quieres entender?",

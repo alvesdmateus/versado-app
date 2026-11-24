@@ -184,11 +184,18 @@ studyRoutes.post("/review", async (c) => {
     };
   }
 
+  // Optimistic lock: only apply if nobody reviewed this card since we read it. Two
+  // overlapping submits (double tap, retry) would otherwise both apply SM-2 from the same
+  // state and both append to the session and adjust the deck's mastered count.
   const rows = await db
     .update(cardProgress)
     .set(updateSet)
-    .where(eq(cardProgress.id, progress.id))
+    .where(and(eq(cardProgress.id, progress.id), eq(cardProgress.version, progress.version)))
     .returning();
+
+  if (rows.length === 0) {
+    throw new AppError(409, "This card was just reviewed", "REVIEW_CONFLICT");
+  }
 
   // Append review to session (if sessionId provided)
   if (data.sessionId) {

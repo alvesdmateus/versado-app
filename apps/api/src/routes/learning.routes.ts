@@ -22,7 +22,7 @@ export const learningRoutes = new Hono();
 
 function mapError(err: unknown): never {
   if (err instanceof LearningError) {
-    const status = err.kind === "not_found" ? 404 : err.kind === "locked" ? 403 : 400;
+    const status = err.kind === "not_found" ? 404 : err.kind === "locked" ? 403 : err.kind === "conflict" ? 409 : 400;
     throw new AppError(status, err.message, `LEARNING_${err.kind.toUpperCase()}`);
   }
   throw err;

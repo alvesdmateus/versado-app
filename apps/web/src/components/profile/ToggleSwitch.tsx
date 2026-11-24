@@ -1,13 +1,17 @@
 export interface ToggleSwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
+  /** Accessible name, usually the setting's label. */
+  label?: string;
 }
 
-export function ToggleSwitch({ checked, onChange }: ToggleSwitchProps) {
+export function ToggleSwitch({ checked, onChange, label }: ToggleSwitchProps) {
   return (
     <button
+      type="button"
       role="switch"
       aria-checked={checked}
+      aria-label={label}
       onClick={() => onChange(!checked)}
       className={`relative h-6 w-11 flex-shrink-0 rounded-full transition-colors duration-200 ${
         checked ? "bg-primary-500" : "bg-neutral-300"

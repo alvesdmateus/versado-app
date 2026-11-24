@@ -13,14 +13,13 @@ import {
   advanceStage,
   applyModuleReview,
   completeModule,
-  createModuleProgress,
   recordPrediction,
   resolveModuleStatuses,
 } from "./progress";
 
 export class LearningError extends Error {
   constructor(
-    public readonly kind: "not_found" | "locked" | "invalid",
+    public readonly kind: "not_found" | "locked" | "invalid" | "conflict",
     message: string
   ) {
     super(message);
@@ -104,23 +103,27 @@ export class LearningService {
     input: { stage: ModuleStage; predictionAttempt?: { correct: boolean }; completed?: boolean },
     now = new Date()
   ): Promise<ModuleProgress> {
-    const resolved = await this.getModule(userId, moduleId);
-    let progress = resolved.progress ?? createModuleProgress(userId, moduleId);
+    await this.getModule(userId, moduleId); // 404 / 403 for missing or locked modules
 
-    progress = advanceStage(progress, input.stage);
-    if (input.predictionAttempt) {
-      progress = recordPrediction(progress, input.predictionAttempt.correct);
-    }
-    if (input.completed) {
-      // The prediction gate is mandatory: a module cannot complete without a correct prediction.
-      if (progress.predictionCorrect === 0) {
-        throw new LearningError("invalid", "A correct prediction is required before completing");
+    // Read-modify-write under the repository's row lock: two requests for the same module
+    // (two tabs, a retry) never both start from the same snapshot and overwrite each other.
+    return this.repos.progress.update(userId, moduleId, (current) => {
+      let progress = current;
+      if (input.predictionAttempt) {
+        progress = recordPrediction(progress, input.predictionAttempt.correct);
       }
-      progress = completeModule(progress, now);
-    }
-
-    await this.repos.progress.save(progress);
-    return progress;
+      // The prediction gate is mandatory: without a correct prediction the stage pointer stops
+      // at 3, so a lost prediction request can never strand the learner past the gate.
+      const reachable: ModuleStage = progress.predictionCorrect > 0 ? input.stage : (Math.min(input.stage, 3) as ModuleStage);
+      progress = advanceStage(progress, reachable);
+      if (input.completed) {
+        if (progress.predictionCorrect === 0) {
+          throw new LearningError("invalid", "A correct prediction is required before completing");
+        }
+        progress = completeModule(progress, now);
+      }
+      return progress;
+    });
   }
 
   async listDueReviews(userId: string, now = new Date()): Promise<DueReview[]> {
@@ -146,13 +149,17 @@ export class LearningService {
     input: { correct: boolean; attempts: number },
     now = new Date()
   ): Promise<ModuleProgress> {
-    const progress = await this.repos.progress.find(userId, moduleId);
-    if (!progress?.completedAt) {
-      throw new LearningError("invalid", "Module has not been completed yet");
-    }
-    const next = applyModuleReview(progress, input.correct, input.attempts, now);
-    await this.repos.progress.save(next);
-    return next;
+    return this.repos.progress.update(userId, moduleId, (progress, existed) => {
+      if (!existed || !progress.completedAt) {
+        throw new LearningError("invalid", "Module has not been completed yet");
+      }
+      // Only a due check counts. A second submit of the same check (double tap, retry, a
+      // second tab) finds it already rescheduled and is rejected instead of applied twice.
+      if (!progress.nextReviewAt || progress.nextReviewAt > now) {
+        throw new LearningError("conflict", "This review is not due");
+      }
+      return applyModuleReview(progress, input.correct, input.attempts, now);
+    });
   }
 
   private async publishedContent(trackId: string) {
