@@ -139,7 +139,8 @@
         "a": "A",
         "b": "B"
       }
-    }
+    },
+    "predictionLost": "Deine Vorhersage wurde nicht gespeichert. Prüfe sie noch einmal, um abzuschließen."
   },
   "review": {
     "title": "Wiederholen",
@@ -155,7 +156,8 @@
     "finished": {
       "title": "Alle Checks erledigt",
       "body": "Die nächsten kommen in größeren Abständen."
-    }
+    },
+    "saveError": "Wir konnten diese Prüfung nicht speichern. Deine Antwort bleibt erhalten; versuch es noch einmal."
   },
   "select": {
     "title": "Was willst du verstehen?",

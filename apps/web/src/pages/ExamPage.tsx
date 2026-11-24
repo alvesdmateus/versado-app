@@ -51,8 +51,14 @@ export function ExamPage() {
   }, [track]);
 
   useEffect(() => {
+    // Exams exist only for certification tracks; without one there is nothing to prepare,
+    // so leave instead of spinning on "Preparing your exam…" forever.
+    if (!track?.examMode.enabled) {
+      navigate("/flashcards", { replace: true });
+      return;
+    }
     startExam();
-  }, [startExam]);
+  }, [startExam, track, navigate]);
 
   useEffect(() => {
     if (phase !== "examining") return;

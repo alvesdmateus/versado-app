@@ -50,7 +50,7 @@ export function PopularDeckCard({ deck, onClick, onAdd }: PopularDeckCardProps) 
           {deck.name}
         </h3>
         <p className="mt-0.5 truncate text-xs text-neutral-500">
-          by {deck.creator.displayName}
+          {t("byCreator", { name: deck.creator.displayName })}
         </p>
         <div className="mt-1.5 flex items-center justify-between">
           <div className="flex items-center gap-1">

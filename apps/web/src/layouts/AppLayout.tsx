@@ -45,10 +45,12 @@ export function AppLayout() {
     profileApi
       .getPreferences()
       .then((prefs) => {
+        // Apply only a theme the user actually chose. `darkMode: false` is the stored default
+        // for every account, so treating it as a choice forced Light on phones set to dark.
         if (prefs.themePreference) {
           setThemePreference(prefs.themePreference as ThemePreference);
-        } else {
-          setDarkMode(prefs.darkMode);
+        } else if (prefs.darkMode === true) {
+          setDarkMode(true);
         }
         if (prefs.nativeLanguage && prefs.nativeLanguage !== i18n.language) {
           i18n.changeLanguage(prefs.nativeLanguage);

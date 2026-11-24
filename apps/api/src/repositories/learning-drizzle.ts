@@ -1,4 +1,5 @@
 import { and, asc, eq, inArray, isNotNull, lte } from "drizzle-orm";
+import { createModuleProgress } from "@versado/core";
 import type {
   LearningChapter,
   LearningModule,
@@ -156,6 +157,29 @@ export function createDrizzleLearningRepositories(db: Database): LearningReposit
             target: [moduleProgress.userId, moduleProgress.moduleId],
             set: values,
           });
+      },
+      async update(userId, moduleId, change) {
+        return db.transaction(async (tx) => {
+          // Make sure the row exists so FOR UPDATE has something to lock: two first-time
+          // requests would otherwise both see "no row" and the later insert would win.
+          const inserted = await tx
+            .insert(moduleProgress)
+            .values({ ...createModuleProgress(userId, moduleId), updatedAt: new Date() })
+            .onConflictDoNothing()
+            .returning({ userId: moduleProgress.userId });
+          const [row] = await tx
+            .select()
+            .from(moduleProgress)
+            .where(and(eq(moduleProgress.userId, userId), eq(moduleProgress.moduleId, moduleId)))
+            .for("update");
+          // A throw from `change` rolls the whole transaction back, placeholder row included.
+          const next = change(toProgress(row!), inserted.length === 0);
+          await tx
+            .update(moduleProgress)
+            .set({ ...next, updatedAt: new Date() })
+            .where(and(eq(moduleProgress.userId, userId), eq(moduleProgress.moduleId, moduleId)));
+          return next;
+        });
       },
       async listDue(userId, now) {
         const rows = await db

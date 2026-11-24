@@ -48,5 +48,9 @@
     "reportReview": "Report review",
     "reportUser": "Report user",
     "blockUser": "Block user"
+  },
+  "social": {
+    "follow": "Follow",
+    "following": "Following"
   }
 }

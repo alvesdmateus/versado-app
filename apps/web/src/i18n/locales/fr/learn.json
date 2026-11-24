@@ -139,7 +139,8 @@
         "a": "A",
         "b": "B"
       }
-    }
+    },
+    "predictionLost": "Votre prédiction n’a pas été enregistrée. Vérifiez-la encore une fois pour terminer."
   },
   "review": {
     "title": "Réviser",
@@ -155,7 +156,8 @@
     "finished": {
       "title": "Révisions terminées",
       "body": "Les prochaines seront plus espacées."
-    }
+    },
+    "saveError": "Impossible d’enregistrer cette révision. Votre réponse est conservée ; réessayez."
   },
   "select": {
     "title": "Que voulez-vous comprendre ?",

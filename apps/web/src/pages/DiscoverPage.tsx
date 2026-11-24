@@ -121,11 +121,9 @@ export function DiscoverPage() {
       <div className="px-5 pt-6 pb-2">
         <div className="flex items-center gap-2">
           <Compass className="h-6 w-6 text-primary-500" />
-          <h1 className="text-2xl font-bold text-neutral-900">Discover</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">{t("home:discover.heading")}</h1>
         </div>
-        <p className="mt-1 text-sm text-neutral-500">
-          Find new decks, creators, and topics
-        </p>
+        <p className="mt-1 text-sm text-neutral-500">{t("home:discover.subtitle")}</p>
       </div>
 
       {/* Trending Tags */}

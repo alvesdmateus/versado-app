@@ -1,3 +1,4 @@
+import { createModuleProgress } from "./progress";
 import type { LearningRepositories } from "./repositories";
 import type { LearningChapter, LearningModule, LearningTrack, ModuleProgress } from "./types";
 
@@ -17,6 +18,8 @@ export function createMemoryLearningRepositories(seed?: {
   const progress = new Map(
     (seed?.progress ?? []).map((p) => [`${p.userId}:${p.moduleId}`, p])
   );
+  // Per-row queue so concurrent updates of one row run one after another, like a row lock.
+  const locks = new Map<string, Promise<unknown>>();
 
   return {
     tracks: {
@@ -66,6 +69,21 @@ export function createMemoryLearningRepositories(seed?: {
       },
       async save(p) {
         progress.set(`${p.userId}:${p.moduleId}`, p);
+      },
+      update(userId, moduleId, change) {
+        const key = `${userId}:${moduleId}`;
+        const run = (locks.get(key) ?? Promise.resolve())
+          .catch(() => {})
+          .then(async () => {
+            // Yield once so callers that started together really interleave in tests.
+            await Promise.resolve();
+            const stored = progress.get(key);
+            const next = change(stored ?? createModuleProgress(userId, moduleId), !!stored);
+            progress.set(key, next);
+            return next;
+          });
+        locks.set(key, run);
+        return run;
       },
       async listDue(userId, now) {
         return [...progress.values()]

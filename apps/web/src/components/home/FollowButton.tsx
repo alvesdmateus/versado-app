@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { cn } from "@versado/ui";
 
 interface FollowButtonProps {
@@ -11,6 +12,7 @@ export function FollowButton({
   onToggle,
   size = "sm",
 }: FollowButtonProps) {
+  const { t } = useTranslation("common");
   return (
     <button
       onClick={(e) => {
@@ -25,7 +27,7 @@ export function FollowButton({
           : "border border-primary-500 text-primary-500 hover:bg-primary-50"
       )}
     >
-      {isFollowing ? "Following" : "Follow"}
+      {isFollowing ? t("social.following") : t("social.follow")}
     </button>
   );
 }
