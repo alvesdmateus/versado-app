@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;800&display=block">
+<style>
+  :root { --blue: #2d6be6; --ink: #ffffff; --soft: rgba(255,255,255,0.78); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--blue); }
+  body { position: relative; font-family: "Figtree", sans-serif; color: var(--ink); display: flex; flex-direction: column; padding: 118px 96px 0; }
+  canvas { position: absolute; inset: 0; }
+  .copy { position: relative; }
+  h1 { font-weight: 800; font-size: 78px; line-height: 1.06; letter-spacing: -0.025em; text-wrap: balance; }
+  p { margin-top: 26px; font-weight: 500; font-size: 36px; line-height: 1.35; color: var(--soft); text-wrap: pretty; max-width: 860px; }
+  .phone {
+    position: relative; align-self: center; margin-top: 80px; width: 708px; flex: none;
+    border-radius: 64px; padding: 14px; background: #0f1420;
+    box-shadow: 0 40px 80px rgba(8, 24, 64, 0.35), 0 8px 24px rgba(8, 24, 64, 0.25);
+  }
+  .phone img { display: block; width: 100%; border-radius: 52px; }
+</style>
+</head>
+<body>
+<canvas id="dots" width="1080" height="1920"></canvas>
+<div class="copy"><h1 id="h"></h1><p id="s"></p></div>
+<div class="phone"><img id="shot" alt=""></div>
+<script>
+  const COPY = {
+    en: [
+      ["Learn by doing, one track at a time", "Math today. Software and science on the way."],
+      ["Move it. Watch it change.", "Drag a control and the idea responds on the spot."],
+      ["Predict before you peek", "Commit to an answer first. Feedback shows exactly where you missed."],
+      ["Reviews arrive right on time", "Quick checks come back just as you’re about to forget."],
+    ],
+    pt: [
+      ["Aprenda fazendo, uma trilha por vez", "Matemática hoje. Software e ciência a caminho."],
+      ["Mexa. Veja mudar.", "Arraste um controle e a ideia responde na hora."],
+      ["Preveja antes de ver", "Dê sua resposta primeiro. O retorno mostra exatamente onde você errou."],
+      ["Revisões na hora certa", "Checagens rápidas voltam quando você está prestes a esquecer."],
+    ],
+  };
+  const FILES = ["1-hub", "2-explore", "3-predict", "4-review"];
+  const q = new URLSearchParams(location.search);
+  const lang = q.get("lang") || "en";
+  const n = Number(q.get("n") || 1);
+  document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
+  document.getElementById("h").textContent = COPY[lang][n - 1][0];
+  document.getElementById("s").textContent = COPY[lang][n - 1][1];
+  const img = document.getElementById("shot");
+  img.src = `shots/${lang}-${FILES[n - 1]}.png`;
+
+  // The login screen's peg lattice, sagging into a gaussian well behind the phone.
+  const c = document.getElementById("dots").getContext("2d");
+  const step = 54;
+  for (let y = step / 2; y < 1920; y += step) {
+    for (let x = step / 2; x < 1080; x += step) {
+      const dx = (x - 540) / 260, dy = (y - 1240) / 420;
+      const well = Math.exp(-(dx * dx + dy * dy));
+      const yy = y + well * 40;
+      // Nearly invisible behind the headline, building up toward the bottom.
+      const fade = y < 470 ? 0.05 : 0.10 + 0.16 * Math.min(1, y / 1920);
+      c.fillStyle = `rgba(255,255,255,${fade})`;
+      c.beginPath(); c.arc(x, yy, 3.4, 0, Math.PI * 2); c.fill();
+    }
+  }
+  window.__ready = Promise.all([document.fonts.ready, img.decode()]);
+</script>
+</body>
+</html>
