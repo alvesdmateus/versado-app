@@ -139,7 +139,8 @@
         "a": "A",
         "b": "B"
       }
-    }
+    },
+    "predictionLost": "Sua previsão não foi salva. Confira mais uma vez para terminar."
   },
   "review": {
     "title": "Revisar",
@@ -155,7 +156,8 @@
     "finished": {
       "title": "Revisões concluídas",
       "body": "As próximas ficam mais espaçadas."
-    }
+    },
+    "saveError": "Não conseguimos salvar esta revisão. Sua resposta está guardada; tente de novo."
   },
   "select": {
     "title": "O que você quer entender?",

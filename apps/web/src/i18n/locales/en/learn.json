@@ -139,7 +139,8 @@
         "a": "A",
         "b": "B"
       }
-    }
+    },
+    "predictionLost": "Your prediction did not save. Check it once more to finish."
   },
   "review": {
     "title": "Review",
@@ -155,7 +156,8 @@
     "finished": {
       "title": "All checks done",
       "body": "The next ones are scheduled further apart."
-    }
+    },
+    "saveError": "We couldn’t save this check. Your answer is kept; try again."
   },
   "select": {
     "title": "What do you want to understand?",

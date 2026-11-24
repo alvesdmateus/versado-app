@@ -107,6 +107,9 @@ export function StudySessionPage() {
   const [isGoFluentOpen, setIsGoFluentOpen] = useState(false);
   const [cardTheme, setCardTheme] = useState<CardTheme>(getCardTheme());
   const isResettingRef = useRef(false);
+  /** One rating at a time: taps, keys, and swipes during a pending save are ignored. */
+  const submittingRef = useRef(false);
+  const [submitting, setSubmitting] = useState(false);
   const cardStartTimeRef = useRef(Date.now());
 
   // Swipe gesture state (X = left/right, Y = up for master)
@@ -179,113 +182,139 @@ export function StudySessionPage() {
   }, [sessionState]);
 
   const handleReview = useCallback(
-    async (rating: ReviewRating) => {
-      if (!currentCard) return;
-
-      // Tactile + audio feedback
-      haptic(rating === 4 ? "success" : "medium");
-      playSound("rate");
-
-      const responseTimeMs = Date.now() - cardStartTimeRef.current;
-
-      // Submit review to API
-      try {
-        await syncAwareApi.submitReview(
-          currentCard.progress.id,
-          rating,
-          responseTimeMs,
-          sessionId ?? undefined
-        );
-      } catch (err) {
-        if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
-          setIsLimitReached(true);
-          return;
+    async (rating: ReviewRating, lockTaken = false) => {
+      if (submittingRef.current && !lockTaken) return;
+      if (!currentCard) {
+        if (lockTaken) {
+          submittingRef.current = false;
+          setSubmitting(false);
         }
-        // Continue even if other submissions fail
+        return;
       }
+      submittingRef.current = true;
+      setSubmitting(true);
+      try {
+        // Tactile + audio feedback
+        haptic(rating === 4 ? "success" : "medium");
+        playSound("rate");
 
-      setReviewedCount((prev) => prev + 1);
-      setRatingCounts((prev) => ({ ...prev, [rating]: prev[rating as keyof typeof prev] + 1 }));
-      setTotalResponseTime((prev) => prev + responseTimeMs);
+        const responseTimeMs = Date.now() - cardStartTimeRef.current;
 
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= dueCards.length) {
-        // End session
-        if (sessionId) {
-          syncAwareApi.endSession(sessionId).catch(console.error);
+        // Submit review to API
+        try {
+          await syncAwareApi.submitReview(
+            currentCard.progress.id,
+            rating,
+            responseTimeMs,
+            sessionId ?? undefined
+          );
+        } catch (err) {
+          if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
+            setIsLimitReached(true);
+            return;
+          }
+          // Continue even if other submissions fail
         }
-        setSessionState("complete");
-      } else {
-        // Instantly reset card to front (no transition)
-        isResettingRef.current = true;
-        setIsFlipped(false);
-        setSwipeOffset(0);
-        setSwipeOffsetY(0);
-        setSwipeExit(null);
-        setCurrentIndex(nextIndex);
-        setSessionState("studying");
-        cardStartTimeRef.current = Date.now();
 
-        // Re-enable transition on next frame
-        requestAnimationFrame(() => {
+        setReviewedCount((prev) => prev + 1);
+        setRatingCounts((prev) => ({ ...prev, [rating]: prev[rating as keyof typeof prev] + 1 }));
+        setTotalResponseTime((prev) => prev + responseTimeMs);
+
+        const nextIndex = currentIndex + 1;
+        if (nextIndex >= dueCards.length) {
+          // End session
+          if (sessionId) {
+            syncAwareApi.endSession(sessionId).catch(console.error);
+          }
+          setSessionState("complete");
+        } else {
+          // Instantly reset card to front (no transition)
+          isResettingRef.current = true;
+          setIsFlipped(false);
+          setSwipeOffset(0);
+          setSwipeOffsetY(0);
+          setSwipeExit(null);
+          setCurrentIndex(nextIndex);
+          setSessionState("studying");
+          cardStartTimeRef.current = Date.now();
+
+          // Re-enable transition on next frame
           requestAnimationFrame(() => {
-            isResettingRef.current = false;
+            requestAnimationFrame(() => {
+              isResettingRef.current = false;
+            });
           });
-        });
+        }
+      } finally {
+        submittingRef.current = false;
+        setSubmitting(false);
       }
     },
     [currentIndex, dueCards.length, currentCard, sessionId]
   );
 
   const handleMaster = useCallback(
-    async () => {
-      if (!currentCard) return;
-
-      haptic("success");
-      playSound("swipeUp");
-
-      const responseTimeMs = Date.now() - cardStartTimeRef.current;
-
-      try {
-        await syncAwareApi.submitReview(
-          currentCard.progress.id,
-          4 as ReviewRating,
-          responseTimeMs,
-          sessionId ?? undefined,
-          true // forceMaster
-        );
-      } catch (err) {
-        if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
-          setIsLimitReached(true);
-          return;
+    async (lockTaken = false) => {
+      if (submittingRef.current && !lockTaken) return;
+      if (!currentCard) {
+        if (lockTaken) {
+          submittingRef.current = false;
+          setSubmitting(false);
         }
+        return;
       }
+      submittingRef.current = true;
+      setSubmitting(true);
+      try {
+        haptic("success");
+        playSound("swipeUp");
 
-      setReviewedCount((prev) => prev + 1);
-      setRatingCounts((prev) => ({ ...prev, 4: prev[4] + 1 }));
-      setTotalResponseTime((prev) => prev + responseTimeMs);
+        const responseTimeMs = Date.now() - cardStartTimeRef.current;
 
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= dueCards.length) {
-        if (sessionId) {
-          syncAwareApi.endSession(sessionId).catch(console.error);
+        try {
+          await syncAwareApi.submitReview(
+            currentCard.progress.id,
+            4 as ReviewRating,
+            responseTimeMs,
+            sessionId ?? undefined,
+            true // forceMaster
+          );
+        } catch (err) {
+          if (err instanceof ApiError && err.code === "REVIEW_LIMIT_REACHED") {
+            setIsLimitReached(true);
+            return;
+          }
         }
-        setSessionState("complete");
-      } else {
-        isResettingRef.current = true;
-        setIsFlipped(false);
-        setSwipeOffset(0);
-        setSwipeOffsetY(0);
-        setSwipeExit(null);
-        setCurrentIndex(nextIndex);
-        setSessionState("studying");
-        cardStartTimeRef.current = Date.now();
 
-        requestAnimationFrame(() => {
+        setReviewedCount((prev) => prev + 1);
+        setRatingCounts((prev) => ({ ...prev, 4: prev[4] + 1 }));
+        setTotalResponseTime((prev) => prev + responseTimeMs);
+
+        const nextIndex = currentIndex + 1;
+        if (nextIndex >= dueCards.length) {
+          if (sessionId) {
+            syncAwareApi.endSession(sessionId).catch(console.error);
+          }
+          setSessionState("complete");
+        } else {
+          isResettingRef.current = true;
+          setIsFlipped(false);
+          setSwipeOffset(0);
+          setSwipeOffsetY(0);
+          setSwipeExit(null);
+          setCurrentIndex(nextIndex);
+          setSessionState("studying");
+          cardStartTimeRef.current = Date.now();
+
           requestAnimationFrame(() => {
-            isResettingRef.current = false;
+            requestAnimationFrame(() => {
+              isResettingRef.current = false;
+            });
           });
-        });
+        }
+      } finally {
+        submittingRef.current = false;
+        setSubmitting(false);
       }
     },
     [currentIndex, dueCards.length, currentCard, sessionId]
@@ -294,7 +323,7 @@ export function StudySessionPage() {
   // Swipe gesture handlers (only active in reviewing state)
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
-      if (sessionState !== "reviewing" || swipeExit) return;
+      if (sessionState !== "reviewing" || swipeExit || submittingRef.current) return;
       e.preventDefault();
       swipeStartX.current = e.clientX;
       swipeStartY.current = e.clientY;
@@ -355,11 +384,14 @@ export function StudySessionPage() {
         haptic("heavy");
         playSound("swipeUp");
         setSwipeExit("up");
+        // Take the lock now: a tap during the exit animation must not rate this card again.
+        submittingRef.current = true;
+        setSubmitting(true);
         setTimeout(() => {
           setSwipeExit(null);
           setSwipeOffset(0);
           setSwipeOffsetY(0);
-          handleMaster();
+          void handleMaster(true);
         }, 300);
       } else if (axis !== "y" && (Math.abs(dx) > SWIPE_THRESHOLD || (Math.abs(dx) > 30 && velocityX > VELOCITY_THRESHOLD))) {
         // Swipe left/right
@@ -367,11 +399,13 @@ export function StudySessionPage() {
         haptic("heavy");
         playSound(direction === "right" ? "swipeRight" : "swipeLeft");
         setSwipeExit(direction);
+        submittingRef.current = true;
+        setSubmitting(true);
         setTimeout(() => {
           setSwipeExit(null);
           setSwipeOffset(0);
           setSwipeOffsetY(0);
-          handleReview(direction === "right" ? (4 as ReviewRating) : (2 as ReviewRating));
+          void handleReview(direction === "right" ? (4 as ReviewRating) : (2 as ReviewRating), true);
         }, 300);
       } else {
         // Tap (no significant movement) — flip card back to question
@@ -748,7 +782,8 @@ export function StudySessionPage() {
                 <button
                   key={opt.rating}
                   onClick={() => handleReview(opt.rating)}
-                  className="flex flex-col items-center gap-1"
+                  disabled={submitting}
+                  className="flex flex-col items-center gap-1 disabled:opacity-60"
                 >
                   <div
                     className={`flex h-14 w-14 items-center justify-center rounded-full text-white shadow-card transition-transform hover:scale-110 active:scale-90 ${opt.bgClass}`}

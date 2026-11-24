@@ -26,7 +26,16 @@ export const authRoutes = new Hono();
 // Stricter rate limiting for auth endpoints
 // Session endpoints (/me, /refresh, /logout) run on every page load, so they get a
 // general limit; the strict brute-force limit only guards credential/token guesses.
-authRoutes.use("*", rateLimitMiddleware(30, 60_000));
+// Session endpoints cost two calls per page load and are shared by everyone behind one IP
+// (a school or office network), so they get a separate, larger budget; tripping it would
+// otherwise look like an expired session to the app.
+const SESSION_PATHS = new Set(["me", "refresh", "logout"]);
+const sessionLimit = rateLimitMiddleware(240, 60_000);
+const generalLimit = rateLimitMiddleware(30, 60_000);
+authRoutes.use("*", (c, next) => {
+  const last = c.req.path.replace(/\/+$/, "").split("/").pop() ?? "";
+  return (SESSION_PATHS.has(last) ? sessionLimit : generalLimit)(c, next);
+});
 const credentialLimit = rateLimitMiddleware(5, 60_000);
 authRoutes.use("/login", credentialLimit);
 authRoutes.use("/reset-password", credentialLimit);

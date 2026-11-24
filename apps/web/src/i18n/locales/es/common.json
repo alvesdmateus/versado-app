@@ -48,5 +48,9 @@
     "reportReview": "Reportar reseña",
     "reportUser": "Reportar usuario",
     "blockUser": "Bloquear usuario"
+  },
+  "social": {
+    "follow": "Seguir",
+    "following": "Siguiendo"
   }
 }

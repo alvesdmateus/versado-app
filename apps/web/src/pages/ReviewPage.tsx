@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { learningApi, type DueReview } from "@/lib/learning-api";
+import { ApiError } from "@/lib/api-client";
+import { withRetry } from "@/lib/retry";
 import { getInteractive, type Values, type Verdict } from "@/components/learning/interactives";
 import { ControlStack, splitControls, unanswered } from "@/components/learning/controls";
 import { BoardPanel, PrimaryButton, Spinner } from "@/components/learning/ui";
@@ -93,6 +95,7 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
   const [touched, setTouched] = useState(false);
   const [changed, setChanged] = useState<{ name: string; tick: number } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   if (!def) return null;
   const Board = def.Board;
@@ -106,10 +109,21 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
   };
 
   const next = async () => {
+    if (saving) return;
     setSaving(true);
-    await learningApi
-      .submitReview(module.id, { correct: !!verdict?.correct, attempts: Math.max(1, attempts) })
-      .catch(() => {});
+    setSaveError(false);
+    try {
+      await withRetry(() =>
+        learningApi.submitReview(module.id, { correct: !!verdict?.correct, attempts: Math.max(1, attempts) })
+      );
+    } catch (err) {
+      // 409: this check was already recorded (another tab, an earlier retry) — move on.
+      if (!(err instanceof ApiError && err.status === 409)) {
+        setSaving(false);
+        setSaveError(true);
+        return;
+      }
+    }
     setSaving(false);
     onDone();
   };
@@ -153,9 +167,16 @@ function ReviewCheck({ review, onDone }: { review: DueReview; onDone: () => void
       {!finished && free.length > 0 && <ControlStack controls={free} values={values} onChange={onControl} />}
       <div className="mt-2">
         {finished ? (
-          <PrimaryButton onClick={next} disabled={saving}>
-            {saving ? <Spinner /> : t("review.next")}
-          </PrimaryButton>
+          <>
+            {saveError && (
+              <p className="mb-2 text-sm font-semibold" role="alert" style={{ color: bandColor("red") }}>
+                {t("review.saveError")}
+              </p>
+            )}
+            <PrimaryButton onClick={next} disabled={saving}>
+              {saving ? <Spinner /> : saveError ? t("lesson.retryFinish") : t("review.next")}
+            </PrimaryButton>
+          </>
         ) : (
           <PrimaryButton onClick={check} disabled={(verdict !== null && !touched) || unanswered(reviewControls, values)}>
             {verdict ? t("lesson.checkAgain") : t("lesson.check")}
