@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.32](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.31...versado-v0.1.32) (2026-11-24)
+
+
+### Features
+
+* **web:** square-root block logo, brand kit and see-through auth card ([#115](https://github.com/alvesdmateus/versado-app/issues/115)) ([b673616](https://github.com/alvesdmateus/versado-app/commit/b67361624dd9712db4dfa7a48ef4ee6d1c9d0a0c))
+
+
+### Bug Fixes
+
+* **web,api,core:** state races, session handling and qa fixes ([#117](https://github.com/alvesdmateus/versado-app/issues/117)) ([2d1f51c](https://github.com/alvesdmateus/versado-app/commit/2d1f51cf25c40b25fc26cb67c7ca158dc9c08f64))
+
+
+### Documentation
+
+* **api:** curriculum specification for math chapters 2 to 5 ([#119](https://github.com/alvesdmateus/versado-app/issues/119)) ([f7588e7](https://github.com/alvesdmateus/versado-app/commit/f7588e7c64badb2a2a3b25b2c02daa5b82d4c633))
+
+
+### Miscellaneous
+
+* **web:** play store listing graphics and descriptions ([#118](https://github.com/alvesdmateus/versado-app/issues/118)) ([c415266](https://github.com/alvesdmateus/versado-app/commit/c415266bfd9d6196b65cc513ef9631624de28881))
+
 ## [0.1.31](https://github.com/alvesdmateus/versado-app/compare/versado-v0.1.30...versado-v0.1.31) (2026-11-23)
 
 
